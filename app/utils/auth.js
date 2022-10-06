@@ -43,5 +43,7 @@ export const logout = () => {
   eraseCookie('token');
   eraseCookie('refreshToken');
   window.localStorage.removeItem('exp');
+  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('refreshToken');
   redirectLogin();
 };

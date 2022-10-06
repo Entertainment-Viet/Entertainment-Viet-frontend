@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_SERVER, API_DEL_DEVICE_TOKEN } from 'constants/api';
+import { API_SERVER } from 'constants/api';
 import { getCookie, setSecureCookie } from 'utils/cookie';
 import { logout } from 'utils/auth';
 import qs from 'qs';
@@ -8,13 +8,14 @@ import jwt from 'jwt-decode';
 // import { getToken } from '../firebaseInit';
 
 function getLocalToken() {
-  const token = getCookie('token');
+  const token = getCookie('token') || window.localStorage.getItem('token');
   return token;
 }
 
 // get token o refreshToken
 function getLocalRefreshToken() {
-  const token = getCookie('refreshToken');
+  const token =
+    getCookie('refreshToken') || window.localStorage.getItem('refreshToken');
   return token;
 }
 
@@ -49,8 +50,10 @@ cRequest.defaults.headers.delete['Content-Type'] =
 
 cRequest.interceptors.request.use(async config => {
   // console.log('Starting Request', JSON.stringify(config, null, 2));
+  // eslint-disable-next-line no-console
   console.log(Date.now() > getLocalAccessTokenExpire() * 1000);
   if (Date.now() > getLocalAccessTokenExpire() * 1000) {
+    // eslint-disable-next-line no-console
     console.log('expired');
     const data = {
       client_id: 'backend',
@@ -73,6 +76,7 @@ cRequest.interceptors.request.use(async config => {
         result.data.access_token,
         jwt(result.data.access_token).exp,
       );
+      // eslint-disable-next-line no-console
       console.log(jwt(result.data.access_token));
       window.localStorage.setItem('exp', jwt(result.data.access_token).exp);
     }
@@ -122,6 +126,7 @@ cRequest.interceptors.response.use(
       logout();
     }
 
+    // eslint-disable-next-line no-empty
     if (response.status === 400) {
     }
 

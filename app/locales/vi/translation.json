@@ -10,7 +10,7 @@
     "haveAccount": "Don’t have an account?"
   },
   "registerPage": {
-    "welcome": "Hello! Please enter your details.",
+    "welcome": "Create an Account blah blah here.",
     "email": "Email",
     "remember": "Remember me",
     "forgotPassword": "Forgot password",
@@ -19,6 +19,13 @@
     "continueWith": "or continue with",
     "haveAccount": "Already have an account?",
     "name": "Name"
+  },
+  "forgotPasswordPage": {
+    "welcome": "Please enter your registered email address. We'll send instruction to help reset your password.",
+    "email": "Email",
+    "forgotPassword": "Forgot password",
+    "forgot": "Forgot Password?",
+    "send": "Send"
   },
   "homePage": {
     "welcome": "Welcome back!",

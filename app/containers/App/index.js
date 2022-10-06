@@ -20,8 +20,9 @@ import { ENUM_ROLES } from 'constants/enums';
 
 // Page
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import LoginPage from 'containers/LogInPage/Loadable';
-import RegisterPage from 'containers/RegisterPage/Loadable';
+import LoginPageV2 from 'containers/LoginPageV2/Loadable';
+import RegisterPageV2 from 'containers/RegisterPageV2/Loadable';
+import ForgotPasswordPage from 'containers/ForgotPasswordPage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import ArtistDetailPage from 'containers/ArtistDetailPage/Loadable';
 import CreateEventPage from 'containers/CreateEventPage/Loadable';
@@ -36,7 +37,6 @@ import GlobalFonts from 'components/GlobalFonts';
 import Banner from 'components/DevelopmentBanner';
 
 // Routes
-import CommonRoute from 'components/Router/CommonRoute';
 import PublicRoute from 'components/Router/PublicRoute';
 import PrivateRoute from 'components/Router/PrivateRoute';
 // Styles
@@ -45,7 +45,6 @@ import styled from 'styled-components';
 import ScrollToTop from 'components/ScrollToTop';
 
 import { requestFirebaseNotificationPermission } from '../../firebaseInit';
-
 const AppWrapper = styled.div`
   margin: 0 auto;
 `;
@@ -76,14 +75,17 @@ export default function App() {
           path={Paths.ROUTE_REGISTER}
           // isAuthenticated={isAuthenticated}
         >
-          <RegisterPage />
+          <RegisterPageV2 />
+        </PublicRoute>
+        <PublicRoute exact path={Paths.ROUTE_FORGOTPASSWORD}>
+          <ForgotPasswordPage />
         </PublicRoute>
         <PublicRoute
           exact
           path={Paths.ROUTE_LOGIN}
           // isAuthenticated={isAuthenticated}
         >
-          <LoginPage />
+          <LoginPageV2 />
         </PublicRoute>
         <PrivateRoute
           exact
