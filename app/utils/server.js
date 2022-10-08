@@ -8,7 +8,7 @@ import jwt from 'jwt-decode';
 // import { getToken } from '../firebaseInit';
 
 function getLocalToken() {
-  const token = getCookie('token') || window.localStorage.getItem('token');
+  const token = getCookie('token');
   return token;
 }
 

@@ -81,7 +81,6 @@ function LoginPageV2() {
       );
       setSecureCookie('refreshToken', result.data.refresh_token);
       if (data.checkBoxRemember === true) {
-        window.localStorage.setItem('token', result.data.access_token);
         window.localStorage.setItem('refreshToken', result.data.refresh_token);
       }
       const role = roles.every(element => {
