@@ -28,6 +28,7 @@ import {
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import background from './image/image.png';
+import Metadata from '../../components/Metadata';
 
 function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -53,6 +54,7 @@ function ForgotPasswordPage() {
         justifyContent: 'center',
       }}
     >
+      <Metadata />
       <Box
         color={TEXT_GREEN}
         fontWeight="700"

@@ -38,6 +38,7 @@ import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
+import Metadata from '../../components/Metadata';
 
 function LoginPageV2() {
   const { t } = useTranslation();
@@ -112,6 +113,7 @@ function LoginPageV2() {
         justifyContent: 'center',
       }}
     >
+      <Metadata />
       <Box
         color={TEXT_GREEN}
         fontWeight="700"

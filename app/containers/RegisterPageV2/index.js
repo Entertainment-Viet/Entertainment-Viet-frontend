@@ -40,6 +40,7 @@ import { EmailIcon } from '../LoginPageV2/ProviderIcons';
 
 import { ROUTE_LOGIN } from '../../constants/routes';
 import { AccountIcon } from './ProviderIcons';
+import Metadata from '../../components/Metadata';
 
 function RegisterPageV2() {
   const { t } = useTranslation();
@@ -60,6 +61,7 @@ function RegisterPageV2() {
         justifyContent: 'center',
       }}
     >
+      <Metadata />
       <Box
         color={TEXT_GREEN}
         fontWeight="700"
