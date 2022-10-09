@@ -83,7 +83,7 @@ function Card(props) {
               color={TEXT_PURPLE}
               mt={1}
             >
-              {props.data.displayName}
+              {property.name}
             </Box>
             <Box>{property.title}</Box>
             <Box display="flex" alignItems="center">
