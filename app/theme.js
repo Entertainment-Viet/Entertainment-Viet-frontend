@@ -37,9 +37,20 @@ const theme = extendTheme(
       Input: {
         baseStyle: {
           field: {
-            bg: 'white',
+            bg: 'transparent',
             ':focus': {
-              bg: 'white',
+              bg: 'transparent',
+            },
+            _hover: { backgroundColor: 'transparent' },
+            _focus: {
+              color: '#b6ff6d',
+              fontSize: '15px',
+              border: '1px solid #a0aec0',
+              backgroundColor: 'transparent',
+            },
+            _placeholder: {
+              color: '#b6ff6d',
+              fontSize: '15px',
             },
           },
         },

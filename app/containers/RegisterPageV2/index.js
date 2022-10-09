@@ -41,6 +41,7 @@ import { EmailIcon } from '../LoginPageV2/ProviderIcons';
 import { ROUTE_LOGIN } from '../../constants/routes';
 import { AccountIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
+import SelectCustom from '../../components/Controls/SelectCustom';
 
 function RegisterPageV2() {
   const { t } = useTranslation();
@@ -54,6 +55,11 @@ function RegisterPageV2() {
     // eslint-disable-next-line no-alert
     alert(values);
   };
+
+  const optionsRole = [
+    { label: 'Organizer', value: 'Organizer' },
+    { label: 'Talent', value: 'Talent' },
+  ];
 
   return (
     <SimpleGrid
@@ -173,6 +179,21 @@ function RegisterPageV2() {
               {t(messages.remember())}
             </Checkbox>
           </HStack>
+          <FormControl>
+            <SelectCustom
+              {...register('role')}
+              sx={{
+                marginBottom: '20px',
+              }}
+            >
+              {optionsRole.map((option, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <option key={index} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </SelectCustom>
+          </FormControl>
           <Stack spacing="6">
             <Button
               variant="primary"
