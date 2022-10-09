@@ -19,8 +19,4 @@ export const messages = {
   workType: () => t(translations.createEventPage.workType),
   currency: () => t(translations.createEventPage.currency),
   submit: () => t(translations.createEventPage.submit),
-  formOfWork: () => t(translations.createEventPage.formOfWork),
-  paymentMethod: () => t(translations.createEventPage.paymentMethod),
-  prepay: () => t(translations.createEventPage.prepay),
-  postPaid: () => t(translations.createEventPage.postPaid),
 };

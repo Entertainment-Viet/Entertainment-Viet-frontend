@@ -21,6 +21,7 @@ export const PRI_BACKGROUND = '#1D1C4D';
 export const SEC_TEXT_COLOR = '#CBD5E0';
 export const THIRD_TEXT_COLOR = '#A0AEC0';
 export const DARK_PINK_COLOR = '#EE2068';
+export const SUB_BLU_COLOR = '#1D1C4C';
 export const size = {
   mobileS: '320px',
   mobileM: '375px',
