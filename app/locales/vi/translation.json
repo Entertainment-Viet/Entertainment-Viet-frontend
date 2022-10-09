@@ -10,7 +10,7 @@
     "haveAccount": "Don’t have an account?"
   },
   "registerPage": {
-    "welcome": "Hello! Please enter your details.",
+    "welcome": "Create an Account blah blah here.",
     "email": "Email",
     "remember": "Remember me",
     "forgotPassword": "Forgot password",
@@ -19,6 +19,13 @@
     "continueWith": "or continue with",
     "haveAccount": "Already have an account?",
     "name": "Name"
+  },
+  "forgotPasswordPage": {
+    "welcome": "Please enter your registered email address. We'll send instruction to help reset your password.",
+    "email": "Email",
+    "forgotPassword": "Forgot password",
+    "forgot": "Forgot Password?",
+    "send": "Send"
   },
   "homePage": {
     "welcome": "Welcome back!",
@@ -75,19 +82,23 @@
     "faq": "FAQ"
   },
   "createEventPage": {
-    "createEvent": "Đăng việc tuyển talent",
-    "title": "Tiêu đề",
-    "desc": "Mô tả công việc cụ thể đang cần tìm talent - Vui lòng mô tả đầy đủ nội dung",
-    "category": "Danh mục",
-    "subCategory": "Danh mục con",
+    "createEvent": "What Talent Are You Looking For?",
+    "title": "Title",
+    "desc": "Description",
+    "category": "Category",
+    "subCategory": "Sub Category",
     "skills": "Các kỹ năng yêu cầu",
     "skillsDesc": "Vui lòng mô tả cụ thể kỹ năng yêu cầu",
     "workType": "Hình thức làm việc",
-    "currency": "Ngân sách",
-    "submit": "Gửi",
+    "currency": "Budget",
+    "submit": "Upload",
     "location": "Địa điểm",
     "startDate": "Thời gian bắt đầu",
-    "endDate": "Thời gian kết thúc"
+    "endDate": "Thời gian kết thúc",
+    "formOfWork": "Forms of Work",
+    "paymentMethod": "Payment Method",
+    "prepay": "Prepay",
+    "postPaid": "Post Paid"
   },
   "artistDetailPage": {
     "overview": "Overview",
