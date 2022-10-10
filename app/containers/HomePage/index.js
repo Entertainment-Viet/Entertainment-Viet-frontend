@@ -1,34 +1,19 @@
-/*
- * NFTPage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- */
-
 import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import {
-  Container,
-  Box,
-  HStack,
-  Divider,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
+import { Box, Divider } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { CardListHorizontal } from 'components/Cards';
-import { ImageSlider } from 'components/Carousel';
 import Metadata from 'components/Metadata';
-import { PRI_TEXT_COLOR, SEC_TEXT_COLOR, LIGHT_GRAY } from 'constants/styles';
-
-import {} from 'constants/routes';
-import {} from './styles';
+import background from './image/image.png';
+//
+// import {} from 'constants/routes';
+// import {} from './styles';
 import { messages } from './messages';
 
 import { loadInfo } from './actions';
@@ -40,7 +25,9 @@ import {
   makeSelectDetail,
 } from './selectors';
 import WelcomeBox from './WelcomeBox';
-// import { propTypes } from 'qrcode.react';
+import TopSlider from './Slider/TopSlider';
+import { TEXT_GREEN } from '../../constants/styles';
+import MidSlider from './Slider/MidSlider';
 
 const key = 'HomePage';
 export function HomePage({ loading, error, data, onLoadData }) {
@@ -51,6 +38,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
     onLoadData();
   }, []);
   const { t } = useTranslation();
+  // eslint-disable-next-line no-console
   console.log(data, loading, error);
 
   const SlideData = [
@@ -76,49 +64,82 @@ export function HomePage({ loading, error, data, onLoadData }) {
     },
   ];
 
+  const dataList = [
+    {
+      id: '1',
+    },
+    {
+      id: '2',
+    },
+    {
+      id: '3',
+    },
+  ];
+
+  const columns = [1, 2, 3];
+
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
-      <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(4, 1fr)' }}>
-        <GridItem w="100%" pr={{ base: 0, lg: 4 }}>
-          <WelcomeBox />
-        </GridItem>
-        <GridItem colSpan={3}>
-          <ImageSlider slides={SlideData} />
-        </GridItem>
-      </Grid>
+      <Box px={10}>
+        <TopSlider slides={SlideData} />
+      </Box>
       <Box
-        color={PRI_TEXT_COLOR}
-        mt="6"
+        color={TEXT_GREEN}
+        mt="12"
         mb="6"
-        fontWeight="500"
-        as="h1"
-        lineHeight="tight"
+        ml="10"
+        fontWeight="600"
+        fontSize="20px"
+        lineHeight="24px"
         noOfLines={1}
       >
         {t(messages.popularTalent())}
       </Box>
-      <CardListHorizontal />
-      <Box
-        color={PRI_TEXT_COLOR}
-        mt="6"
-        mb="6"
-        fontWeight="500"
-        as="h1"
-        lineHeight="tight"
-        noOfLines={1}
-      >
-        {t(messages.recentTalent())}
+      <Box>
+        <CardListHorizontal />
       </Box>
-      <CardListHorizontal />
-      <ImageSlider slides={SlideData} />
+      <Box display="flex" pl={10}>
+        <Box
+          width="37%"
+          mt="12"
+          backgroundImage={background}
+          backgroundSize="cover"
+          borderRadius="10px"
+          height="49.5%"
+        >
+          <WelcomeBox />
+        </Box>
+        <Box pl={8}>
+          <Box
+            color={TEXT_GREEN}
+            mb="6"
+            ml="4"
+            fontWeight="600"
+            fontSize="20px"
+            lineHeight="24px"
+            noOfLines={1}
+          >
+            {t(messages.recentTalent())}
+          </Box>
+          <CardListHorizontal
+            dataList={dataList}
+            columns={columns}
+            spacing="45px"
+          />
+        </Box>
+      </Box>
+      <Box px={10}>
+        <MidSlider slides={SlideData} />
+      </Box>
       <Box
-        color={PRI_TEXT_COLOR}
-        mt="6"
+        color={TEXT_GREEN}
+        mt="12"
         mb="6"
-        fontWeight="500"
-        as="h1"
-        lineHeight="tight"
+        ml="10"
+        fontWeight="600"
+        fontSize="20px"
+        lineHeight="24px"
         noOfLines={1}
       >
         {t(messages.editorChoice())}
