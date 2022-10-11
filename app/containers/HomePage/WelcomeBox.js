@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box, Link, Button } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
-import './Slider/style.css';
 import {
   PRI_TEXT_COLOR,
   TEXT_GREEN,
@@ -23,7 +22,7 @@ export default function WelcomeBox() {
     >
       <Box
         width="100%"
-        height="28.5rem"
+        height="26.7rem"
         borderWidth="1px"
         borderRadius="lg"
         bg="transparent"
@@ -49,7 +48,7 @@ export default function WelcomeBox() {
             width="270px"
             height="100px"
           >
-            Are you looking for
+            {t(messages.welcomeBox1())}
           </Box>
           <Box
             color={TEXT_GREEN}
@@ -61,25 +60,26 @@ export default function WelcomeBox() {
             width="270px"
             height="100px"
           >
-            Talent for your Event?
+            {t(messages.welcomeBox2())}
           </Box>
-          <Link href={ROUTE_CREATE_EVENT} width="100%">
-            <Button
-              mt="200"
-              width="60vh"
-              mx={5}
-              bg={TEXT_PURPLE}
-              sx={{
-                _hover: {
-                  bg: TEXT_PURPLE,
-                },
-              }}
-              fullWidth
-            >
-              {t(messages.postJob())}
-            </Button>
-          </Link>
         </Box>
+      </Box>
+      <Box
+        w="90%"
+        paddingInlineStart="0"
+        maxW="90%"
+        bg={TEXT_PURPLE}
+        px={5}
+        justifyContent="center"
+        textAlign="center"
+        alignItems="center"
+        ml="5%"
+        mt="-70px"
+        borderRadius="5px"
+      >
+        <Button>
+          <Link href={ROUTE_CREATE_EVENT}>{t(messages.postJob())}</Link>
+        </Button>
       </Box>
     </Box>
   );

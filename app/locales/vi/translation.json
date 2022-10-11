@@ -34,7 +34,9 @@
     "createPackage": "Create a package",
     "popularTalent": "Most popular Talents in Entertainment Viet",
     "recentTalent": "Recent Talents",
-    "editorChoice": "Editor’s Choices"
+    "editorChoice": "Editor’s Choices",
+    "welcomeBox1": "Are you looking for",
+    "welcomeBox2": "Talent for your Event?"
   },
   "controls": {
     "email": "email",

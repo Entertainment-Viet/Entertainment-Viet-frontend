@@ -25,9 +25,8 @@ import {
   makeSelectDetail,
 } from './selectors';
 import WelcomeBox from './WelcomeBox';
-import TopSlider from './Slider/TopSlider';
 import { TEXT_GREEN } from '../../constants/styles';
-import MidSlider from './Slider/MidSlider';
+import ImageSlider from '../../components/Carousel/ImageSlider';
 
 const key = 'HomePage';
 export function HomePage({ loading, error, data, onLoadData }) {
@@ -82,7 +81,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
     <div style={{ width: '100%' }}>
       <Metadata />
       <Box px={10}>
-        <TopSlider slides={SlideData} />
+        <ImageSlider slides={SlideData} />
       </Box>
       <Box
         color={TEXT_GREEN}
@@ -104,9 +103,9 @@ export function HomePage({ loading, error, data, onLoadData }) {
           width="37%"
           mt="12"
           backgroundImage={background}
-          backgroundSize="cover"
+          backgroundSize="100% 100%"
           borderRadius="10px"
-          height="49.5%"
+          height="10%"
         >
           <WelcomeBox />
         </Box>
@@ -130,7 +129,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
         </Box>
       </Box>
       <Box px={10}>
-        <MidSlider slides={SlideData} />
+        <ImageSlider slides={SlideData} />
       </Box>
       <Box
         color={TEXT_GREEN}

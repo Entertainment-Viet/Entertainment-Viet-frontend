@@ -16,4 +16,6 @@ export const messages = {
   popularTalent: () => t(translations.homePage.popularTalent),
   recentTalent: () => t(translations.homePage.recentTalent),
   editorChoice: () => t(translations.homePage.editorChoice),
+  welcomeBox1: () => t(translations.homePage.welcomeBox1),
+  welcomeBox2: () => t(translations.homePage.welcomeBox2),
 };
