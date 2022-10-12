@@ -49,7 +49,7 @@ function HeaderButton({ text, href, isExternal = false }) {
 }
 
 const key = 'Header';
-function Header({ handleSubmit, handleRefresh }) {
+function Header({ handleSubmit, handleRefresh, cartData, search }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [searchTerm, setSearchTerm] = useState('');
@@ -107,7 +107,7 @@ function Header({ handleSubmit, handleRefresh }) {
               isExternal
             />
             <Notification />
-            <Cart />
+            {cartData && <Cart data={cartData} />}
             <ProfileAvatar />
           </HStack>
         </Box>
@@ -119,6 +119,8 @@ function Header({ handleSubmit, handleRefresh }) {
 Header.propTypes = {
   handleSubmit: PropTypes.func,
   handleRefresh: PropTypes.func,
+  cartData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  search: PropTypes.string,
 };
 
 HeaderButton.propTypes = {

@@ -8,18 +8,19 @@ import {
   MenuItem,
   Link,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import PackagesBox from 'components/PackageBox';
 import { RED_COLOR, LIGHT_GRAY } from 'constants/styles';
 import * as Paths from 'constants/routes';
 import { numberWithCommas } from 'utils/helpers';
 import { NumberedCart, CartIcon } from '../Icon';
 import { NumWrapper } from './Wrapper';
-import { cartData } from './CartData';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const Cart = () => {
+const Cart = ({ data }) => {
+  const { content } = data;
   function calculateTotalPrice() {
-    const totalPrice = cartData.reduce(
+    const totalPrice = content.reduce(
       (partialSum, a) => partialSum + a.suggestedPrice,
       0,
     );
@@ -28,25 +29,19 @@ const Cart = () => {
   return (
     <Menu onCloseSelect={false}>
       <MenuButton>
-        {Object.keys(cartData).length >= 1 ? (
+        {content.length > 0 ? (
           <>
             <NumberedCart />
-            <NumWrapper>{Object.keys(cartData).length}</NumWrapper>
+            <NumWrapper>{content.length}</NumWrapper>
           </>
         ) : (
           <CartIcon />
         )}
       </MenuButton>
-      <MenuList
-        minWidth="240px"
-        bg={LIGHT_GRAY}
-        h="30rem"
-        overflow="auto"
-        zIndex={999}
-      >
-        {cartData &&
-          cartData.map(item => (
-            <MenuGroup key={item.id}>
+      <MenuList minWidth="240px" bg={LIGHT_GRAY} overflow="auto" zIndex={999}>
+        {content &&
+          content.map(item => (
+            <MenuGroup>
               <MenuItem _hover={{ bg: 'none' }}>
                 <PackagesBox data={item} />
               </MenuItem>
@@ -74,5 +69,7 @@ const Cart = () => {
     </Menu>
   );
 };
-
+Cart.propTypes = {
+  data: PropTypes.array,
+};
 export default Cart;

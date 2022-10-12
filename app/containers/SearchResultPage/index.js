@@ -80,9 +80,7 @@ const CustomOption = styled.option`
 const key = 'SearchResultPage';
 export function SearchResultPage({
   paging,
-  loading,
   data,
-  error,
   handlePageChange,
   handleCategoryChange,
   handleCityChange,
@@ -145,11 +143,10 @@ export function SearchResultPage({
             placeholder="Categories"
             onChange={val => handleCategoryChange(val.target.value)}
           >
-            {categories
-              ? categories.map(item => (
-                  <CustomOption value={item.uid}>{item.name}</CustomOption>
-                ))
-              : null}
+            {categories &&
+              categories.map(item => (
+                <CustomOption value={item.uid}>{item.name}</CustomOption>
+              ))}
           </CustomSelect>
         </FieldWrapper>
         <FieldWrapper>
@@ -203,7 +200,7 @@ export function SearchResultPage({
           alignItems="start"
         >
           {data &&
-            data.map(function(tempt) {
+            data.map(tempt => {
               const { uid } = tempt;
               const packagesPrice = [];
               tempt.packages.map(item => {
@@ -211,12 +208,8 @@ export function SearchResultPage({
                 packagesPrice.push(item.jobDetail.price.max);
                 return true;
               });
-              const min = packagesPrice.sort(function(a, b) {
-                return a - b;
-              })[0];
-              const max = packagesPrice.sort(function(a, b) {
-                return b - a;
-              })[0];
+              const min = packagesPrice.sort((a, b) => a - b)[0];
+              const max = packagesPrice.sort((a, b) => b - a)[0];
               return (
                 <Card
                   key={uid}
