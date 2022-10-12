@@ -18,6 +18,7 @@ import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const PackagesBox = ({ data }) => {
   const orgId = window.localStorage.getItem('uid');
+  const { name, displayName, suggestedPrice, jobDetail } = data;
   function handleDeletePackage() {
     del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId).then(res1 => {
       const status1 = getResStatus(res1);
@@ -39,19 +40,17 @@ const PackagesBox = ({ data }) => {
             alt="demo"
             boxSize="2rem"
             borderRadius="10%"
-            zIndex={99}
+            // zIndex={99}
           />
         </Box>
         <Box>
-          <Text>{data.name}</Text>
-          <Text color={THIRD_TEXT_COLOR}>{data.talent.displayName}</Text>
+          <Text>{name}</Text>
+          <Text color={THIRD_TEXT_COLOR}>{displayName}</Text>
           <Text color={THIRD_TEXT_COLOR}>
-            Thời gian:{' '}
-            {new Date(data.jobDetail.performanceStartTime).toLocaleString()}
+            Thời gian:
+            {new Date(jobDetail.performanceStartTime).toLocaleString()}
           </Text>
-          <Text color={THIRD_TEXT_COLOR}>
-            Địa điểm: {data.jobDetail.location}
-          </Text>
+          <Text color={THIRD_TEXT_COLOR}>Địa điểm: {jobDetail.location}</Text>
         </Box>
         <VStack
           justify="space-between"
@@ -59,7 +58,7 @@ const PackagesBox = ({ data }) => {
           style={{ marginLeft: 'auto' }}
         >
           <Text color={PRI_TEXT_COLOR}>
-            {numberWithCommas(data.suggestedPrice)} VND
+            {numberWithCommas(suggestedPrice)} VND
           </Text>
           <HStack justify="space-between">
             <Button bg="transparent" color={PRI_TEXT_COLOR} fontSize="14px">
@@ -83,6 +82,6 @@ const PackagesBox = ({ data }) => {
 };
 
 PackagesBox.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.any,
 };
 export default PackagesBox;

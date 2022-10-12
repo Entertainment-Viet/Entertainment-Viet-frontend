@@ -3,7 +3,7 @@ import { TEXT_PURPLE } from 'constants/styles';
 export const NumWrapper = styled.div`
   position: absolute;
   top: 57%;
-  right: -3px;
+  right: 77px;
   color: ${TEXT_PURPLE};
   font-size: 10px;
   text-align: center;

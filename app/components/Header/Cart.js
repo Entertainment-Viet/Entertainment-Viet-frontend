@@ -9,23 +9,29 @@ import {
   Link,
 } from '@chakra-ui/react';
 import PackagesBox from 'components/PackageBox';
-import { PRI_TEXT_COLOR, RED_COLOR, LIGHT_GRAY } from 'constants/styles';
-import PropTypes from 'prop-types';
+import { RED_COLOR, LIGHT_GRAY } from 'constants/styles';
 import * as Paths from 'constants/routes';
+import { numberWithCommas } from 'utils/helpers';
 import { NumberedCart, CartIcon } from '../Icon';
 import { NumWrapper } from './Wrapper';
+import { cartData } from './CartData';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const Cart = ({ data }) => {
-  const { content } = data;
+const Cart = () => {
+  function calculateTotalPrice() {
+    const totalPrice = cartData.reduce(
+      (partialSum, a) => partialSum + a.suggestedPrice,
+      0,
+    );
+    return numberWithCommas(totalPrice);
+  }
   return (
     <Menu onCloseSelect={false}>
       <MenuButton>
-        {/* <Cart /> */}
-        {content.length > 0 ? (
+        {Object.keys(cartData).length >= 1 ? (
           <>
             <NumberedCart />
-            <NumWrapper>{content.length}</NumWrapper>
+            <NumWrapper>{Object.keys(cartData).length}</NumWrapper>
           </>
         ) : (
           <CartIcon />
@@ -38,34 +44,28 @@ const Cart = ({ data }) => {
         overflow="auto"
         zIndex={999}
       >
-        {content.map(item => (
-          <MenuGroup>
-            <MenuItem _hover={{ bg: 'none' }}>
-              <PackagesBox data={item} />
-            </MenuItem>
-          </MenuGroup>
-        ))}
-        {/* <MenuGroup>
-          <MenuItem _hover={{ bg: 'none' }}>
-            <PackagesBox />
-          </MenuItem>
-        </MenuGroup>
+        {cartData &&
+          cartData.map(item => (
+            <MenuGroup key={item.id}>
+              <MenuItem _hover={{ bg: 'none' }}>
+                <PackagesBox data={item} />
+              </MenuItem>
+            </MenuGroup>
+          ))}
         <MenuGroup>
           <MenuItem _hover={{ bg: 'none' }}>
-            <PackagesBox />
-          </MenuItem>
-        </MenuGroup> */}
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'none' }}>
-            <Link href={Paths.ROUTE_PRECHECKOUT} style={{ width: '100%' }}>
+            <Link
+              href={Paths.ROUTE_PRECHECKOUT}
+              style={{ width: '100%', textDecoration: 'none' }}
+            >
               <Button
                 w="100%"
                 bg={RED_COLOR}
-                color={PRI_TEXT_COLOR}
+                color="#FFFFFF"
                 _hover={{ bg: 'orange' }}
                 href="/checkout"
               >
-                Thanh toán
+                Thanh toán - {calculateTotalPrice()} VND
               </Button>
             </Link>
           </MenuItem>
@@ -75,7 +75,4 @@ const Cart = ({ data }) => {
   );
 };
 
-Cart.propTypes = {
-  data: PropTypes.array,
-};
 export default Cart;

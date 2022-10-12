@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Text, Divider, Image } from '@chakra-ui/react';
-import { FiHome, FiCalendar, FiUser } from 'react-icons/fi';
-import { IoPawOutline } from 'react-icons/io5';
+import { Flex, Text, Image, Link } from '@chakra-ui/react';
+import { FiHome } from 'react-icons/fi';
 import cRequest from 'utils/server';
 import { getResStatus, cacthError, cacthResponse } from 'utils/helpers';
+import { BsFacebook, BsInstagram, BsTwitter, BsLinkedin } from 'react-icons/bs';
 import NavItem from './NavItem';
 import VE from '../assets/Entertainment Viet.svg';
 import EV from '../assets/EV.svg';
 import DropdownItem from './DropdownItem';
-import { HeaderData } from '../HeaderData';
-
+import { dataAbout, dataSupport } from './DataSidebar';
 export default function Sidebar() {
   const [navSize, changeNavSize] = useState('small');
   const [categories, setCategories] = useState([]);
@@ -34,14 +33,15 @@ export default function Sidebar() {
     <Flex
       pos="sticky"
       left="5"
-      h="95vh"
+      h="100vh"
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize === 'small' ? '15px' : '30px'}
-      w={navSize === 'small' ? '75px' : '400px'}
+      w={navSize === 'small' ? '3rem' : '25%'}
       flexDir="column"
       justifyContent="space-between"
-      transition="0.5s"
+      transition="0.75s"
+      cursor={navSize === 'small' ? 'pointer' : 'default'}
       onMouseEnter={() => {
         changeNavSize('large');
       }}
@@ -66,34 +66,60 @@ export default function Sidebar() {
         />
         <DropdownItem
           navSize={navSize}
-          icon={FiCalendar}
           title="Categories"
           active
           data={categories}
         />
-        <DropdownItem
-          navSize={navSize}
-          icon={FiUser}
-          title="About"
-          data={HeaderData}
-        />
-        <DropdownItem navSize={navSize} icon={IoPawOutline} title="Support" />
+        <DropdownItem navSize={navSize} title="About" data={dataAbout} />
+        <DropdownItem navSize={navSize} title="Support" data={dataSupport} />
       </Flex>
 
-      <Flex
-        p="5%"
-        flexDir="column"
-        w="100%"
-        alignItems={navSize === 'small' ? 'center' : 'flex-start'}
-        mb={4}
-      >
-        <Divider display={navSize === 'small' ? 'none' : 'flex'} />
-        <Flex mt={4} align="center">
-          {navSize === 'large' ? (
-            <Text as="span">Entertainment Viet Ltd. 2022</Text>
-          ) : null}
+      {navSize === 'large' && (
+        <Flex
+          p="5%"
+          flexDir="column"
+          w="100%"
+          alignItems={navSize === 'small' ? 'center' : 'flex-start'}
+          mb={5}
+          justifyContent="flex-start"
+        >
+          <Flex justifyContent="space-between" w="60%">
+            <Link href="https://www.facebook.com/">
+              <BsFacebook
+                style={{ fill: '#BDC2EA' }}
+                size={30}
+                cursor="pointer"
+              />
+            </Link>
+            <Link href="https://www.instagram.com/">
+              <BsInstagram
+                style={{ fill: '#BDC2EA' }}
+                size={30}
+                cursor="pointer"
+              />
+            </Link>
+            <Link href="https://twitter.com/">
+              <BsTwitter
+                style={{ fill: '#BDC2EA' }}
+                size={30}
+                cursor="pointer"
+              />
+            </Link>
+            <Link href="https://www.linkedin.com/">
+              <BsLinkedin
+                style={{ fill: '#BDC2EA' }}
+                size={30}
+                cursor="pointer"
+              />
+            </Link>
+          </Flex>
+          <Flex mt={4} align="center">
+            {navSize === 'large' && (
+              <Text as="span">Entertainment Viet Ltd. 2022</Text>
+            )}
+          </Flex>
         </Flex>
-      </Flex>
+      )}
     </Flex>
   );
 }
