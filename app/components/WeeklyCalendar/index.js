@@ -9,7 +9,8 @@ import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css'; // a dependency of timegrid
 import '@fullcalendar/timegrid/main.css';
 import './styles.css';
-export default function Calendar() {
+
+export default function WeeklyCalendar() {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
@@ -28,7 +29,7 @@ export default function Calendar() {
     const val = document.querySelectorAll('.fc-toolbar-chunk')[0];
     const test =
       '<select class="select_month form-control"><option value=""></option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mrch</option><option value="04">Aprl</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">Aug</option><option value="09">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>';
-    appendHtml(val, test);
+    // appendHtml(val, test);
     const selectTag = document.querySelector('.select_month');
     const calendarApi = calendarComponentRef.current.getApi();
     selectTag.addEventListener('change', () => {
@@ -79,7 +80,7 @@ export default function Calendar() {
     setCurrentEvents(events);
   };
   return (
-    <div className="calendar-wrapper">
+    <div className="weekly-calendar-wrapper">
       {/* {this.renderSidebar()} */}
       {/* <div className="demo-app-main"> */}
       <FullCalendar
@@ -91,9 +92,9 @@ export default function Calendar() {
           // right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
         ref={calendarComponentRef}
-        height={350}
+        height={1000}
         // width={100}
-        initialView="dayGridMonth"
+        initialView="timeGridWeek"
         editable
         selectable
         selectMirror

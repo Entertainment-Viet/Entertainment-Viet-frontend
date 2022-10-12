@@ -10,8 +10,7 @@
 }
 .fc-theme-standard td {
     border-top: 2px solid #BDC1EA;
-    /* borde    r-left: 10px solid #1A202C; */
-    border-right: 10px solid #1A202C;
+    border-right: 10px solid transparent;
     border-bottom: 1px solid #1A202C;
 }
 .fc-theme-standard th {
@@ -76,8 +75,24 @@ option {
 .fc-today-button.fc-button.fc-button-primary {
     visibility: hidden;
 }
-.calendar-wrapper {
+.weekly-calendar-wrapper {
     width: 40%;
     display: inline-block;
+    background: #1D1C4C;
+}
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor, .fc-timegrid-slot.fc-timegrid-slot-lane.fc-timegrid-slot-minor {
+    border-top-style: hidden;
+
+}
+.fc-col-header-cell.fc-day.fc-day-past {
     background: transparent;
 }
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-scrollgrid-shrink {
+    border-right: 10px solid #1D1C4C !important;
+}
+.fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor {
+    border-right: 10px solid #1D1C4C !important;
+}
+/* .fc-daygrid-day.fc-day.fc-day-past {
+    border-right: 10px solid red;
+} */

@@ -11,14 +11,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Container, Box, HStack, Divider } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { CardListHorizontal } from 'components/Cards';
-import { ImageSlider } from 'components/Carousel';
-import Buttons from 'components/Buttons';
-import Metadata from 'components/Metadata';
 import Calendar from 'components/Calendar';
 import { PRI_TEXT_COLOR, SEC_TEXT_COLOR, LIGHT_GRAY } from 'constants/styles';
 // import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
@@ -29,6 +25,7 @@ import { PRI_TEXT_COLOR, SEC_TEXT_COLOR, LIGHT_GRAY } from 'constants/styles';
 
 import {} from 'constants/routes';
 import {} from './styles';
+import WeeklyCalendar from 'components/WeeklyCalendar';
 import { messages } from './messages';
 
 import { loadInfo } from './actions';
@@ -52,9 +49,10 @@ export function BookManagementPage({ loading, error, data, onLoadData }) {
   const { t } = useTranslation();
 
   return (
-    <Box color={PRI_TEXT_COLOR}>
+    <Flex color={PRI_TEXT_COLOR} gap={4}>
       <Calendar />
-    </Box>
+      <WeeklyCalendar />
+    </Flex>
   );
 }
 
