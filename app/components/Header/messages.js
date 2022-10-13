@@ -21,4 +21,9 @@ export const messages = {
   stylish: () => t(translations.header.stylish),
   makeup: () => t(translations.header.makeup),
   bartender: () => t(translations.header.bartender),
+  packageBoxTime: () => t(translations.header.packageBox.time),
+  packageBoxLocation: () => t(translations.header.packageBox.location),
+  packageBoxEdit: () => t(translations.header.packageBox.edit),
+  packageBoxDelete: () => t(translations.header.packageBox.delete),
+  packageBoxPay: () => t(translations.header.packageBox.pay),
 };

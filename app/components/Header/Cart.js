@@ -13,11 +13,14 @@ import PackagesBox from 'components/PackageBox';
 import { RED_COLOR, LIGHT_GRAY } from 'constants/styles';
 import * as Paths from 'constants/routes';
 import { numberWithCommas } from 'utils/helpers';
+import { useTranslation } from 'react-i18next';
 import { NumberedCart, CartIcon } from '../Icon';
 import { NumWrapper } from './Wrapper';
+import { messages } from './messages';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const Cart = ({ data }) => {
+  const { t } = useTranslation();
   const { content } = data;
   function calculateTotalPrice() {
     const totalPrice = content.reduce(
@@ -60,7 +63,7 @@ const Cart = ({ data }) => {
                 _hover={{ bg: 'orange' }}
                 href="/checkout"
               >
-                Thanh toán - {calculateTotalPrice()} VND
+                {t(messages.packageBoxPay())} - {calculateTotalPrice()} VND
               </Button>
             </Link>
           </MenuItem>
