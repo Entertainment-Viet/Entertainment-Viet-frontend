@@ -27,6 +27,12 @@ const makeSelectPackages = () =>
     State => State.packages,
   );
 
+const makeSelectComments = () =>
+  createSelector(
+    selectState,
+    State => State.comments,
+  );
+
 const makeSelectId = () =>
   createSelector(
     selectState,
@@ -53,4 +59,5 @@ export {
   makeSelectPackages,
   makeSelectPackageInfo,
   makeSelectPackageId,
+  makeSelectComments,
 };

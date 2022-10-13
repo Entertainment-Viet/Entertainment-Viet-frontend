@@ -19,6 +19,7 @@ import {
   chakra,
   TabPanels,
   TabPanel,
+  Box,
 } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -30,15 +31,16 @@ import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
 import { loadDataHeader } from 'components/Header/actions';
-import { loadData, loadPackageInfo } from './actions';
+import { loadCommentsInfo, loadData, loadPackageInfo } from './actions';
 
-import {} from 'constants/routes';
-import {} from './styles';
+// import {} from 'constants/routes';
+// import {} from './styles';
 import { messages } from './messages';
 
 import saga from './saga';
 import reducer from './reducer';
 import {
+  makeSelectComments,
   makeSelectData,
   makeSelectPackageInfo,
   makeSelectPackages,
@@ -62,12 +64,15 @@ export function ArtistDetailPage({
   packages,
   loadPackage,
   packageInfo,
+  comments,
+  loadComments,
 }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
+  const [pageNumberComments, setPageNumberComments] = useState(0);
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);
@@ -75,7 +80,10 @@ export function ArtistDetailPage({
   };
   useEffect(() => {
     onLoadData(match.params.id);
+    loadComments(match.params.id, pageNumberComments);
   }, [match.params.id]);
+  // eslint-disable-next-line no-console
+  console.log(comments, setPageNumberComments);
 
   return (
     <div>
@@ -88,8 +96,8 @@ export function ArtistDetailPage({
       <Tabs mb="12">
         <TabList color={TEXT_PURPLE}>
           <CustomTab>{t(messages.overview())}</CustomTab>
-          <CustomTab>{t(messages.about())}</CustomTab>
           <CustomTab>{t(messages.review())}</CustomTab>
+          <CustomTab>{t(messages.about())}</CustomTab>
         </TabList>
         {!data ? (
           <PageSpinner />
@@ -102,6 +110,9 @@ export function ArtistDetailPage({
                 packages={packages}
                 toggleModal={toggleModal}
               />
+            </TabPanel>
+            <TabPanel>
+              <Box>Coming</Box>
             </TabPanel>
             <TabPanel>
               <Review />
@@ -125,8 +136,10 @@ ArtistDetailPage.propTypes = {
   match: PropTypes.object,
   onLoadData: PropTypes.func,
   loadPackage: PropTypes.func,
+  loadComments: PropTypes.func,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   packages: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  comments: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
@@ -134,6 +147,7 @@ const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
   packages: makeSelectPackages(),
   packageInfo: makeSelectPackageInfo(),
+  comments: makeSelectComments(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -144,6 +158,9 @@ export function mapDispatchToProps(dispatch) {
     loadPackage: (id, talentId) => {
       dispatch(loadPackageInfo(id, talentId));
       dispatch(loadDataHeader(window.localStorage.getItem('uid')));
+    },
+    loadComments: (talentId, pageNumber) => {
+      dispatch(loadCommentsInfo(talentId, pageNumber));
     },
   };
 }

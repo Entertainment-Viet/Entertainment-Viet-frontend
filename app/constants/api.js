@@ -15,6 +15,7 @@ export const API_ORG_DETAIL = 'api/organizers/:id1';
 export const API_TALENT_LIST = 'api/talents';
 export const API_TALENT_DETAIL = 'api/talents/:id1';
 export const API_TALENT_PACKAGE = 'api/talents/:id1/packages';
+export const API_TALENT_REVIEWS = 'api/talents/:id1/reviews';
 
 /* MANAGER */
 export const API_JOBOFFER_LIST = 'api/organizers/:id1/joboffers';

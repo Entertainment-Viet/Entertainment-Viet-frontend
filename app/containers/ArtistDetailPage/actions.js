@@ -4,6 +4,8 @@ import {
   LOAD_DATA_ERROR,
   LOAD_PACKAGE,
   LOAD_PACKAGE_SUCCESS,
+  LOAD_COMMENTS,
+  LOAD_COMMENTS_SUCCESS,
 } from './constants';
 
 export function loadData(id) {
@@ -36,6 +38,19 @@ export function loadPackageInfo(id, talentId) {
 export function loadPackageInfoSuccess(payload) {
   return {
     type: LOAD_PACKAGE_SUCCESS,
+    payload,
+  };
+}
+export function loadCommentsInfo(talentId, pageNumber) {
+  return {
+    type: LOAD_COMMENTS,
+    talentId,
+    pageNumber,
+  };
+}
+export function loadCommentsInfoSuccess(payload) {
+  return {
+    type: LOAD_COMMENTS_SUCCESS,
     payload,
   };
 }

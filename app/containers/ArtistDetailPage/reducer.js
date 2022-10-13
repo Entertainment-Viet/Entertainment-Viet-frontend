@@ -5,6 +5,8 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_PACKAGE,
   LOAD_PACKAGE_SUCCESS,
+  LOAD_COMMENTS,
+  LOAD_COMMENTS_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -14,6 +16,7 @@ export const initialState = {
   id: '',
   packages: false,
   packageInfo: false,
+  comments: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -44,6 +47,14 @@ const pageReducer = (state = initialState, action) =>
       case LOAD_PACKAGE_SUCCESS:
         draft.loading = false;
         draft.packageInfo = action.payload;
+        break;
+      case LOAD_COMMENTS:
+        draft.error = false;
+        draft.loading = true;
+        break;
+      case LOAD_COMMENTS_SUCCESS:
+        draft.loading = false;
+        draft.comments = action.payload;
         break;
     }
   });

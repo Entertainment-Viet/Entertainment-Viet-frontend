@@ -8,18 +8,19 @@ import {
   API_TALENT_DETAIL,
   API_TALENT_PACKAGE,
   API_GET_PACKAGE_INFO,
+  API_TALENT_REVIEWS,
 } from 'constants/api';
-import { LOAD_DATA, LOAD_PACKAGE } from './constants';
+import { LOAD_DATA, LOAD_PACKAGE, LOAD_COMMENTS } from './constants';
 import {
   loadDataSuccess,
   loadDataError,
   loadPackageInfoSuccess,
+  loadCommentsInfoSuccess,
 } from './actions';
 import { makeSelectId } from './selectors';
 
 export function* getData() {
   const id = yield select(makeSelectId());
-  console.log('id: ', id);
   try {
     const payload = yield call(get, API_TALENT_DETAIL, {}, id);
     const packages = yield call(get, API_TALENT_PACKAGE, {}, id);
@@ -43,7 +44,24 @@ export function* getPackage(id) {
   }
 }
 
+export function* getComments(id) {
+  try {
+    const payload = yield call(
+      get,
+      API_TALENT_REVIEWS,
+      {
+        page: id.pageNumber,
+      },
+      id.talentId,
+    );
+    yield put(loadCommentsInfoSuccess(payload));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
+
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_DATA, getData);
   yield takeEvery(LOAD_PACKAGE, getPackage);
+  yield takeEvery(LOAD_COMMENTS, getComments);
 }
