@@ -67,7 +67,8 @@ option {
     margin-right: 10px;
     background-color: red;
     border-radius: 50%;
-    display: inline-block;
+    /* display: inline-block; */
+    display: none;
   }
 .fc-event b {
     display: none;
@@ -76,7 +77,7 @@ option {
     visibility: hidden;
 }
 .weekly-calendar-wrapper {
-    width: 40%;
+    width: 50%;
     display: inline-block;
     background: #1D1C4C;
 }
@@ -96,3 +97,15 @@ option {
 /* .fc-daygrid-day.fc-day.fc-day-past {
     border-right: 10px solid red;
 } */
+.fc .fc-col-header-cell-cushion {
+    text-align: center;
+    padding: 2px 16px;
+}
+.fc-timegrid-event {
+    background-color: #BDC1EA !important;
+    border-left: 5px solid #8A6DFF;
+}
+.fc-col-header-cell.fc-day-today {
+    color: #B6FF6D;
+    border: 5px solid #B6FF6D !important;
+}

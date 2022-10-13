@@ -5,18 +5,18 @@
  *
  */
 
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Calendar from 'components/Calendar';
-import { PRI_TEXT_COLOR, SEC_TEXT_COLOR, LIGHT_GRAY } from 'constants/styles';
+import { PRI_TEXT_COLOR } from 'constants/styles';
 // import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
 
 // import { isAuthor } from 'utils/auth';
@@ -36,13 +36,14 @@ import {
   makeSelectDetailError,
   makeSelectDetail,
 } from './selectors';
+
 // import { propTypes } from 'qrcode.react';
 
 const key = 'HomePage';
 export function BookManagementPage({ loading, error, data, onLoadData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-
+  const [selectedDate, selectDate] = useState();
   useEffect(() => {
     onLoadData();
   }, []);
@@ -50,8 +51,8 @@ export function BookManagementPage({ loading, error, data, onLoadData }) {
 
   return (
     <Flex color={PRI_TEXT_COLOR} gap={4}>
-      <Calendar />
-      <WeeklyCalendar />
+      <WeeklyCalendar toDate={selectedDate} />
+      <Calendar onSelectDate={selectDate} />
     </Flex>
   );
 }

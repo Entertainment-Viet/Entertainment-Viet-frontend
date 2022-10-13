@@ -4,13 +4,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { JobDetailModal } from 'components/Modal';
+import PropTypes from 'prop-types';
+
 import { INITIAL_EVENTS } from './event-utils';
 import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css'; // a dependency of timegrid
 import '@fullcalendar/timegrid/main.css';
 import './styles.css';
-export default function Calendar() {
-  const [currentEvents, setCurrentEvents] = useState([]);
+export default function Calendar({ onSelectDate }) {
+  // const [currentEvents, setCurrentEvents] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
   const toggleModal = inputId => {
@@ -25,7 +27,7 @@ export default function Calendar() {
         el.appendChild(div.children[0]);
       }
     }
-    const val = document.querySelectorAll('.fc-toolbar-chunk')[0];
+    const val = document.querySelectorAll('.fc-toolbar-chunk')[3];
     const test =
       '<select class="select_month form-control"><option value=""></option><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mrch</option><option value="04">Aprl</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">Aug</option><option value="09">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>';
     appendHtml(val, test);
@@ -46,6 +48,8 @@ export default function Calendar() {
     // const title = prompt('Please enter a new title for your event');
     const calendarApi = selectInfo.view.calendar;
     console.log(selectInfo);
+    // window.localStorage.setItem('calendar', selectInfo.start)
+    onSelectDate(selectInfo.start);
     calendarApi.unselect(); // clear date selection
     // toggleModal(selectInfo.startStr);
 
@@ -76,7 +80,7 @@ export default function Calendar() {
 
   const handleEvents = events => {
     console.log(events);
-    setCurrentEvents(events);
+    // setCurrentEvents(events);
   };
   return (
     <div className="calendar-wrapper">
@@ -119,7 +123,9 @@ export default function Calendar() {
     </div>
   );
 }
-
+Calendar.propTypes = {
+  onSelectDate: PropTypes.func,
+};
 function renderEventContent(eventInfo) {
   return (
     <>
