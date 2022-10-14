@@ -73,6 +73,7 @@ export function ArtistDetailPage({
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
   const [pageNumberComments, setPageNumberComments] = useState(0);
+  const [commentsData, setCommentsData] = useState([]);
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);
@@ -82,8 +83,41 @@ export function ArtistDetailPage({
     onLoadData(match.params.id);
     loadComments(match.params.id, pageNumberComments);
   }, [match.params.id]);
-  // eslint-disable-next-line no-console
-  console.log(comments, setPageNumberComments);
+
+  useEffect(() => {
+    if (comments !== false && pageNumberComments === 0) {
+      const { content } = comments.reviews;
+      setCommentsData(content);
+      localStorage.removeItem('comments');
+      const commentTemp = localStorage.getItem('comments');
+      const commentLocalStorageParse = JSON.parse(commentTemp) || [];
+      const commentLocalStorageTemp = [...commentLocalStorageParse, ...content];
+      const commentsLocalStorage = JSON.stringify(commentLocalStorageTemp);
+      localStorage.setItem('comments', commentsLocalStorage);
+    }
+  }, [comments]);
+
+  useEffect(() => {
+    if (pageNumberComments !== 0) {
+      loadComments(match.params.id, pageNumberComments);
+      if (comments !== false) {
+        const { content } = comments.reviews;
+        const commentTemp = localStorage.getItem('comments');
+        const commentLocalStorageParse = JSON.parse(commentTemp) || [];
+        const commentLocalStorageTemp = [
+          ...commentLocalStorageParse,
+          ...content,
+        ];
+        setCommentsData(commentLocalStorageTemp);
+        const commentsLocalStorage = JSON.stringify(commentLocalStorageTemp);
+        localStorage.setItem('comments', commentsLocalStorage);
+      }
+    }
+  }, [pageNumberComments]);
+
+  const handleSeeMore = () => {
+    setPageNumberComments(pageNumberComments + 1);
+  };
 
   return (
     <div>
@@ -96,8 +130,8 @@ export function ArtistDetailPage({
       <Tabs mb="12">
         <TabList color={TEXT_PURPLE}>
           <CustomTab>{t(messages.overview())}</CustomTab>
-          <CustomTab>{t(messages.review())}</CustomTab>
           <CustomTab>{t(messages.about())}</CustomTab>
+          <CustomTab>{t(messages.review())}</CustomTab>
         </TabList>
         {!data ? (
           <PageSpinner />
@@ -115,7 +149,12 @@ export function ArtistDetailPage({
               <Box>Coming</Box>
             </TabPanel>
             <TabPanel>
-              <Review />
+              <Review
+                comments={comments}
+                commentList={commentsData}
+                pageNumber={pageNumberComments}
+                handleSeeMore={handleSeeMore}
+              />
             </TabPanel>
           </TabPanels>
         )}
