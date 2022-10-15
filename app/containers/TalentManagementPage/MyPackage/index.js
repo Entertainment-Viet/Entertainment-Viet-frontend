@@ -205,7 +205,9 @@ const MyPackage = ({
         {mode === 1 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
-        <CustomButton>{t(messages.createPackage())}</CustomButton>
+        <Link href="/create-package">
+          <CustomButton>{t(messages.createPackage())}</CustomButton>
+        </Link>
       </Flex>
       {!data ? (
         <PageSpinner />

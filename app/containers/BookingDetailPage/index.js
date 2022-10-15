@@ -22,6 +22,7 @@ import {
   Box,
   Image,
   Divider,
+  Flex,
 } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -32,6 +33,7 @@ import { PRI_TEXT_COLOR, RED_COLOR } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
 import styled from 'styled-components';
+import BookingGeneralCard from './BookingGeneralCard';
 import Arrow from './assets/arrow.svg';
 import { loadData } from './actions';
 
@@ -42,10 +44,7 @@ import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
 import { makeSelectData } from './selectors';
-
-const H1 = styled.h1`
-  color: ${PRI_TEXT_COLOR};
-`;
+import BookingDetailCard from './BookingDetailCard';
 
 const key = 'BookingDetail';
 export function BookingDetailPage({ match, onLoadData, data }) {
@@ -54,13 +53,15 @@ export function BookingDetailPage({ match, onLoadData, data }) {
   const { t } = useTranslation();
 
   useEffect(() => {
-    onLoadData(match.params.id);
+    const talentId = window.localStorage.getItem('uid');
+    onLoadData(match.params.id, talentId);
   }, [match.params.id]);
 
   return (
     <div>
       <Metadata />
-      <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
+      {
+        /* <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
         <GridItem colSpan={2}>
           <VStack
             border="1px solid #718096"
@@ -100,7 +101,14 @@ export function BookingDetailPage({ match, onLoadData, data }) {
             </Container>
           </VStack>
         </GridItem>
-      </Grid>
+      </Grid> */
+        <Flex zIndex={1} position="relative" gap={4}>
+          <BookingGeneralCard data={data} />
+          <Box w="65%" flexGrow={1}>
+            <BookingDetailCard data={data} />
+          </Box>
+        </Flex>
+      }
     </div>
   );
 }
@@ -117,8 +125,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLoadData: id => {
-      dispatch(loadData(id));
+    onLoadData: (id, talentId) => {
+      dispatch(loadData(id, talentId));
     },
   };
 }

@@ -19,83 +19,82 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
+import { toIsoString, getResStatus, cacthResponse } from 'utils/helpers';
+import { API_GET_PACKAGE_INFO } from 'constants/api';
+import { post } from 'utils/request';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
-import TextAreaCustom from '../../components/Controls/TextAreaCustom';
-import UploadFileCustom from '../../components/Controls/UploadFileCustom';
 import SelectCustom from '../../components/Controls/SelectCustom';
-import DynamicFormV2 from '../../components/DynamicInputFormV2';
 import {
   PRI_BACKGROUND,
   RED_COLOR,
   SUB_BLU_COLOR,
   TEXT_GREEN,
-  TEXT_PURPLE,
-  THIRD_TEXT_COLOR,
 } from '../../constants/styles';
-import { QWERTYEditor } from '../../components/Controls';
-
+import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
+import { makeSelectCategories } from './selectors';
+import { loadCategories } from './actions';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
   },
 });
 
-const key = 'CreateEventPage';
+const key = 'CreatePackagePage';
 
-export function CreateEventPage() {
+export function CreatePackagePage({ getCategories, categories }) {
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
   const { t } = useTranslation();
-  const fileUpload = useRef(null);
-  const [file, setFile] = useState(null);
-  const [dynamicData, setDynamicData] = useState();
+
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
   const describeNFTRef = useRef(null);
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCategories();
+  }, []);
 
-  const onSubmit = async values => {
+  const onSubmit = async () => {
+    const talentId = window.localStorage.getItem('uid');
     const val = {
-      name: values.name,
-      description: values.description,
-      formOfWork: values.formOfWork,
-      currency: values.currency,
-      dynamic: dynamicData,
-      category: values.constructor,
-      subCategory: values.subCategory,
-      desc: describeNFTRef.current.getContent(),
+      name: getValues('name'),
+      jobDetail: {
+        categoryUid: getValues('category'),
+        workType: getValues('workType'),
+        price: {
+          min: getValues('min'),
+          max: getValues('max'),
+          currency: 'currency.vnd',
+        },
+        note: describeNFTRef.current.getContent(),
+        location: getValues('location'),
+        performanceStartTime: toIsoString(start),
+        performanceEndTime: toIsoString(end),
+        performanceCount: 0,
+        extensions: 'string',
+      },
     };
-    // eslint-disable-next-line no-console
-    console.log('values', values);
-    // eslint-disable-next-line no-console
-    console.log(isSubmitting);
-    return new Promise(resolve => {
-      setTimeout(() => {
-        // eslint-disable-next-line no-alert
-        alert(JSON.stringify(val, null, 2));
-        resolve();
-      }, 3000);
+    post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
+      const status1 = getResStatus(res1);
+      if (status1 === '201') {
+        console.log('sent');
+      } else if (status1 === '400') {
+        console.log('fail');
+      } else {
+        cacthResponse(res1);
+      }
     });
   };
-
-  const optionsCategory = [
-    { label: 'Green', value: 'green' },
-    { label: 'Green-Yellow', value: 'greenyellow' },
-    { label: 'Red', value: 'red' },
-    { label: 'Violet', value: 'violet' },
-    { label: 'Forest', value: 'forest' },
-    { label: 'Tangerine', value: 'tangerine' },
-    { label: 'Blush', value: 'blush' },
-    { label: 'Purple', value: 'purple' },
-  ];
 
   return (
     <SimpleGrid
@@ -146,7 +145,23 @@ export function CreateEventPage() {
                   {errors.name && errors.name.message}
                 </Text>
               </FormControl>
-              <FormControl>
+              <CustomFormLabel>Start</CustomFormLabel>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="start_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={setStart}
+              />
+              <CustomFormLabel>End</CustomFormLabel>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={setEnd}
+              />
+              {/* <FormControl>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.desc())}
                 </CustomFormLabel>
@@ -165,7 +180,7 @@ export function CreateEventPage() {
                 <Text color={RED_COLOR}>
                   {errors.description && errors.description.message}
                 </Text>
-              </FormControl>
+              </FormControl> */}
               <FormControl isInvalid={errors.name}>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.desc())}
@@ -178,15 +193,49 @@ export function CreateEventPage() {
                   // {...register('description')}
                 />
               </FormControl>
-              <FormControl>
-                <UploadFileCustom
-                  type="file"
-                  ref={fileUpload}
-                  onChange={e => setFile(e.target.files[0])}
-                  accept="image/*"
+              <Box>
+                <CustomFormLabel htmlFor="subcategory">
+                  {t(messages.workType())}
+                </CustomFormLabel>
+                <SelectCustom
+                  placeholder="Select option"
+                  {...register('workType')}
+                >
+                  <option value="work.type.single-time">Single time</option>
+                  <option value="work.type.single-show">Single show</option>
+                  <option value=" work.type.period-contract">
+                    Single contract
+                  </option>
+                </SelectCustom>
+              </Box>
+              <Box>
+                {/* <CustomFormLabel htmlFor="location">
+                  {t(messages.location())}
+                </CustomFormLabel>
+                <SelectCustom
+                  placeholder="Select option"
+                  {...register('location')}
+                >
+                  <option value="TPHCM">Thành phố Hồ Chí Minh</option>
+                </SelectCustom> */}
+                <CustomFormLabel htmlFor="location">
+                  {t(messages.location())}
+                </CustomFormLabel>
+                <InputCustomV2
+                  id="location"
+                  placeholder="Địa điểm"
+                  {...register('location', {
+                    required: 'This is required',
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
+                  })}
                 />
-              </FormControl>
-              {file && <Text color={TEXT_GREEN}>{file.name}</Text>}
+                <Text color={RED_COLOR}>
+                  {errors.location && errors.location.message}
+                </Text>
+              </Box>
               <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
@@ -197,12 +246,13 @@ export function CreateEventPage() {
                       placeholder="Select option"
                       {...register('category')}
                     >
-                      {optionsCategory.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                      {categories &&
+                        categories.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
                     </SelectCustom>
                   </Box>
                   <Box>
@@ -213,22 +263,22 @@ export function CreateEventPage() {
                       placeholder="Select option"
                       {...register('subcategory')}
                     >
-                      {optionsCategory.map((option, index) => (
+                      {/* {optionsCategory.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={index} value={option.value}>
                           {option.label}
                         </option>
-                      ))}
+                      ))} */}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <CustomFormLabel htmlFor="skills">
                   {t(messages.skills())}
                 </CustomFormLabel>
                 <DynamicFormV2 setDynamicData={setDynamicData} />
-              </FormControl>
+              </FormControl> */}
             </Stack>
           </Box>
         </Box>
@@ -250,83 +300,39 @@ export function CreateEventPage() {
             <Stack spacing="2">
               <FormControl>
                 <CustomFormLabel htmlFor="formOfWork">
-                  {t(messages.formOfWork())}
-                </CustomFormLabel>
-                <TextAreaCustom
-                  name="formOfWork"
-                  id="formOfWork"
-                  placeholder="Forms of Work..."
-                  {...register('formOfWork', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                />
-                <Text color={RED_COLOR}>
-                  {errors.formOfWork && errors.formOfWork.message}
-                </Text>
-              </FormControl>
-              <FormControl>
-                <SimpleGrid columns={2} spacing={2}>
-                  <Box>
-                    <CustomFormLabel htmlFor="formOfWork">
-                      {t(messages.currency())}
-                    </CustomFormLabel>
-                    <InputCustomV2
-                      id="currency"
-                      type="number"
-                      placeholder="0.000"
-                      {...register('currency', {
-                        required: 'This is required',
-                        minLength: {
-                          value: 4,
-                          message: 'Minimum length should be 4',
-                        },
-                      })}
-                    />
-                    <Text color={RED_COLOR}>
-                      {errors.currency && errors.currency.message}
-                    </Text>
-                  </Box>
-                </SimpleGrid>
-              </FormControl>
-              <FormControl>
-                <CustomFormLabel htmlFor="paymentMethod">
-                  {t(messages.paymentMethod())}
+                  {t(messages.currency())}
                 </CustomFormLabel>
                 <SimpleGrid columns={2} spacing={2}>
-                  <Box width="100%">
-                    <Button
-                      sx={{
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        background: TEXT_PURPLE,
-                        width: '100%',
-                        height: '56px',
-                      }}
-                      color={SUB_BLU_COLOR}
-                      {...register('prepay')}
-                    >
-                      {t(messages.prepay())}
-                    </Button>
-                  </Box>
-                  <Box width="100%">
-                    <Button
-                      sx={{
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        background: THIRD_TEXT_COLOR,
-                        width: '100%',
-                        height: '56px',
-                      }}
-                      color={SUB_BLU_COLOR}
-                      {...register('postPaid')}
-                    >
-                      {t(messages.postPaid())}
-                    </Button>
-                  </Box>
+                  <InputCustomV2
+                    id="min"
+                    type="number"
+                    placeholder="Min"
+                    {...register('min', {
+                      required: 'This is required',
+                      minLength: {
+                        value: 4,
+                        message: 'Minimum length should be 4',
+                      },
+                    })}
+                  />
+                  <InputCustomV2
+                    id="max"
+                    type="number"
+                    placeholder="Max"
+                    {...register('max', {
+                      required: 'This is required',
+                      minLength: {
+                        value: 4,
+                        message: 'Minimum length should be 4',
+                      },
+                    })}
+                  />
+                  <Text color={RED_COLOR}>
+                    {errors.min && errors.min.message}
+                  </Text>
+                  <Text color={RED_COLOR}>
+                    {errors.max && errors.max.message}
+                  </Text>
                 </SimpleGrid>
               </FormControl>
             </Stack>
@@ -347,7 +353,7 @@ export function CreateEventPage() {
             type="submit"
             isLoading={isSubmitting}
           >
-            {t(messages.submit())}
+            Create
           </Button>
         </Box>
       </form>
@@ -355,15 +361,21 @@ export function CreateEventPage() {
   );
 }
 
-CreateEventPage.propTypes = {
+CreatePackagePage.propTypes = {
   match: PropTypes.object,
+  getCategories: PropTypes.func,
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  categories: makeSelectCategories(),
+});
 export function mapDispatchToProps(dispatch) {
-  // eslint-disable-next-line no-console
-  console.log(dispatch);
-  return {};
+  return {
+    getCategories: () => {
+      dispatch(loadCategories());
+    },
+  };
 }
 
 const withConnect = connect(
@@ -374,4 +386,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CreateEventPage);
+)(CreatePackagePage);

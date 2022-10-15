@@ -107,7 +107,8 @@
     "formOfWork": "Forms of Work",
     "paymentMethod": "Payment Method",
     "prepay": "Prepay",
-    "postPaid": "Post Paid"
+    "postPaid": "Post Paid",
+    "createPackage": "Create new package"
   },
   "artistDetailPage": {
     "overview": "Overview",

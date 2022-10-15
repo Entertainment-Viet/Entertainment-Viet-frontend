@@ -42,3 +42,18 @@ export const ENUM_PAGGING = {
   page: 1,
   limit: 12,
 };
+
+export const ENUM_BOOKING_STATUS = {
+  ORG_PENDING: 'booking.status.organizer-pending',
+  TALENT_PENDING: 'booking.status.talent-pending',
+  CONFIRMED: 'booking.status.confirmed',
+  CANCELLED: 'booking.status.cancelled',
+  FINISHED: 'booking.status.finished',
+  ARCHIVED: 'booking.status.archived',
+};
+
+export const ENUM_WORK_TYPE = {
+  SINGLE_TIME: 'work.type.single-time',
+  SINGLE_SHOW: 'work.type.single-show',
+  PERIOD_CONTRACT: 'work.type.period-contract',
+};

@@ -5,12 +5,10 @@ import {
   chakra,
   UnorderedList,
   ListItem,
-  Link,
+  Divider,
 } from '@chakra-ui/react';
 import { SUB_BLU_COLOR, TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 import { H1 } from 'components/Elements';
-import Buttons from 'components/Buttons';
-import styled from 'styled-components';
 import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
 
@@ -28,7 +26,7 @@ const GradientBox = chakra(Box, {
     position: 'relative',
     backgroundClip: 'padding-box',
     px: '2rem',
-    py: '6rem',
+    py: '2rem',
     _before: {
       content: `""`,
       position: 'absolute',
@@ -45,30 +43,19 @@ const GradientBox = chakra(Box, {
   },
 });
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const CustomLink = styled(Link)`
-  width: 90%;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  margin: auto;
-`;
-const PackageDetailCard = ({ data }) => (
+const BookingDetailCard = ({ data }) => (
   <GradientBox>
     {console.log(data)}
     {!data ? (
       <PageSpinner />
     ) : (
       <>
-        <Text color={TEXT_GREEN} as="h1" fontSize="30px">
-          Package Detail
+        <Text color={TEXT_GREEN} as="h1">
+          Booking Details
         </Text>
         <H1 color={TEXT_PURPLE} py={0} mb={-2}>
           {data.name}
         </H1>
-        <Text>
-          {data.jobDetail.price.min} - {data.jobDetail.price.max}
-        </Text>
         <Text color={TEXT_PURPLE} mt={6}>
           Details
         </Text>
@@ -87,16 +74,18 @@ const PackageDetailCard = ({ data }) => (
             <Text>Note: {data.jobDetail.note} </Text>
           </ListItem>
         </UnorderedList>
-        <CustomLink href="/#">
-          <Buttons width="100%" bg={TEXT_PURPLE} color={SUB_BLU_COLOR}>
-            Edit
-          </Buttons>
-        </CustomLink>
+        <Divider mt={6} />
+        <Text color={TEXT_PURPLE} mt={6}>
+          Skills Requirement (coming soon)
+        </Text>
+        <Text color={TEXT_PURPLE} mt={6}>
+          Form of Work: {data.jobDetail.workType}
+        </Text>
       </>
     )}
   </GradientBox>
 );
-PackageDetailCard.propTypes = {
+BookingDetailCard.propTypes = {
   data: PropTypes.any,
 };
-export default PackageDetailCard;
+export default BookingDetailCard;
