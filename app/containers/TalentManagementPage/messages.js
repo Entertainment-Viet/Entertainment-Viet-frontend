@@ -18,4 +18,13 @@ export const messages = {
   createPackage: () => t(translations.TalentManagementPage.createPackage),
   delete: () => t(translations.TalentManagementPage.delete),
   edit: () => t(translations.TalentManagementPage.edit),
+  done: () => t(translations.TalentManagementPage.done),
+  contact: () => t(translations.TalentManagementPage.contact),
+  cancel: () => t(translations.TalentManagementPage.cancel),
+  all: () => t(translations.TalentManagementPage.all),
+  upcoming: () => t(translations.TalentManagementPage.upcoming),
+  pending: () => t(translations.TalentManagementPage.pending),
+  canceled: () => t(translations.TalentManagementPage.canceled),
+  budget: () => t(translations.TalentManagementPage.budget),
+  detail: () => t(translations.TalentManagementPage.detail),
 };

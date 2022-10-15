@@ -143,6 +143,15 @@
     "back": "Back",
     "createPackage": "+ Create new package",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "done": "Done",
+    "contact": "Contact",
+    "cancel": "Cancel",
+    "all": "All",
+    "upcoming": "Upcoming",
+    "pending": "Pending",
+    "canceled": "Canceled",
+    "budget": "Ngân sách hiện có",
+    "detail": "Chi tiết"
   }
 }

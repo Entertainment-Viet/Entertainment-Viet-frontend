@@ -6,9 +6,6 @@ import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
-  Flex,
-  Text,
-  Link,
   Tab,
   TabList,
   Tabs,
@@ -19,7 +16,6 @@ import {
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import MyTable from 'components/Table';
 import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 // import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
 
@@ -27,10 +23,6 @@ import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 
 // import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
 import { H1 } from 'components/Elements';
-import styled from 'styled-components';
-import {} from 'constants/routes';
-import {} from './styles';
-import PageSpinner from 'components/PageSpinner';
 import { messages } from './messages';
 
 import { changePage, loadPackages, changeMode } from './actions';
@@ -44,17 +36,10 @@ import {
   makeSelectMode,
 } from './selectors';
 import MyPackage from './MyPackage';
-// import { propTypes } from 'qrcode.react';
+import Orders from './Orders';
 
 const key = 'ManagementPage';
-export function ManagementPage({
-  loading,
-  error,
-  data,
-  onLoadData,
-  handleModeChange,
-  mode,
-}) {
+export function ManagementPage({ data, onLoadData, mode }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -86,7 +71,13 @@ export function ManagementPage({
         </TabList>
         <TabPanels>
           <TabPanel>
+            <Box>Comming soon</Box>
+          </TabPanel>
+          <TabPanel>
             <MyPackage data={data} mode={mode} />
+          </TabPanel>
+          <TabPanel>
+            <Orders data={data} />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -96,9 +87,6 @@ export function ManagementPage({
 
 ManagementPage.propTypes = {
   onLoadData: PropTypes.func,
-  handleModeChange: PropTypes.func,
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   mode: PropTypes.number,
 };
