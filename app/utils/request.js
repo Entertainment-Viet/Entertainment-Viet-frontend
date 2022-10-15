@@ -13,10 +13,10 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response.data;
   }
-
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
+  return response.status;
+  // const error = new Error(response.statusText);
+  // error.response = response;
+  // throw error;
 }
 
 export function get(url, params, id1, id2, id3) {

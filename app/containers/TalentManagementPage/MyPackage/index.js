@@ -12,6 +12,8 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import { API_GET_PACKAGE_INFO } from 'constants/api';
+import { del } from 'utils/request';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -33,6 +35,7 @@ import {
   makeSelectPackageInfo,
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
+
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -132,7 +135,17 @@ const MyPackage = ({
   useEffect(() => {
     onLoadData();
   }, []);
-
+  const userId = window.localStorage.getItem('uid');
+  function handleDelete(id) {
+    del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
+      console.log(res1);
+      if (res1 > 300) {
+        console.log('error');
+      } else {
+        onLoadData(userId);
+      }
+    });
+  }
   let tablePackage;
   let tableBooking;
   if (data) {
@@ -144,7 +157,7 @@ const MyPackage = ({
               handleModeChange(1);
               onLoadData(user.uid);
               handlePageChange(0);
-              loadPackage(user.uid, window.localStorage.getItem('uid'));
+              loadPackage(user.uid, userId);
             }}
           >
             {user.name}
@@ -161,7 +174,11 @@ const MyPackage = ({
             <Button colorScheme="purple" size="xs">
               {t(messages.edit())}
             </Button>
-            <Button colorScheme="red" size="xs">
+            <Button
+              colorScheme="red"
+              size="xs"
+              onClick={() => handleDelete(user.uid)}
+            >
               {t(messages.delete())}
             </Button>
           </HStack>
