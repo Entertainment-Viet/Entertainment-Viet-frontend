@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, chakra, VStack } from '@chakra-ui/react';
 import {
   SUB_BLU_COLOR,
@@ -10,14 +10,19 @@ import Buttons from 'components/Buttons';
 import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
 import { post, del } from 'utils/request';
+import { numberWithCommas, getResStatus, cacthResponse } from 'utils/helpers';
 import {
   API_GET_BOOKING_TALENT_INFO,
   API_GET_BOOKING_ORG_INFO,
 } from 'constants/api';
-import { getResStatus, cacthResponse } from 'utils/helpers';
+
 import FeedbackOfferModal from 'components/Modal/FeedbackOfferModal';
-import { ENUM_BOOKING_STATUS } from '../../constants/enums';
+import { useTranslation } from 'react-i18next';
 import AcceptOfferModal from '../../components/Modal/AcceptOfferModal';
+import ConfirmFinishModal from '../../components/Modal/ConfirmFinishModal';
+import { globalMessages } from '../App/globalMessage';
+import { ENUM_BOOKING_STATUS } from '../../constants/enums';
+import { messages } from './messages';
 
 const GradientBox = chakra(Box, {
   baseStyle: {
@@ -54,9 +59,11 @@ const GradientBox = chakra(Box, {
 // If you want to use your own Selectors look up the Advancaed Story book examples
 
 const BookingGeneralCard = ({ data }) => {
+  const { t } = useTranslation();
   const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
   const [isShowing, setIsShowing] = useState(false);
+  const [enable, setEnable] = useState(true);
   const toggleModal = () => {
     setIsShowing(!isShowing);
     // loadPackage(inputId, match.params.id);
@@ -66,6 +73,21 @@ const BookingGeneralCard = ({ data }) => {
     setIsShowing1(!isShowing1);
     // loadPackage(inputId, match.params.id);
   };
+  const [isShowing2, setIsShowing2] = useState(false);
+  const toggleModal2 = () => {
+    setIsShowing2(!isShowing2);
+    // loadPackage(inputId, match.params.id);
+  };
+  function isEnableButton() {
+    console.log('aaa');
+    if (role === 'talent') {
+      return data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING;
+    }
+    if (role === 'organizer') {
+      return data.status !== ENUM_BOOKING_STATUS.ORG_PENDING;
+    }
+    return true;
+  }
   function handleAccept() {
     if (role === 'talent')
       post(API_GET_BOOKING_TALENT_INFO, {}, id, data.uid).then(res1 => {
@@ -89,6 +111,7 @@ const BookingGeneralCard = ({ data }) => {
           cacthResponse(res1);
         }
       });
+    // window.location.reload();
   }
   function handleCancel() {
     if (role === 'talent')
@@ -114,6 +137,10 @@ const BookingGeneralCard = ({ data }) => {
         }
       });
   }
+
+  useEffect(() => {
+    setEnable(isEnableButton());
+  }, [data]);
   return (
     <GradientBox>
       {console.log(data)}
@@ -123,31 +150,34 @@ const BookingGeneralCard = ({ data }) => {
         <>
           <VStack alignItems="flex-start">
             <Text color={TEXT_GREEN} as="h1">
-              Booking Informations
+              {t(messages.bookingInfo())}
             </Text>
             <Text>
-              <b>Organizer:</b> {data.org.displayName}
+              <b>Organizer:</b> {data.organizerName}
             </Text>
             <Text>
               <b>Talent:</b> {data.talent.displayName}
             </Text>
             <Text>
-              <b>Perform date and time:</b>{' '}
+              <b>{t(messages.performTime())}</b>{' '}
               {new Date(data.jobDetail.performanceStartTime).toLocaleString()} -{' '}
               {new Date(data.jobDetail.performanceEndTime).toLocaleString()}
             </Text>
             <Text>
-              <b>Price:</b> {data.jobDetail.price.min} -{' '}
-              {data.jobDetail.price.max}
+              <b>{t(messages.price())}</b>{' '}
+              {numberWithCommas(data.jobDetail.price.min)} -{' '}
+              {numberWithCommas(data.jobDetail.price.max)}
             </Text>
             <Text>
-              <b>Payment type:</b> {data.paymentType}
+              <b>{t(messages.paymentType())}</b>{' '}
+              {t(globalMessages[data.paymentType])}
             </Text>
             <Text>
-              <b>Paid:</b> {data.isPaid.toString()}
+              <b>{t(messages.paid())}</b>{' '}
+              {data.isPaid ? t(messages.isPaid()) : t(messages.isNotPaid())}
             </Text>
             <Text>
-              <b>Status:</b> {data.status}
+              <b>{t(messages.status())}</b> {t(globalMessages[data.status])}
             </Text>
           </VStack>
           <VStack>
@@ -156,20 +186,19 @@ const BookingGeneralCard = ({ data }) => {
                 width="100%"
                 bg={TEXT_GREEN}
                 color={SUB_BLU_COLOR}
-                disabled={data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING}
-                onClick={toggleModal}
+                onClick={toggleModal2}
               >
-                Confirm finished
+                {t(messages.confirmFinish())}
               </Buttons>
             ) : (
               <Buttons
                 width="100%"
                 bg={TEXT_GREEN}
                 color={SUB_BLU_COLOR}
-                disabled={data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING}
+                disabled={enable}
                 onClick={handleAccept}
               >
-                Accept offer
+                {t(messages.accept())}
               </Buttons>
             )}
 
@@ -177,19 +206,19 @@ const BookingGeneralCard = ({ data }) => {
               width="100%"
               bg={TEXT_PURPLE}
               color={SUB_BLU_COLOR}
-              disabled={data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING}
+              disabled={enable}
               onClick={toggleModal}
             >
-              Offer new price
+              {t(messages.offer())}
             </Buttons>
             <Buttons
               width="100%"
               bg={RED_COLOR}
               color={SUB_BLU_COLOR}
-              disabled={data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING}
+              disabled={enable}
               onClick={handleCancel}
             >
-              Cancel
+              {t(messages.cancel())}
             </Buttons>
           </VStack>
         </>
@@ -203,6 +232,11 @@ const BookingGeneralCard = ({ data }) => {
         data={data}
         onClose={() => toggleModal1()}
         show={isShowing1}
+      />
+      <ConfirmFinishModal
+        data={data}
+        onClose={() => toggleModal2()}
+        show={isShowing2}
       />
     </GradientBox>
   );

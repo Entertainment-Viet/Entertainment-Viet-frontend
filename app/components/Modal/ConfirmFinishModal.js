@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import './Modal.css';
@@ -19,11 +19,12 @@ import { useTranslation } from 'react-i18next';
 import Button from 'components/Buttons';
 import { getResStatus, cacthError, cacthResponse } from 'utils/helpers';
 import { useForm } from 'react-hook-form';
-import { put } from 'utils/request';
+import { post } from 'utils/request';
 import {
-  API_GET_BOOKING_TALENT_INFO,
-  API_GET_BOOKING_ORG_INFO,
+  API_TALENT_FINISH_BOOKING,
+  API_ORG_FINISH_BOOKING,
 } from 'constants/api';
+import BasicRating from '../Rating/BasicRating';
 import { messages } from './messages';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -31,29 +32,26 @@ const CustomFormLabel = chakra(FormLabel, {
   },
 });
 
-const FeedbackOfferModal = props => {
+const ConfirmFinishModal = props => {
   const {
     handleSubmit,
     register,
     getValues,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const [rating, setRating] = useState(0);
   const { t } = useTranslation();
   const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
   function onSubmit() {
     if (role === 'talent') {
       const val = {
-        jobDetail: {
-          price: {
-            min: getValues('price'),
-            max: Number(props.data.jobDetail.price.max),
-            currency: 'currency.vnd',
-          },
-        },
+        organizerId: id,
+        talentId: props.data.uid,
+        comment: getValues('comment'),
+        score: rating,
       };
-      put(API_GET_BOOKING_TALENT_INFO, val, id, props.data.uid)
+      post(API_TALENT_FINISH_BOOKING, val, id, props.data.uid)
         .then(res => {
           const status = getResStatus(res);
           if (status === 200) {
@@ -77,7 +75,7 @@ const FeedbackOfferModal = props => {
           },
         },
       };
-      put(API_GET_BOOKING_ORG_INFO, val, id, props.data.uid)
+      post(API_ORG_FINISH_BOOKING, val, id, props.data.uid)
         .then(res => {
           const status = getResStatus(res);
           if (status === 200) {
@@ -128,9 +126,15 @@ const FeedbackOfferModal = props => {
           onKeyPress={closeOnEscapeKeyDown}
         >
           <VStack align="flex-start" p={4} spacing={4}>
-            <HStack />
-            <HStack />
-
+            <BasicRating
+              size={48}
+              icon="star"
+              scale={5}
+              fillColor="gold"
+              strokeColor="grey"
+              setRating={setRating}
+              rating={rating}
+            />
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl isInvalid={errors.suggestedPrice}>
                 <CustomFormLabel htmlFor="suggestedPrice">
@@ -138,10 +142,10 @@ const FeedbackOfferModal = props => {
                 </CustomFormLabel>
                 <Input
                   bg="white"
-                  id="price"
+                  id="comment"
                   color="black"
                   placeholder="Mức giá"
-                  {...register('price', {
+                  {...register('comment', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
@@ -173,4 +177,4 @@ const FeedbackOfferModal = props => {
   );
 };
 
-export default FeedbackOfferModal;
+export default ConfirmFinishModal;

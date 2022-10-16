@@ -145,7 +145,6 @@
     "back": "Back",
     "createPackage": "+ Create new package",
     "edit": "Edit",
-    "delete": "Delete",
     "done": "Done",
     "contact": "Contact",
     "cancel": "Cancel",
@@ -154,6 +153,39 @@
     "pending": "Pending",
     "canceled": "Canceled",
     "budget": "Ngân sách hiện có",
-    "detail": "Chi tiết"
+    "detail": "Chi tiết",
+    "delete": "Delete"
+  },
+  "bookingDetailPage": {
+    "bookingInfo": "Thông tin booking: ",
+    "performTime": "Thời gian biểu diễn: ",
+    "price": "Mức giá: ",
+    "paymentType": "Hình thức thanh toán: ",
+    "paid": "Trạng thái thanh toán: ",
+    "status": "Trạng thái booking: ",
+    "confirmFinish": "Xác nhận hoàn thành",
+    "accept": "Chấp nhận",
+    "offer": "Đề nghị mới",
+    "cancel": "Hủy",
+    "isPaid": "Đã thanh toán",
+    "isNotPaid": "Chưa thanh toán",
+    "bookingDetail": "Thông tin chi tiết của Booking",
+    "detail": "Thông tin chi tiết",
+    "location": "Địa điểm",
+    "skillRequired": "Kỹ năng yêu cầu",
+    "workType": "Hình thức làm việc: "
+  },
+  "globalMessages": {
+    "ORG_PENDING": "Đang chờ phía tổ chức",
+    "TALENT_PENDING": "Đang chờ phía talent",
+    "CONFIRMED": "Đã xác nhận",
+    "CANCELLED": "Đã hủy",
+    "FINISHED": "Đã hoàn thành",
+    "ARCHIVED": "Đã lưu trữ",
+    "SINGLE_TIME": "Diễn một lần",
+    "SINGLE_SHOW": "Diễn một show",
+    "PERIOD_CONTRACT": "Diễn theo hợp đồng",
+    "ONLINE": "Trả trước",
+    "OFFLINE": "Trả sau"
   }
 }

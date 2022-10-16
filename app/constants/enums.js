@@ -57,3 +57,7 @@ export const ENUM_WORK_TYPE = {
   SINGLE_SHOW: 'work.type.single-show',
   PERIOD_CONTRACT: 'work.type.period-contract',
 };
+export const ENUM_PAYMENT_TYPE = {
+  ONLINE: 'payment.online',
+  OFFLINE: 'payment.offline',
+};

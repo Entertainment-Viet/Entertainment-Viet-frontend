@@ -28,7 +28,7 @@ export function* getData() {
       );
       const booker = yield all(
         payload.content.map(el =>
-          call(get, `${API_ORG_DETAIL}`, {}, el.organizerUid),
+          call(get, `${API_ORG_DETAIL}`, {}, el.organizerId),
         ),
       );
       payload.content = payload.content.map((p, index) => ({
@@ -56,7 +56,7 @@ export function* getBookingData() {
     console.log(payload);
     const booker = yield all(
       payload.content.map(el =>
-        call(get, `${API_ORG_DETAIL}`, {}, el.organizerUid),
+        call(get, `${API_ORG_DETAIL}`, {}, el.organizerId),
       ),
       // payload.content.map(el => console.log(el.organizerUid)),
     );

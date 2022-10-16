@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Icon, PseudoBox, Stack, Text } from '@chakra-ui/react';
+import { Box, Icon, Stack, Text } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
 const BasicRating = React.forwardRef(
-  ({ size, icon, scale, fillColor, strokeColor }, ref) => {
-    const [rating, setRating] = useState(0);
+  ({ size, icon, scale, fillColor, strokeColor, setRating, rating }, ref) => {
+    // const [rating, setRating] = useState(0);
     const buttons = [];
 
     const onClick = idx => {
@@ -20,28 +20,28 @@ const BasicRating = React.forwardRef(
 
     const RatingIcon = ({ fill }) => (
       <Icon
-        name={StarIcon}
-        // size={`${size}px`}
-        // color={fillColor}
-        // stroke={strokeColor}
-        // onClick={onClick}
-        // fillOpacity={fill ? '100%' : '0'}
+        as={StarIcon}
+        size={`${size}px`}
+        color={fillColor}
+        stroke={strokeColor}
+        onClick={onClick}
+        fillOpacity={fill ? '100%' : '0'}
       />
     );
 
     const RatingButton = ({ idx, fill }) => (
-      <PseudoBox
+      <Box
         as="button"
-        // aria-label={`Rate ${idx}`}
-        // height={`${size}px`}
-        // width={`${size}px`}
-        // variant="unstyled"
+        aria-label={`Rate ${idx}`}
+        height={`${size}px`}
+        width={`${size}px`}
+        variant="unstyled"
         mx={1}
         onClick={() => onClick(idx)}
         _focus={{ outline: 0 }}
       >
         <RatingIcon fill={fill} />
-      </PseudoBox>
+      </Box>
     );
 
     for (let i = 1; i <= scale; i += 1) {

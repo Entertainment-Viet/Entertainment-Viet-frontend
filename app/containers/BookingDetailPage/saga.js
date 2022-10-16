@@ -9,6 +9,7 @@ import {
   API_TALENT_DETAIL,
   API_ORG_DETAIL,
   API_GET_BOOKING_ORG_INFO,
+  API_PACKAGE_LIST,
 } from 'constants/api';
 import { LOAD_DATA } from './constants';
 import { loadDataSuccess, loadDataError } from './actions';
@@ -19,7 +20,10 @@ export function* getData(id) {
   const role = window.localStorage.getItem('role');
   try {
     let payload;
-    if (role === 'talent')
+    let packageInfo;
+    let talent;
+    let org;
+    if (role === 'talent') {
       payload = yield call(
         get,
         API_GET_BOOKING_TALENT_INFO,
@@ -27,7 +31,9 @@ export function* getData(id) {
         id.talentId,
         id.id,
       );
-    else if (role === 'organizer') {
+      talent = yield call(get, API_TALENT_DETAIL, {}, id.talentId);
+      org = yield call(get, API_ORG_DETAIL, {}, payload.organizerId);
+    } else if (role === 'organizer') {
       payload = yield call(
         get,
         API_GET_BOOKING_ORG_INFO,
@@ -35,9 +41,21 @@ export function* getData(id) {
         id.talentId,
         id.id,
       );
+      talent = yield call(get, API_TALENT_DETAIL, {}, payload.talentId);
+      org = yield call(get, API_ORG_DETAIL, {}, id.talentId);
     }
-    const talent = yield call(get, API_TALENT_DETAIL, {}, id.talentId);
-    const org = yield call(get, API_ORG_DETAIL, {}, payload.organizerUid);
+    try {
+      packageInfo = yield call(
+        get,
+        `${API_PACKAGE_LIST}/${payload.packageUid}`,
+        {},
+        id.talentId,
+      );
+      payload.package = packageInfo;
+    } catch (err) {
+      console.log(err);
+      payload.package = null;
+    }
     payload.talent = talent;
     payload.org = org;
     yield put(loadDataSuccess(payload));

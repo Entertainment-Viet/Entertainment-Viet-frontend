@@ -195,7 +195,7 @@ const MyPackage = ({
               </Link>
             </Flex>
           ),
-          booker: booking.booker.displayName,
+          booker: booking.organizerName,
           priceMin: jobDetail.price.min,
           priceMax: jobDetail.price.max,
           paymentType: booking.paymentType,
