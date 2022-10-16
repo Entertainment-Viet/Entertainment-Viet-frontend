@@ -181,6 +181,8 @@
     "CONFIRMED": "Đã xác nhận",
     "CANCELLED": "Đã hủy",
     "FINISHED": "Đã hoàn thành",
+    "TALENT_FINISHED": "Talent đã xác nhận hoàn thành",
+    "ORG_FINISHED": "Phía tổ chức đã xác nhận hoàn thành",
     "ARCHIVED": "Đã lưu trữ",
     "SINGLE_TIME": "Diễn một lần",
     "SINGLE_SHOW": "Diễn một show",

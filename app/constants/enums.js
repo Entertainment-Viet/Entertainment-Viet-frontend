@@ -50,6 +50,8 @@ export const ENUM_BOOKING_STATUS = {
   CANCELLED: 'booking.status.cancelled',
   FINISHED: 'booking.status.finished',
   ARCHIVED: 'booking.status.archived',
+  TALENT_FINISHED: 'booking.status.talent-finished',
+  ORG_FINISHED: 'booking.status.organizer-finished',
 };
 
 export const ENUM_WORK_TYPE = {

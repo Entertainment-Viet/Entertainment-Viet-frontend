@@ -41,17 +41,17 @@ const ConfirmFinishModal = props => {
   } = useForm();
   const [rating, setRating] = useState(0);
   const { t } = useTranslation();
-  const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
+  const { data } = props;
   function onSubmit() {
     if (role === 'talent') {
       const val = {
-        organizerId: id,
-        talentId: props.data.uid,
+        organizerId: data.organizerId,
+        talentId: data.talentId,
         comment: getValues('comment'),
         score: rating,
       };
-      post(API_TALENT_FINISH_BOOKING, val, id, props.data.uid)
+      post(API_TALENT_FINISH_BOOKING, val, data.talentId, data.uid)
         .then(res => {
           const status = getResStatus(res);
           if (status === 200) {
@@ -67,15 +67,12 @@ const ConfirmFinishModal = props => {
         .catch(err => cacthError(err));
     } else if (role === 'organizer') {
       const val = {
-        jobDetail: {
-          price: {
-            max: getValues('price'),
-            min: Number(props.data.jobDetail.price.min),
-            currency: 'currency.vnd',
-          },
-        },
+        organizerId: data.organizerId,
+        talentId: data.talentId,
+        comment: getValues('comment'),
+        score: rating,
       };
-      post(API_ORG_FINISH_BOOKING, val, id, props.data.uid)
+      post(API_ORG_FINISH_BOOKING, val, data.organizerId, data.uid)
         .then(res => {
           const status = getResStatus(res);
           if (status === 200) {

@@ -181,26 +181,28 @@ const BookingGeneralCard = ({ data }) => {
             </Text>
           </VStack>
           <VStack>
-            {data.status === ENUM_BOOKING_STATUS.CONFIRMED ? (
-              <Buttons
-                width="100%"
-                bg={TEXT_GREEN}
-                color={SUB_BLU_COLOR}
-                onClick={toggleModal2}
-              >
-                {t(messages.confirmFinish())}
-              </Buttons>
-            ) : (
-              <Buttons
-                width="100%"
-                bg={TEXT_GREEN}
-                color={SUB_BLU_COLOR}
-                disabled={enable}
-                onClick={handleAccept}
-              >
-                {t(messages.accept())}
-              </Buttons>
-            )}
+            {data.status === ENUM_BOOKING_STATUS.CONFIRMED ||
+            data.status === ENUM_BOOKING_STATUS.TALENT_FINISHED ||
+            data.status === ENUM_BOOKING_STATUS.ORG_FINISHED ? (
+                <Buttons
+                  width="100%"
+                  bg={TEXT_GREEN}
+                  color={SUB_BLU_COLOR}
+                  onClick={toggleModal2}
+                >
+                  {t(messages.confirmFinish())}
+                </Buttons>
+              ) : (
+                <Buttons
+                  width="100%"
+                  bg={TEXT_GREEN}
+                  color={SUB_BLU_COLOR}
+                  disabled={enable}
+                  onClick={handleAccept}
+                >
+                  {t(messages.accept())}
+                </Buttons>
+              )}
 
             <Buttons
               width="100%"
