@@ -13,7 +13,8 @@ import Buttons from 'components/Buttons';
 import styled from 'styled-components';
 import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
-
+import parserHtml from 'utils/html';
+import { numberWithCommas } from '../../../utils/helpers';
 const GradientBox = chakra(Box, {
   baseStyle: {
     flex: 1,
@@ -55,7 +56,6 @@ const CustomLink = styled(Link)`
 `;
 const PackageDetailCard = ({ data }) => (
   <GradientBox>
-    {console.log(data)}
     {!data ? (
       <PageSpinner />
     ) : (
@@ -67,7 +67,8 @@ const PackageDetailCard = ({ data }) => (
           {data.name}
         </H1>
         <Text>
-          {data.jobDetail.price.min} - {data.jobDetail.price.max}
+          {numberWithCommas(data.jobDetail.price.min)} -{' '}
+          {numberWithCommas(data.jobDetail.price.max)}
         </Text>
         <Text color={TEXT_PURPLE} mt={6}>
           Details
@@ -84,7 +85,7 @@ const PackageDetailCard = ({ data }) => (
             </Text>
           </ListItem>
           <ListItem>
-            <Text>Note: {data.jobDetail.note} </Text>
+            <Text>Note: {parserHtml(data.jobDetail.note)} </Text>
           </ListItem>
         </UnorderedList>
         <CustomLink href="/#">

@@ -36,6 +36,8 @@ import {
   makeSelectPackageInfo,
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
+import { numberWithCommas } from '../../../utils/helpers';
+import { globalMessages } from '../../App/globalMessage';
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -167,7 +169,9 @@ const MyPackage = ({
             {user.name}
           </Text>
         ),
-        price: `${user.jobDetail.price.max} - ${user.jobDetail.price.max}`,
+        price: `${numberWithCommas(
+          user.jobDetail.price.max,
+        )} - ${numberWithCommas(user.jobDetail.price.max)}`,
         status: (
           <StatusCell type={user.isActive ? 'active' : 'disable'}>
             {user.isActive ? 'Active' : 'Disable'}
@@ -200,11 +204,13 @@ const MyPackage = ({
             </Flex>
           ),
           booker: booking.organizerName,
-          priceMin: jobDetail.price.min,
-          priceMax: jobDetail.price.max,
+          priceMin: numberWithCommas(jobDetail.price.min),
+          priceMax: numberWithCommas(jobDetail.price.max),
           paymentType: booking.paymentType,
           status: (
-            <StatusCell type={booking.status}>{booking.status}</StatusCell>
+            <StatusCell type={booking.status}>
+              {t(globalMessages[booking.status])}
+            </StatusCell>
           ),
         };
       });
