@@ -10,7 +10,8 @@ import { t } from 'utils/messages';
 
 export const messages = {
   orgInfo: () => t(translations.Modal.orgInfo),
-  googleMap: () => t(translations.Modal.googleMap),
+  priceRange: () => t(translations.Modal.priceRange),
   postDesc: () => t(translations.Modal.postDesc),
+  performanceTime: () => t(translations.Modal.performanceTime),
   goToDetail: () => t(translations.Modal.goToDetail),
 };

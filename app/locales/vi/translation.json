@@ -121,10 +121,11 @@
     "seeMore": "+ See more"
   },
   "Modal": {
-    "orgInfo": "Thông tin quán",
-    "googleMap": "Google Map",
+    "orgInfo": "Thông tin gói",
+    "priceRange": "Mức Giá",
     "postDesc": "Mô tả công việc",
-    "goToDetail": "Xem chi tiết"
+    "goToDetail": "Xem chi tiết",
+    "performanceTime": "Thời gian diễn"
   },
   "preCheckout": {
     "overview": "Tổng quát",
