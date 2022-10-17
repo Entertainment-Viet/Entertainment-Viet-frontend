@@ -42,7 +42,7 @@ export function* getBookings(id) {
         {
           page,
           size,
-          startTime: new Date(),
+          startTime: new Date().toISOString(),
         },
         myId,
       );

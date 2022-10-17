@@ -20,7 +20,7 @@ const CommentBox = ({ commentItem }) => (
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <Link href="#">
             <Text fontSize="18px" fontWeight={700} color={TEXT_PURPLE}>
-              Anna 212
+              {commentItem.organizerName}
             </Text>
           </Link>
         </Container>

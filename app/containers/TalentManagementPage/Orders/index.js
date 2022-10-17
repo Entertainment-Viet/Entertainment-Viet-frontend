@@ -26,7 +26,8 @@ import {
   makeSelectDetailLoading,
   makeSelectDetailError,
   makeSelectPaging,
-  makeSelectBookings,
+  makeSelectData,
+  makeSelectUnpaidSum,
 } from './slice/selectors';
 const StatusCell = styled(Text)`
   text-align: center;
@@ -97,9 +98,9 @@ const Orders = ({
   paging,
   handlePageChange,
   handleLimitChange,
-  bookings,
   // eslint-disable-next-line no-shadow
   loadBookings,
+  unpaidSum,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -139,8 +140,8 @@ const Orders = ({
   };
 
   let tableBookings;
-  if (bookings.content) {
-    tableBookings = bookings.content.map(booking => ({
+  if (data) {
+    tableBookings = data.map(booking => ({
       createdAt: (
         <Text>{new Date(booking.createdAt).toLocaleDateString()}</Text>
       ),
@@ -148,20 +149,26 @@ const Orders = ({
         <Box>
           <Box sx={{ marginBottom: '5px' }}>
             <Text>
-              {new Date(booking.performanceStartTime).toLocaleDateString()}
+              {new Date(
+                booking.jobDetail.performanceStartTime,
+              ).toLocaleDateString()}
             </Text>
           </Box>
           <Text>
-            {`${new Date(booking.performanceStartTime).getHours()}:${new Date(
-              booking.performanceStartTime,
+            {`${new Date(
+              booking.jobDetail.performanceStartTime,
+            ).getHours()}:${new Date(
+              booking.jobDetail.performanceStartTime,
             ).getMinutes()}:${new Date(
-              booking.performanceStartTime,
+              booking.jobDetail.performanceStartTime,
             ).getSeconds()}`}{' '}
             -
-            {`${new Date(booking.performanceEndTime).getHours()}:${new Date(
-              booking.performanceEndTime,
+            {`${new Date(
+              booking.jobDetail.performanceEndTime,
+            ).getHours()}:${new Date(
+              booking.jobDetail.performanceEndTime,
             ).getMinutes()}:${new Date(
-              booking.performanceEndTime,
+              booking.jobDetail.performanceEndTime,
             ).getSeconds()}`}
           </Text>
         </Box>
@@ -304,7 +311,7 @@ const Orders = ({
               lineHeight="42px"
               color={TEXT_GREEN}
             >
-              $10,000
+              ${unpaidSum}
             </Box>
           </Box>
         </Box>
@@ -330,23 +337,20 @@ const Orders = ({
 
 Orders.propTypes = {
   match: PropTypes.object,
-  data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   paging: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   handlePageChange: PropTypes.func,
   handleLimitChange: PropTypes.func,
   loadBookings: PropTypes.func,
-  bookings: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-    PropTypes.array,
-  ]),
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  unpaidSum: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectDetailLoading(),
   error: makeSelectDetailError(),
   paging: makeSelectPaging(),
-  bookings: makeSelectBookings(),
+  data: makeSelectData(),
+  unpaidSum: makeSelectUnpaidSum(),
 });
 
 export function mapDispatchToProps(dispatch) {

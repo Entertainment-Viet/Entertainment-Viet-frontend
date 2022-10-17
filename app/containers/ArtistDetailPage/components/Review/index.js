@@ -133,23 +133,48 @@ const Review = ({ comments, commentList, pageNumber, handleSeeMore }) => {
         </Box>
       </Box>
       <HStack>
-        <Text>5 sao</Text> <Progress value={100} size="xs" w="20rem" />
+        <Text>5 sao</Text>{' '}
+        <Progress
+          value={comments.sumScore5 / totalComments}
+          size="xs"
+          w="20rem"
+        />
         <Text>{checkNumber(comments.sumScore5)}</Text>
       </HStack>
       <HStack>
-        <Text>4 sao</Text> <Progress value={80} size="xs" w="20rem" />
+        <Text>4 sao</Text>{' '}
+        <Progress
+          value={comments.sumScore4 / totalComments}
+          size="xs"
+          w="20rem"
+        />
         <Text>{checkNumber(comments.sumScore4)}</Text>
       </HStack>
       <HStack>
-        <Text>3 sao</Text> <Progress value={60} size="xs" w="20rem" />
+        <Text>3 sao</Text>{' '}
+        <Progress
+          value={comments.sumScore3 / totalComments}
+          size="xs"
+          w="20rem"
+        />
         <Text>{checkNumber(comments.sumScore3)}</Text>
       </HStack>
       <HStack>
-        <Text>2 sao</Text> <Progress value={40} size="xs" w="20rem" />
+        <Text>2 sao</Text>{' '}
+        <Progress
+          value={comments.sumScore2 / totalComments}
+          size="xs"
+          w="20rem"
+        />
         <Text>{checkNumber(comments.sumScore2)}</Text>
       </HStack>
       <HStack>
-        <Text>1 sao</Text> <Progress value={20} size="xs" w="20rem" />
+        <Text>1 sao</Text>{' '}
+        <Progress
+          value={comments.sumScore1 / totalComments}
+          size="xs"
+          w="20rem"
+        />
         <Text>{checkNumber(comments.sumScore1)}</Text>
       </HStack>
       <Text as="h1" fontWeight={700} color={TEXT_GREEN}>
