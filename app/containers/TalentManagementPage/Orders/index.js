@@ -29,6 +29,7 @@ import {
   makeSelectData,
   makeSelectUnpaidSum,
 } from './slice/selectors';
+import { numberWithCommas } from '../../../utils/helpers';
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -227,6 +228,7 @@ const Orders = ({
               fontWeight: '10px',
             }}
             onClick={() => handleFilterAll()}
+            color={active === 0 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.all())}
           </Button>
@@ -239,6 +241,7 @@ const Orders = ({
               fontWeight: '10px',
             }}
             onClick={() => handleFilterUpcoming()}
+            color={active === 1 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.upcoming())}
           </Button>
@@ -253,6 +256,7 @@ const Orders = ({
             onClick={() =>
               handleChangeStatus(2, 'booking.status.talent-pending')
             }
+            color={active === 2 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.pending())}
           </Button>
@@ -265,6 +269,7 @@ const Orders = ({
               fontWeight: '10px',
             }}
             onClick={() => handleChangeStatus(3, 'booking.status.finished')}
+            color={active === 3 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.done())}
           </Button>
@@ -277,6 +282,7 @@ const Orders = ({
               fontWeight: '10px',
             }}
             onClick={() => handleChangeStatus(4, 'booking.status.cancelled')}
+            color={active === 4 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.canceled())}
           </Button>
@@ -311,7 +317,7 @@ const Orders = ({
               lineHeight="42px"
               color={TEXT_GREEN}
             >
-              ${unpaidSum}
+              ${numberWithCommas(unpaidSum)}
             </Box>
           </Box>
         </Box>
