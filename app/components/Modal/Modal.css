@@ -28,7 +28,10 @@
   background-color: #1D1C4C;
   transition: all 0.3s ease-in-out;
   transform: translateY(-200px);
-  color: #00D5FF;
+  border: 1px solid #bdc1ea;
+  box-shadow: -3px 0px 10px rgba(0, 0, 0, 0.45);
+  border-radius: 6px;
+  padding: 1rem;
 }
 
 .modal.enter-done .modal-content {
