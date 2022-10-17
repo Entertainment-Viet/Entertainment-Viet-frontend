@@ -166,8 +166,8 @@ const Orders = ({
           </Text>
         </Box>
       ),
-      package: <Text>N/A</Text>,
-      organizer: <Text>{booking.organizerUid}</Text>,
+      package: <Text>{booking.packageName}</Text>,
+      organizer: <Text>{booking.organizerName}</Text>,
       status: (
         <StatusCell type={booking.isPaid ? 'active' : 'disable'}>
           {booking.isPaid ? 'Paid' : 'Unpaid'}
