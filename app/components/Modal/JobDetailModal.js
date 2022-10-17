@@ -64,7 +64,7 @@ const JobDetailModal = props => {
                 <Text>283 Trần Quang Khải, P2, Phú Nhuận, Tp.HCM</Text>
                 <Link href="https://goo.gl/maps/mXySHagWZn7XxGJz5">
                   <Box as="span" color="red">
-                    {t(messages.googleMap())}
+                    {/* {t(messages.googleMap())} */}Google Map
                   </Box>
                 </Link>
               </Container>

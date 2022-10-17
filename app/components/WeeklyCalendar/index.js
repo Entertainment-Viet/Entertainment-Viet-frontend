@@ -5,13 +5,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { JobDetailModal } from 'components/Modal';
 import PropTypes from 'prop-types';
-import { INITIAL_EVENTS } from './event-utils';
+// import { INITIAL_EVENTS } from './event-utils';
 import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css'; // a dependency of timegrid
 import '@fullcalendar/timegrid/main.css';
 import './styles.css';
-export default function WeeklyCalendar({ toDate }) {
-  // const [currentEvents, setCurrentEvents] = useState([]);
+export default function WeeklyCalendar({ toDate, data }) {
+  const [currentEvents, setCurrentEvents] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
   const toggleModal = inputId => {
@@ -22,10 +22,28 @@ export default function WeeklyCalendar({ toDate }) {
   // const date = new Date(window.localStorage.getItem('calendar'));
 
   useLayoutEffect(() => {
+    if (data) {
+      const tempt1 = [];
+      data.content.map(event => {
+        const tempt = {
+          id: event.uid,
+          title: event.packageName,
+          start: new Date(event.jobDetail.performanceStartTime)
+            .toISOString()
+            .replace('.000Z', ''),
+          end: new Date(event.jobDetail.performanceEndTime)
+            .toISOString()
+            .replace('.000Z', ''),
+          backgroundColor: '#805AD5',
+          className: 'dot',
+        };
+        tempt1.push(tempt);
+        return true;
+      });
+      setCurrentEvents(tempt1);
+    }
     const calendarApi = calendarComponentRef.current.getApi();
     // const selectDay = document.getElementsByClassName('fc-daygrid-day-frame');
-
-    console.log('calendar changed');
     // const date = new Date(window.localStorage.getItem('calendar'));
     if (!toDate) {
       calendarApi.gotoDate(new Date());
@@ -33,14 +51,14 @@ export default function WeeklyCalendar({ toDate }) {
       calendarApi.gotoDate(toDate);
     }
     // }
-  }, [toDate]);
+  }, [toDate, data]);
 
   const calendarComponentRef = React.createRef();
 
   const handleDateSelect = selectInfo => {
     // const title = prompt('Please enter a new title for your event');
     const calendarApi = selectInfo.view.calendar;
-    console.log(selectInfo);
+    // console.log(selectInfo);
     calendarApi.unselect(); // clear date selection
     // toggleModal(selectInfo.startStr);
 
@@ -57,8 +75,8 @@ export default function WeeklyCalendar({ toDate }) {
 
   const handleEventClick = clickInfo => {
     // const calendarApi = clickInfo.view.calendar;
-    console.log(clickInfo.view.getCurrentData());
-    console.log(clickInfo.event);
+    // console.log(clickInfo.view.getCurrentData());
+    // console.log(clickInfo.event);
     // if (
     //   prompt(
     //     `Are you sure you want to delete the event '${clickInfo.event.title}'`,
@@ -70,13 +88,14 @@ export default function WeeklyCalendar({ toDate }) {
   };
 
   const handleEvents = events => {
-    console.log(events);
+    // console.log(events);
     // setCurrentEvents(events);
   };
   return (
     <div className="weekly-calendar-wrapper">
       {/* {this.renderSidebar()} */}
       {/* <div className="demo-app-main"> */}
+      {console.log(currentEvents)}
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
@@ -93,7 +112,8 @@ export default function WeeklyCalendar({ toDate }) {
         selectable
         selectMirror
         dayMaxEvents
-        initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+        // initialEvents={INITIAL_EVENTS}
+        events={currentEvents} // alternatively, use the `events` setting to fetch from a feed
         select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}

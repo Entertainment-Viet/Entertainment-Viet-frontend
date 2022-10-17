@@ -47,6 +47,7 @@ import {
 } from './selectors';
 import Overview from './components/Overview';
 import Review from './components/Review';
+import Calendar from '../Calendar';
 // import { BasicRating } from '../../components/Rating';
 const CustomTab = chakra(Tab, {
   baseStyle: {
@@ -146,7 +147,7 @@ export function ArtistDetailPage({
               />
             </TabPanel>
             <TabPanel>
-              <Box>Coming</Box>
+              <Calendar />
             </TabPanel>
             <TabPanel>
               <Review

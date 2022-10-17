@@ -39,7 +39,7 @@ import {
 
 // import { propTypes } from 'qrcode.react';
 
-const key = 'HomePage';
+const key = 'Calendar';
 export function BookManagementPage({ loading, error, data, onLoadData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -51,8 +51,12 @@ export function BookManagementPage({ loading, error, data, onLoadData }) {
 
   return (
     <Flex color={PRI_TEXT_COLOR} gap={4}>
-      <WeeklyCalendar toDate={selectedDate} />
-      <Calendar onSelectDate={selectDate} />
+      {data && (
+        <>
+          <WeeklyCalendar toDate={selectedDate} data={data} />
+          <Calendar onSelectDate={selectDate} data={data} />
+        </>
+      )}
     </Flex>
   );
 }
