@@ -108,6 +108,7 @@ const PackageModal = props => {
     };
   }, [props]);
 
+  console.log('job de', jobDetail);
   useLayoutEffect(() => {}, []);
 
   return ReactDOM.createPortal(
