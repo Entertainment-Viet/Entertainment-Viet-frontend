@@ -64,7 +64,7 @@ const BookingDetailCard = ({ data }) => {
             {data.name}
           </H1>
           <H1 color={TEXT_PURPLE} py={0} mb={-2}>
-            {data.package.name ? data.package.name : 'Custom booking'}
+            {data.packageName ? data.packageName : 'Custom booking'}
           </H1>
           <Text color={TEXT_PURPLE} mt={6}>
             {t(messages.detail())}
