@@ -77,7 +77,7 @@ export function ManagementPage({ data, onLoadData, mode }) {
             <MyPackage data={data} mode={mode} />
           </TabPanel>
           <TabPanel>
-            <Orders data={data} />
+            <Orders />
           </TabPanel>
         </TabPanels>
       </Tabs>

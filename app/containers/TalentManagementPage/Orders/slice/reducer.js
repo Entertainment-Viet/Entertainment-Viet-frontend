@@ -14,6 +14,8 @@ export const initialState = {
   error: false,
   paging: ENUM_PAGGING,
   bookings: false,
+  data: false,
+  unpaidSum: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -44,7 +46,9 @@ const pageReducer = (state = initialState, action) =>
       case LOAD_BOOKINGS_SUCCESS:
         draft.loading = false;
         draft.bookings = action.payload;
-        draft.paging = action.payload.paging;
+        draft.paging = action.payload.bookings.paging;
+        draft.data = action.payload.bookings.content;
+        draft.unpaidSum = action.payload.unpaidSum;
         break;
     }
   });

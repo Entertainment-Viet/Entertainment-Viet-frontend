@@ -32,10 +32,16 @@ const makeSelectPaging = () =>
     State => State.paging,
   );
 
-const makeSelectBookings = () =>
+const makeSelectData = () =>
   createSelector(
     selectState,
-    State => State.bookings,
+    State => State.data,
+  );
+
+const makeSelectUnpaidSum = () =>
+  createSelector(
+    selectState,
+    State => State.unpaidSum,
   );
 
 export {
@@ -44,5 +50,6 @@ export {
   makeSelectPage,
   makeSelectPaging,
   makeSelectLimit,
-  makeSelectBookings,
+  makeSelectUnpaidSum,
+  makeSelectData,
 };
