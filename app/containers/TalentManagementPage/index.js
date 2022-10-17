@@ -1,5 +1,4 @@
-import React, { useEffect, memo } from 'react';
-import PropTypes from 'prop-types';
+import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -39,7 +38,7 @@ import MyPackage from './MyPackage';
 import Orders from './Orders';
 
 const key = 'ManagementPage';
-export function ManagementPage({ data, onLoadData, mode }) {
+export function ManagementPage() {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -52,9 +51,6 @@ export function ManagementPage({ data, onLoadData, mode }) {
     },
   });
 
-  useEffect(() => {
-    onLoadData();
-  }, []);
   const { t } = useTranslation();
 
   return (
@@ -74,7 +70,7 @@ export function ManagementPage({ data, onLoadData, mode }) {
             <Box>Comming soon</Box>
           </TabPanel>
           <TabPanel>
-            <MyPackage data={data} mode={mode} />
+            <MyPackage />
           </TabPanel>
           <TabPanel>
             <Orders />
@@ -85,11 +81,7 @@ export function ManagementPage({ data, onLoadData, mode }) {
   );
 }
 
-ManagementPage.propTypes = {
-  onLoadData: PropTypes.func,
-  data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  mode: PropTypes.number,
-};
+ManagementPage.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectDetailLoading(),

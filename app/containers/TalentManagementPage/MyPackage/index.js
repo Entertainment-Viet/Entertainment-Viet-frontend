@@ -14,6 +14,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
 import { del } from 'utils/request';
+import { ENUM_BOOKING_STATUS } from 'constants/enums';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -35,24 +36,27 @@ import {
   makeSelectPackageInfo,
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
-
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
   background: ${props => {
     switch (props.type) {
-      case 'UPCOMING':
-        return '#00C2FF';
-      case 'waiting':
-        return '#999999';
-      case 'booking.status.talent-pending':
+      case ENUM_BOOKING_STATUS.ARCHIVED:
+        return '#DCDCDC';
+      case ENUM_BOOKING_STATUS.TALENT_PENDING:
         return '#DBB325';
-      case 'booking.status.organizer-pending':
+      case ENUM_BOOKING_STATUS.ORG_PENDING:
         return '#DBB325';
-      case 'pendingTransaction':
-        return '#4527A0';
-      case 'request-user':
-        return 'rgb(225 29 72)';
+      case ENUM_BOOKING_STATUS.TALENT_FINISHED:
+        return '#B6FF6D';
+      case ENUM_BOOKING_STATUS.ORG_FINISHED:
+        return '#B6FF6D';
+      case ENUM_BOOKING_STATUS.FINISHED:
+        return '#B6FF6D';
+      case ENUM_BOOKING_STATUS.CONFIRMED:
+        return '#FFA500';
+      case ENUM_BOOKING_STATUS.CANCELLED:
+        return '#FF0000';
       default:
         return 'transparent';
     }
