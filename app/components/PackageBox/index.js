@@ -35,8 +35,6 @@ const PackagesBox = ({ data }) => {
     });
   }
 
-  console.log('checking time');
-
   return (
     <Container>
       <HStack align="flex-start">
