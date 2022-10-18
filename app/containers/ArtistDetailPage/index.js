@@ -19,7 +19,6 @@ import {
   chakra,
   TabPanels,
   TabPanel,
-  Box,
 } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -128,10 +127,11 @@ export function ArtistDetailPage({
           ? data.offerCategories[0].name
           : null}
       </H1>
-      <Tabs mb="12">
+      <Tabs mb="12" isLazy>
         <TabList color={TEXT_PURPLE}>
           <CustomTab>{t(messages.overview())}</CustomTab>
           <CustomTab>{t(messages.about())}</CustomTab>
+          <CustomTab>{t(messages.schedule())}</CustomTab>
           <CustomTab>{t(messages.review())}</CustomTab>
         </TabList>
         {!data ? (
@@ -144,10 +144,11 @@ export function ArtistDetailPage({
                 match={match}
                 packages={packages}
                 toggleModal={toggleModal}
+                comments={comments}
               />
             </TabPanel>
             <TabPanel>
-              <Calendar />
+              <Calendar roles="talent" uid={match.params.id} />
             </TabPanel>
             <TabPanel>
               <Review
@@ -178,7 +179,7 @@ ArtistDetailPage.propTypes = {
   loadPackage: PropTypes.func,
   loadComments: PropTypes.func,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  packages: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  packages: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   comments: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };

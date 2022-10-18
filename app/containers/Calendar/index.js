@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -26,7 +26,7 @@ import { PRI_TEXT_COLOR } from 'constants/styles';
 import {} from 'constants/routes';
 import {} from './styles';
 import WeeklyCalendar from 'components/WeeklyCalendar';
-import { messages } from './messages';
+// import { messages } from './messages';
 
 import { loadInfo } from './actions';
 import saga from './saga';
@@ -40,17 +40,17 @@ import {
 // import { propTypes } from 'qrcode.react';
 
 const key = 'Calendar';
-export function BookManagementPage({ loading, error, data, onLoadData }) {
+export function BookManagementPage({ data, onLoadData, roles, uid }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [selectedDate, selectDate] = useState();
   useEffect(() => {
-    onLoadData();
+    onLoadData(roles, uid);
   }, []);
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   return (
-    <Flex color={PRI_TEXT_COLOR} gap={4}>
+    <Flex color={PRI_TEXT_COLOR} gap={8}>
       {data && (
         <>
           <WeeklyCalendar toDate={selectedDate} data={data} />
@@ -63,8 +63,8 @@ export function BookManagementPage({ loading, error, data, onLoadData }) {
 
 BookManagementPage.propTypes = {
   onLoadData: PropTypes.func,
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  roles: PropTypes.string,
+  uid: PropTypes.string,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
@@ -76,8 +76,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLoadData: () => {
-      dispatch(loadInfo());
+    onLoadData: (roles, uid) => {
+      dispatch(loadInfo(roles, uid));
     },
   };
 }

@@ -22,4 +22,7 @@ export const messages = {
   location: () => t(translations.createEventPage.location),
   startDate: () => t(translations.createEventPage.startDate),
   endDate: () => t(translations.createEventPage.endDate),
+  paymentType: () => t(translations.createEventPage.paymentType),
+  instantPay: () => t(translations.preCheckout.instantPay),
+  laterPay: () => t(translations.preCheckout.laterPay),
 };

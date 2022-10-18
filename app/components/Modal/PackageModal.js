@@ -41,7 +41,6 @@ const PackageModal = props => {
   const {
     handleSubmit,
     register,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
   let jobDetail;
@@ -66,11 +65,11 @@ const PackageModal = props => {
       .then(res => {
         const status = getResStatus(res);
         if (status === 200) {
-          console.log(res.data);
+          // console.log(res.data);
         } else if (status === 400) {
-          console.log('error while logging out 400');
+          // console.log('error while logging out 400');
         } else if (status === 500) {
-          console.log('error while logging out 500');
+          // console.log('error while logging out 500');
         } else {
           cacthResponse(res);
         }
@@ -160,9 +159,9 @@ const PackageModal = props => {
               <Container>
                 <Text color={TEXT_GREEN}>
                   {jobDetail &&
-                    `${Date(jobDetail.performanceStartTime)
+                    `${new Date(jobDetail.performanceStartTime)
                       .toLocaleString()
-                      .slice(0, 24)} - ${Date(jobDetail.performanceEndTime)
+                      .slice(0, 24)} - ${new Date(jobDetail.performanceEndTime)
                       .toLocaleString()
                       .slice(0, 24)}`}
                 </Text>

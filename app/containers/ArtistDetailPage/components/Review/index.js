@@ -198,9 +198,9 @@ const Review = ({ comments, commentList, pageNumber, handleSeeMore }) => {
 };
 
 Review.propTypes = {
-  comments: PropTypes.object,
+  comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   pageNumber: PropTypes.number,
-  handleSeeMore: Progress.func,
+  handleSeeMore: PropTypes.func,
   commentList: PropTypes.array,
 };
 export default memo(Review);

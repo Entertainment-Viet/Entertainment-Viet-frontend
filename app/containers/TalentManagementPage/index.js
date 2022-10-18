@@ -36,6 +36,7 @@ import {
 } from './selectors';
 import MyPackage from './MyPackage';
 import Orders from './Orders';
+import Calendar from '../Calendar';
 
 const key = 'ManagementPage';
 export function ManagementPage() {
@@ -58,7 +59,7 @@ export function ManagementPage() {
       <H1 color={TEXT_GREEN} fontSize="30px">
         {t(messages.myAccount())}
       </H1>
-      <Tabs mb="12">
+      <Tabs mb="12" isLazy>
         <TabList color={TEXT_PURPLE}>
           <CustomTab>{t(messages.profile())}</CustomTab>
           <CustomTab>{t(messages.myPackage())}</CustomTab>
@@ -74,6 +75,13 @@ export function ManagementPage() {
           </TabPanel>
           <TabPanel>
             <Orders />
+          </TabPanel>
+          <TabPanel>
+            {/* <MySchedule /> */}
+            <Calendar
+              roles={localStorage.getItem('role')}
+              uid={localStorage.getItem('uid')}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

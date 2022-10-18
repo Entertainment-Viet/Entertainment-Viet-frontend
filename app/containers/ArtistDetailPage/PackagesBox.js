@@ -45,11 +45,11 @@ const PackagesBox = ({ data, id, toggleModal }) => {
       .then(res => {
         const status = getResStatus(res);
         if (status === 200) {
-          console.log(res.data);
+          // console.log(res.data);
         } else if (status === 400) {
-          console.log('error while logging out 400');
+          // console.log('error while logging out 400');
         } else if (status === 500) {
-          console.log('error while logging out 500');
+          // console.log('error while logging out 500');
         } else {
           cacthResponse(res);
         }
@@ -111,7 +111,12 @@ const PackagesBox = ({ data, id, toggleModal }) => {
                           {item.name}
                         </Text>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                          {item.jobDetail.note}
+                          {item.jobDetail.location}
+                        </Text>
+                        <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
+                          {new Date(
+                            item.jobDetail.performanceStartTime,
+                          ).toLocaleString()}
                         </Text>
                       </Td>
                       <Td>

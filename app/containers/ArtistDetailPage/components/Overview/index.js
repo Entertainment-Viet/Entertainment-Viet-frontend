@@ -19,9 +19,8 @@ import Header from '../../Header';
 import NormalProfile from '../../NormalProfile';
 import PackagesBox from '../../PackagesBox';
 
-const Overview = ({ data, match, packages, toggleModal }) => {
+const Overview = ({ data, match, packages, toggleModal, comments }) => {
   const { t } = useTranslation();
-  console.log('aaa');
   const SlideData = [
     {
       image:
@@ -48,7 +47,7 @@ const Overview = ({ data, match, packages, toggleModal }) => {
     <Grid templateColumns="repeat(4, 1fr)" gap={2}>
       <GridItem colSpan={3}>
         <VStack align="flex-start">
-          <Header profile={data} />
+          <Header profile={data} comments={comments} />
           <ImageSliderWithPreview slides={SlideData} />
           <HStack
             justifyContent="space-between"
@@ -62,7 +61,7 @@ const Overview = ({ data, match, packages, toggleModal }) => {
               <Text fontWeight={400}>{t(messages.allComment())}</Text>
             </Link>
           </HStack>
-          <CommentCarousel />
+          <CommentCarousel slides={comments} />
           <Divider />
           <Text as="h1" fontWeight={700} color={TEXT_GREEN}>
             {t(messages.description())}
@@ -91,7 +90,8 @@ const Overview = ({ data, match, packages, toggleModal }) => {
 Overview.propTypes = {
   match: PropTypes.object,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  packages: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  packages: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   toggleModal: PropTypes.func,
 };
 export default memo(Overview);

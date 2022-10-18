@@ -10,6 +10,7 @@ import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css'; // a dependency of timegrid
 import '@fullcalendar/timegrid/main.css';
 import './styles.css';
+
 export default function WeeklyCalendar({ toDate, data }) {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
@@ -18,8 +19,6 @@ export default function WeeklyCalendar({ toDate, data }) {
     setIsShowing(!isShowing);
     setId(inputId);
   };
-
-  // const date = new Date(window.localStorage.getItem('calendar'));
 
   useLayoutEffect(() => {
     if (data) {
@@ -88,14 +87,14 @@ export default function WeeklyCalendar({ toDate, data }) {
   };
 
   const handleEvents = events => {
-    // console.log(events);
+    // eslint-disable-next-line no-console
+    console.log(events);
     // setCurrentEvents(events);
   };
   return (
     <div className="weekly-calendar-wrapper">
       {/* {this.renderSidebar()} */}
       {/* <div className="demo-app-main"> */}
-      {console.log(currentEvents)}
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
@@ -105,7 +104,7 @@ export default function WeeklyCalendar({ toDate, data }) {
           // right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
         ref={calendarComponentRef}
-        height={1000}
+        height={1430}
         // width={100}
         initialView="timeGridWeek"
         editable
@@ -136,6 +135,7 @@ export default function WeeklyCalendar({ toDate, data }) {
 }
 WeeklyCalendar.propTypes = {
   toDate: PropTypes.any,
+  data: PropTypes.any,
 };
 function renderEventContent(eventInfo) {
   return (

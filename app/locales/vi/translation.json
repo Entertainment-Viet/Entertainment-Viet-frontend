@@ -108,7 +108,8 @@
     "paymentMethod": "Payment Method",
     "prepay": "Prepay",
     "postPaid": "Post Paid",
-    "createPackage": "Create new package"
+    "createPackage": "Create new package",
+    "paymentType": "Payment type"
   },
   "artistDetailPage": {
     "overview": "Overview",
@@ -119,7 +120,8 @@
     "description": "Thông tin dịch vụ công cấp",
     "basicInfo": "Thông tin cơ bản về talent",
     "questions": "Câu hỏi thường gặp",
-    "seeMore": "+ See more"
+    "seeMore": "+ See more",
+    "schedule": "Schedule"
   },
   "Modal": {
     "orgInfo": "Thông tin gói",

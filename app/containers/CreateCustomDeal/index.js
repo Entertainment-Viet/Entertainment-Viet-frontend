@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /*
  * NFTPage
  *
@@ -22,7 +23,6 @@ import {
   Box,
   SimpleGrid,
   Select,
-  Textarea,
   InputGroup,
   InputRightElement,
   chakra,
@@ -37,13 +37,9 @@ import { LIGHT_GRAY, PRI_TEXT_COLOR } from 'constants/styles';
 import { H1 } from 'components/Elements';
 import { QWERTYEditor, DateTimeCustom } from 'components/Controls';
 import FileUploadInput from 'components/FileUploadInput';
-import DynamicForm from 'components/DynamicInputForm';
 import {
   toIsoString,
-  getResStatus,
   redirectTo,
-  cacthError,
-  cacthResponse,
 } from 'utils/helpers';
 import { API_CREATE_BOOKING } from 'constants/api';
 import { post } from 'utils/request';
@@ -60,7 +56,7 @@ import { loadCategories } from './actions';
 import saga from './saga';
 import reducer from './reducer';
 import { makeSelectCategories } from './selectors';
-import { UploadInput } from './styles';
+import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -80,8 +76,6 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
   const [end, setEnd] = useState();
 
   const { t } = useTranslation();
-  const fileUpload = useRef(null);
-  const [file, setFile] = useState(null);
   const {
     handleSubmit,
     register,
@@ -96,19 +90,19 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
     getCategories();
   }, []);
 
-  function onSubmit(values) {
+  function onSubmit() {
     // console.log('file: ', file);
     const val = {
       // attachment: file,
-      organizerUid: orgId,
-      talentUid: match.params.id,
+      organizerId: orgId,
+      talentId: match.params.id,
       jobDetail: {
         location: getValues('location'),
         note: describeNFTRef.current.getContent(),
-        categoryUid: getValues('category'),
+        categoryId: getValues('category'),
         workType: getValues('workType'),
         price: {
-          min: getValues('currency'),
+          min: 0,
           max: getValues('currency'),
           currency: 'currency.vnd',
         },
@@ -117,16 +111,14 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
         performanceCount: 0,
         extensions: 'string',
       },
+      paymentType: getValues('paymentType'),
+      extensions: "string"
     };
     post(API_CREATE_BOOKING, val, orgId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        console.log('sent');
-      } else if (status1 === '400') {
-        console.log('fail');
-      } else {
-        cacthResponse(res1);
-      }
+      if (res1 > 300) {
+        // console.log('error');
+      } 
+      redirectTo('/');
     });
   }
 
@@ -170,11 +162,6 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                 />
               </FormControl>
               <FileUploadInput />
-              <UploadInput
-                type="file"
-                ref={fileUpload}
-                onChange={e => setFile(e.target.files[0])}
-              />
               <CustomDivider />
               <SimpleGrid columns={2} spacing={2}>
                 <Box>
@@ -189,8 +176,8 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   >
                     {categories
                       ? categories.map(item => (
-                          <option value={item.uid}>{item.name}</option>
-                        ))
+                        <option value={item.uid}>{item.name}</option>
+                      ))
                       : null}
                   </Select>
                 </Box>
@@ -209,6 +196,20 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     <option value=" work.type.period-contract">
                       Single contract
                     </option>
+                  </Select>
+                </Box>
+                <Box>
+                  <CustomFormLabel htmlFor="paymentType">
+                    {t(messages.paymentType())}
+                  </CustomFormLabel>
+                  <Select
+                    placeholder="Select option"
+                    {...register('paymentType')}
+                    color="black"
+                    bg="white"
+                  >
+                    <option value={ENUM_PAYMENT_TYPE.OFFLINE}>{t(messages.laterPay())}</option>
+                    <option value={ENUM_PAYMENT_TYPE.ONLINE}>{t(messages.instantPay())}</option>
                   </Select>
                 </Box>
               </SimpleGrid>

@@ -18,4 +18,5 @@ export const messages = {
   questions: () => t(translations.artistDetailPage.questions),
   seeMore: () => t(translations.artistDetailPage.seeMore),
   allComment: () => t(translations.artistDetailPage.allComment),
+  schedule: () => t(translations.artistDetailPage.schedule),
 };

@@ -69,7 +69,7 @@ export function CreatePackagePage({ getCategories, categories }) {
     const val = {
       name: getValues('name'),
       jobDetail: {
-        categoryUid: getValues('category'),
+        categoryId: getValues('category'),
         workType: getValues('workType'),
         price: {
           min: getValues('min'),
@@ -87,9 +87,9 @@ export function CreatePackagePage({ getCategories, categories }) {
     post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
       const status1 = getResStatus(res1);
       if (status1 === '201') {
-        console.log('sent');
+        // console.log('ok')
       } else if (status1 === '400') {
-        console.log('fail');
+        // console.log('error')
       } else {
         cacthResponse(res1);
       }

@@ -120,7 +120,8 @@ export default function Calendar({ onSelectDate, data }) {
   };
 
   const handleEvents = events => {
-    // console.log(events);
+    // eslint-disable-next-line no-console
+    console.log(events);
     // setCurrentEvents(events);
   };
   return (
@@ -167,6 +168,7 @@ export default function Calendar({ onSelectDate, data }) {
 }
 Calendar.propTypes = {
   onSelectDate: PropTypes.func,
+  data: PropTypes.any,
 };
 function renderEventContent(eventInfo) {
   return (

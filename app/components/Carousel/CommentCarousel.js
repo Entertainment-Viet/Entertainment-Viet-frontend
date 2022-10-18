@@ -15,7 +15,6 @@ import './style.css';
 import PropTypes from 'prop-types';
 import {
   PRI_TEXT_COLOR,
-  LIGHT_GRAY,
   TEXT_GREEN,
   TEXT_PURPLE,
   PRI_BACKGROUND,
@@ -66,36 +65,37 @@ const CommentCarousel = ({ slides }) => (
     {/* {slides.map(slide => (
       <Image src={slide.image} height="auto" width="800px" />
     ))} */}
-    <Box bg={PRI_BACKGROUND} p="8">
-      <VStack align="flex-start">
-        <HStack align="flex-start">
-          <Center>
-            <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
-            <Text color={TEXT_PURPLE} ml="2" fontSize="18px" fontWeight={700}>
-              Anna 212
-            </Text>
-            <Box display="flex" ml="2" alignItems="center">
-              <StarIcon color={TEXT_GREEN} />
-              <Box
-                as="span"
-                ml={2}
-                color={TEXT_GREEN}
-                fontSize="18px"
-                fontWeight={700}
-              >
-                4
+    {/* {console.log('slide: ', slides.reviews)} */}
+    {slides.reviews.content.slice(0, 4).map(slide => (
+      <Box bg={PRI_BACKGROUND} p="8">
+        <VStack align="flex-start">
+          <HStack align="flex-start">
+            <Center>
+              <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+              <Text color={TEXT_PURPLE} ml="2" fontSize="18px" fontWeight={700}>
+                {slide.organizerName}
+              </Text>
+              <Box display="flex" ml="2" alignItems="center">
+                <StarIcon color={TEXT_GREEN} />
+                <Box
+                  as="span"
+                  ml={2}
+                  color={TEXT_GREEN}
+                  fontSize="18px"
+                  fontWeight={700}
+                >
+                  {slide.score}
+                </Box>
               </Box>
-            </Box>
-          </Center>
-        </HStack>
-        <Container color={PRI_TEXT_COLOR} maxW="100%" p={0} textAlign="start">
-          “Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer ...”
-        </Container>
-      </VStack>
-    </Box>
-    <Box bg={LIGHT_GRAY} p="8">
+            </Center>
+          </HStack>
+          <Container color={PRI_TEXT_COLOR} maxW="100%" p={0} textAlign="start">
+            {slide.comment}
+          </Container>
+        </VStack>
+      </Box>
+    ))}
+    {/* <Box bg={LIGHT_GRAY} p="8">
       <VStack align="flex-start">
         <HStack align="flex-start">
           <Center>
@@ -128,7 +128,7 @@ const CommentCarousel = ({ slides }) => (
           since the 1500s, when an unknown printer ...”
         </Container>
       </VStack>
-    </Box>
+    </Box> */}
   </Carousel>
 );
 
