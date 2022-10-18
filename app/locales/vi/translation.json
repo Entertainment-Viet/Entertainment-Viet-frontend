@@ -128,7 +128,8 @@
     "priceRange": "Mức Giá",
     "postDesc": "Mô tả công việc",
     "goToDetail": "Xem chi tiết",
-    "performanceTime": "Thời gian diễn"
+    "performanceTime": "Thời gian diễn",
+    "location": "Địa điểm"
   },
   "preCheckout": {
     "overview": "Tổng quát",

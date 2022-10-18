@@ -16,8 +16,10 @@ export default function WeeklyCalendar({ toDate, data }) {
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
   const toggleModal = inputId => {
+    console.log(inputId);
     setIsShowing(!isShowing);
-    setId(inputId);
+    setId(data.content.find(x => x.uid === inputId));
+    // setId(inputId);
   };
 
   useLayoutEffect(() => {
@@ -83,7 +85,8 @@ export default function WeeklyCalendar({ toDate, data }) {
     // ) {
     //   clickInfo.event.remove();
     // }
-    toggleModal(clickInfo.event.title);
+    console.log(clickInfo.event);
+    toggleModal(clickInfo.event.id);
   };
 
   const handleEvents = events => {
@@ -128,7 +131,7 @@ export default function WeeklyCalendar({ toDate, data }) {
         title="My Modal"
         onClose={() => toggleModal()}
         show={isShowing}
-        id={id}
+        data={id}
       />
     </div>
   );

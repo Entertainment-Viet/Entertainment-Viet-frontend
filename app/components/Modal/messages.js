@@ -14,4 +14,5 @@ export const messages = {
   postDesc: () => t(translations.Modal.postDesc),
   performanceTime: () => t(translations.Modal.performanceTime),
   goToDetail: () => t(translations.Modal.goToDetail),
+  location: () => t(translations.Modal.location),
 };
