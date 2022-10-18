@@ -72,7 +72,6 @@ function ProfileCard(props) {
               as="h1"
               lineHeight="100%"
               noOfLines={1}
-              w={width}
               color={TEXT_PURPLE}
               mt={1}
               textAlign="center"
