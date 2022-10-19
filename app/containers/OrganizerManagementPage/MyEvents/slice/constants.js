@@ -1,0 +1,9 @@
+export const LOAD_EVENTS = 'App/MyEvents/LOAD_EVENTS';
+export const LOAD_BOOKING_EVENTS = 'App/MyEvents/LOAD_BOOKING_EVENTS';
+export const CHANGE_PAGE = 'App/MyEvents/CHANGE_PAGE';
+export const CHANGE_LIMIT = 'App/MyEvents/CHANGE_LIMIT';
+export const CHANGE_MODE = 'App/TalentManagementPage/CHANGE_MODE';
+export const LOAD_INFO_SUCCESS = 'App/MyEvents/LOAD_INFO_SUCCESS';
+export const LOAD_EVENT = 'App/MyEvents/LOAD_EVENT';
+export const LOAD_EVENT_SUCCESS = 'App/MyEvents/LOAD_EVENT_SUCCESS';
+export const LOAD_INFO_ERROR = 'App/MyEvents/LOAD_INFO_ERROR';

@@ -1,26 +1,26 @@
 import {
-  LOAD_PACKAGES,
+  LOAD_EVENTS,
   CHANGE_PAGE,
   LOAD_INFO_SUCCESS,
   LOAD_INFO_ERROR,
-  LOAD_BOOKING_PACKAGES,
+  LOAD_BOOKING_EVENTS,
   CHANGE_MODE,
   CHANGE_LIMIT,
-  LOAD_PACKAGE,
-  LOAD_PACKAGE_SUCCESS,
+  LOAD_EVENT,
+  LOAD_EVENT_SUCCESS,
 } from './constants';
 
-export function loadPackages(id) {
+export function loadEvents(id) {
   return {
-    type: LOAD_PACKAGES,
+    type: LOAD_EVENTS,
     id,
   };
 }
 
-export function loadBookingPackages(packageId) {
+export function loadBookingEvents(eventId) {
   return {
-    type: LOAD_BOOKING_PACKAGES,
-    packageId,
+    type: LOAD_BOOKING_EVENTS,
+    eventId,
   };
 }
 
@@ -44,30 +44,30 @@ export function changeMode(mode) {
   };
 }
 
-export function loadInfoSuccess(data, paging) {
+export function loadEventsInfoSuccess(data, paging) {
   return {
     type: LOAD_INFO_SUCCESS,
     data,
     paging,
   };
 }
-export function loadInfoError(error) {
+export function loadEventInfoError(error) {
   return {
     type: LOAD_INFO_ERROR,
     error,
   };
 }
 
-export function loadPackageInfo(id, talentId) {
+export function loadEventInfo(id, orgId) {
   return {
-    type: LOAD_PACKAGE,
+    type: LOAD_EVENT,
     id,
-    talentId,
+    orgId,
   };
 }
-export function loadPackageInfoSuccess(payload) {
+export function loadEventInfoSuccess(payload) {
   return {
-    type: LOAD_PACKAGE_SUCCESS,
+    type: LOAD_EVENT_SUCCESS,
     payload,
   };
 }

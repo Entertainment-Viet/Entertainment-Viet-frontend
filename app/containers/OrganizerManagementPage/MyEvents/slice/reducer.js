@@ -1,46 +1,46 @@
 import produce from 'immer';
 import { ENUM_PAGGING } from 'constants/enums';
 import {
-  LOAD_BOOKING_PACKAGES,
-  LOAD_PACKAGES,
+  LOAD_BOOKING_EVENTS,
+  LOAD_EVENTS,
   LOAD_INFO_SUCCESS,
   LOAD_INFO_ERROR,
   CHANGE_MODE,
   CHANGE_LIMIT,
   CHANGE_PAGE,
-  LOAD_PACKAGE,
-  LOAD_PACKAGE_SUCCESS,
+  LOAD_EVENT,
+  LOAD_EVENT_SUCCESS,
 } from './constants';
 
 export const initialState = {
   loading: false,
   error: false,
   data: false,
-  packageId: false,
+  eventId: false,
   mode: 0,
   page: 0,
   limit: 10,
   total: 0,
   paging: ENUM_PAGGING,
-  packageInfo: false,
+  eventInfo: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
 const pageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case LOAD_PACKAGES:
+      case LOAD_EVENTS:
         draft.loading = true;
         draft.error = false;
         draft.data = false;
-        draft.packageId = action.id;
+        draft.eventId = action.id;
         break;
 
-      case LOAD_BOOKING_PACKAGES:
+      case LOAD_BOOKING_EVENTS:
         draft.loading = true;
         draft.error = false;
         draft.data = false;
-        draft.packageId = action.packageId;
+        draft.eventId = action.eventId;
         break;
 
       case LOAD_INFO_SUCCESS:
@@ -64,14 +64,14 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_PAGE:
         draft.page = action.page;
         break;
-      case LOAD_PACKAGE:
+      case LOAD_EVENT:
         draft.error = false;
         draft.loading = true;
-        draft.packageInfo = false;
+        draft.eventInfo = false;
         break;
-      case LOAD_PACKAGE_SUCCESS:
+      case LOAD_EVENT_SUCCESS:
         draft.loading = false;
-        draft.packageInfo = action.payload;
+        draft.eventInfo = action.payload;
         break;
     }
   });

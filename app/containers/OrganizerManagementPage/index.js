@@ -34,7 +34,7 @@ import {
   makeSelectPackage,
   makeSelectMode,
 } from './selectors';
-import MyPackage from './MyPackage';
+import MyPackage from './MyEvents';
 import Orders from './Orders';
 import Calendar from '../Calendar';
 

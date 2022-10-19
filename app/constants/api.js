@@ -47,3 +47,8 @@ export const API_GET_BOOKING_TALENT_INFO = 'api/talents/:id1/bookings/:id2';
 export const API_GET_BOOKING_ORG_INFO = 'api/organizers/:id1/bookings/:id2';
 export const API_TALENT_FINISH_BOOKING = 'api/talents/:id1/bookings/:id2/done';
 export const API_ORG_FINISH_BOOKING = 'api/organizers/:id1/bookings/:id2/done';
+
+/* EVENT */
+export const API_LIST_EVENTS = 'api/organizers/:id1/events';
+export const API_EVENT_APPLICANT = 'api/organizers/:id1/events/:id2/positions';
+export const API_EVENT_DETAIL = 'api/organizers/:id1/events/:id2';

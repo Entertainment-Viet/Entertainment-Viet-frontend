@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-const selectState = state => state.MyPackage || initialState;
+const selectState = state => state.MyEvents || initialState;
 
 const makeSelectDetailLoading = () =>
   createSelector(
@@ -38,10 +38,10 @@ const makeSelectDetail = () =>
     State => State.data,
   );
 
-const makeSelectPackage = () =>
+const makeSelectEvent = () =>
   createSelector(
     selectState,
-    State => State.packageId,
+    State => State.eventId,
   );
 
 const makeSelectPaging = () =>
@@ -50,19 +50,19 @@ const makeSelectPaging = () =>
     State => State.paging,
   );
 
-const makeSelectPackageInfo = () =>
+const makeSelectEventInfo = () =>
   createSelector(
     selectState,
-    State => State.packageInfo,
+    State => State.eventInfo,
   );
 export {
   makeSelectDetailLoading,
   makeSelectDetailError,
   makeSelectDetail,
   makeSelectPage,
-  makeSelectPackage,
+  makeSelectEvent,
   makeSelectMode,
   makeSelectPaging,
   makeSelectLimit,
-  makeSelectPackageInfo,
+  makeSelectEventInfo,
 };

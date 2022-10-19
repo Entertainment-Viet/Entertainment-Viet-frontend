@@ -12,17 +12,17 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { API_GET_PACKAGE_INFO } from 'constants/api';
+import { API_EVENT_DETAIL } from 'constants/api';
 import { del } from 'utils/request';
 import { ENUM_BOOKING_STATUS } from 'constants/enums';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
   changePage,
-  loadPackages,
+  loadEvents,
   changeMode,
   changeLimit,
-  loadPackageInfo,
+  loadEventInfo,
 } from './slice/actions';
 import saga from './slice/saga';
 import reducer from './slice/reducer';
@@ -30,12 +30,12 @@ import {
   makeSelectDetailLoading,
   makeSelectDetailError,
   makeSelectDetail,
-  makeSelectPackage,
+  makeSelectEvent,
   makeSelectMode,
   makeSelectPaging,
-  makeSelectPackageInfo,
+  makeSelectEventInfo,
 } from './slice/selectors';
-import PackageDetailCard from './PackageDetailCard';
+import EventDetailCard from './EventDetailCard';
 import { numberWithCommas } from '../../../utils/helpers';
 import { globalMessages } from '../../App/globalMessage';
 const StatusCell = styled(Text)`
@@ -74,22 +74,18 @@ const StatusCell = styled(Text)`
     }
   }};
 `;
-const packageColumns = [
+const eventColumns = [
   {
-    Header: 'Package',
-    accessor: 'package',
+    Header: 'Event Name',
+    accessor: 'eventName',
   },
   {
-    Header: 'Số lượt đặt',
-    accessor: 'totalBooking',
+    Header: 'Số lượt apply',
+    accessor: 'totalApply',
   },
   {
     Header: 'Status',
     accessor: 'status',
-  },
-  {
-    Header: 'Giá tiền',
-    accessor: 'price',
   },
   {
     Header: 'Action',
@@ -122,8 +118,8 @@ const bookingColumns = [
     accessor: 'status',
   },
 ];
-const key = 'MyPackage';
-const MyPackage = ({
+const key = 'MyEvents';
+const MyEvents = ({
   data,
   mode,
   onLoadData,
@@ -131,8 +127,8 @@ const MyPackage = ({
   paging,
   handlePageChange,
   handleLimitchange,
-  loadPackage,
-  packageInfo,
+  loadEvent,
+  eventInfo,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -141,9 +137,9 @@ const MyPackage = ({
   useEffect(() => {
     onLoadData();
   }, []);
-  const userId = window.localStorage.getItem('uid');
+  const userId = localStorage.getItem('uid');
   function handleDelete(id) {
-    del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
+    del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
       console.log(res1);
       if (res1 > 300) {
         console.log('error');
@@ -152,29 +148,27 @@ const MyPackage = ({
       }
     });
   }
-  let tablePackage;
+  let tableEvent;
   let tableBooking;
   if (data) {
     if (mode === 0)
-      tablePackage = data.map(user => ({
-        package: (
+      tableEvent = data.map(event => ({
+        eventName: (
           <Text
             onClick={() => {
               handleModeChange(1);
-              onLoadData(user.uid);
+              onLoadData(event.uid);
               handlePageChange(0);
-              loadPackage(user.uid, userId);
+              loadEvent(event.uid, userId);
             }}
           >
-            {user.name}
+            {event.name}
           </Text>
         ),
-        price: `${numberWithCommas(
-          user.jobDetail.price.max,
-        )} - ${numberWithCommas(user.jobDetail.price.max)}`,
+        totalApply: 0,
         status: (
-          <StatusCell type={user.isActive ? 'active' : 'disable'}>
-            {user.isActive ? 'Active' : 'Disable'}
+          <StatusCell type={event.isActive ? 'active' : 'disable'}>
+            {event.isActive ? 'Active' : 'Disable'}
           </StatusCell>
         ),
         action: (
@@ -185,7 +179,7 @@ const MyPackage = ({
             <Button
               colorScheme="red"
               size="xs"
-              onClick={() => handleDelete(user.uid)}
+              onClick={() => handleDelete(event.uid)}
             >
               {t(messages.delete())}
             </Button>
@@ -232,7 +226,7 @@ const MyPackage = ({
         {mode === 1 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
-        <Link href="/create-package">
+        <Link href="/create-event">
           <CustomButton>{t(messages.createPackage())}</CustomButton>
         </Link>
       </Flex>
@@ -240,11 +234,11 @@ const MyPackage = ({
         <PageSpinner />
       ) : (
         <Flex zIndex={1} position="relative" gap={4}>
-          {mode === 1 ? <PackageDetailCard data={packageInfo} /> : null}
+          {mode === 1 ? <EventDetailCard data={eventInfo} /> : null}
           <Box w={mode === 1 ? 'auto' : '100%'} flexGrow={1}>
             <AdvancedTable
-              columns={mode === 0 ? packageColumns : bookingColumns}
-              data={mode === 0 ? tablePackage : tableBooking}
+              columns={mode === 0 ? eventColumns : bookingColumns}
+              data={mode === 0 ? tableEvent : tableBooking}
               {...pageProps}
               handlePageChange={handlePageChange}
               setLimit={handleLimitchange}
@@ -256,47 +250,47 @@ const MyPackage = ({
   );
 };
 
-MyPackage.propTypes = {
+MyEvents.propTypes = {
   match: PropTypes.object,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   mode: PropTypes.number,
   onLoadData: PropTypes.func,
-  loadPackage: PropTypes.func,
+  loadEvent: PropTypes.func,
   handleModeChange: PropTypes.func,
   paging: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   handlePageChange: PropTypes.func,
   handleLimitchange: PropTypes.func,
-  packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  eventInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectDetailLoading(),
   error: makeSelectDetailError(),
   data: makeSelectDetail(),
-  packageId: makeSelectPackage(),
+  eventId: makeSelectEvent(),
   mode: makeSelectMode(),
   paging: makeSelectPaging(),
-  packageInfo: makeSelectPackageInfo(),
+  eventInfo: makeSelectEventInfo(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
     onLoadData: id => {
-      dispatch(loadPackages(id));
+      dispatch(loadEvents(id));
     },
     handlePageChange: page => {
       dispatch(changePage(page));
-      dispatch(loadPackages());
+      dispatch(loadEvents());
     },
     handleModeChange: mode => {
       dispatch(changeMode(mode));
     },
     handleLimitchange: limit => {
       dispatch(changeLimit(limit));
-      dispatch(loadPackages());
+      dispatch(loadEvents());
     },
-    loadPackage: (id, talentId) => {
-      dispatch(loadPackageInfo(id, talentId));
+    loadEvent: (id, orgId) => {
+      dispatch(loadEventInfo(id, orgId));
     },
   };
 }
@@ -309,4 +303,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(MyPackage);
+)(MyEvents);
