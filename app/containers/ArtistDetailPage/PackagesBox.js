@@ -33,6 +33,7 @@ import {
 import PropTypes from 'prop-types';
 import { Divider } from '@chakra-ui/core';
 import Cart from './assets/Cart-white.svg';
+import parserHtml from '../../utils/html';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const PackagesBox = ({ data, id, toggleModal }) => {
@@ -91,7 +92,7 @@ const PackagesBox = ({ data, id, toggleModal }) => {
               <Tbody position="relative">
                 {data.map((item, index) => (
                   <>
-                    {index !== 0 ? (
+                    {index !== 0 && (
                       <Divider
                         w="90%"
                         position="absolute"
@@ -100,7 +101,7 @@ const PackagesBox = ({ data, id, toggleModal }) => {
                         margin="0 auto"
                         bg={PRI_TEXT_COLOR}
                       />
-                    ) : null}
+                    )}
                     <Tr key={item.uid}>
                       <Td>
                         <Text

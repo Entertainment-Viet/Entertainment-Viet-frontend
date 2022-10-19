@@ -121,7 +121,9 @@
     "basicInfo": "Thông tin cơ bản về talent",
     "questions": "Câu hỏi thường gặp",
     "seeMore": "+ See more",
-    "schedule": "Schedule"
+    "schedule": "Schedule",
+    "artistStory": "Tiểu sử",
+    "artistActivity": "Hoạt động"
   },
   "Modal": {
     "orgInfo": "Thông tin gói",

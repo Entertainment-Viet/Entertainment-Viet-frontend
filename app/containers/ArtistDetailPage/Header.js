@@ -12,7 +12,6 @@ import { StarIcon } from '@chakra-ui/icons';
 import { LIGHT_GRAY, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 
 import PropTypes from 'prop-types';
-
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const Header = ({ profile, comments }) => {
   const [totalComments, setTotalComments] = useState(0);
@@ -77,6 +76,9 @@ const Header = ({ profile, comments }) => {
   );
 };
 
+RatingStar.propTypes = {
+  rating: PropTypes.number.isRequired,
+};
 Header.propTypes = {
   profile: PropTypes.any,
   comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
