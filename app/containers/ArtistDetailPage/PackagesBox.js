@@ -33,7 +33,6 @@ import {
 import PropTypes from 'prop-types';
 import { Divider } from '@chakra-ui/core';
 import Cart from './assets/Cart-white.svg';
-import parserHtml from '../../utils/html';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const PackagesBox = ({ data, id, toggleModal }) => {
