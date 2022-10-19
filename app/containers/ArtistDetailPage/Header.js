@@ -75,10 +75,6 @@ const Header = ({ profile, comments }) => {
     </Container>
   );
 };
-
-RatingStar.propTypes = {
-  rating: PropTypes.number.isRequired,
-};
 Header.propTypes = {
   profile: PropTypes.any,
   comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),

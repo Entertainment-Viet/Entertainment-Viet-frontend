@@ -148,15 +148,16 @@ export function ArtistDetailPage({
               />
             </TabPanel>
             <TabPanel>
-              <Calendar roles="talent" uid={match.params.id} />
-            </TabPanel>
-            <TabPanel>
               <About
                 data={data}
+                comments={comments}
                 match={match}
                 packages={packages}
                 toggleModal={toggleModal}
               />
+            </TabPanel>
+            <TabPanel>
+              <Calendar roles="talent" uid={match.params.id} />
             </TabPanel>
             <TabPanel>
               <Review

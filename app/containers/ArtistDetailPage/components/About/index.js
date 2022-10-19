@@ -8,15 +8,9 @@ import { messages } from '../../messages';
 import Header from '../../Header';
 import PackagesBox from '../../PackagesBox';
 
-const About = ({ data, match, packages, toggleModal }) => {
+const About = ({ data, match, packages, toggleModal, comments }) => {
   const { t } = useTranslation();
   const dataArtist = data.extensions && JSON.parse(data.extensions);
-  const headerData = {
-    headerTitle: 'About Talent',
-    rating: 1.9,
-    voteAmount: 100,
-  };
-
   const RenderProfile = () =>
     dataArtist.profile.map(item => (
       <>
@@ -36,7 +30,7 @@ const About = ({ data, match, packages, toggleModal }) => {
     <Grid templateColumns="repeat(4, 1fr)" gap={2}>
       <GridItem colSpan={3}>
         <VStack align="flex-start">
-          <Header profile={data} headerData={headerData} />
+          <Header profile={data} comments={comments} />
           <Image src={ARTIST_IMAGE} borderRadius="10px" alt="Talent Image" />
           <Text as="h1" fontWeight={600} fontSize="50px" color={TEXT_PURPLE}>
             {data.displayName}
@@ -58,6 +52,7 @@ const About = ({ data, match, packages, toggleModal }) => {
 About.propTypes = {
   match: PropTypes.object,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   packages: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   toggleModal: PropTypes.func,
 };
