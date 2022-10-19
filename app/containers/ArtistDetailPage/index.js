@@ -119,7 +119,6 @@ export function ArtistDetailPage({
   const handleSeeMore = () => {
     setPageNumberComments(pageNumberComments + 1);
   };
-
   return (
     <div>
       <Metadata />
