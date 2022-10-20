@@ -1,5 +1,13 @@
 import React, { memo } from 'react';
-import { VStack, Grid, GridItem, Text, Divider, Image } from '@chakra-ui/react';
+import {
+  VStack,
+  Grid,
+  GridItem,
+  Text,
+  Divider,
+  Image,
+  Box,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 import parserHtml from 'utils/html';
@@ -15,12 +23,19 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
     dataArtist.profile.map(item => (
       <>
         <Divider />
-        <Text as="h1" fontWeight={700} color={TEXT_GREEN}>
-          {item.type === 'bio'
-            ? t(messages.artistStory())
-            : t(messages.artistActivity())}
-        </Text>
-        <Text>{parserHtml(item.value)}</Text>
+        <Box style={{ margin: '2rem 0px' }}>
+          <Text
+            as="h1"
+            fontWeight={700}
+            style={{ margin: '1rem 0px' }}
+            color={TEXT_GREEN}
+          >
+            {item.type === 'bio'
+              ? t(messages.artistStory())
+              : t(messages.artistActivity())}
+          </Text>
+          <Text style={{ marginLeft: '1rem' }}>{parserHtml(item.value)}</Text>
+        </Box>
       </>
     ));
 
