@@ -23,7 +23,7 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
     dataArtist.profile.map(item => (
       <>
         <Divider />
-        <Box style={{ margin: '2rem 0px' }}>
+        <Box style={{ margin: '1rem 0px' }}>
           <Text
             as="h1"
             fontWeight={700}
