@@ -226,8 +226,8 @@ const MyEvents = ({
         {mode === 1 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
-        <Link href="/create-event">
-          <CustomButton>{t(messages.createPackage())}</CustomButton>
+        <Link href="/event/create">
+          <CustomButton>{t(messages.createEvent())}</CustomButton>
         </Link>
       </Flex>
       {!data ? (

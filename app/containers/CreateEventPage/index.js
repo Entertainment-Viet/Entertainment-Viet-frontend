@@ -249,7 +249,7 @@ CreateEventPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({});
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps() {
   return {};
 }
 

@@ -159,6 +159,9 @@
     "detail": "Chi tiết",
     "delete": "Delete"
   },
+  "OrganizerManagementPage": {
+    "createEvent": "Create event"
+  },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",
     "performTime": "Thời gian biểu diễn: ",

@@ -27,4 +27,5 @@ export const messages = {
   canceled: () => t(translations.TalentManagementPage.canceled),
   budget: () => t(translations.TalentManagementPage.budget),
   detail: () => t(translations.TalentManagementPage.detail),
+  createEvent: () => t(translations.OrganizerManagementPage.createEvent),
 };
