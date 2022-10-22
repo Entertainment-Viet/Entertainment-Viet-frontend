@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
 import React, { memo, useEffect } from 'react';
 import { HStack, Text, Flex, Box, Link, Button } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -12,8 +15,8 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { API_EVENT_DETAIL } from 'constants/api';
-import { del } from 'utils/request';
+// import { API_EVENT_DETAIL } from 'constants/api';
+// import { del } from 'utils/request';
 import { ENUM_BOOKING_STATUS } from 'constants/enums';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
@@ -38,6 +41,7 @@ import {
 import EventDetailCard from './EventDetailCard';
 import { numberWithCommas } from '../../../utils/helpers';
 import { globalMessages } from '../../App/globalMessage';
+import PositionDetailCard from './PositionDetailCard';
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -80,12 +84,34 @@ const eventColumns = [
     accessor: 'eventName',
   },
   {
-    Header: 'Số lượt apply',
-    accessor: 'totalApply',
+    Header: 'Địa chỉ',
+    accessor: 'address',
+  },
+  {
+    Header: 'Thời gian',
+    accessor: 'time',
   },
   {
     Header: 'Status',
     accessor: 'status',
+  },
+  {
+    Header: 'Action',
+    accessor: 'action',
+  },
+];
+const positionsColumns = [
+  {
+    Header: 'Categories',
+    accessor: 'categories',
+  },
+  {
+    Header: 'Số lượt apply',
+    accessor: 'totalApply',
+  },
+  {
+    Header: 'Thời gian',
+    accessor: 'time',
   },
   {
     Header: 'Action',
@@ -98,8 +124,8 @@ const bookingColumns = [
     accessor: 'bookedDate',
   },
   {
-    Header: 'Người đặt',
-    accessor: 'booker',
+    Header: 'Talent apply',
+    accessor: 'applicant',
   },
   {
     Header: 'Giá tiền min',
@@ -122,12 +148,12 @@ const key = 'MyEvents';
 const MyEvents = ({
   data,
   mode,
-  onLoadData,
+  onLoadTableData,
   handleModeChange,
   paging,
   handlePageChange,
   handleLimitchange,
-  loadEvent,
+  onLoadDetailData,
   eventInfo,
 }) => {
   useInjectReducer({ key, reducer });
@@ -135,20 +161,21 @@ const MyEvents = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    onLoadData();
+    if (mode === 0) onLoadTableData();
   }, []);
   const userId = localStorage.getItem('uid');
-  function handleDelete(id) {
-    del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
-      console.log(res1);
-      if (res1 > 300) {
-        console.log('error');
-      } else {
-        onLoadData(userId);
-      }
-    });
-  }
+  // function handleDelete(id) {
+  //   del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
+  //     console.log(res1);
+  //     if (res1 > 300) {
+  //       console.log('error');
+  //     } else {
+  //       onLoadTableData(userId);
+  //     }
+  //   });
+  // }
   let tableEvent;
+  let tablePositions;
   let tableBooking;
   if (data) {
     if (mode === 0)
@@ -157,15 +184,21 @@ const MyEvents = ({
           <Text
             onClick={() => {
               handleModeChange(1);
-              onLoadData(event.uid);
+              onLoadTableData(event.uid);
               handlePageChange(0);
-              loadEvent(event.uid, userId);
+              onLoadDetailData(event.uid, userId);
             }}
           >
             {event.name}
           </Text>
         ),
-        totalApply: 0,
+        address: event.occurrenceAddress,
+        time: (
+          <Text>
+            {new Date(event.occurrenceStartTime).toLocaleString()} -{' '}
+            {new Date(event.occurrenceEndTime).toLocaleString()}
+          </Text>
+        ),
         status: (
           <StatusCell type={event.isActive ? 'active' : 'disable'}>
             {event.isActive ? 'Active' : 'Disable'}
@@ -179,7 +212,48 @@ const MyEvents = ({
             <Button
               colorScheme="red"
               size="xs"
-              onClick={() => handleDelete(event.uid)}
+              // onClick={() => handleDelete(event.uid)}
+            >
+              {t(messages.delete())}
+            </Button>
+          </HStack>
+        ),
+      }));
+    else if (mode === 1)
+      tablePositions = data.map(position => ({
+        categories: (
+          <Text
+            onClick={() => {
+              handleModeChange(2);
+              onLoadTableData(position.eventId, position.uid);
+              handlePageChange(0);
+              onLoadDetailData(position.eventId, position.uid);
+            }}
+          >
+            {position.jobOffer.jobDetail.category.name}
+          </Text>
+        ),
+        totalApply: position.applicantCount,
+        time: (
+          <Text>
+            {new Date(position.jobOffer.jobDetail.performanceStartTime).toLocaleString()} -{' '}
+            {new Date(position.jobOffer.jobDetail.performanceEndTime).toLocaleString()}
+          </Text>
+        ),
+        status: (
+          <StatusCell type={position.isActive ? 'active' : 'disable'}>
+            {position.isActive ? 'Active' : 'Disable'}
+          </StatusCell>
+        ),
+        action: (
+          <HStack>
+            <Button colorScheme="purple" size="xs">
+              {t(messages.edit())}
+            </Button>
+            <Button
+              colorScheme="red"
+              size="xs"
+              // onClick={() => handleDelete(position.uid)}
             >
               {t(messages.delete())}
             </Button>
@@ -197,7 +271,7 @@ const MyEvents = ({
               </Link>
             </Flex>
           ),
-          booker: booking.organizerName,
+          applicant: booking.talentName,
           priceMin: numberWithCommas(jobDetail.price.min),
           priceMax: numberWithCommas(jobDetail.price.max),
           paymentType: booking.paymentType,
@@ -217,28 +291,48 @@ const MyEvents = ({
   };
 
   function handleBack() {
-    handleModeChange(0);
+    handleModeChange(mode - 1);
     handlePageChange(0);
   }
   return (
     <Box color={PRI_TEXT_COLOR}>
       <Flex justifyContent="space-between" mb={2}>
-        {mode === 1 ? (
+        {mode === 1 || mode === 2 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
-        <Link href="/event/create">
-          <CustomButton>{t(messages.createEvent())}</CustomButton>
-        </Link>
+        {mode === 0 ? (
+          <Link href="/event/create">
+            <CustomButton>{t(messages.createEvent())}</CustomButton>
+          </Link>
+        ) : (
+          <Link href="/event/create">
+            <CustomButton>{t(messages.createPosition())}</CustomButton>
+          </Link>
+        )}
       </Flex>
       {!data ? (
         <PageSpinner />
       ) : (
         <Flex zIndex={1} position="relative" gap={4}>
-          {mode === 1 ? <EventDetailCard data={eventInfo} /> : null}
-          <Box w={mode === 1 ? 'auto' : '100%'} flexGrow={1}>
+          {mode === 1 ? (
+            <EventDetailCard data={eventInfo} />
+          ) : mode === 2 ? <PositionDetailCard data={eventInfo} /> : null}
+          <Box w={mode === 1 || mode === 2 ? 'auto' : '100%'} flexGrow={1}>
             <AdvancedTable
-              columns={mode === 0 ? eventColumns : bookingColumns}
-              data={mode === 0 ? tableEvent : tableBooking}
+              columns={
+                mode === 0
+                  ? eventColumns
+                  : mode === 1
+                  ? positionsColumns
+                  : bookingColumns
+              }
+              data={
+                mode === 0
+                  ? tableEvent
+                  : mode === 1
+                  ? tablePositions
+                  : tableBooking
+              }
               {...pageProps}
               handlePageChange={handlePageChange}
               setLimit={handleLimitchange}
@@ -254,8 +348,8 @@ MyEvents.propTypes = {
   match: PropTypes.object,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   mode: PropTypes.number,
-  onLoadData: PropTypes.func,
-  loadEvent: PropTypes.func,
+  onLoadTableData: PropTypes.func,
+  onLoadDetailData: PropTypes.func,
   handleModeChange: PropTypes.func,
   paging: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   handlePageChange: PropTypes.func,
@@ -275,8 +369,8 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLoadData: id => {
-      dispatch(loadEvents(id));
+    onLoadTableData: (eventId, positionId) => {
+      dispatch(loadEvents(eventId, positionId));
     },
     handlePageChange: page => {
       dispatch(changePage(page));
@@ -289,8 +383,8 @@ export function mapDispatchToProps(dispatch) {
       dispatch(changeLimit(limit));
       dispatch(loadEvents());
     },
-    loadEvent: (id, orgId) => {
-      dispatch(loadEventInfo(id, orgId));
+    onLoadDetailData: (eventId, positionId) => {
+      dispatch(loadEventInfo(eventId, positionId));
     },
   };
 }

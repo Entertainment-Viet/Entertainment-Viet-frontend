@@ -28,4 +28,6 @@ export const messages = {
   budget: () => t(translations.TalentManagementPage.budget),
   detail: () => t(translations.TalentManagementPage.detail),
   createEvent: () => t(translations.OrganizerManagementPage.createEvent),
+  createPosition: () => t(translations.OrganizerManagementPage.createPosition),
+  myEvents: () => t(translations.OrganizerManagementPage.myEvents),
 };

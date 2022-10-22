@@ -160,7 +160,9 @@
     "delete": "Delete"
   },
   "OrganizerManagementPage": {
-    "createEvent": "Create event"
+    "createEvent": "+ Create event",
+    "createPosition": "Create a new position for event",
+    "myEvents": "My Events"
   },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",

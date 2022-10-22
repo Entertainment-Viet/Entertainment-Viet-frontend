@@ -10,10 +10,11 @@ import {
   LOAD_EVENT_SUCCESS,
 } from './constants';
 
-export function loadEvents(id) {
+export function loadEvents(eventId, positionId) {
   return {
     type: LOAD_EVENTS,
-    id,
+    eventId,
+    positionId,
   };
 }
 
@@ -58,11 +59,11 @@ export function loadEventInfoError(error) {
   };
 }
 
-export function loadEventInfo(id, orgId) {
+export function loadEventInfo(eventId, positionId) {
   return {
     type: LOAD_EVENT,
-    id,
-    orgId,
+    eventId,
+    positionId,
   };
 }
 export function loadEventInfoSuccess(payload) {

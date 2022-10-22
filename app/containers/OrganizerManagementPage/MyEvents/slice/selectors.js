@@ -44,6 +44,12 @@ const makeSelectEvent = () =>
     State => State.eventId,
   );
 
+const makeSelectPosition = () =>
+  createSelector(
+    selectState,
+    State => State.positionId,
+  );
+
 const makeSelectPaging = () =>
   createSelector(
     selectState,
@@ -65,4 +71,5 @@ export {
   makeSelectPaging,
   makeSelectLimit,
   makeSelectEventInfo,
+  makeSelectPosition,
 };

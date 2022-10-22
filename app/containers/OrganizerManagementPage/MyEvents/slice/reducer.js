@@ -17,6 +17,7 @@ export const initialState = {
   error: false,
   data: false,
   eventId: false,
+  positionId: false,
   mode: 0,
   page: 0,
   limit: 10,
@@ -33,7 +34,8 @@ const pageReducer = (state = initialState, action) =>
         draft.loading = true;
         draft.error = false;
         draft.data = false;
-        draft.eventId = action.id;
+        draft.eventId = action.eventId;
+        draft.positionId = action.positionId;
         break;
 
       case LOAD_BOOKING_EVENTS:
@@ -47,6 +49,7 @@ const pageReducer = (state = initialState, action) =>
         draft.loading = false;
         draft.error = false;
         draft.data = action.data;
+        console.log('action: ', action.paging);
         draft.paging = action.paging;
         break;
 
