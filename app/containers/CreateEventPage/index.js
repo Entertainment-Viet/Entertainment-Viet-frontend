@@ -19,15 +19,14 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString, getResStatus, cacthResponse } from 'utils/helpers';
-import { API_GET_PACKAGE_INFO } from 'constants/api';
+import { getResStatus, cacthResponse } from 'utils/helpers';
+import { API_LIST_EVENTS } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
-import SelectCustom from '../../components/Controls/SelectCustom';
 import {
   PRI_BACKGROUND,
   RED_COLOR,
@@ -62,26 +61,16 @@ export function CreateEventPage() {
   useEffect(() => {}, []);
 
   const onSubmit = async () => {
-    const talentId = window.localStorage.getItem('uid');
+    const orgId = window.localStorage.getItem('uid');
     const val = {
       name: getValues('name'),
-      jobDetail: {
-        categoryId: getValues('category'),
-        workType: getValues('workType'),
-        price: {
-          min: getValues('min'),
-          max: getValues('max'),
-          currency: 'currency.vnd',
-        },
-        note: describeNFTRef.current.getContent(),
-        location: getValues('location'),
-        performanceStartTime: toIsoString(start),
-        performanceEndTime: toIsoString(end),
-        performanceCount: 0,
-        extensions: 'string',
-      },
+      isActive: true,
+      occurrenceAddress: getValues('address'),
+      occurrenceStartTime: start,
+      occurrenceEndTime: end,
+      description: describeNFTRef.current.getContent(),
     };
-    post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
+    post(API_LIST_EVENTS, val, orgId).then(res1 => {
       const status1 = getResStatus(res1);
       if (status1 === '201') {
         // console.log('ok')
@@ -92,7 +81,6 @@ export function CreateEventPage() {
       }
     });
   };
-
   return (
     <SimpleGrid
       sx={{
@@ -172,21 +160,6 @@ export function CreateEventPage() {
                 />
               </FormControl>
               <Box>
-                <CustomFormLabel htmlFor="subcategory">
-                  {t(messages.workType())}
-                </CustomFormLabel>
-                <SelectCustom
-                  placeholder="Select option"
-                  {...register('workType')}
-                >
-                  <option value="work.type.single-time">Single time</option>
-                  <option value="work.type.single-show">Single show</option>
-                  <option value=" work.type.period-contract">
-                    Single contract
-                  </option>
-                </SelectCustom>
-              </Box>
-              <Box>
                 {/* <CustomFormLabel htmlFor="location">
                   {t(messages.location())}
                 </CustomFormLabel>
@@ -198,9 +171,9 @@ export function CreateEventPage() {
                 </SelectCustom> */}
                 <CustomFormLabel htmlFor="location">Địa điểm</CustomFormLabel>
                 <InputCustomV2
-                  id="occurrenceAddress"
+                  id="address"
                   placeholder="Địa điểm"
-                  {...register('occurrenceAddress', {
+                  {...register('address', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
