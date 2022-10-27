@@ -58,8 +58,15 @@ const PackagesBox = ({ data }) => {
             {t(messages.packageBoxTime())}:&nbsp;
             {new Date(jobDetail.performanceStartTime).toLocaleString()}
           </Text>
-          <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
-            {t(messages.packageBoxLocation())}:&nbsp; {jobDetail.location}
+          <Text
+            color={PRI_TEXT_COLOR}
+            fontWeight={400}
+            fontSize="15px"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
+            {t(messages.packageBoxLocation())}:&nbsp;{jobDetail.location}
           </Text>
         </Box>
         <VStack
@@ -67,7 +74,9 @@ const PackagesBox = ({ data }) => {
           height="7rem"
           style={{ marginLeft: 'auto' }}
         >
-          <Text color={TEXT_GREEN}>{numberWithCommas(suggestedPrice)} VND</Text>
+          <Text color={TEXT_GREEN}>
+            {numberWithCommas(suggestedPrice)}&nbsp;VND
+          </Text>
           <HStack justify="space-between">
             <Button
               bg="transparent"

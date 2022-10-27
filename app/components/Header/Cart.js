@@ -6,8 +6,8 @@ import {
   MenuList,
   MenuGroup,
   MenuItem,
-  Link,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PackagesBox from 'components/PackageBox';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
@@ -59,7 +59,7 @@ const Cart = ({ data }) => {
         <MenuGroup>
           <MenuItem _hover={{ bg: 'none' }}>
             <Link
-              href={Paths.ROUTE_PRECHECKOUT}
+              to={Paths.ROUTE_PRECHECKOUT}
               style={{ width: '100%', textDecoration: 'none' }}
             >
               <Button
@@ -67,7 +67,7 @@ const Cart = ({ data }) => {
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
                 _hover={{ bg: PRI_TEXT_COLOR }}
-                href="/checkout"
+                // href="/checkout"
               >
                 {t(messages.packageBoxPay())}
               </Button>
