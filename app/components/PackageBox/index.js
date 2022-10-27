@@ -21,7 +21,7 @@ import { messages } from '../Header/messages';
 const PackagesBox = ({ data }) => {
   const { t } = useTranslation();
   const orgId = window.localStorage.getItem('uid');
-  const { name, displayName, suggestedPrice, jobDetail } = data;
+  const { name, talentName, suggestedPrice, jobDetail } = data;
   function handleDeletePackage() {
     del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId).then(res1 => {
       const status1 = getResStatus(res1);
@@ -48,24 +48,22 @@ const PackagesBox = ({ data }) => {
           />
         </Box>
         <Box>
-          <Text color={PRI_TEXT_COLOR} fontWeight={600} fontSize="20px">
+          <Text
+            color={TEXT_PURPLE}
+            fontWeight={600}
+            fontSize="20px"
+            mb="0.5rem"
+          >
             {name}
           </Text>
-          <Text color={TEXT_PURPLE} fontWeight={400} fontSize="15px">
-            {displayName}
+          <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
+            {talentName}
           </Text>
           <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
             {t(messages.packageBoxTime())}:&nbsp;
             {new Date(jobDetail.performanceStartTime).toLocaleString()}
           </Text>
-          <Text
-            color={PRI_TEXT_COLOR}
-            fontWeight={400}
-            fontSize="15px"
-            whiteSpace="nowrap"
-            overflow="hidden"
-            textOverflow="ellipsis"
-          >
+          <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
             {t(messages.packageBoxLocation())}:&nbsp;{jobDetail.location}
           </Text>
         </Box>
@@ -74,7 +72,12 @@ const PackagesBox = ({ data }) => {
           height="7rem"
           style={{ marginLeft: 'auto' }}
         >
-          <Text color={TEXT_GREEN}>
+          <Text
+            color={TEXT_GREEN}
+            fontWeight={600}
+            fontSize="15px"
+            lineHeight="18px"
+          >
             {numberWithCommas(suggestedPrice)}&nbsp;VND
           </Text>
           <HStack justify="space-between">

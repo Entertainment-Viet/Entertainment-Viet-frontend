@@ -67,7 +67,6 @@ const Cart = ({ data }) => {
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
                 _hover={{ bg: PRI_TEXT_COLOR }}
-                // href="/checkout"
               >
                 {t(messages.packageBoxPay())}
               </Button>
