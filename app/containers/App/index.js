@@ -36,6 +36,7 @@ import CreateCustomDealPage from 'containers/CreateCustomDeal/Loadable';
 import CreatePackagePage from 'containers/CreatePackagePage/Loadable';
 import TalentHomePage from 'containers/TalentHomepage/Loadable';
 import EventSearchResultPage from 'containers/EventSearchResultPage/Loadable';
+import EventDetailPage from 'containers/EventDetailPage/Loadable';
 // Components
 import GlobalFonts from 'components/GlobalFonts';
 import Banner from 'components/DevelopmentBanner';
@@ -140,6 +141,14 @@ export default function App() {
           roles={[ENUM_ROLES.ORG]}
         >
           <ArtistDetailPage />
+        </PrivateRoute>
+        <PrivateRoute
+          exact
+          path={Paths.ROUTE_EVENT_DETAIL}
+          isAuthenticated={isAuthenticated}
+          roles={[ENUM_ROLES.TAL]}
+        >
+          <EventDetailPage />
         </PrivateRoute>
         <PrivateRoute
           exact
