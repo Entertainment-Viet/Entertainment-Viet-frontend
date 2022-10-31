@@ -33,6 +33,7 @@ import OrganizerManagementPage from 'containers/OrganizerManagementPage/Loadable
 import PreCheckout from 'containers/PreCheckout/Loadable';
 import BookingDetailPage from 'containers/BookingDetailPage/Loadable';
 import CreateCustomDealPage from 'containers/CreateCustomDeal/Loadable';
+import KYCVerifyPage from 'containers/KYCVerifyPage/Loadable';
 import CreatePackagePage from 'containers/CreatePackagePage/Loadable';
 import TalentHomePage from 'containers/TalentHomepage/Loadable';
 // Components
@@ -167,6 +168,14 @@ export default function App() {
           ) : (
             <OrganizerManagementPage />
           )}
+        </PrivateRoute>
+        <PrivateRoute
+          exact
+          path={Paths.ROUTE_MANAGER_KYC}
+          isAuthenticated={isAuthenticated}
+          roles={[ENUM_ROLES.TAL]}
+        >
+          <KYCVerifyPage />
         </PrivateRoute>
         <PrivateRoute
           exact

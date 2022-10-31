@@ -17,6 +17,7 @@ export const API_TALENT_DETAIL = 'api/talents/:id1';
 export const API_TALENT_PACKAGE = 'api/talents/:id1/packages';
 export const API_TALENT_REVIEWS = 'api/talents/:id1/reviews';
 export const API_TALENT_BOOKING = 'api/talents/:id1/bookings';
+export const API_TALENT_KYC = 'api/talents/:id1/confidential';
 
 /* MANAGER */
 export const API_JOBOFFER_LIST = 'api/organizers/:id1/joboffers';

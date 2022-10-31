@@ -27,4 +27,10 @@ export const messages = {
   canceled: () => t(translations.TalentManagementPage.canceled),
   budget: () => t(translations.TalentManagementPage.budget),
   detail: () => t(translations.TalentManagementPage.detail),
+  displayName: () => t(translations.TalentManagementPage.displayName),
+  history: () => t(translations.TalentManagementPage.history),
+  activity: () => t(translations.TalentManagementPage.activity),
+  bio: () => t(translations.TalentManagementPage.bio),
+  save: () => t(translations.TalentManagementPage.save),
+  kycVerify: () => t(translations.TalentManagementPage.kycVerify),
 };
