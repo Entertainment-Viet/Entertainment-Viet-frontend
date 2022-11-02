@@ -214,3 +214,7 @@ export function calculateTotalPrice(arr) {
   );
   return numberWithCommas(totalPrice);
 }
+
+export function convertReadableTime(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}

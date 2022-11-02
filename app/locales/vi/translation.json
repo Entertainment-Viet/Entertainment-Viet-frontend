@@ -150,15 +150,21 @@
     "overview": "Check out",
     "overviewDesc": "Đơn hàng của bạn",
     "method": "Hình thức thanh toán",
+    "methodPay": "Cách thức thanh toán",
+    "methodDescPay": "Vui lòng thực hiện thanh toán bằng phương thức chuyển khoản đến STK bên dưới. Kiểm tra kỹ nội dung chuyển khoản theo hướng dẫn.",
     "methodDesc": "Vui lòng lựa chọn hình thức thanh toán của bạn.",
     "instantPay": "Thanh toán ngay",
     "laterPay": "Thanh toán trả sau",
-    "tableTitle": {
+    "packageCheckout": {
       "package": "Package",
       "price": "Giá",
       "action": "Thao tác",
+      "time": "Thời gian",
+      "location": "Địa điểm",
+      "edit": "Chỉnh sửa",
       "delete": "Xóa",
-      "edit": "Chỉnh sửa"
+      "total": "Tổng thanh toán",
+      "selected": "đã chọn"
     }
   },
   "TalentManagementPage": {
