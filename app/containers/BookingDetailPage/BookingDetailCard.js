@@ -72,7 +72,8 @@ const BookingDetailCard = ({ data }) => {
           <UnorderedList>
             <ListItem>
               <Text>
-                {t(messages.location())}: {handleAddress(data.location)}
+                {t(messages.location())}:{' '}
+                {handleAddress(data.jobDetail.location)}
               </Text>
             </ListItem>
             <ListItem>
