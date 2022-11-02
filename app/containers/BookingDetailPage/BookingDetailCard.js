@@ -16,6 +16,7 @@ import parserHtml from 'utils/html';
 import { useTranslation } from 'react-i18next';
 import { messages } from './messages';
 import { globalMessages } from '../App/globalMessage';
+import { handleAddress } from '../../utils/helpers';
 
 const GradientBox = chakra(Box, {
   baseStyle: {
@@ -52,7 +53,6 @@ const BookingDetailCard = ({ data }) => {
   const { t } = useTranslation();
   return (
     <GradientBox>
-      {console.log(data)}
       {!data ? (
         <PageSpinner />
       ) : (
@@ -72,7 +72,7 @@ const BookingDetailCard = ({ data }) => {
           <UnorderedList>
             <ListItem>
               <Text>
-                {t(messages.location())}: {data.location}
+                {t(messages.location())}: {handleAddress(data.location)}
               </Text>
             </ListItem>
             <ListItem>

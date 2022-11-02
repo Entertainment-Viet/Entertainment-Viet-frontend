@@ -10,7 +10,12 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
-import { numberWithCommas, getResStatus, cacthResponse } from 'utils/helpers';
+import {
+  numberWithCommas,
+  // getResStatus,
+  // cacthResponse,
+  handleAddress,
+} from 'utils/helpers';
 import PropTypes from 'prop-types';
 import { del } from 'utils/request';
 import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
@@ -23,16 +28,17 @@ const PackagesBox = ({ data }) => {
   const orgId = window.localStorage.getItem('uid');
   const { name, talentName, suggestedPrice, jobDetail } = data;
   function handleDeletePackage() {
-    del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        console.log('sent');
-      } else if (status1 === '400') {
-        console.log('fail');
-      } else {
-        cacthResponse(res1);
-      }
-    });
+    del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId);
+    // .then(res1 => {
+    //   const status1 = getResStatus(res1);
+    //   if (status1 === '201') {
+    //     console.log('sent');
+    //   } else if (status1 === '400') {
+    //     console.log('fail');
+    //   } else {
+    //     cacthResponse(res1);
+    //   }
+    // });
   }
 
   return (
@@ -64,7 +70,8 @@ const PackagesBox = ({ data }) => {
             {new Date(jobDetail.performanceStartTime).toLocaleString()}
           </Text>
           <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
-            {t(messages.packageBoxLocation())}:&nbsp;{jobDetail.location}
+            {t(messages.packageBoxLocation())}:&nbsp;
+            {`${handleAddress(jobDetail.location)}`}
           </Text>
         </Box>
         <VStack

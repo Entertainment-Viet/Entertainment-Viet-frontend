@@ -29,6 +29,7 @@ import {
   cacthError,
   cacthResponse,
   numberWithCommas,
+  handleAddress,
 } from 'utils/helpers';
 import PropTypes from 'prop-types';
 import { Divider } from '@chakra-ui/core';
@@ -111,7 +112,7 @@ const PackagesBox = ({ data, id, toggleModal }) => {
                           {item.name}
                         </Text>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                          {item.jobDetail.location}
+                          {handleAddress(item.jobDetail.location)}
                         </Text>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                           {new Date(
