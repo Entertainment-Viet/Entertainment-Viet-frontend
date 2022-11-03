@@ -23,4 +23,7 @@ export const messages = {
   paymentMethod: () => t(translations.createEventPage.paymentMethod),
   prepay: () => t(translations.createEventPage.prepay),
   postPaid: () => t(translations.createEventPage.postPaid),
+  street: () => t(translations.KYCProfile.street),
+  district: () => t(translations.KYCProfile.district),
+  province: () => t(translations.KYCProfile.province),
 };

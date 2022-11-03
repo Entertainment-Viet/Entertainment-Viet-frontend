@@ -37,6 +37,8 @@ import {
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
+import { dataDistrictHCM } from '../../utils/data-address';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -77,7 +79,11 @@ export function CreatePackagePage({ getCategories, categories }) {
           currency: 'currency.vnd',
         },
         note: describeNFTRef.current.getContent(),
-        location: getValues('location'),
+        location: {
+          street: getValues('street'),
+          district: getValues('district'),
+          city: getValues('city'),
+        },
         performanceStartTime: toIsoString(start),
         performanceEndTime: toIsoString(end),
         performanceCount: 0,
@@ -193,6 +199,56 @@ export function CreatePackagePage({ getCategories, categories }) {
                   // {...register('description')}
                 />
               </FormControl>
+              <FormControl>
+                <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
+                <InputCustomV2
+                  id="street"
+                  type="text"
+                  size="md"
+                  placeholder="Enter your street"
+                  {...register('street', {
+                    required: 'This is required',
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
+                  })}
+                  // defaultValue={talentInfo.address.street}
+                />
+              </FormControl>
+              <FormControl>
+                <SimpleGrid columns={2} spacing={2}>
+                  <Box>
+                    <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
+                    <SelectCustom
+                      id="district"
+                      size="md"
+                      {...register('district')}
+                    >
+                      {dataDistrictHCM.map((option, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.district && errors.district.message}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
+                    <SelectCustom id="city" size="md" {...register('city')}>
+                      <option value="Thành phố Hồ Chí Minh">
+                        Thành phố Hồ Chí Minh
+                      </option>
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.province && errors.province.message}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </FormControl>
               <Box>
                 <CustomFormLabel htmlFor="subcategory">
                   {t(messages.workType())}
@@ -207,34 +263,6 @@ export function CreatePackagePage({ getCategories, categories }) {
                     Single contract
                   </option>
                 </SelectCustom>
-              </Box>
-              <Box>
-                {/* <CustomFormLabel htmlFor="location">
-                  {t(messages.location())}
-                </CustomFormLabel>
-                <SelectCustom
-                  placeholder="Select option"
-                  {...register('location')}
-                >
-                  <option value="TPHCM">Thành phố Hồ Chí Minh</option>
-                </SelectCustom> */}
-                <CustomFormLabel htmlFor="location">
-                  {t(messages.location())}
-                </CustomFormLabel>
-                <InputCustomV2
-                  id="location"
-                  placeholder="Địa điểm"
-                  {...register('location', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                />
-                <Text color={RED_COLOR}>
-                  {errors.location && errors.location.message}
-                </Text>
               </Box>
               <FormControl>
                 <SimpleGrid columns={2} spacing={2}>

@@ -25,6 +25,8 @@ import { post } from 'utils/request';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
+import SelectCustom from '../../components/Controls/SelectCustom';
+import { dataDistrictHCM } from '../../utils/data-address';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import {
@@ -65,7 +67,11 @@ export function CreateEventPage() {
     const val = {
       name: getValues('name'),
       isActive: true,
-      occurrenceAddress: getValues('address'),
+      occurrenceAddress: {
+        street: getValues('street'),
+        district: getValues('district'),
+        city: getValues('city'),
+      },
       occurrenceStartTime: start,
       occurrenceEndTime: end,
       description: describeNFTRef.current.getContent(),
@@ -159,16 +165,7 @@ export function CreateEventPage() {
                   // {...register('description')}
                 />
               </FormControl>
-              <Box>
-                {/* <CustomFormLabel htmlFor="location">
-                  {t(messages.location())}
-                </CustomFormLabel>
-                <SelectCustom
-                  placeholder="Select option"
-                  {...register('location')}
-                >
-                  <option value="TPHCM">Thành phố Hồ Chí Minh</option>
-                </SelectCustom> */}
+              {/* <Box>
                 <CustomFormLabel htmlFor="location">Địa điểm</CustomFormLabel>
                 <InputCustomV2
                   id="address"
@@ -184,7 +181,57 @@ export function CreateEventPage() {
                 <Text color={RED_COLOR}>
                   {errors.location && errors.location.message}
                 </Text>
-              </Box>
+              </Box> */}
+              <FormControl>
+                <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
+                <InputCustomV2
+                  id="street"
+                  type="text"
+                  size="md"
+                  placeholder="Enter your street"
+                  {...register('street', {
+                    required: 'This is required',
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
+                  })}
+                  // defaultValue={talentInfo.address.street}
+                />
+              </FormControl>
+              <FormControl>
+                <SimpleGrid columns={2} spacing={2}>
+                  <Box>
+                    <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
+                    <SelectCustom
+                      id="district"
+                      size="md"
+                      {...register('district')}
+                    >
+                      {dataDistrictHCM.map((option, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.district && errors.district.message}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
+                    <SelectCustom id="city" size="md" {...register('city')}>
+                      <option value="Thành phố Hồ Chí Minh">
+                        Thành phố Hồ Chí Minh
+                      </option>
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.province && errors.province.message}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </FormControl>
               {/* <FormControl>
                 <CustomFormLabel htmlFor="skills">
                   {t(messages.skills())}

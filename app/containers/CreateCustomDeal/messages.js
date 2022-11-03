@@ -9,7 +9,7 @@ import { translations } from 'locales/translations';
 import { t } from 'utils/messages';
 
 export const messages = {
-  createEvent: () => t(translations.createEventPage.createEvent),
+  createDeal: () => t(translations.createCustomDeal.createDeal),
   title: () => t(translations.createEventPage.title),
   desc: () => t(translations.createEventPage.desc),
   category: () => t(translations.createEventPage.category),
@@ -25,4 +25,7 @@ export const messages = {
   paymentType: () => t(translations.createEventPage.paymentType),
   instantPay: () => t(translations.preCheckout.instantPay),
   laterPay: () => t(translations.preCheckout.laterPay),
+  street: () => t(translations.KYCProfile.street),
+  district: () => t(translations.KYCProfile.district),
+  province: () => t(translations.KYCProfile.province),
 };

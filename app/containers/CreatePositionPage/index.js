@@ -79,7 +79,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
             currency: 'currency.vnd',
           },
           note: describeNFTRef.current.getContent(),
-          location: getValues('location'),
+          // location: getValues('location'),
           performanceStartTime: toIsoString(start),
           performanceEndTime: toIsoString(end),
           performanceCount: 0,
@@ -228,16 +228,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                   </option>
                 </SelectCustom>
               </Box>
-              <Box>
-                {/* <CustomFormLabel htmlFor="location">
-                  {t(messages.location())}
-                </CustomFormLabel>
-                <SelectCustom
-                  placeholder="Select option"
-                  {...register('location')}
-                >
-                  <option value="TPHCM">Thành phố Hồ Chí Minh</option>
-                </SelectCustom> */}
+              {/* <Box>
                 <CustomFormLabel htmlFor="location">
                   {t(messages.location())}
                 </CustomFormLabel>
@@ -255,7 +246,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                 <Text color={RED_COLOR}>
                   {errors.location && errors.location.message}
                 </Text>
-              </Box>
+              </Box> */}
               <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>

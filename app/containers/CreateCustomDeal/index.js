@@ -12,20 +12,14 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import {
-  Divider,
-  Grid,
-  GridItem,
-  FormErrorMessage,
   FormLabel,
   FormControl,
-  Input,
-  Button,
   Box,
   SimpleGrid,
-  Select,
-  InputGroup,
-  InputRightElement,
   chakra,
+  Text,
+  Stack,
+  Button,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -33,43 +27,32 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { LIGHT_GRAY, PRI_TEXT_COLOR } from 'constants/styles';
-import { H1 } from 'components/Elements';
-import { QWERTYEditor, DateTimeCustom } from 'components/Controls';
-import FileUploadInput from 'components/FileUploadInput';
-import {
-  toIsoString,
-  redirectTo,
-} from 'utils/helpers';
+import { toIsoString } from 'utils/helpers';
 import { API_CREATE_BOOKING } from 'constants/api';
 import { post } from 'utils/request';
-
-// import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
-
-// import { isAuthor } from 'utils/auth';
-
-// import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
-
-import {} from 'constants/routes';
 import { messages } from './messages';
-import { loadCategories } from './actions';
 import saga from './saga';
 import reducer from './reducer';
-import { makeSelectCategories } from './selectors';
-import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
 
+import InputCustomV2 from '../../components/Controls/InputCustomV2';
+import SelectCustom from '../../components/Controls/SelectCustom';
+import { dataDistrictHCM } from '../../utils/data-address';
+
+import {
+  PRI_BACKGROUND,
+  RED_COLOR,
+  SUB_BLU_COLOR,
+  TEXT_GREEN,
+} from '../../constants/styles';
+import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
+import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
+import { makeSelectCategories } from './selectors';
+import { loadCategories } from './actions';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
   },
 });
-const CustomDivider = chakra(Divider, {
-  baseStyle: {
-    mt: '4',
-    mb: '6',
-  },
-});
-
 const key = 'CreateCustomDeal';
 export function CreateCustomDealPage({ match, getCategories, categories }) {
   const [start, setStart] = useState();
@@ -97,13 +80,17 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
       organizerId: orgId,
       talentId: match.params.id,
       jobDetail: {
-        location: getValues('location'),
+        location: {
+          street: getValues('street'),
+          district: getValues('district'),
+          city: getValues('city')
+        },
         note: describeNFTRef.current.getContent(),
         categoryId: getValues('category'),
         workType: getValues('workType'),
         price: {
-          min: 0,
-          max: getValues('currency'),
+          min: getValues('min'),
+          max: getValues('max'),
           currency: 'currency.vnd',
         },
         performanceStartTime: toIsoString(start),
@@ -118,28 +105,48 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
       if (res1 > 300) {
         // console.log('error');
       } 
-      redirectTo('/');
+      // redirectTo('/');
     });
   }
 
   return (
-    <div>
+    <SimpleGrid
+      sx={{
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}
+    >
       <Metadata />
-      <H1>{t(messages.createEvent())}</H1>
-      <Grid templateColumns="repeat(5, 1fr)">
-        <GridItem colSpan={3}>
-          <Box bg={LIGHT_GRAY} p="8" color={PRI_TEXT_COLOR}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl isInvalid={errors.name}>
-                <CustomFormLabel htmlFor="location">
-                  {t(messages.location())}
-                </CustomFormLabel>
-                <Input
-                  bg="white"
-                  id="location"
-                  color="black"
-                  placeholder="Địa điểm"
-                  {...register('location', {
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          sx={{
+            backgroundColor: PRI_BACKGROUND,
+            marginTop: '104px',
+          }}
+          width="810px"
+          borderRadius="10px"
+          py={{ base: '0', sm: '12' }}
+          px={{ base: '4', sm: '12' }}
+        >
+          <Box
+            color={TEXT_GREEN}
+            fontWeight="600"
+            fontSize="25px"
+            sx={{
+              marginBottom: '25px',
+            }}
+          >
+            {t(messages.createDeal())}
+          </Box>
+          <Box>
+            <Stack spacing="2">
+              <FormControl>
+                <CustomFormLabel>{t(messages.title())}</CustomFormLabel>
+                <InputCustomV2
+                  id="name"
+                  type="text"
+                  placeholder="Need a singer..."
+                  {...register('name', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
@@ -147,9 +154,47 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     },
                   })}
                 />
-                <FormErrorMessage>
+                <Text color={RED_COLOR}>
                   {errors.name && errors.name.message}
-                </FormErrorMessage>
+                </Text>
+              </FormControl>
+              <CustomFormLabel>Start</CustomFormLabel>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="start_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={setStart}
+              />
+              <CustomFormLabel>End</CustomFormLabel>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={setEnd}
+              />
+              {/* <FormControl>
+                <CustomFormLabel htmlFor="description">
+                  {t(messages.desc())}
+                </CustomFormLabel>
+                <TextAreaCustom
+                  name="description"
+                  id="description"
+                  placeholder="For our Events..."
+                  {...register('description', {
+                    required: 'This is required',
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
+                  })}
+                />
+                <Text color={RED_COLOR}>
+                  {errors.description && errors.description.message}
+                </Text>
+              </FormControl> */}
+              <FormControl isInvalid={errors.name}>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.desc())}
                 </CustomFormLabel>
@@ -161,117 +206,200 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   // {...register('description')}
                 />
               </FormControl>
-              <FileUploadInput />
-              <CustomDivider />
-              <SimpleGrid columns={2} spacing={2}>
-                <Box>
-                  <CustomFormLabel htmlFor="category">
-                    {t(messages.category())}
-                  </CustomFormLabel>
-                  <Select
-                    placeholder="Select option"
-                    {...register('category')}
-                    color="black"
-                    bg="white"
-                  >
-                    {categories
-                      ? categories.map(item => (
-                        <option value={item.uid}>{item.name}</option>
-                      ))
-                      : null}
-                  </Select>
-                </Box>
-                <Box>
-                  <CustomFormLabel htmlFor="subcategory">
-                    {t(messages.workType())}
-                  </CustomFormLabel>
-                  <Select
-                    placeholder="Select option"
-                    {...register('workType')}
-                    color="black"
-                    bg="white"
-                  >
-                    <option value="work.type.single-time">Single time</option>
-                    <option value="work.type.single-show">Single show</option>
-                    <option value=" work.type.period-contract">
-                      Single contract
-                    </option>
-                  </Select>
-                </Box>
-                <Box>
-                  <CustomFormLabel htmlFor="paymentType">
-                    {t(messages.paymentType())}
-                  </CustomFormLabel>
-                  <Select
-                    placeholder="Select option"
-                    {...register('paymentType')}
-                    color="black"
-                    bg="white"
-                  >
-                    <option value={ENUM_PAYMENT_TYPE.OFFLINE}>{t(messages.laterPay())}</option>
-                    <option value={ENUM_PAYMENT_TYPE.ONLINE}>{t(messages.instantPay())}</option>
-                  </Select>
-                </Box>
-              </SimpleGrid>
-              <CustomDivider />
-              <CustomFormLabel htmlFor="currency">
-                {t(messages.currency())}
-              </CustomFormLabel>
-              <InputGroup>
-                <Input
-                  bg="white"
-                  id="currency"
-                  color="black"
-                  placeholder="currency"
-                  type="number"
-                  {...register('currency', {
+              <Box>
+                <CustomFormLabel htmlFor="subcategory">
+                  {t(messages.workType())}
+                </CustomFormLabel>
+                <SelectCustom
+                  placeholder="Select option"
+                  {...register('workType')}
+                >
+                  <option value="work.type.single-time">Single time</option>
+                  <option value="work.type.single-show">Single show</option>
+                  <option value=" work.type.period-contract">
+                    Single contract
+                  </option>
+                </SelectCustom>
+              </Box>
+              <FormControl>
+                <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
+                <InputCustomV2
+                  id="street"
+                  type="text"
+                  size="md"
+                  placeholder="Enter your street"
+                  {...register('street', {
                     required: 'This is required',
-                    valueAsNumber: true,
-                    validate: value => value > 10000,
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
                   })}
+                  // defaultValue={talentInfo.address.street}
                 />
-                <InputRightElement>
-                  <Box color={LIGHT_GRAY}>VND</Box>
-                </InputRightElement>
-              </InputGroup>
-              <Box>
-                <CustomFormLabel htmlFor="start">
-                  {t(messages.startDate())}
-                </CustomFormLabel>
-                <DateTimeCustom
-                  template="datetime-picker right"
-                  name="end_vip_date"
-                  type="hm"
-                  message="Start date"
-                  handleDateChange={setStart}
-                />
-              </Box>
-              <Box>
-                <CustomFormLabel htmlFor="end">
-                  {t(messages.endDate())}
-                </CustomFormLabel>
-                <DateTimeCustom
-                  template="datetime-picker right"
-                  name="end_vip_date"
-                  type="hm"
-                  message="End date"
-                  handleDateChange={setEnd}
-                />
-              </Box>
-              <CustomDivider />
-              <Button
-                mt={4}
-                colorScheme="teal"
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                {t(messages.submit())}
-              </Button>
-            </form>
+              </FormControl>
+              <FormControl>
+                <SimpleGrid columns={2} spacing={2}>
+                  <Box>
+                    <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
+                    <SelectCustom
+                      id="district"
+                      size="md"
+                      {...register('district')}
+                    >
+                      {dataDistrictHCM.map((option, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.district && errors.district.message}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
+                    <SelectCustom id="city" size="md" {...register('city')}>
+                      <option value="Thành phố Hồ Chí Minh">
+                        Thành phố Hồ Chí Minh
+                      </option>
+                    </SelectCustom>
+                    <Text color={RED_COLOR}>
+                      {errors.province && errors.province.message}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </FormControl>
+              <FormControl>
+                <SimpleGrid columns={2} spacing={2}>
+                  <Box>
+                    <CustomFormLabel htmlFor="category">
+                      {t(messages.category())}
+                    </CustomFormLabel>
+                    <SelectCustom
+                      placeholder="Select option"
+                      {...register('category')}
+                    >
+                      {categories &&
+                        categories.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
+                    </SelectCustom>
+                  </Box>
+                  <Box>
+                    <CustomFormLabel htmlFor="subcategory">
+                      {t(messages.subCategory())}
+                    </CustomFormLabel>
+                    <SelectCustom
+                      placeholder="Select option"
+                      {...register('subcategory')}
+                    >
+                      {/* {optionsCategory.map((option, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={index} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))} */}
+                    </SelectCustom>
+                  </Box>
+                </SimpleGrid>
+              </FormControl>
+              
+            </Stack>
           </Box>
-        </GridItem>
-      </Grid>
-    </div>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: PRI_BACKGROUND,
+            marginTop: '5px',
+          }}
+          width="810px"
+          borderRadius="10px"
+          py={{ base: '0', sm: '12' }}
+          px={{ base: '4', sm: '12' }}
+        >
+          <Box
+            sx={{
+              marginTop: '-30px',
+            }}
+          >
+            <Stack spacing="2">
+              <FormControl>
+                <CustomFormLabel htmlFor="formOfWork">
+                  {t(messages.currency())}
+                </CustomFormLabel>
+                <SimpleGrid columns={2} spacing={2}>
+                  <InputCustomV2
+                    id="min"
+                    type="number"
+                    placeholder="Min"
+                    {...register('min', {
+                      required: 'This is required',
+                      minLength: {
+                        value: 4,
+                        message: 'Minimum length should be 4',
+                      },
+                    })}
+                  />
+                  <InputCustomV2
+                    id="max"
+                    type="number"
+                    placeholder="Max"
+                    {...register('max', {
+                      required: 'This is required',
+                      minLength: {
+                        value: 4,
+                        message: 'Minimum length should be 4',
+                      },
+                    })}
+                  />
+                  <Text color={RED_COLOR}>
+                    {errors.min && errors.min.message}
+                  </Text>
+                  <Text color={RED_COLOR}>
+                    {errors.max && errors.max.message}
+                  </Text>
+                </SimpleGrid>
+              </FormControl>
+              <Box>
+                <CustomFormLabel htmlFor="paymentType">
+                  {t(messages.paymentType())}
+                </CustomFormLabel>
+                <SelectCustom
+                  placeholder="Select option"
+                  {...register('paymentType')}
+                >
+                  <option value={ENUM_PAYMENT_TYPE.OFFLINE}>{t(messages.laterPay())}</option>
+                  <option value={ENUM_PAYMENT_TYPE.ONLINE}>{t(messages.instantPay())}</option>
+                </SelectCustom>
+              </Box>
+            </Stack>
+          </Box>
+        </Box>
+        <Box display="flex" justifyContent="end">
+          <Button
+            sx={{
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: '20px',
+              marginBottom: '100px',
+              background: TEXT_GREEN,
+              width: '235px',
+              height: '48px',
+            }}
+            color={SUB_BLU_COLOR}
+            type="submit"
+            isLoading={isSubmitting}
+          >
+            Create
+          </Button>
+        </Box>
+      </form>
+    </SimpleGrid>
   );
 }
 
