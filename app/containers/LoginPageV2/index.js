@@ -23,6 +23,7 @@ import {
   Link,
   InputLeftElement,
   InputGroup,
+  useToast,
 } from '@chakra-ui/react';
 import {
   PRI_TEXT_COLOR,
@@ -39,9 +40,18 @@ import PasswordField from './PasswordField';
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
+import NotificationProvider from '../../components/NotificationProvider';
 
 function LoginPageV2() {
   const { t } = useTranslation();
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const {
     handleSubmit,
     register,
@@ -73,6 +83,7 @@ function LoginPageV2() {
     const result = await axios(options);
     const { roles } = jwt(result.data.access_token).realm_access;
     if (result.status === 200) {
+      notify('Đăng nhập thành công');
       window.localStorage.setItem('exp', jwt(result.data.access_token).exp);
       window.localStorage.setItem('uid', jwt(result.data.access_token).sub);
       setSecureCookie(
