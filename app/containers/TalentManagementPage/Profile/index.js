@@ -73,6 +73,7 @@ const Profile = ({
   const activityNFTRef = useRef(null);
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
+  const [category, setCategory] = useState(null);
 
   const {
     handleSubmit,
@@ -84,6 +85,17 @@ const Profile = ({
     loadTalent(talentId);
     loadCategories();
   }, [talentId]);
+
+  useEffect(() => {
+    if (categoriesInfo && talentInfo) {
+      const temp = categoriesInfo.filter(
+        item => item.uid === talentInfo.offerCategories[0].uid,
+      );
+      setCategory(temp[0]);
+    }
+    // eslint-disable-next-line no-console
+    console.log(category);
+  }, [categoriesInfo, talentInfo]);
 
   const handleUpload = item => {
     if (item) {
@@ -119,8 +131,10 @@ const Profile = ({
       offerCategories: [data.category],
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
-      .then(() => {
-        // window.location.reload();
+      .then(res => {
+        if (res) {
+          window.location.reload();
+        }
       })
       .catch(err => cacthError(err));
   };
@@ -231,9 +245,9 @@ const Profile = ({
               <FormControl>
                 <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
                 <SelectCustom id="category" size="md" {...register('category')}>
-                  {categoriesInfo.map((option, index) => (
+                  {categoriesInfo.map(option => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <option key={index} value={option.uid}>
+                    <option key={option.uid} value={option.uid}>
                       {option.name}
                     </option>
                   ))}
@@ -280,7 +294,11 @@ const Profile = ({
                 {t(messages.save())}
               </Button>
               <Box />
-              <Button bg={TEXT_PURPLE} color={SUB_BLU_COLOR} disabled>
+              <Button
+                bg={TEXT_PURPLE}
+                color={SUB_BLU_COLOR}
+                disabled={talentInfo.userState === USER_STATE.VERIFIED}
+              >
                 <Link
                   href={
                     talentInfo.userState === USER_STATE.VERIFIED
