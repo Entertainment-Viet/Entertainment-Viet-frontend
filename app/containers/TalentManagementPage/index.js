@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import {
-  Box,
   Tab,
   TabList,
   Tabs,
@@ -16,11 +15,6 @@ import {
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
-// import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
-
-// import { isAuthor } from 'utils/auth';
-
-// import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
 import { H1 } from 'components/Elements';
 import { messages } from './messages';
 
@@ -36,6 +30,7 @@ import {
 } from './selectors';
 import MyPackage from './MyPackage';
 import Orders from './Orders';
+import Profile from './Profile';
 import Calendar from '../Calendar';
 
 const key = 'ManagementPage';
@@ -68,7 +63,7 @@ export function ManagementPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Box>Comming soon</Box>
+            <Profile />
           </TabPanel>
           <TabPanel>
             <MyPackage />

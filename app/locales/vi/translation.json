@@ -172,7 +172,15 @@
     "canceled": "Canceled",
     "budget": "Ngân sách hiện có",
     "detail": "Chi tiết",
-    "delete": "Delete"
+    "delete": "Delete",
+    "displayName": "Display Name",
+    "history": "Tiểu sử",
+    "activity": "Hoạt động",
+    "bio": "Dịch vụ cung cấp",
+    "save": "Save",
+    "kycVerify": "KYC Verification",
+    "kycVerified": "KYC Verified",
+    "category": "Category"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",
@@ -212,5 +220,31 @@
     "PERIOD_CONTRACT": "Diễn theo hợp đồng",
     "ONLINE": "Trả trước",
     "OFFLINE": "Trả sau"
+  },
+  "KYCProfile": {
+    "fullName": "Full Name",
+    "displayName": "Display Name",
+    "gmail": "Gmail",
+    "phoneNumber": "Phone number",
+    "street": "Street",
+    "district": "District",
+    "province": "Province",
+    "introduce": "Introduction",
+    "accountNameOwner": "Tên chủ tài khoản",
+    "accountNumber": "Số tài khoản",
+    "bankName": "Ngân hàng",
+    "cccd": "Upload CMND/CCCD",
+    "kycVerifyPhoto": "KYC Verification Photo",
+    "yourSong": "Your Songs",
+    "yourReward": "Your Rewards",
+    "year": "Year",
+    "text1": "By clicking Submit, you agree to our ",
+    "text2": "Terms of Service ",
+    "text3": "and that you have read our ",
+    "text4": "Privacy Policy",
+    "submit": "Submit",
+    "avatar": "Your avatar",
+    "type": "Công ty/ Cá nhân",
+    "role": "Role"
   }
 }

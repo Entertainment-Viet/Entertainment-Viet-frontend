@@ -17,6 +17,7 @@ export const API_TALENT_DETAIL = 'api/talents/:id1';
 export const API_TALENT_PACKAGE = 'api/talents/:id1/packages';
 export const API_TALENT_REVIEWS = 'api/talents/:id1/reviews';
 export const API_TALENT_BOOKING = 'api/talents/:id1/bookings';
+export const API_TALENT_KYC = 'api/talents/:id1/confidential';
 
 /* MANAGER */
 export const API_JOBOFFER_LIST = 'api/organizers/:id1/joboffers';
@@ -56,4 +57,8 @@ export const API_EVENT_POSITIONS_BOOKINGS =
 export const API_EVENT_DETAIL = 'api/organizers/:id1/events/:id2';
 export const API_EVENT_POSITION_DETAIL =
   'api/organizers/:id1/events/:id2/positions/:id3';
+
+/* CATEGORY */
+export const API_GET_CATEGORIES = 'api/categories';
 export const API_EVENT_SEARCH = 'api/events';
+
