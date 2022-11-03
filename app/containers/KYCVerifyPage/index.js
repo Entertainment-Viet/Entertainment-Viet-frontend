@@ -128,7 +128,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       avatar: fileAvatar,
       fullName: values.fullName,
       displayName: values.displayName,
-      gmail: values.gmail,
       phoneNumber: values.phoneNumber,
       street: values.street,
       district: values.district,
@@ -157,7 +156,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
 
       const dataSumbit = {
         phoneNumber: data.phoneNumber,
-        email: data.gmail,
         address: JSON.stringify(preDataStreet),
         taxId: '',
         bankAccountNumber: data.accountNumber,
@@ -296,51 +294,25 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 {errors.displayName && errors.displayName.message}
               </Text>
               <FormControl>
-                <SimpleGrid columns={2} spacing={2}>
-                  <Box>
-                    <CustomFormLabel>{t(messages.gmail())}</CustomFormLabel>
-                    <InputCustomV2
-                      id="gmail"
-                      type="email"
-                      size="md"
-                      placeholder="Enter your gmail"
-                      {...register('gmail', {
-                        required: 'This is required',
-                        minLength: {
-                          value: 4,
-                          message: 'Minimum length should be 4',
-                        },
-                      })}
-                      defaultValue="caitriona@gmail.com"
-                    />
-                    <Text color={RED_COLOR}>
-                      {errors.gmail && errors.gmail.message}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <CustomFormLabel>
-                      {t(messages.phoneNumber())}
-                    </CustomFormLabel>
-                    <InputCustomV2
-                      id="phoneNumber"
-                      type="tel"
-                      size="md"
-                      placeholder="Enter your phone number"
-                      {...register('phoneNumber', {
-                        required: 'This is required',
-                        minLength: {
-                          value: 4,
-                          message: 'Minimum length should be 4',
-                        },
-                      })}
-                      defaultValue="0342229515"
-                    />
-                    <Text color={RED_COLOR}>
-                      {errors.phoneNumber && errors.phoneNumber.message}
-                    </Text>
-                  </Box>
-                </SimpleGrid>
+                <CustomFormLabel>{t(messages.phoneNumber())}</CustomFormLabel>
+                <InputCustomV2
+                  id="phoneNumber"
+                  type="tel"
+                  size="md"
+                  placeholder="Enter your phone number"
+                  {...register('phoneNumber', {
+                    required: 'This is required',
+                    minLength: {
+                      value: 4,
+                      message: 'Minimum length should be 4',
+                    },
+                  })}
+                  defaultValue="0342229515"
+                />
               </FormControl>
+              <Text color={RED_COLOR}>
+                {errors.phoneNumber && errors.phoneNumber.message}
+              </Text>
               <FormControl>
                 <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
                 <InputCustomV2

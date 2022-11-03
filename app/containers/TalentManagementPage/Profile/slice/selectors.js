@@ -9,4 +9,10 @@ const makeSelectTalent = () =>
     State => State.talentInfo,
   );
 
-export { makeSelectTalent };
+const makeSelectCategories = () =>
+  createSelector(
+    selectState,
+    State => State.categories,
+  );
+
+export { makeSelectTalent, makeSelectCategories };

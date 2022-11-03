@@ -59,6 +59,16 @@ export const ENUM_WORK_TYPE = {
   SINGLE_SHOW: 'work.type.single-show',
   PERIOD_CONTRACT: 'work.type.period-contract',
 };
+
+export const USER_STATE = {
+  GUEST: 'user.state.guest',
+  PENDING: 'user.state.pending',
+  VERIFIED: 'user.state.verified',
+  UNVERIFIED: 'user.state.unverified',
+  CHARGEABLE: 'user.state.chargeable',
+  ARCHIVED: 'user.state.archived',
+};
+
 export const ENUM_PAYMENT_TYPE = {
   ONLINE: 'payment.online',
   OFFLINE: 'payment.offline',

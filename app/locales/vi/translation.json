@@ -173,7 +173,9 @@
     "activity": "Hoạt động",
     "bio": "Dịch vụ cung cấp",
     "save": "Save",
-    "kycVerify": "KYC Verification"
+    "kycVerify": "KYC Verification",
+    "kycVerified": "KYC Verified",
+    "category": "Category"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",

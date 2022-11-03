@@ -34,17 +34,18 @@ import PropTypes from 'prop-types';
 import saga from './slice/saga';
 import reducer from './slice/reducer';
 import InputCustomV2 from '../../../components/Controls/InputCustomV2';
-import TextAreaCustom from '../../../components/Controls/TextAreaCustom';
 
-import { AddAvatarIcon } from '../ProviderIcons';
+import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
 import { cacthError } from '../../../utils/helpers';
-import { loadTalentInfo } from './slice/actions';
-import { makeSelectTalent } from './slice/selectors';
+import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
+import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
+import { USER_STATE } from '../../../constants/enums';
+import SelectCustom from '../../../components/Controls/SelectCustom';
 
 const key = 'Profile';
 
@@ -54,7 +55,12 @@ const CustomFormLabel = chakra(FormLabel, {
   },
 });
 
-const Profile = ({ talentInfo, loadTalent }) => {
+const Profile = ({
+  talentInfo,
+  loadTalent,
+  categoriesInfo,
+  loadCategories,
+}) => {
   const controls = useAnimation();
   const startAnimation = () => controls.start('hover');
   const stopAnimation = () => controls.stop();
@@ -65,6 +71,7 @@ const Profile = ({ talentInfo, loadTalent }) => {
   const [file, setFile] = useState(null);
   const historyNFTRef = useRef(null);
   const activityNFTRef = useRef(null);
+  const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
 
   const {
@@ -75,6 +82,7 @@ const Profile = ({ talentInfo, loadTalent }) => {
 
   useEffect(() => {
     loadTalent(talentId);
+    loadCategories();
   }, [talentId]);
 
   const handleUpload = item => {
@@ -90,28 +98,29 @@ const Profile = ({ talentInfo, loadTalent }) => {
       displayName: values.displayName,
       history: historyNFTRef.current.getContent(),
       activity: activityNFTRef.current.getContent(),
-      bio: values.bio,
+      bio: bioNFTRef.current.getContent(),
+      category: values.category,
     };
     const preData = [
       {
-        type: 'Activity',
+        type: 'activity',
         value: data.activity,
       },
       {
-        type: 'History',
+        type: 'history',
         value: data.history,
       },
     ];
     const dataSubmit = {
       avatar: file,
       displayName: data.displayName,
-      bio: values.bio,
+      bio: data.bio,
       extensions: JSON.stringify(preData),
-      scoreSystem: [{}],
+      offerCategories: [data.category],
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
       .then(() => {
-        window.location.reload();
+        // window.location.reload();
       })
       .catch(err => cacthError(err));
   };
@@ -123,7 +132,7 @@ const Profile = ({ talentInfo, loadTalent }) => {
         justifyContent: 'center',
       }}
     >
-      {talentInfo ? (
+      {talentInfo && categoriesInfo ? (
         <Box
           color={PRI_TEXT_COLOR}
           bg={SUB_BLU_COLOR}
@@ -136,7 +145,7 @@ const Profile = ({ talentInfo, loadTalent }) => {
           py="74px"
         >
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing="1">
+            <Stack spacing="2">
               <Box display="flex" marginBottom="20px">
                 <Box>
                   <Avatar
@@ -179,13 +188,23 @@ const Profile = ({ talentInfo, loadTalent }) => {
                     border="1px solid"
                     borderRadius="5px"
                     width="120px"
-                    textAlign="center"
                     fontWeight="600px"
                     fontSize="15px"
                     lineHeight="18px"
-                    color={PRI_TEXT_COLOR}
+                    color={
+                      talentInfo.userState === USER_STATE.VERIFIED
+                        ? TEXT_GREEN
+                        : PRI_TEXT_COLOR
+                    }
+                    display="flex"
+                    px={4}
                   >
                     Talent
+                    {talentInfo.userState === USER_STATE.VERIFIED && (
+                      <Box ml={7}>
+                        <AddVerifyIcon />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               </Box>
@@ -209,27 +228,17 @@ const Profile = ({ talentInfo, loadTalent }) => {
               <Text color={RED_COLOR}>
                 {errors.displayName && errors.displayName.message}
               </Text>
-              {/* <FormControl> */}
-              {/*  <CustomFormLabel>Password</CustomFormLabel> */}
-              {/*  <InputCustomV2 */}
-              {/*    id="password" */}
-              {/*    size="md" */}
-              {/*    name="password" */}
-              {/*    type="password" */}
-              {/*    autoComplete="current-password" */}
-              {/*    placeholder="Enter your password" */}
-              {/*    {...register('password', { */}
-              {/*      required: 'This is required', */}
-              {/*      minLength: { */}
-              {/*        value: 4, */}
-              {/*        message: 'Minimum length should be 4', */}
-              {/*      }, */}
-              {/*    })} */}
-              {/*  /> */}
-              {/* </FormControl> */}
-              {/* <Text color={RED_COLOR}> */}
-              {/*  {errors.password && errors.password.message} */}
-              {/* </Text> */}
+              <FormControl>
+                <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
+                <SelectCustom id="category" size="md" {...register('category')}>
+                  {categoriesInfo.map((option, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={index} value={option.uid}>
+                      {option.name}
+                    </option>
+                  ))}
+                </SelectCustom>
+              </FormControl>
               <FormControl>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.history())}
@@ -239,6 +248,7 @@ const Profile = ({ talentInfo, loadTalent }) => {
                   name="history"
                   id="history"
                   required
+                  val={JSON.parse(talentInfo.extensions)[1].value}
                 />
               </FormControl>
               <FormControl>
@@ -250,34 +260,38 @@ const Profile = ({ talentInfo, loadTalent }) => {
                   name="activity"
                   id="activity"
                   required
+                  val={JSON.parse(talentInfo.extensions)[0].value}
                 />
               </FormControl>
               <FormControl>
                 <CustomFormLabel htmlFor="bio">
                   {t(messages.bio())}
                 </CustomFormLabel>
-                <TextAreaCustom
+                <QWERTYEditor
+                  ref={bioNFTRef}
                   name="bio"
                   id="bio"
-                  placeholder="For our Events..."
-                  {...register('bio', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                  defaultValue={talentInfo.bio}
+                  required
+                  val={talentInfo.bio}
                 />
               </FormControl>
-              <Text color={RED_COLOR}>{errors.bio && errors.bio.message}</Text>
               <Box />
               <Button bg={TEXT_GREEN} color={SUB_BLU_COLOR} type="submit">
                 {t(messages.save())}
               </Button>
               <Box />
-              <Button bg={TEXT_PURPLE} color={SUB_BLU_COLOR}>
-                <Link href={ROUTE_MANAGER_KYC}>{t(messages.kycVerify())}</Link>
+              <Button bg={TEXT_PURPLE} color={SUB_BLU_COLOR} disabled>
+                <Link
+                  href={
+                    talentInfo.userState === USER_STATE.VERIFIED
+                      ? null
+                      : ROUTE_MANAGER_KYC
+                  }
+                >
+                  {talentInfo.userState === USER_STATE.VERIFIED
+                    ? t(messages.kycVerified())
+                    : t(messages.kycVerify())}
+                </Link>
               </Button>
             </Stack>
           </form>
@@ -292,16 +306,22 @@ const Profile = ({ talentInfo, loadTalent }) => {
 Profile.propTypes = {
   loadTalent: PropTypes.func,
   talentInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  loadCategories: PropTypes.func,
+  categoriesInfo: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   talentInfo: makeSelectTalent(),
+  categoriesInfo: makeSelectCategories(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
     loadTalent: talentId => {
       dispatch(loadTalentInfo(talentId));
+    },
+    loadCategories: () => {
+      dispatch(loadCategoriesInfo());
     },
   };
 }
