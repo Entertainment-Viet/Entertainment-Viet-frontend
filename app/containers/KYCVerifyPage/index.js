@@ -33,7 +33,11 @@ import reducer from './reducer';
 import { AddAvatarIcon } from '../TalentManagementPage/ProviderIcons';
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
-import { bankName, dataDistrictHCM } from '../../utils/data-address';
+import {
+  bankName,
+  dataDistrictHCM,
+  dataProvince,
+} from '../../utils/data-address';
 import { QWERTYEditor } from '../../components/Controls';
 import example from './image/example.png';
 import {
@@ -250,7 +254,16 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 <Box textAlign="center">{t(messages.avatar())}</Box>
                 <FormControl>
                   <CustomFormLabel>{t(messages.type())}</CustomFormLabel>
-                  <SelectCustom id="type" size="md" {...register('type')}>
+                  <SelectCustom
+                    id="type"
+                    size="md"
+                    {...register('type')}
+                    defaultValue={
+                      dataType.filter(
+                        item => item.value === talentInfo.accountType,
+                      )[0].value
+                    }
+                  >
                     {dataType.map((option, index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <option key={index} value={option.value}>
@@ -352,6 +365,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         id="district"
                         size="md"
                         {...register('district')}
+                        defaultValue={
+                          dataDistrictHCM.filter(
+                            item => item.name === talentInfo.address.district,
+                          )[0].name
+                        }
                       >
                         {dataDistrictHCM.map((option, index) => (
                           // eslint-disable-next-line react/no-array-index-key
@@ -368,20 +386,28 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                       <CustomFormLabel>
                         {t(messages.province())}
                       </CustomFormLabel>
-                      <InputCustomV2
+                      <SelectCustom
                         id="province"
-                        type="text"
                         size="md"
-                        placeholder="Enter your province"
-                        {...register('province', {
-                          required: 'This is required',
-                          minLength: {
-                            value: 4,
-                            message: 'Minimum length should be 4',
-                          },
-                        })}
-                        defaultValue={talentInfo.address.city}
-                      />
+                        {...register('province')}
+                        value={
+                          dataProvince.filter(
+                            item => item.name === talentInfo.address.city,
+                          )[0].name
+                        }
+                        defaultValue={
+                          dataProvince.filter(
+                            item => item.name === talentInfo.address.city,
+                          )[0].name
+                        }
+                      >
+                        {dataProvince.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </SelectCustom>
                       <Text color={RED_COLOR}>
                         {errors.province && errors.province.message}
                       </Text>
@@ -457,6 +483,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         id="bankName"
                         size="md"
                         {...register('bankName')}
+                        defaultValue={
+                          bankName.filter(
+                            item => item.name === talentInfo.bankName,
+                          )[0].name
+                        }
                       >
                         {bankName.map((option, index) => (
                           // eslint-disable-next-line react/no-array-index-key
