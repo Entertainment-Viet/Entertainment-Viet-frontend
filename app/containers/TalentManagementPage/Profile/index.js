@@ -73,7 +73,6 @@ const Profile = ({
   const activityNFTRef = useRef(null);
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
-  const [category, setCategory] = useState(null);
 
   const {
     handleSubmit,
@@ -85,17 +84,6 @@ const Profile = ({
     loadTalent(talentId);
     loadCategories();
   }, [talentId]);
-
-  useEffect(() => {
-    if (categoriesInfo && talentInfo) {
-      const temp = categoriesInfo.filter(
-        item => item.uid === talentInfo.offerCategories[0].uid,
-      );
-      setCategory(temp[0]);
-    }
-    // eslint-disable-next-line no-console
-    console.log(category);
-  }, [categoriesInfo, talentInfo]);
 
   const handleUpload = item => {
     if (item) {
@@ -244,7 +232,16 @@ const Profile = ({
               </Text>
               <FormControl>
                 <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
-                <SelectCustom id="category" size="md" {...register('category')}>
+                <SelectCustom
+                  id="category"
+                  size="md"
+                  {...register('category')}
+                  defaultValue={
+                    categoriesInfo.filter(
+                      item => item.uid === talentInfo.offerCategories[0].uid,
+                    )[0].uid
+                  }
+                >
                   {categoriesInfo.map(option => (
                     // eslint-disable-next-line react/no-array-index-key
                     <option key={option.uid} value={option.uid}>
