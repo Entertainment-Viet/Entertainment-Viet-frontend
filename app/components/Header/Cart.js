@@ -6,11 +6,11 @@ import {
   MenuList,
   MenuGroup,
   MenuItem,
-  Link,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PackagesBox from 'components/PackageBox';
-import { RED_COLOR, LIGHT_GRAY } from 'constants/styles';
+import { PRI_TEXT_COLOR, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import * as Paths from 'constants/routes';
 import { numberWithCommas } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
@@ -41,7 +41,13 @@ const Cart = ({ data }) => {
           <CartIcon />
         )}
       </MenuButton>
-      <MenuList minWidth="240px" bg={LIGHT_GRAY} overflow="auto" zIndex={999}>
+      <MenuList
+        minWidth="240px"
+        bg={SUB_BLU_COLOR}
+        overflow="auto"
+        zIndex={999}
+        border="none"
+      >
         {content &&
           content.map(item => (
             <MenuGroup>
@@ -53,15 +59,14 @@ const Cart = ({ data }) => {
         <MenuGroup>
           <MenuItem _hover={{ bg: 'none' }}>
             <Link
-              href={Paths.ROUTE_PRECHECKOUT}
+              to={Paths.ROUTE_PRECHECKOUT}
               style={{ width: '100%', textDecoration: 'none' }}
             >
               <Button
                 w="100%"
-                bg={RED_COLOR}
-                color="#FFFFFF"
-                _hover={{ bg: 'orange' }}
-                href="/checkout"
+                bg={TEXT_PURPLE}
+                color={SUB_BLU_COLOR}
+                _hover={{ bg: PRI_TEXT_COLOR }}
               >
                 {t(messages.packageBoxPay())} - {calculateTotalPrice()} VND
               </Button>

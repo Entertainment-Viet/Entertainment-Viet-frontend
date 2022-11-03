@@ -60,3 +60,5 @@ export const API_EVENT_POSITION_DETAIL =
 
 /* CATEGORY */
 export const API_GET_CATEGORIES = 'api/categories';
+export const API_EVENT_SEARCH = 'api/events';
+

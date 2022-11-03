@@ -92,7 +92,7 @@ function CardEvent(props) {
               color={TEXT_PURPLE}
               mt={1}
             >
-              {props.data.displayName}
+              {props.data.name}
             </Box>
             <Box display="flex" alignItems="center" my={2}>
               <Avatar

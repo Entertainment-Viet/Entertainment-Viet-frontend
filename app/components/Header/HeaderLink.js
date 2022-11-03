@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { PRI_FONTCOLOR, PRI_COLOR } from 'constants/styles';
+import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 
 export default styled(NavLink)`
   display: inline-flex;
@@ -10,12 +10,14 @@ export default styled(NavLink)`
   user-select: none;
   cursor: pointer;
   outline: 0;
-  color:  ${PRI_FONTCOLOR};
+  color: ${PRI_TEXT_COLOR};
   font-style: normal;
   font-weight: 600;
   font-size: 1.5rem;
-  
-  &:active, &:hover, &.active {
-    color: ${PRI_COLOR};
+
+  &:active,
+  &:hover,
+  &.active {
+    color: ${TEXT_GREEN};
   }
 `;

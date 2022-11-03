@@ -5,13 +5,11 @@ import './Modal.css';
 import { HStack, Text, Box, VStack, Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
-import { numberWithCommas } from 'utils/helpers';
+import { numberWithCommas, handleAddress } from 'utils/helpers';
 import parserHtml from 'utils/html';
 import { GoogleMap, Phone } from '../Icon';
 import { messages } from './messages';
-
 const JobDetailModal = props => {
-  console.log(props.data);
   const { t } = useTranslation();
   const closeOnEscapeKeyDown = e => {
     if ((e.charCode || e.keyCode) === 27) {
@@ -79,7 +77,7 @@ const JobDetailModal = props => {
                 <Phone color={TEXT_GREEN} size={25} />
                 <Container>
                   <Text color={TEXT_GREEN}>
-                    {props.data.jobDetail.location}
+                    {handleAddress(props.data.jobDetail.location)}
                   </Text>
                   <Box as="span" color={PRI_TEXT_COLOR}>
                     {t(messages.location())}

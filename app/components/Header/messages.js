@@ -25,5 +25,5 @@ export const messages = {
   packageBoxLocation: () => t(translations.header.packageBox.location),
   packageBoxEdit: () => t(translations.header.packageBox.edit),
   packageBoxDelete: () => t(translations.header.packageBox.delete),
-  packageBoxPay: () => t(translations.header.packageBox.pay),
+  packageBoxPay: () => t(translations.header.packageBox.viewCart),
 };

@@ -7,12 +7,11 @@ import {
   MenuItem,
   Box,
   Link,
-  Divider,
 } from '@chakra-ui/react';
-import { PRI_TEXT_COLOR, LIGHT_GRAY, PRI_BACKGROUND } from 'constants/styles';
+import { SUB_BLU_COLOR, LIGHT_PINK } from 'constants/styles';
 import NotificationBox from './NotificationBox';
 import { NotificationIcon } from '../Icon';
-import { NumWrapper } from './Wrapper';
+// import { NumWrapper } from './Wrapper';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const Notification = () => (
@@ -23,43 +22,45 @@ const Notification = () => (
     </MenuButton>
     <MenuList
       minWidth="240px"
-      bg={LIGHT_GRAY}
+      bg={SUB_BLU_COLOR}
       h="30rem"
       overflow="auto"
       zIndex={999}
       pt={0}
+      border="none"
     >
       <MenuGroup>
         <MenuItem
-          bg={PRI_BACKGROUND}
+          bg={LIGHT_PINK}
           w="100%"
           h="100%"
-          _hover={{ bg: PRI_BACKGROUND }}
+          mb="0.5rem"
+          _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}
         >
-          <Box as="h1" color={PRI_TEXT_COLOR} fontSize="24px" m="0.4rem">
+          <Box as="h1" color={SUB_BLU_COLOR} fontSize="24px" m="0.4rem">
             Notification
           </Box>
           <Link
             href="https://google.com"
             right="1rem"
             position="absolute"
-            borderBottom="1px solid #F7FAFC"
-            fontWeight={400}
+            _hover={{ textDecoration: 'none' }}
+            borderBottom={`1px solid ${SUB_BLU_COLOR}`}
+            fontWeight={600}
           >
-            <Box as="span" color={PRI_TEXT_COLOR}>
+            <Box as="span" color={SUB_BLU_COLOR} fontWeight={500}>
               Mark all as read
             </Box>
           </Link>
         </MenuItem>
       </MenuGroup>
       <MenuGroup>
-        <MenuItem _hover={{ bg: 'black' }}>
+        <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
           <NotificationBox />
         </MenuItem>
-        <Divider w="88%" ml="auto" mr="auto" my="1rem" />
       </MenuGroup>
       <MenuGroup>
-        <MenuItem>
+        <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
           <NotificationBox />
         </MenuItem>
       </MenuGroup>

@@ -41,6 +41,11 @@
   "talentHomepage": {
     "hotUpcomingEvent": "Hot upcoming event"
   },
+  "eventDetailPage": {
+    "basicInfo": "Thông tin cơ bản về organizer",
+    "description": "Mô tả về Event",
+    "about": "About Organizer"
+  },
   "controls": {
     "email": "email",
     "password": "password",
@@ -65,7 +70,7 @@
       "location": "Địa điểm",
       "edit": "Chỉnh sửa",
       "delete": "Xóa",
-      "pay": "Thanh toán"
+      "viewCart": "Xem giỏ hàng"
     }
   },
   "footer": {

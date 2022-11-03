@@ -19,6 +19,10 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { redirectTo } from 'utils/helpers';
 
 import { changeSearch, loadData } from 'containers/SearchResultPage/actions';
+import {
+  changeSearchEvent,
+  loadDataEvent,
+} from 'containers/EventSearchResultPage/actions';
 import { makeSelectSearch } from 'containers/SearchResultPage/selectors';
 import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import { loadDataHeader } from './actions';
@@ -49,7 +53,7 @@ function HeaderButton({ text, href, isExternal = false }) {
 }
 
 const key = 'Header';
-function Header({ handleSubmit, handleRefresh, cartData, search }) {
+function Header({ handleSubmit, handleRefresh, cartData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [searchTerm, setSearchTerm] = useState('');
@@ -120,7 +124,6 @@ Header.propTypes = {
   handleSubmit: PropTypes.func,
   handleRefresh: PropTypes.func,
   cartData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  search: PropTypes.string,
 };
 
 HeaderButton.propTypes = {
@@ -137,8 +140,14 @@ const mapStateToProps = createStructuredSelector({
 export function mapDispatchToProps(dispatch) {
   return {
     handleSubmit: search => {
-      dispatch(changeSearch(search));
-      dispatch(loadData());
+      const role = localStorage.getItem('role');
+      if (role === 'organizer') {
+        dispatch(changeSearch(search));
+        dispatch(loadData());
+      } else {
+        dispatch(changeSearchEvent(search));
+        dispatch(loadDataEvent());
+      }
     },
     handleRefresh: id => {
       dispatch(loadDataHeader(id));

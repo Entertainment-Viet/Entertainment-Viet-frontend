@@ -36,6 +36,8 @@ import CreateCustomDealPage from 'containers/CreateCustomDeal/Loadable';
 import KYCVerifyPage from 'containers/KYCVerifyPage/Loadable';
 import CreatePackagePage from 'containers/CreatePackagePage/Loadable';
 import TalentHomePage from 'containers/TalentHomepage/Loadable';
+import EventSearchResultPage from 'containers/EventSearchResultPage/Loadable';
+import EventDetailPage from 'containers/EventDetailPage/Loadable';
 // Components
 import GlobalFonts from 'components/GlobalFonts';
 import Banner from 'components/DevelopmentBanner';
@@ -143,6 +145,14 @@ export default function App() {
         </PrivateRoute>
         <PrivateRoute
           exact
+          path={Paths.ROUTE_EVENT_DETAIL}
+          isAuthenticated={isAuthenticated}
+          roles={[ENUM_ROLES.TAL]}
+        >
+          <EventDetailPage />
+        </PrivateRoute>
+        <PrivateRoute
+          exact
           path={Paths.ROUTE_CREATE_EVENT}
           isAuthenticated={isAuthenticated}
           roles={[ENUM_ROLES.ORG]}
@@ -155,7 +165,11 @@ export default function App() {
           isAuthenticated={isAuthenticated}
           roles={[ENUM_ROLES.ORG, ENUM_ROLES.TAL]}
         >
-          <SearchResultPage />
+          {role === ENUM_ROLES.ORG ? (
+            <SearchResultPage />
+          ) : (
+            <EventSearchResultPage />
+          )}
         </PrivateRoute>
         <PrivateRoute
           exact

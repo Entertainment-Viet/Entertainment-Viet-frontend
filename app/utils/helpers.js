@@ -1,7 +1,9 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-param-reassign */
 import * as Paths from 'constants/routes';
 import * as Storages from 'constants/storage';
-import { useHistory } from 'react-router-dom';
-import { getCookie } from 'utils/cookie';
+// import { useHistory } from 'react-router-dom';
+// import { getCookie } from 'utils/cookie';
 
 // import { DEFAULT_LOCALE } from 'i18n';
 
@@ -85,10 +87,10 @@ export const getObjectValueById = (obj, id) => {
 export const redirectTo = name => {
   window.location.href = name;
 };
-export const redirectBack = value => {
-  const history = useHistory();
-  history.goBack();
-};
+// export const redirectBack = value => {
+//   const history = useHistory();
+//   history.goBack();
+// };
 export const redirectHome = () => {
   redirectTo(Paths.ROUTE_HOME);
 };
@@ -121,7 +123,9 @@ export const setParamUrl = (
 ) => {
   try {
     window.history.replaceState(null, title, route + sep + param);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const mapRouteParam = (route, value, param = ':id', fallback = '') => {
@@ -173,7 +177,7 @@ export const getResStatus = res => {
 export const getErrorCode = () => {
   try {
     const error = getError();
-    return getResError(error.data.error_code);
+    return getError(error.data.error_code);
   } catch (err) {
     return '';
   }
@@ -198,4 +202,8 @@ export function toIsoString(date) {
 }
 export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+export function handleAddress(addr) {
+  return `${addr.street}, quận ${addr.district}, ${addr.city}`;
 }
