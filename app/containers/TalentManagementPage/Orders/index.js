@@ -336,7 +336,7 @@ const Orders = ({
           <Box w="100%" flexGrow={1}>
             <AdvancedTable
               columns={bookingsColumns}
-              data={tableBookings || []}
+              data={tableBookings}
               {...pageProps}
               handlePageChange={handlePageChange}
               setLimit={handleLimitChange}

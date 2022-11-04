@@ -79,7 +79,10 @@ function CardEvent(props) {
         mt="0.3rem"
         ml="1px"
       />
-      <Link href={`/artist/${props.data.uid}`} zIndex={1}>
+      <Link
+        href={`/event/${props.data.organizerId}/${props.data.uid}`}
+        zIndex={1}
+      >
         <GradientBox>
           <Box p="4">
             <Box
@@ -101,10 +104,13 @@ function CardEvent(props) {
                 size="sm"
               />
               <Box as="span" ml="2" color={PRI_TEXT_COLOR} fontSize="sm">
-                {property.rating} ({property.reviewCount})
+                {props.data.organizerName}
               </Box>
             </Box>
-            <Box>31/10/2022 | 21:00 - 23:00</Box>
+            <Box>
+              {new Date(props.data.occurrenceStartTime).toLocaleString()} -{' '}
+              {new Date(props.data.occurrenceEndTime).toLocaleString()}
+            </Box>
           </Box>
           {/* <Divider orientation="horizontal" borderColor="#26358F" /> */}
           <Flex

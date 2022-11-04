@@ -15,6 +15,7 @@ import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
 import parserHtml from 'utils/html';
 // import { numberWithCommas } from '../../../utils/helpers';
+import { handleAddress } from '../../../utils/helpers';
 const GradientBox = chakra(Box, {
   baseStyle: {
     flex: 1,
@@ -71,7 +72,7 @@ const PackageDetailCard = ({ data }) => (
         </Text>
         <UnorderedList>
           <ListItem>
-            <Text>Location: {data.occurrenceAddress}</Text>
+            <Text>Location: {handleAddress(data.occurrenceAddress)}</Text>
           </ListItem>
           <ListItem>
             <Text>

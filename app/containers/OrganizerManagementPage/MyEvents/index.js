@@ -39,9 +39,10 @@ import {
   makeSelectEventInfo,
 } from './slice/selectors';
 import EventDetailCard from './EventDetailCard';
-import { numberWithCommas } from '../../../utils/helpers';
+import { numberWithCommas , handleAddress } from '../../../utils/helpers';
 import { globalMessages } from '../../App/globalMessage';
 import PositionDetailCard from './PositionDetailCard';
+
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -196,7 +197,7 @@ const MyEvents = ({
             {event.name}
           </Text>
         ),
-        address: event.occurrenceAddress,
+        address: handleAddress(event.occurrenceAddress),
         time: (
           <Text>
             {new Date(event.occurrenceStartTime).toLocaleString()} -{' '}

@@ -10,6 +10,7 @@ export function* getBookings(id) {
   try {
     const page = yield select(makeSelectPage());
     const size = yield select(makeSelectLimit());
+    console.log(size);
     const { status, hasFilterStatus, isFilterAll, isFilterUpcoming } = id;
     let payload;
     if (isFilterAll) {

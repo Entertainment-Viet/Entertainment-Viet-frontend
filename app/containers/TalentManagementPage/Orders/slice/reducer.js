@@ -16,6 +16,9 @@ export const initialState = {
   bookings: false,
   data: false,
   unpaidSum: false,
+  page: 0,
+  limit: 10,
+  total: 0,
 };
 
 /* eslint-disable default-case, no-param-reassign */

@@ -1,8 +1,17 @@
 import React from 'react';
-import { HStack, Avatar, Container, VStack, Text } from '@chakra-ui/react';
-import { TEXT_PURPLE } from 'constants/styles';
-
+import {
+  HStack,
+  Avatar,
+  Container,
+  VStack,
+  Text,
+  Divider,
+} from '@chakra-ui/react';
+import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import PropTypes from 'prop-types';
+import { GoogleMap } from 'components/Icon';
+
+import { handleAddress } from '../../utils/helpers';
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const Header = ({ profile }) => (
   <Container marginInlineStart="inherit" paddingInlineStart="inherit" mb={6}>
@@ -18,6 +27,22 @@ const Header = ({ profile }) => (
         />
         <Text color={TEXT_PURPLE} as="h1">
           {profile.organizerName}
+        </Text>
+      </HStack>
+      <HStack>
+        <GoogleMap color={TEXT_GREEN} size={25} />
+        <Text color={TEXT_GREEN}>
+          {profile.occurrenceAddress &&
+            handleAddress(profile.occurrenceAddress)}
+        </Text>
+        <Divider
+          orientation="vertical"
+          height="14px"
+          borderColor={TEXT_GREEN}
+        />
+        <Text color={TEXT_GREEN}>
+          {new Date(profile.occurrenceStartTime).toLocaleString()} -{' '}
+          {new Date(profile.occurrenceEndTime).toLocaleString()}
         </Text>
       </HStack>
     </VStack>
