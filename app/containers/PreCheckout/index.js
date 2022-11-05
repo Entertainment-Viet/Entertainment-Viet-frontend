@@ -11,17 +11,22 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Box, VStack, Grid, GridItem, Text, Image } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Text, HStack } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import PackagesBox from 'components/PackageBox';
+// import PackagesBox from 'components/PackageBox';
 import Metadata from 'components/Metadata';
 import { H1 } from 'components/Elements';
-import { LIGHT_GRAY } from 'constants/styles';
+import {
+  BOX_SHADOW_CHECKOUT,
+  TEXT_PURPLE,
+  TEXT_GREEN,
+  SUB_BLU_COLOR,
+} from 'constants/styles';
 import { makeSelectCartData } from 'components/Header/selectors';
-import CardImg from './assets/payment_card.svg';
-import Arrow from './assets/arrow.svg';
+import Arrow from 'components/Icon/Arrow';
+import Wallet from 'components/Icon/Wallet';
 
 // import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
 
@@ -31,6 +36,8 @@ import Arrow from './assets/arrow.svg';
 
 import {} from 'constants/routes';
 import {} from './styles';
+import { post } from 'utils/request';
+import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
 import { messages } from './messages';
 
 import { loadInfo } from './actions';
@@ -41,8 +48,7 @@ import {
   makeSelectDetailError,
   makeSelectDetail,
 } from './selectors';
-import { post } from 'utils/request';
-import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
+import CheckoutTable from './CheckoutTable';
 
 const key = 'PreCheckout';
 export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
@@ -55,8 +61,8 @@ export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
   const orgId = window.localStorage.getItem('uid');
   function instantPay() {
     const val = {
-      paymentType: "payment.online"
-    }
+      paymentType: 'payment.online',
+    };
     post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res1 => {
       const status1 = getResStatus(res1);
       if (status1 === '201') {
@@ -70,8 +76,8 @@ export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
   }
   function laterPay() {
     const val = {
-      paymentType: "payment.offline"
-    }
+      paymentType: 'payment.offline',
+    };
     post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res1 => {
       const status1 = getResStatus(res1);
       if (status1 === '201') {
@@ -86,51 +92,83 @@ export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
   const { t } = useTranslation();
   console.log(data, loading, error);
   const { content } = cartData;
-  console.log(content);
+  console.log('content', content);
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
       <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
         <GridItem colSpan={3}>
-          <H1>{t(messages.overview())}</H1>
-          <Text>{t(messages.overviewDesc())}</Text>
-          <Box border="1px solid #718096" py={4} my={6}>
-            {content && content.map(item => <PackagesBox data={item} />)}
+          <H1 color={TEXT_GREEN} fontWeight={600} fontSize={25}>
+            {t(messages.overview())}
+          </H1>
+          <Text color={TEXT_PURPLE} fontWeight={600} fontSize={30}>
+            {t(messages.overviewDesc())}
+          </Text>
+          <Box py={4} my={6}>
+            {/* {content && content.map(item => <PackagesBox data={item} />)} */}
+            <CheckoutTable />
           </Box>
         </GridItem>
-        <GridItem colStart={5} colEnd={7}>
-          <H1>{t(messages.method())}</H1>
-          <Text>{t(messages.methodDesc())}</Text>
+        <GridItem mt={20} colStart={5} colEnd={7}>
+          <H1 color={TEXT_PURPLE} py={0} fontWeight={600} fontSize={30}>
+            {t(messages.method())}
+          </H1>
+          <Text fontWeight={400} style={{ marginTop: '0px' }} fontSize={15}>
+            {t(messages.methodDesc())}
+          </Text>
           <Box py={4}>
-            <Box bg={LIGHT_GRAY} position="relative" p={4}>
-              <VStack align="flex-start">
-                <Text>{t(messages.instantPay())}</Text>
-                <Image src={CardImg} alt="card image" pt={2} />
-              </VStack>
-              <Image
-                src={Arrow}
-                alt="card image"
-                position="absolute"
-                top="50%"
-                right="0"
-                transform="translate(-50%, -50%)"
-                onClick={instantPay}
-              />
+            <Box
+              bg={SUB_BLU_COLOR}
+              borderRadius="10px"
+              p={6}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              _hover={{
+                cursor: 'pointer',
+                boxShadow: `-1px 5px ${BOX_SHADOW_CHECKOUT}`,
+                transition: 'ease 0.3s',
+              }}
+            >
+              <HStack justifyContent="space-between" width="50%">
+                <Wallet size={24} colorIcon={TEXT_GREEN} />
+                <Text
+                  style={{ marginTop: '0px' }}
+                  color={TEXT_GREEN}
+                  fontSize="18px"
+                  fontWeight={500}
+                >
+                  {t(messages.instantPay())}
+                </Text>
+              </HStack>
+              <Arrow size={15} colorIcon={TEXT_GREEN} onClick={instantPay} />
             </Box>
-            <Box bg={LIGHT_GRAY} position="relative" p={4} mt={4}>
-              <VStack align="flex-start">
-                <Text>{t(messages.laterPay())}</Text>
-                <Image src={CardImg} alt="card image" pt={2} />
-              </VStack>
-              <Image
-                src={Arrow}
-                alt="card image"
-                position="absolute"
-                top="50%"
-                right="0"
-                transform="translate(-50%, -50%)"
-                onClick={laterPay}
-              />
+            <Box
+              bg={SUB_BLU_COLOR}
+              borderRadius="10px"
+              p={6}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              mt={4}
+              _hover={{
+                cursor: 'pointer',
+                boxShadow: '-1px 5px #404b8d',
+                transition: 'ease 0.3s',
+              }}
+            >
+              <HStack justifyContent="space-between" width="55%">
+                <Wallet size={24} colorIcon={TEXT_PURPLE} />
+                <Text
+                  style={{ marginTop: '0px' }}
+                  color={TEXT_PURPLE}
+                  fontSize="18px"
+                  fontWeight={500}
+                >
+                  {t(messages.laterPay())}
+                </Text>
+              </HStack>
+              <Arrow size={15} colorIcon={TEXT_PURPLE} onClick={laterPay} />
             </Box>
           </Box>
         </GridItem>

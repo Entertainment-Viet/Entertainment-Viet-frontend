@@ -147,12 +147,19 @@
     "submit": "Submit"
   },
   "preCheckout": {
-    "overview": "Tổng quát",
-    "overviewDesc": "Vui lòng kiểm tra lại đơn của bạn",
+    "overview": "Check out",
+    "overviewDesc": "Đơn hàng của bạn",
     "method": "Hình thức thanh toán",
-    "methodDesc": "Vui lòng điền đầy đủ thông tin thanh toán để hoàn tất đặt hẹn cho talent",
+    "methodDesc": "Vui lòng lựa chọn hình thức thanh toán của bạn.",
     "instantPay": "Thanh toán ngay",
-    "laterPay": "Thanh toán trả sau"
+    "laterPay": "Thanh toán trả sau",
+    "tableTitle": {
+      "package": "Package",
+      "price": "Giá",
+      "action": "Thao tác",
+      "delete": "Xóa",
+      "edit": "Chỉnh sửa"
+    }
   },
   "TalentManagementPage": {
     "profile": "Profile",

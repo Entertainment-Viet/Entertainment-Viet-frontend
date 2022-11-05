@@ -15,4 +15,9 @@ export const messages = {
   methodDesc: () => t(translations.preCheckout.methodDesc),
   instantPay: () => t(translations.preCheckout.instantPay),
   laterPay: () => t(translations.preCheckout.laterPay),
+  packageTitle: () => t(translations.preCheckout.tableTitle.package),
+  packagePrice: () => t(translations.preCheckout.tableTitle.price),
+  packageAction: () => t(translations.preCheckout.tableTitle.action),
+  packageBoxDelete: () => t(translations.preCheckout.tableTitle.delete),
+  packageBoxEdit: () => t(translations.preCheckout.tableTitle.edit),
 };
