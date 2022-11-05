@@ -29,6 +29,8 @@ import {
   makeSelectPaging,
   makeSelectData,
   makeSelectUnpaidSum,
+  makeSelectPage,
+  makeSelectLimit,
 } from './slice/selectors';
 import { numberWithCommas } from '../../../utils/helpers';
 const StatusCell = styled(Text)`
@@ -103,6 +105,8 @@ const Orders = ({
   // eslint-disable-next-line no-shadow
   loadBookings,
   unpaidSum,
+  page,
+  limit,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -115,7 +119,7 @@ const Orders = ({
 
   useEffect(() => {
     loadBookings(status, hasFilterStatus, isFilterAll, isFilterUpcoming);
-  }, [status, hasFilterStatus, isFilterAll, isFilterUpcoming]);
+  }, [status, hasFilterStatus, isFilterAll, isFilterUpcoming, page, limit]);
 
   const handleChangeStatus = (activeTemp, statusTemp) => {
     setStatus(statusTemp);
@@ -361,6 +365,8 @@ Orders.propTypes = {
   ]),
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   unpaidSum: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  page: PropTypes.number,
+  limit: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -369,17 +375,17 @@ const mapStateToProps = createStructuredSelector({
   paging: makeSelectPaging(),
   data: makeSelectData(),
   unpaidSum: makeSelectUnpaidSum(),
+  page: makeSelectPage(),
+  limit: makeSelectLimit(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
     handlePageChange: page => {
       dispatch(changePage(page));
-      dispatch(loadBookings());
     },
     handleLimitChange: limit => {
       dispatch(changeLimit(limit));
-      dispatch(loadBookings());
     },
     loadBookings: (status, hasFilterStatus, isFilterAll, isFilterUpcoming) => {
       dispatch(
