@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   Text,
@@ -237,10 +238,9 @@ const Profile = ({
                   size="md"
                   {...register('category')}
                   defaultValue={
-                    categoriesInfo.filter(
-                      item => item.uid === talentInfo.offerCategories[0].uid,
-                    )[0].uid
-                  }
+                    talentInfo.offerCategories.length > 0
+                      ? categoriesInfo.filter(
+                        item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
                 >
                   {categoriesInfo.map(option => (
                     // eslint-disable-next-line react/no-array-index-key
@@ -259,7 +259,11 @@ const Profile = ({
                   name="history"
                   id="history"
                   required
-                  val={JSON.parse(talentInfo.extensions)[1].value}
+                  val={
+                    talentInfo.extensions
+                      ? JSON.parse(talentInfo.extensions)[1].value
+                      : null
+                  }
                 />
               </FormControl>
               <FormControl>
@@ -271,7 +275,11 @@ const Profile = ({
                   name="activity"
                   id="activity"
                   required
-                  val={JSON.parse(talentInfo.extensions)[0].value}
+                  val={
+                    talentInfo.extensions
+                      ? JSON.parse(talentInfo.extensions)[0].value
+                      : null
+                  }
                 />
               </FormControl>
               <FormControl>
