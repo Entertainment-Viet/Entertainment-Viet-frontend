@@ -4,56 +4,64 @@
  *
  */
 
-import React, { Children, useState } from 'react';
+import React, { Children } from 'react';
 import PropTypes from 'prop-types';
-
-import Loading from 'components/LoadingIndicator';
-import Wrapper from './Wrapper';
-import WrapperLoading from './WrapperLoading';
+import { Box, Button } from '@chakra-ui/react';
+import { TEXT_GREEN, PRI_BACKGROUND, SUB_BLU_COLOR } from 'constants/styles';
 
 function Form(props) {
   const { children } = props;
-  const [isSubmit, setIsSubmit] = useState(false);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    setIsSubmit(true);
-
-    const res = props.mySubmit ? props.mySubmit(e) : '';
-
-    if (res) {
-      try {
-        res.finally(() => setIsSubmit(false));
-      } catch (err) {
-        throw err;
-      }
-    } else {
-      setIsSubmit(false);
-    }
-
-    // setTimeout(() => {
-    //   setIsSubmit(false);
-    // }, 3000);
-  };
 
   return (
-    <Wrapper>
-      <form onSubmit={handleSubmit} noValidate>
+    <>
+      <Box
+        sx={{
+          backgroundColor: PRI_BACKGROUND,
+          marginTop: '104px',
+        }}
+        width="810px"
+        borderRadius="10px"
+        py={{ base: '0', sm: '12' }}
+        px={{ base: '4', sm: '12' }}
+      >
+        <Box
+          color={TEXT_GREEN}
+          fontWeight="600"
+          fontSize="25px"
+          sx={{
+            marginBottom: '25px',
+          }}
+        >
+          {props.title}
+        </Box>
         {Children.toArray(children)}
-        {isSubmit ? (
-          <WrapperLoading>
-            <Loading />
-          </WrapperLoading>
-        ) : (
-          ''
-        )}
-      </form>
-    </Wrapper>
+      </Box>
+      <Box display="flex" justifyContent="end">
+        <Button
+          sx={{
+            justifyContent: 'center',
+            alignContent: 'center',
+            marginTop: '20px',
+            marginBottom: '100px',
+            background: TEXT_GREEN,
+            width: '235px',
+            height: '48px',
+          }}
+          color={SUB_BLU_COLOR}
+          type="submit"
+          isLoading={props.isSubmitting}
+        >
+          Create
+        </Button>
+      </Box>
+    </>
   );
 }
 
 Form.propTypes = {
   children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  isSubmitting: PropTypes.any,
 };
 
 export default Form;

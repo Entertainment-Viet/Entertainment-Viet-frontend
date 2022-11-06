@@ -11,7 +11,6 @@ import {
   chakra,
   Text,
   Stack,
-  Button,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +21,7 @@ import Metadata from 'components/Metadata';
 import { getResStatus, cacthResponse } from 'utils/helpers';
 import { API_LIST_EVENTS } from 'constants/api';
 import { post } from 'utils/request';
+import Form from 'components/Form';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
@@ -29,14 +29,8 @@ import SelectCustom from '../../components/Controls/SelectCustom';
 import { dataDistrictHCM } from '../../utils/data-address';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
-import {
-  PRI_BACKGROUND,
-  RED_COLOR,
-  SUB_BLU_COLOR,
-  TEXT_GREEN,
-} from '../../constants/styles';
+import { RED_COLOR } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
-
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -96,26 +90,7 @@ export function CreateEventPage() {
     >
       <Metadata />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          sx={{
-            backgroundColor: PRI_BACKGROUND,
-            marginTop: '104px',
-          }}
-          width="810px"
-          borderRadius="10px"
-          py={{ base: '0', sm: '12' }}
-          px={{ base: '4', sm: '12' }}
-        >
-          <Box
-            color={TEXT_GREEN}
-            fontWeight="600"
-            fontSize="25px"
-            sx={{
-              marginBottom: '25px',
-            }}
-          >
-            {t(messages.createEvent())}
-          </Box>
+        <Form isSubmitting={isSubmitting} title={t(messages.createEvent())}>
           <Box>
             <Stack spacing="2">
               <FormControl>
@@ -240,25 +215,7 @@ export function CreateEventPage() {
               </FormControl> */}
             </Stack>
           </Box>
-        </Box>
-        <Box display="flex" justifyContent="end">
-          <Button
-            sx={{
-              justifyContent: 'center',
-              alignContent: 'center',
-              marginTop: '20px',
-              marginBottom: '100px',
-              background: TEXT_GREEN,
-              width: '235px',
-              height: '48px',
-            }}
-            color={SUB_BLU_COLOR}
-            type="submit"
-            isLoading={isSubmitting}
-          >
-            Create
-          </Button>
-        </Box>
+        </Form>
       </form>
     </SimpleGrid>
   );
