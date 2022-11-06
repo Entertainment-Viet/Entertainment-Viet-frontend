@@ -2,28 +2,56 @@ import React, { memo } from 'react';
 import { Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { TEXT_PURPLE } from 'constants/styles';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import { H1 } from 'components/Elements';
+import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
+import { makeSelectPayType } from '../selectors';
 import PayLater from './PayLater';
 import PayInstant from './PayInstant';
-function PayMethod({ isPayLater }) {
+function PayMethod({ payMethod }) {
   const { t } = useTranslation();
-
   return (
-    <>
-      <H1 color={TEXT_PURPLE} py={0} fontWeight={600} fontSize={30}>
-        {!isPayLater ? t(messages.methodPay()) : t(messages.method())}
+    <div style={{ width: '80%' }}>
+      <H1 color={TEXT_PURPLE} py={0} fontSize="30" whiteSpace="nowrap">
+        {payMethod === 'payLater'
+          ? t(messages.method())
+          : t(messages.methodPay())}
       </H1>
-      <Text fontWeight={400} style={{ marginTop: '0px' }} fontSize={15}>
-        {!isPayLater ? t(messages.methodDescPay()) : t(messages.methodDesc())}
+      <Text
+        fontWeight={400}
+        lineHeight="18px"
+        style={{ marginTop: '0px' }}
+        fontSize={15}
+      >
+        {payMethod === 'payLater'
+          ? t(messages.methodDesc())
+          : t(messages.methodDescPay())}
       </Text>
-      {isPayLater ? <PayLater /> : <PayInstant />}
-    </>
+      {payMethod === 'payLater' ? <PayLater /> : <PayInstant />}
+    </div>
   );
 }
 PayMethod.propTypes = {
-  isPayLater: PropTypes.bool,
+  payMethod: PropTypes.string,
 };
+const mapDispatchToProps = dispatch => ({
+  chooseMethod: payType => dispatch(choosePaymentType(payType)),
+});
 
-export default memo(PayMethod);
+const mapStateToProps = createStructuredSelector({
+  payMethod: makeSelectPayType(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(PayMethod);

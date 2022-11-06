@@ -1,5 +1,9 @@
 import React, { memo } from 'react';
 import { Box, Text, HStack } from '@chakra-ui/react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import PropTypes from 'prop-types';
 import {
   BOX_SHADOW_CHECKOUT,
   TEXT_PURPLE,
@@ -7,12 +11,14 @@ import {
   SUB_BLU_COLOR,
 } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
-import Arrow from 'components/Icon/Arrow';
-import Wallet from 'components/Icon/Wallet';
 import { post } from 'utils/request';
 import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
+import Arrow from 'components/Icon/Arrow';
+import Wallet from 'components/Icon/Wallet';
+import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
-function PayLater() {
+import { makeSelectPayType } from '../selectors';
+function PayLater({ chooseMethod }) {
   const { t } = useTranslation();
   const orgId = localStorage.getItem('uid');
   function instantPay() {
@@ -59,8 +65,12 @@ function PayLater() {
           boxShadow: `-1px 5px ${BOX_SHADOW_CHECKOUT}`,
           transition: 'ease 0.3s',
         }}
+        onClick={() => {
+          chooseMethod('payInstant');
+          // instantPay();
+        }}
       >
-        <HStack justifyContent="space-between" width="50%">
+        <HStack whiteSpace="nowrap">
           <Wallet size={24} colorIcon={TEXT_GREEN} />
           <Text
             style={{ marginTop: '0px' }}
@@ -71,7 +81,7 @@ function PayLater() {
             {t(messages.instantPay())}
           </Text>
         </HStack>
-        <Arrow size={15} colorIcon={TEXT_GREEN} onClick={() => instantPay()} />
+        <Arrow size={15} colorIcon={TEXT_GREEN} />
       </Box>
       <Box
         bg={SUB_BLU_COLOR}
@@ -86,8 +96,11 @@ function PayLater() {
           boxShadow: '-1px 5px #404b8d',
           transition: 'ease 0.3s',
         }}
+        onClick={() => {
+          laterPay();
+        }}
       >
-        <HStack justifyContent="space-between" width="55%">
+        <HStack whiteSpace="nowrap">
           <Wallet size={24} colorIcon={TEXT_PURPLE} />
           <Text
             style={{ marginTop: '0px' }}
@@ -98,10 +111,29 @@ function PayLater() {
             {t(messages.laterPay())}
           </Text>
         </HStack>
-        <Arrow size={15} colorIcon={TEXT_PURPLE} onClick={() => laterPay()} />
+        <Arrow size={15} colorIcon={TEXT_PURPLE} />
       </Box>
     </Box>
   );
 }
 
-export default memo(PayLater);
+PayLater.propTypes = {
+  chooseMethod: PropTypes.func,
+};
+const mapDispatchToProps = dispatch => ({
+  chooseMethod: payType => dispatch(choosePaymentType(payType)),
+});
+
+const mapStateToProps = createStructuredSelector({
+  payMethod: makeSelectPayType(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(PayLater);

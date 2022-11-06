@@ -43,7 +43,7 @@ const Cart = ({ data }) => {
       >
         {content &&
           content.map(item => (
-            <MenuGroup>
+            <MenuGroup key={item.uid}>
               <MenuItem _hover={{ bg: 'none' }}>
                 <PackagesBox data={item} />
               </MenuItem>
@@ -72,6 +72,6 @@ const Cart = ({ data }) => {
   );
 };
 Cart.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 export default Cart;

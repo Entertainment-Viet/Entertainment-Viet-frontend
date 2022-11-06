@@ -1,4 +1,7 @@
 import React, { memo } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import {
   VStack,
   Text,
@@ -17,14 +20,18 @@ import {
 } from 'constants/styles';
 import PropTypes from 'prop-types';
 import { numberWithCommas, convertReadableTime } from 'utils/helpers';
+import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
+import { makeSelectPayType } from '../selectors';
 
-const DetailPackage = ({ detailPackage, name, suggestedPrice }) => {
+const DetailPackage = ({ dataPackage, payMethod }) => {
   const { t } = useTranslation();
+  const { jobDetail, suggestedPrice, name } = dataPackage;
+  const { city, district, street } = dataPackage.jobDetail.location;
   return (
     <>
-      <Divider my={5} w="100%" />
-      <Box ps={4}>
+      <Divider my={5} w="100%" style={{ padding: '0' }} />
+      <Box ps={4} style={{ paddingLeft: '3rem' }}>
         <HStack align="center" justifyContent="space-between">
           <HStack w="60%">
             <Image
@@ -39,7 +46,7 @@ const DetailPackage = ({ detailPackage, name, suggestedPrice }) => {
               </Text>
               <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
                 {t(messages.packageBoxTime())}:&nbsp;
-                {convertReadableTime(detailPackage.performanceStartTime)}
+                {convertReadableTime(jobDetail.performanceStartTime)}
               </Text>
               <Text
                 color={PRI_TEXT_COLOR}
@@ -48,14 +55,22 @@ const DetailPackage = ({ detailPackage, name, suggestedPrice }) => {
                 whiteSpace="nowrap"
                 textOverflow="ellipsis"
                 overflow="hidden"
-                width="60%"
               >
                 {t(messages.packageBoxLocation())}:&nbsp;
-                {detailPackage.location}
+                {street}&nbsp;{district}&nbsp;{city}
               </Text>
             </VStack>
           </HStack>
-          <HStack justifyContent="space-between" w="40%">
+          <HStack
+            style={
+              payMethod === 'payLater'
+                ? {
+                    justifyContent: 'space-between',
+                    width: '40%',
+                  }
+                : { marginRight: '2%' }
+            }
+          >
             <Text
               color={TEXT_GREEN}
               fontWeight={600}
@@ -65,24 +80,26 @@ const DetailPackage = ({ detailPackage, name, suggestedPrice }) => {
             >
               {numberWithCommas(suggestedPrice)}&nbsp;VND
             </Text>
-            <VStack justify="space-between">
-              <Button
-                bg="transparent"
-                color={PRI_TEXT_COLOR}
-                fontWeight={400}
-                fontSize="14px"
-              >
-                {t(messages.packageBoxEdit())}
-              </Button>
-              <Button
-                bg="transparent"
-                color={RED_COLOR}
-                fontSize="14px"
-                fontWeight={400}
-              >
-                {t(messages.packageBoxDelete())}
-              </Button>
-            </VStack>
+            {payMethod === 'payLater' && (
+              <VStack justify="space-between">
+                <Button
+                  bg="transparent"
+                  color={PRI_TEXT_COLOR}
+                  fontWeight={400}
+                  fontSize="14px"
+                >
+                  {t(messages.packageBoxEdit())}
+                </Button>
+                <Button
+                  bg="transparent"
+                  color={RED_COLOR}
+                  fontSize="14px"
+                  fontWeight={400}
+                >
+                  {t(messages.packageBoxDelete())}
+                </Button>
+              </VStack>
+            )}
           </HStack>
         </HStack>
       </Box>
@@ -90,9 +107,29 @@ const DetailPackage = ({ detailPackage, name, suggestedPrice }) => {
   );
 };
 
+export function mapDispatchToProps(dispatch) {
+  return {
+    choosePayMethod: paymentType => dispatch(choosePaymentType(paymentType)),
+  };
+}
+const mapStateToProps = createStructuredSelector({
+  payMethod: makeSelectPayType(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
 DetailPackage.propTypes = {
-  detailPackage: PropTypes.any,
-  name: PropTypes.string,
-  suggestedPrice: PropTypes.number,
+  dataPackage: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]),
+  payMethod: PropTypes.string,
 };
-export default memo(DetailPackage);
+export default compose(
+  withConnect,
+  memo,
+)(DetailPackage);

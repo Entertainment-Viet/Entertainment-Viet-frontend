@@ -68,7 +68,10 @@ export const OrganizationItem = styled.a`
 export const TotalTrayWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: ${props =>
+    props.payMethod === 'payInstant' ? 'space-between' : null};
   padding: 1rem;
+  padding-left: 3rem;
   border-radius: 10px;
   color: ${TEXT_PURPLE};
   background-color: ${SUB_BLU_COLOR};
@@ -84,6 +87,7 @@ export const HeaderCheckout = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  padding-left: 3rem;
   border-radius: 10px;
   color: ${TEXT_PURPLE};
   background-color: ${SUB_BLU_COLOR};

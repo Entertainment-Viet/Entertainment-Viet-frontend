@@ -1,41 +1,40 @@
 import React, { memo } from 'react';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { TEXT_PURPLE, TEXT_GREEN, SUB_BLU_COLOR } from 'constants/styles';
-import { VStack, Text, Box, HStack } from '@chakra-ui/react';
-import { HeaderCheckout, BodyPackageCheckout } from '../styles';
-import { messages } from '../messages';
+import { Text, HStack } from '@chakra-ui/react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { BodyPackageCheckout } from '../styles';
+import { makeSelectPayType } from '../selectors';
+import { choosePaymentType } from '../actions';
 import DetailPackage from './DetailPackage';
-function PackageCheckout({ data }) {
-  const { name, suggestedPrice, talentName, jobDetail } = data;
-  const { t } = useTranslation();
-
+function PackageCheckout({ data, payMethod }) {
+  const distinctTalentName =
+    data &&
+    data.reduce((acc, current) => {
+      const x = acc.find(item => item.talentName === current.talentName);
+      if (!x) {
+        return acc.concat([current]);
+      }
+      return acc;
+    }, []);
+  const distinctTalentId =
+    data &&
+    data.reduce((acc, current) => {
+      const x = acc.find(item => item.talentId === current.talentId);
+      if (!x) {
+        return acc.concat([current]);
+      }
+      return acc;
+    }, []);
   return (
-    <>
-      <HeaderCheckout>
-        <Box w="65%">
-          <Text
-            style={{
-              marginTop: '0px',
-              color: TEXT_PURPLE,
-              fontWeight: 600,
-              fontSize: 15,
-            }}
-          >
-            {t(messages.packageTitle())}
-          </Text>
-        </Box>
-        <VStack flexDir="row" justifyContent="space-between" width="35%">
-          <Text style={{ marginTop: '0px', color: TEXT_PURPLE }}>
-            {t(messages.packagePrice())}
-          </Text>
-          <Text style={{ marginTop: '0px', color: TEXT_PURPLE }}>
-            {t(messages.packageAction())}
-          </Text>
-        </VStack>
-      </HeaderCheckout>
-      <BodyPackageCheckout>
-        <HStack margin="1rem">
+    <BodyPackageCheckout>
+      <HStack
+        justifyContent="space-between"
+        style={{ padding: '1rem', paddingLeft: '3rem' }}
+      >
+        <HStack>
           <Text
             style={{ marginTop: '0px', fontWeight: 600 }}
             color={SUB_BLU_COLOR}
@@ -55,20 +54,51 @@ function PackageCheckout({ data }) {
             fontWeight={600}
             fontSize={15}
           >
-            {talentName}
+            {distinctTalentName[0].talentName}
           </Text>
         </HStack>
-        <DetailPackage
-          detailPackage={jobDetail}
-          suggestedPrice={suggestedPrice}
-          name={name}
-        />
-      </BodyPackageCheckout>
-    </>
+        {payMethod === 'payInstant' && (
+          <Text
+            style={{
+              marginTop: '0px',
+              color: TEXT_GREEN,
+            }}
+            fontWeight={600}
+            fontSize={15}
+          >
+            ID:&nbsp;{distinctTalentId[0].talentId}
+          </Text>
+        )}
+      </HStack>
+      {data &&
+        data.map(dataPackage => (
+          <DetailPackage key={dataPackage.uid} dataPackage={dataPackage} />
+        ))}
+    </BodyPackageCheckout>
   );
 }
 PackageCheckout.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]),
+  payMethod: PropTypes.string,
 };
+const mapStateToProps = createStructuredSelector({
+  payMethod: makeSelectPayType(),
+});
 
-export default memo(PackageCheckout);
+export function mapDispatchToProps(dispatch) {
+  return {
+    choosePayMethod: paymentType => dispatch(choosePaymentType(paymentType)),
+  };
+}
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+export default compose(
+  withConnect,
+  memo,
+)(PackageCheckout);

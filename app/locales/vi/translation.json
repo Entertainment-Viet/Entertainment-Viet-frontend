@@ -165,7 +165,10 @@
       "delete": "Xóa",
       "total": "Tổng thanh toán",
       "selected": "đã chọn"
-    }
+    },
+    "accountNumber": "STK:",
+    "contentTransaction": "Nội dung:",
+    "accountName": "Chủ tài khoản:"
   },
   "TalentManagementPage": {
     "profile": "Profile",

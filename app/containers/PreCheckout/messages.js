@@ -28,4 +28,7 @@ export const messages = {
   packageBoxTotal: () => t(translations.preCheckout.packageCheckout.total),
   packageBoxSelected: () =>
     t(translations.preCheckout.packageCheckout.selected),
+  accountNumber: () => t(translations.preCheckout.accountNumber),
+  accountName: () => t(translations.preCheckout.accountName),
+  contentTransaction: () => t(translations.preCheckout.contentTransaction),
 };

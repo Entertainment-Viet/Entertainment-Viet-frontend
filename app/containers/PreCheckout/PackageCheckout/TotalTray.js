@@ -1,16 +1,21 @@
 import React, { memo } from 'react';
 import { numberWithCommas, calculateTotalPrice } from 'utils/helpers';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import { Text, Box } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { TotalTrayWrapper, WrapperTitleTotal } from '../styles';
+import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
+import { makeSelectPayType } from '../selectors';
 
-const TotalTray = ({ content }) => {
+const TotalTray = ({ content, payMethod }) => {
   const { t } = useTranslation();
   return (
-    <TotalTrayWrapper>
+    <TotalTrayWrapper payMethod={payMethod}>
       <WrapperTitleTotal>
         <Text
           style={{
@@ -53,6 +58,23 @@ const TotalTray = ({ content }) => {
   );
 };
 TotalTray.propTypes = {
-  content: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  content: PropTypes.any,
+  payMethod: PropTypes.string,
 };
-export default memo(TotalTray);
+export function mapDispatchToProps(dispatch) {
+  return {
+    choosePayMethod: paymentType => dispatch(choosePaymentType(paymentType)),
+  };
+}
+const mapStateToProps = createStructuredSelector({
+  payMethod: makeSelectPayType(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+export default compose(
+  withConnect,
+  memo,
+)(TotalTray);

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
@@ -14,22 +14,23 @@ import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import { makeSelectCartData } from 'components/Header/selectors';
 import { messages } from './messages';
 import { loadInfo } from './actions';
+import { HeaderCheckout } from './styles';
 import saga from './saga';
 import reducer from './reducer';
 import {
   makeSelectDetailLoading,
   makeSelectDetailError,
   makeSelectDetail,
+  makeSelectPayType,
 } from './selectors';
-import PackageCheckout from './PackageCheckout/index';
-import PayMethod from './PayMethod/index';
+import PackageCheckout from './PackageCheckout';
+import PayMethod from './PayMethod';
 import TotalTray from './PackageCheckout/TotalTray';
 
 const key = 'PreCheckout';
-export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
+export function PreCheckout({ onLoadData, cartData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-
   useEffect(() => {
     onLoadData();
   }, []);
@@ -39,26 +40,71 @@ export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
   const sortedPackage =
     content && content.sort((a, b) => a.talentName.localeCompare(b.talentName));
 
+  // group all the same elements have same talentName into an array of array
+  const groupPackage = sortedPackage
+    ? sortedPackage.reduce((result, curr) => {
+        // eslint-disable-next-line no-param-reassign
+        result[curr.talentName] = [...(result[curr.talentName] || []), curr];
+        return result;
+      }, {})
+    : [];
+
+  // get object values is subArray of a big array
+  const groupPackageToArray = Object.values(groupPackage);
+
   return sortedPackage ? (
     <div style={{ width: '100%' }}>
       <Metadata />
       <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
         <GridItem colSpan={3}>
-          <H1 color={TEXT_GREEN} fontWeight={600} fontSize={25}>
+          <H1 color={TEXT_GREEN} fontSize="25">
             {t(messages.overview())}
           </H1>
           <Text color={TEXT_PURPLE} fontWeight={600} fontSize={30}>
             {t(messages.overviewDesc())}
           </Text>
           <Box py={4} my={6}>
-            {sortedPackage.map(item => (
-              <PackageCheckout key={item.uid} data={item} />
-            ))}
+            {content.length > 0 && (
+              <HeaderCheckout>
+                <Box w="65%">
+                  <Text
+                    style={{
+                      marginTop: '0px',
+                      color: TEXT_PURPLE,
+                      fontWeight: 600,
+                      fontSize: 15,
+                    }}
+                  >
+                    {t(messages.packageTitle())}
+                  </Text>
+                </Box>
+                <VStack
+                  flexDir="row"
+                  justifyContent="space-between"
+                  width="35%"
+                >
+                  <Text style={{ marginTop: '0px', color: TEXT_PURPLE }}>
+                    {t(messages.packagePrice())}
+                  </Text>
+                  <Text style={{ marginTop: '0px', color: TEXT_PURPLE }}>
+                    {t(messages.packageAction())}
+                  </Text>
+                </VStack>
+              </HeaderCheckout>
+            )}
+            {groupPackageToArray &&
+              groupPackageToArray.map((item, indexItem) => (
+                <PackageCheckout
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={indexItem}
+                  data={item}
+                />
+              ))}
           </Box>
-          {<TotalTray content={content} />}
+          {sortedPackage.length > 0 && <TotalTray content={sortedPackage} />}
         </GridItem>
         <GridItem mt={20} colStart={5} colEnd={7}>
-          <PayMethod isPayLater={false} />
+          <PayMethod />
         </GridItem>
       </Grid>
     </div>
@@ -69,9 +115,6 @@ export function PreCheckout({ loading, error, data, onLoadData, cartData }) {
 
 PreCheckout.propTypes = {
   onLoadData: PropTypes.func,
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   cartData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
@@ -80,6 +123,7 @@ const mapStateToProps = createStructuredSelector({
   error: makeSelectDetailError(),
   data: makeSelectDetail(),
   cartData: makeSelectCartData(),
+  payMethod: makeSelectPayType(),
 });
 
 export function mapDispatchToProps(dispatch) {
