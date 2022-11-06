@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@chakra-ui/react';
+import { Button, Image } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/core';
 import InputCustomV2 from '../Controls/InputCustomV2';
 import { SEC_TEXT_COLOR, SUB_BLU_COLOR } from '../../constants/styles';
-
+import trashCan from './assets/ic_delete.svg';
 function DynamicFormYourSong(props) {
   const [formFields, setFormFields] = useState([{ key: '', value: '' }]);
 
@@ -27,6 +27,12 @@ function DynamicFormYourSong(props) {
 
     setFormFields([...formFields, object]);
   };
+  const removeFields = index => {
+    const data = [...formFields];
+    data.splice(index, 1);
+    props.setDynamicData(data);
+    setFormFields(data);
+  };
 
   return (
     <form onChange={submit}>
@@ -44,6 +50,11 @@ function DynamicFormYourSong(props) {
             placeholder="Enter URL"
             onChange={event => handleFormChange(event, index)}
             value={form.value}
+          />
+          <Image
+            src={trashCan}
+            alt="trash"
+            onClick={() => removeFields(index)}
           />
         </Box>
       ))}

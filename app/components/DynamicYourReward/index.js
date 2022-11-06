@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@chakra-ui/react';
+import { Button, Image } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/core';
 import { useAnimation } from 'framer-motion';
 import {
@@ -11,7 +11,7 @@ import {
 import InputCustomV2 from '../Controls/InputCustomV2';
 import SelectCustom from '../Controls/SelectCustom';
 import { AttachIcon } from '../Controls/UploadFileCustom';
-
+import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';
 function DynamicFormYourReward(props) {
   const [formFields, setFormFields] = useState([
     { key: '', value: '', file: null },
@@ -47,6 +47,13 @@ function DynamicFormYourReward(props) {
     };
 
     setFormFields([...formFields, object]);
+  };
+
+  const removeFields = index => {
+    const data = [...formFields];
+    data.splice(index, 1);
+    props.setDynamicData(data);
+    setFormFields(data);
   };
 
   const year = [
@@ -196,6 +203,11 @@ function DynamicFormYourReward(props) {
               onChange={e => handleUpload(e.target.files[0], 'file', index)}
             />
           </Box>
+          <Image
+            src={trashCan}
+            alt="trash"
+            onClick={() => removeFields(index)}
+          />
         </Box>
       ))}
       <Box width="100%">

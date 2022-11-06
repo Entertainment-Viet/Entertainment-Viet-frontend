@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@chakra-ui/react';
+import { Button, Image } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/core';
 import InputCustomV2 from '../Controls/InputCustomV2';
 import { SEC_TEXT_COLOR, SUB_BLU_COLOR } from '../../constants/styles';
-
+import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';
 function DynamicFormV2(props) {
   const [formFields, setFormFields] = useState([{ key: '', value: '' }]);
   const obj = {};
@@ -37,11 +37,12 @@ function DynamicFormV2(props) {
     setFormFields([...formFields, object]);
   };
 
-  // const removeFields = index => {
-  //   const data = [...formFields];
-  //   data.splice(index, 1);
-  //   setFormFields(data);
-  // };
+  const removeFields = index => {
+    const data = [...formFields];
+    data.splice(index, 1);
+    props.setDynamicData(data);
+    setFormFields(data);
+  };
 
   return (
     <form onChange={submit}>
@@ -60,13 +61,11 @@ function DynamicFormV2(props) {
             onChange={event => handleFormChange(event, index)}
             value={form.value}
           />
-          {/* <Button */}
-          {/*  onClick={() => removeFields(index)} */}
-          {/*  text="Remove" */}
-          {/*  template="btn-pri btn-inline" */}
-          {/* > */}
-          {/*  Remove */}
-          {/* </Button> */}
+          <Image
+            src={trashCan}
+            alt="trash"
+            onClick={() => removeFields(index)}
+          />
         </Box>
       ))}
       <Box width="100%">
