@@ -89,7 +89,8 @@ function Card(props) {
             <Box display="flex" alignItems="center">
               <StarIcon color={TEXT_PURPLE} />
               <Box as="span" ml="2" color={PRI_TEXT_COLOR} fontSize="sm">
-                {property.rating} ({property.reviewCount})
+                {Math.round(props.data.avgReviewRate * 10) / 10} (
+                {props.data.reviewCount})
               </Box>
             </Box>
           </Box>
