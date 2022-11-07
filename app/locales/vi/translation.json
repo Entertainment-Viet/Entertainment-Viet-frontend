@@ -7,7 +7,9 @@
     "signin": "Sign in",
     "signup": "Sign up",
     "continueWith": "or continue with",
-    "haveAccount": "Don’t have an account?"
+    "haveAccount": "Don’t have an account?",
+    "incomeRange": "Khoảng thu nhập (1 session)",
+    "location": "Vị trí"
   },
   "registerPage": {
     "welcome": "Create an Account blah blah here.",

@@ -14,23 +14,17 @@ import {
   Container,
   Box,
   SimpleGrid,
-  // Select,
-  NumberInput,
-  NumberInputField,
-  // chakra,
   HStack,
+  chakra,
+  Select,
   Text,
 } from '@chakra-ui/react';
-
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import {
-  TEXT_PURPLE,
-  SEC_TEXT_COLOR,
-  PRI_TEXT_COLOR,
-  TEXT_GREEN,
-} from 'constants/styles';
+import { TEXT_PURPLE, SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
@@ -46,7 +40,8 @@ import {} from 'constants/routes';
 import {} from './styles';
 
 import { toIsoString } from 'utils/helpers';
-import InputCustomV2 from '../../components/Controls/InputCustomV2';
+import SliderRange from 'components/SliderRange';
+import { messages } from './messages';
 import {
   loadDataEvent,
   changePage,
@@ -56,7 +51,7 @@ import {
   changeEnd,
   changeCategory,
   changeSearchEvent,
-  // loadCategories,
+  loadCategories,
   changeOrganizer,
 } from './actions';
 import saga from './saga';
@@ -75,36 +70,48 @@ import {
   makeSelectEnd,
   makeSelectCategories,
 } from './selectors';
-
-// const CustomOption = styled.option`
-//   color: black;
-// `;
+const CustomOption = styled.option`
+  color: black;
+`;
+const CustomSelect = chakra(Select, {
+  baseStyle: {
+    color: 'white',
+    bg: TEXT_PURPLE,
+    textAlign: 'center',
+    w: 'fit-content',
+  },
+});
+const FieldWrapper = chakra(Box, {
+  baseStyle: {
+    w: 'fit-content',
+    color: 'white',
+  },
+});
 const key = 'EventSearchResultPage';
 export function EventSearchResultPage({
   paging,
   data,
   handlePageChange,
   handleCategoryChange,
-  // handleCityChange,
-  handleBudgetChange,
+  handleCityChange,
   handleSearchChange,
   handleStartChange,
   handleEndChange,
   onLoadData,
   search,
-  // categories,
-  // onLoadCategory,
-  handleOrganizerChange,
+  categories,
+  onLoadCategory,
 }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
+  const { t } = useTranslation();
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const searchParams = urlParams.get('search');
   const category = urlParams.get('category');
   useEffect(() => {
-    // onLoadCategory();
+    onLoadCategory();
     if (category) handleCategoryChange(category);
     else if (searchParams) handleSearchChange(searchParams);
     else onLoadData();
@@ -117,12 +124,6 @@ export function EventSearchResultPage({
     last: paging.last,
   };
 
-  // const FieldWrapper = chakra(Box, {
-  //   baseStyle: {
-  //     w: 'fit-content',
-  //     color: 'white',
-  //   },
-  // });
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
@@ -131,7 +132,7 @@ export function EventSearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        {/* <FieldWrapper>
+        <FieldWrapper>
           <CustomSelect
             isSearchable
             placeholder="Categories"
@@ -146,34 +147,14 @@ export function EventSearchResultPage({
         <FieldWrapper>
           <CustomSelect
             isSearchable
-            placeholder="City"
+            placeholder={t(messages.location())}
             onChange={val => handleCityChange(val.target.value)}
           >
             <CustomOption value="TPHCM">TPHCM</CustomOption>
           </CustomSelect>
-        </FieldWrapper> */}
-        <Text>Your budget</Text>
-        <Box>
-          <NumberInput
-            color={PRI_TEXT_COLOR}
-            bg="transparent"
-            borderColor={TEXT_PURPLE}
-            onChange={val => handleBudgetChange(val)}
-          >
-            <NumberInputField placeholder="Budget" />
-          </NumberInput>
-        </Box>
-        <Text>Organizer</Text>
-        <Box>
-          <InputCustomV2
-            color={PRI_TEXT_COLOR}
-            bg="transparent"
-            borderColor={TEXT_PURPLE}
-            onChange={val => handleOrganizerChange(val.currentTarget.value)}
-          >
-            {/* <InputField placeholder="Organizer name" /> */}
-          </InputCustomV2>
-        </Box>
+        </FieldWrapper>
+        <SliderRange titleRange={t(messages.incomeRange())} />
+
         <Text>Start time</Text>
         <Box>
           <DateTimeCustom
@@ -231,12 +212,12 @@ EventSearchResultPage.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   page: PropTypes.number,
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // budget: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  // categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  budget: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -291,9 +272,9 @@ export function mapDispatchToProps(dispatch) {
     onLoadData: category => {
       dispatch(loadDataEvent(category));
     },
-    // onLoadCategory: () => {
-    //   dispatch(loadCategories());
-    // },
+    onLoadCategory: () => {
+      dispatch(loadCategories());
+    },
   };
 }
 

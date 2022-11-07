@@ -21,7 +21,6 @@ import {
   HStack,
   Text,
 } from '@chakra-ui/react';
-
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
@@ -31,6 +30,8 @@ import {
   PRI_TEXT_COLOR,
   TEXT_GREEN,
 } from 'constants/styles';
+import { useTranslation } from 'react-i18next';
+
 import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
@@ -46,6 +47,8 @@ import {} from 'constants/routes';
 import {} from './styles';
 
 import { toIsoString } from 'utils/helpers';
+import SliderRange from 'components/SliderRange';
+import { messages } from './messages';
 import {
   loadData,
   changePage,
@@ -100,6 +103,8 @@ export function SearchResultPage({
   const urlParams = new URLSearchParams(queryString);
   const searchParams = urlParams.get('search');
   const category = urlParams.get('category');
+  const { t } = useTranslation();
+
   useEffect(() => {
     onLoadCategory();
     if (category) handleCategoryChange(category);
@@ -152,7 +157,7 @@ export function SearchResultPage({
         <FieldWrapper>
           <CustomSelect
             isSearchable
-            placeholder="City"
+            placeholder={t(messages.location())}
             onChange={val => handleCityChange(val.target.value)}
           >
             <CustomOption value="TPHCM">TPHCM</CustomOption>
@@ -160,6 +165,7 @@ export function SearchResultPage({
             <CustomOption value="option3">Option 3</CustomOption>
           </CustomSelect>
         </FieldWrapper>
+        <SliderRange titleRange={t(messages.incomeRange())} />
         <Text>Your budget</Text>
         <Box>
           <NumberInput
