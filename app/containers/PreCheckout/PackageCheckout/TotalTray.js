@@ -58,7 +58,11 @@ const TotalTray = ({ content, payMethod }) => {
   );
 };
 TotalTray.propTypes = {
-  content: PropTypes.any,
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]),
   payMethod: PropTypes.string,
 };
 export function mapDispatchToProps(dispatch) {
