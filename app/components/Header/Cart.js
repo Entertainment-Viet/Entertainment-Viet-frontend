@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import PackagesBox from 'components/PackageBox';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import * as Paths from 'constants/routes';
-import { numberWithCommas } from 'utils/helpers';
+import { calculateTotalPrice } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { NumberedCart, CartIcon } from '../Icon';
 import { NumWrapper } from './Wrapper';
@@ -22,13 +22,6 @@ import { messages } from './messages';
 const Cart = ({ data }) => {
   const { t } = useTranslation();
   const { content } = data;
-  function calculateTotalPrice() {
-    const totalPrice = content.reduce(
-      (partialSum, a) => partialSum + a.suggestedPrice,
-      0,
-    );
-    return numberWithCommas(totalPrice);
-  }
   return (
     <Menu onCloseSelect={false}>
       <MenuButton>
@@ -50,7 +43,7 @@ const Cart = ({ data }) => {
       >
         {content &&
           content.map(item => (
-            <MenuGroup>
+            <MenuGroup key={item.uid}>
               <MenuItem _hover={{ bg: 'none' }}>
                 <PackagesBox data={item} />
               </MenuItem>
@@ -68,7 +61,8 @@ const Cart = ({ data }) => {
                 color={SUB_BLU_COLOR}
                 _hover={{ bg: PRI_TEXT_COLOR }}
               >
-                {t(messages.packageBoxPay())} - {calculateTotalPrice()} VND
+                {t(messages.packageBoxPay())} - {calculateTotalPrice(content)}
+                &nbsp;VND
               </Button>
             </Link>
           </MenuItem>
@@ -78,6 +72,6 @@ const Cart = ({ data }) => {
   );
 };
 Cart.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 export default Cart;

@@ -20,5 +20,14 @@ const makeSelectDetail = () =>
     selectState,
     State => State.data,
   );
-
-export { makeSelectDetailLoading, makeSelectDetailError, makeSelectDetail };
+const makeSelectPayType = () =>
+  createSelector(
+    selectState,
+    State => State.payMethod,
+  );
+export {
+  makeSelectDetailLoading,
+  makeSelectDetailError,
+  makeSelectDetail,
+  makeSelectPayType,
+};

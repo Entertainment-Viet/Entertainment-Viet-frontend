@@ -147,12 +147,28 @@
     "submit": "Submit"
   },
   "preCheckout": {
-    "overview": "Tổng quát",
-    "overviewDesc": "Vui lòng kiểm tra lại đơn của bạn",
+    "overview": "Check out",
+    "overviewDesc": "Đơn hàng của bạn",
     "method": "Hình thức thanh toán",
-    "methodDesc": "Vui lòng điền đầy đủ thông tin thanh toán để hoàn tất đặt hẹn cho talent",
+    "methodPay": "Cách thức thanh toán",
+    "methodDescPay": "Vui lòng thực hiện thanh toán bằng phương thức chuyển khoản đến STK bên dưới. Kiểm tra kỹ nội dung chuyển khoản theo hướng dẫn.",
+    "methodDesc": "Vui lòng lựa chọn hình thức thanh toán của bạn.",
     "instantPay": "Thanh toán ngay",
-    "laterPay": "Thanh toán trả sau"
+    "laterPay": "Thanh toán trả sau",
+    "packageCheckout": {
+      "package": "Package",
+      "price": "Giá",
+      "action": "Thao tác",
+      "time": "Thời gian",
+      "location": "Địa điểm",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "total": "Tổng thanh toán",
+      "selected": "đã chọn"
+    },
+    "accountNumber": "STK:",
+    "contentTransaction": "Nội dung:",
+    "accountName": "Chủ tài khoản:"
   },
   "TalentManagementPage": {
     "profile": "Profile",

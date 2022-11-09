@@ -207,3 +207,14 @@ export function numberWithCommas(x) {
 export function handleAddress(addr) {
   return `${addr.street}, quận ${addr.district}, ${addr.city}`;
 }
+export function calculateTotalPrice(arr) {
+  const totalPrice = arr.reduce(
+    (partialSum, a) => partialSum + a.suggestedPrice,
+    0,
+  );
+  return numberWithCommas(totalPrice);
+}
+
+export function convertReadableTime(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}
