@@ -3,21 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import {
-  Container,
-  Box,
-  SimpleGrid,
-  HStack,
-  chakra,
-  Select,
-  Text,
-} from '@chakra-ui/react';
+import { Container, Box, SimpleGrid, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { TEXT_PURPLE, SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
+import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
+import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
@@ -51,23 +43,6 @@ import {
   makeSelectEnd,
   makeSelectCategories,
 } from './selectors';
-const CustomOption = styled.option`
-  color: black;
-`;
-const CustomSelect = chakra(Select, {
-  baseStyle: {
-    color: 'white',
-    bg: TEXT_PURPLE,
-    textAlign: 'center',
-    w: 'fit-content',
-  },
-});
-const FieldWrapper = chakra(Box, {
-  baseStyle: {
-    w: 'fit-content',
-    color: 'white',
-  },
-});
 const key = 'EventSearchResultPage';
 export function EventSearchResultPage({
   paging,
@@ -113,29 +88,16 @@ export function EventSearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder="Categories"
-            onChange={val => handleCategoryChange(val.target.value)}
-          >
-            {categories &&
-              categories.map(item => (
-                <CustomOption value={item.uid}>{item.name}</CustomOption>
-              ))}
-          </CustomSelect>
-        </FieldWrapper>
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder={t(messages.location())}
-            onChange={val => handleCityChange(val.target.value)}
-          >
-            <CustomOption value="TPHCM">TPHCM</CustomOption>
-          </CustomSelect>
-        </FieldWrapper>
+        <SelectSearchCustom
+          placeholderName="Categories"
+          handleChange={handleCategoryChange}
+          listOption={categories}
+        />
+        <SelectSearchCustom
+          placeholderName={t(messages.location())}
+          handleChange={handleCityChange}
+        />
         <SliderRange titleRange={t(messages.incomeRange())} />
-
         <Text>Start time</Text>
         <Box>
           <DateTimeCustom
