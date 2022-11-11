@@ -1,14 +1,14 @@
 import { createGlobalStyle } from 'styled-components';
 
-import FontWoff from './SVNGilroyLight/SVNGilroy.woff';
-import FontTtf from './SVNGilroyLight/SVNGilroy.ttf';
-import FontEot from './SVNGilroyLight/SVNGilroy.eot';
-import FontSvg from './SVNGilroyLight/SVNGilroy.svg';
+import FontWoff from './Font/SFProDisplay-Regular.woff';
+import FontTtf from './Font/SFProDisplay-Regular.ttf';
+import FontEot from './Font/SFProDisplay-Regular.eot';
+import FontSvg from './Font/SFProDisplay-Regular.svg';
 
-import FontBoldWoff from './SVNGilroyBold/SVNGilroy.woff';
-import FontBoldTtf from './SVNGilroyBold/SVNGilroy.ttf';
-import FontBoldEot from './SVNGilroyBold/SVNGilroy.eot';
-import FontBoldSvg from './SVNGilroyBold/SVNGilroy.svg';
+import FontBoldWoff from './FontBold/SFProDisplay-Bold.woff';
+import FontBoldTtf from './FontBold/SFProDisplay-Bold.ttf';
+import FontBoldEot from './FontBold/SFProDisplay-Bold.eot';
+import FontBoldSvg from './FontBold/SFProDisplay-Bold.svg';
 
 export default createGlobalStyle`
     @font-face {

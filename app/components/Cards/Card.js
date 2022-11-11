@@ -85,7 +85,11 @@ function Card(props) {
             >
               {props.data.displayName}
             </Box>
-            <Box>{property.title}</Box>
+            <Box>
+              {props.data.offerCategories.length > 0
+                ? props.data.offerCategories[0].name
+                : 'Unknown'}
+            </Box>
             <Box display="flex" alignItems="center">
               <StarIcon color={TEXT_PURPLE} />
               <Box as="span" ml="2" color={PRI_TEXT_COLOR} fontSize="sm">
