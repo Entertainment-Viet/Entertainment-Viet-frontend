@@ -3,13 +3,14 @@ import { ENUM_PAGGING } from 'constants/enums';
 import {
   CHANGE_PAGE,
   LOAD_DATA,
-  CHANGE_BUDGET,
+  CHANGE_PRICE_RANGE,
   CHANGE_END,
   CHANGE_START,
   CHANGE_CATEGORY,
   CHANGE_CITY,
   CHANGE_SEARCH,
   LOAD_CATEGORIES_SUCCESS,
+  LOAD_TALENT_PRICE_RANGE_SUCCESS,
   LOAD_DATA_SUCCESS,
 } from './constants';
 
@@ -22,7 +23,7 @@ export const initialState = {
   search: '',
   category: '',
   city: '',
-  budget: '',
+  priceRange: [],
   start: '',
   end: '',
   categories: false,
@@ -41,8 +42,8 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_PAGE:
         draft.page = action.page;
         break;
-      case CHANGE_BUDGET:
-        draft.budget = action.budget;
+      case CHANGE_PRICE_RANGE:
+        draft.priceRange = action.priceRange;
         break;
       case CHANGE_END:
         draft.end = action.end;
@@ -57,7 +58,6 @@ const pageReducer = (state = initialState, action) =>
         draft.city = action.city;
         break;
       case CHANGE_SEARCH:
-        console.log(action.search);
         draft.search = action.search;
         break;
       case LOAD_DATA_SUCCESS:
@@ -67,6 +67,12 @@ const pageReducer = (state = initialState, action) =>
         break;
       case LOAD_CATEGORIES_SUCCESS:
         draft.categories = action.data;
+        break;
+      case LOAD_TALENT_PRICE_RANGE_SUCCESS:
+        draft.loading = false;
+        draft.data = action.data;
+        draft.paging = action.paging;
+        break;
     }
   });
 

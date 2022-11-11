@@ -20,7 +20,8 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
   const { t } = useTranslation();
   const dataArtist = data.extensions && JSON.parse(data.extensions);
   const RenderProfile = () =>
-    dataArtist.profile.map(item => (
+    dataArtist.length > 0 &&
+    dataArtist.map(item => (
       <>
         <Divider />
         <Box style={{ margin: '1rem 0px' }}>
@@ -48,12 +49,14 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
           <Header profile={data} comments={comments} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2} w="100%">
             <GridItem colSpan={4}>
-              <Image
-                src={ARTIST_IMAGE}
-                borderRadius="10px"
-                alt="Talent Image"
-                w="100%"
-              />
+              {dataArtist.length > 0 && (
+                <Image
+                  src={ARTIST_IMAGE}
+                  borderRadius="10px"
+                  alt="Talent Image"
+                  w="100%"
+                />
+              )}
             </GridItem>
             <GridItem colSpan={2}>
               <PackagesBox

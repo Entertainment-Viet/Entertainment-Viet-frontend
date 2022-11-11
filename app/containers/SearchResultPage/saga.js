@@ -1,18 +1,16 @@
-/**
- * Gets the repositories of the user from Github
- */
-
 import { call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import { API_TALENT_LIST } from 'constants/api';
-import { LOAD_CATEGORIES, LOAD_DATA } from './constants';
+import { LOAD_CATEGORIES, LOAD_DATA, CHANGE_PRICE_RANGE } from './constants';
 import {
   loadDataSuccess,
   loadDataError,
   loadCategoriesSuccess,
+  loadPriceRangeSuccess,
 } from './actions';
 import {
-  makeSelectBudget,
+  makeSelectPriceMax,
+  makeSelectPriceMin,
   makeSelectCategory,
   makeSelectEnd,
   makeSelectPage,
@@ -26,7 +24,6 @@ export function* getData() {
   yield delay(1000);
   const search = yield select(makeSelectSearch());
   const city = yield select(makeSelectCity());
-  const budget = yield select(makeSelectBudget());
   const start = yield select(makeSelectStart());
   const end = yield select(makeSelectEnd());
   const category = yield select(makeSelectCategory());
@@ -36,7 +33,6 @@ export function* getData() {
       displayName: search,
       category,
       city,
-      budget,
       startTime: start,
       endTime: end,
     });
@@ -53,8 +49,24 @@ export function* getCategories() {
     yield put(loadDataError(err));
   }
 }
+export function* getPriceRange() {
+  try {
+    const currency = 'VND';
+    const maxPrice = yield select(makeSelectPriceMax());
+    const minPrice = yield select(makeSelectPriceMin());
+    const payload = yield call(get, API_TALENT_LIST, {
+      currency,
+      maxPrice,
+      minPrice,
+    });
+    yield put(loadPriceRangeSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_DATA, getData);
   yield takeEvery(LOAD_CATEGORIES, getCategories);
+  yield takeEvery(CHANGE_PRICE_RANGE, getPriceRange);
 }

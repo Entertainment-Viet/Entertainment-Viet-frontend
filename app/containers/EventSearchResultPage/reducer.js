@@ -3,7 +3,6 @@ import { ENUM_PAGGING } from 'constants/enums';
 import {
   CHANGE_PAGE,
   LOAD_DATA,
-  CHANGE_BUDGET,
   CHANGE_END,
   CHANGE_START,
   CHANGE_CATEGORY,
@@ -12,6 +11,8 @@ import {
   LOAD_CATEGORIES_SUCCESS,
   LOAD_DATA_SUCCESS,
   CHANGE_ORGANIZER,
+  CHANGE_EVENT_PRICE_RANGE,
+  LOAD_EVENT_PRICE_RANGE_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -23,7 +24,7 @@ export const initialState = {
   search: '',
   category: '',
   city: '',
-  budget: '',
+  priceRange: [],
   organizer: '',
   start: '',
   end: '',
@@ -43,9 +44,6 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_PAGE:
         draft.page = action.page;
         break;
-      case CHANGE_BUDGET:
-        draft.budget = action.budget;
-        break;
       case CHANGE_ORGANIZER:
         draft.organizer = action.organizer;
         break;
@@ -61,8 +59,10 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_CITY:
         draft.city = action.city;
         break;
+      case CHANGE_EVENT_PRICE_RANGE:
+        draft.priceRange = action.priceRange;
+        break;
       case CHANGE_SEARCH:
-        console.log(action.search);
         draft.search = action.search;
         break;
       case LOAD_DATA_SUCCESS:
@@ -72,6 +72,12 @@ const pageReducer = (state = initialState, action) =>
         break;
       case LOAD_CATEGORIES_SUCCESS:
         draft.categories = action.data;
+        break;
+      case LOAD_EVENT_PRICE_RANGE_SUCCESS:
+        draft.loading = false;
+        draft.data = action.data;
+        draft.paging = action.paging;
+        break;
     }
   });
 

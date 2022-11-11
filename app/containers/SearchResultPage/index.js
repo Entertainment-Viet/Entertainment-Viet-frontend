@@ -1,10 +1,3 @@
-/*
- * NFTPage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- */
-
 import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,43 +7,33 @@ import {
   Container,
   Box,
   SimpleGrid,
-  Select,
   NumberInput,
   NumberInputField,
-  chakra,
   HStack,
   Text,
 } from '@chakra-ui/react';
-
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
+import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
 import {
   TEXT_PURPLE,
   SEC_TEXT_COLOR,
   PRI_TEXT_COLOR,
   TEXT_GREEN,
 } from 'constants/styles';
+import { useTranslation } from 'react-i18next';
 import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-import styled from 'styled-components';
-// import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
-
-// import { isAuthor } from 'utils/auth';
-
-// import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
-
-import {} from 'constants/routes';
-import {} from './styles';
-
 import { toIsoString } from 'utils/helpers';
+import SliderRange from 'components/SliderRange';
+import { messages } from './messages';
 import {
   loadData,
   changePage,
   changeCity,
-  changeBudget,
   changeStart,
   changeEnd,
   changeCategory,
@@ -66,7 +49,6 @@ import {
   makeSelectData,
   makeSelectPage,
   makeSelectSearch,
-  makeSelectBudget,
   makeSelectCategory,
   makeSelectCity,
   makeSelectStart,
@@ -74,9 +56,6 @@ import {
   makeSelectCategories,
 } from './selectors';
 
-const CustomOption = styled.option`
-  color: black;
-`;
 const key = 'SearchResultPage';
 export function SearchResultPage({
   paging,
@@ -100,6 +79,7 @@ export function SearchResultPage({
   const urlParams = new URLSearchParams(queryString);
   const searchParams = urlParams.get('search');
   const category = urlParams.get('category');
+  const { t } = useTranslation();
   useEffect(() => {
     onLoadCategory();
     if (category) handleCategoryChange(category);
@@ -114,52 +94,24 @@ export function SearchResultPage({
     limit: paging.pageSize, // pageSize
     last: paging.last,
   };
-
-  const CustomSelect = chakra(Select, {
-    baseStyle: {
-      color: 'white',
-      bg: TEXT_PURPLE,
-      textAlign: 'center',
-      w: 'fit-content',
-    },
-  });
-  const FieldWrapper = chakra(Box, {
-    baseStyle: {
-      w: 'fit-content',
-      color: 'white',
-    },
-  });
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
-      <H1 color={TEXT_GREEN}>Result for "{search}"</H1>
+      <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder="Categories"
-            onChange={val => handleCategoryChange(val.target.value)}
-          >
-            {categories &&
-              categories.map(item => (
-                <CustomOption value={item.uid}>{item.name}</CustomOption>
-              ))}
-          </CustomSelect>
-        </FieldWrapper>
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder="City"
-            onChange={val => handleCityChange(val.target.value)}
-          >
-            <CustomOption value="TPHCM">TPHCM</CustomOption>
-            <CustomOption value="option2">Option 2</CustomOption>
-            <CustomOption value="option3">Option 3</CustomOption>
-          </CustomSelect>
-        </FieldWrapper>
+        <SelectSearchCustom
+          placeholderName="Categories"
+          handleChange={handleCategoryChange}
+          listOption={categories}
+        />
+        <SelectSearchCustom
+          placeholderName={t(messages.location())}
+          handleChange={handleCityChange}
+        />
+        <SliderRange titleRange={t(messages.incomeRange())} />
         <Text>Your budget</Text>
         <Box>
           <NumberInput
@@ -243,7 +195,6 @@ SearchResultPage.propTypes = {
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  budget: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
@@ -258,7 +209,6 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   category: makeSelectCategory(),
   city: makeSelectCity(),
-  budget: makeSelectBudget(),
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
@@ -276,10 +226,6 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
-      dispatch(loadData());
-    },
-    handleBudgetChange: budget => {
-      dispatch(changeBudget(budget));
       dispatch(loadData());
     },
     handleStartChange: start => {

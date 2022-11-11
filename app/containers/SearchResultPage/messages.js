@@ -22,4 +22,6 @@ export const messages = {
   resendActive: () => t(translations.loginPage.resendActive),
   resendSuccess: () => t(translations.loginPage.resendSuccess),
   resendError: () => t(translations.loginPage.resendError),
+  location: () => t(translations.loginPage.location),
+  incomeRange: () => t(translations.loginPage.incomeRange),
 };

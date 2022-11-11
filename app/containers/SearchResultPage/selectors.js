@@ -61,10 +61,15 @@ const makeSelectEnd = () =>
     selectState,
     State => State.end,
   );
-const makeSelectBudget = () =>
+const makeSelectPriceMax = () =>
   createSelector(
     selectState,
-    State => State.budget,
+    State => State.priceRange[1],
+  );
+const makeSelectPriceMin = () =>
+  createSelector(
+    selectState,
+    State => State.priceRange[0],
   );
 
 export {
@@ -76,7 +81,8 @@ export {
   makeSelectSearch,
   makeSelectCategory,
   makeSelectCity,
-  makeSelectBudget,
+  makeSelectPriceMax,
+  makeSelectPriceMin,
   makeSelectStart,
   makeSelectEnd,
   makeSelectCategories,
