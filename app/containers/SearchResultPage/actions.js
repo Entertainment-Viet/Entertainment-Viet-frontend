@@ -3,7 +3,6 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_ERROR,
   CHANGE_PAGE,
-  CHANGE_BUDGET,
   CHANGE_END,
   CHANGE_START,
   CHANGE_CATEGORY,
@@ -11,6 +10,7 @@ import {
   CHANGE_SEARCH,
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_SUCCESS,
+  LOAD_TALENT_PRICE_RANGE_SUCCESS,
 } from './constants';
 
 export function loadData(search) {
@@ -51,12 +51,6 @@ export function changeCity(city) {
     city,
   };
 }
-export function changeBudget(budget) {
-  return {
-    type: CHANGE_BUDGET,
-    budget,
-  };
-}
 export function changeStart(start) {
   return {
     type: CHANGE_START,
@@ -70,7 +64,6 @@ export function changeEnd(end) {
   };
 }
 export function changeSearch(search) {
-  console.log(search);
   return {
     type: CHANGE_SEARCH,
     search,
@@ -85,5 +78,12 @@ export function loadCategoriesSuccess(data) {
   return {
     type: LOAD_CATEGORIES_SUCCESS,
     data,
+  };
+}
+export function loadPriceRangeSuccess(data, paging) {
+  return {
+    type: LOAD_TALENT_PRICE_RANGE_SUCCESS,
+    data,
+    paging,
   };
 }

@@ -1,4 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import {
   Box,
   Text,
@@ -13,8 +16,12 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { TEXT_PURPLE, SUB_BLU_COLOR, TEXT_GREEN } from 'constants/styles';
 import PropTypes from 'prop-types';
+import { numberWithCommas } from 'utils/helpers';
+import { MAX_DEFAULT, MIN_DEFAULT } from './constants';
+import { changePriceRange } from './action';
 
-function SliderRange({ titleRange }) {
+function SliderRange({ titleRange, handlePriceChange }) {
+  const [value, setValue] = useState([]);
   return (
     <Menu>
       <MenuButton
@@ -34,14 +41,18 @@ function SliderRange({ titleRange }) {
             {titleRange}
           </Text>
           <Text color={SUB_BLU_COLOR} my={4} fontSize={14} fontWeight={600}>
-            2.000.000 VND - 5.000.000 VND
+            {`${numberWithCommas(MIN_DEFAULT)}`} VND -&nbsp;
+            {`${numberWithCommas(MAX_DEFAULT)}`} VND
           </Text>
           <RangeSlider
             ariaLabel={['min', 'max']}
-            defaultValue={[0, 5000000]}
-            min={0}
-            max={5000000}
-            onChangeEnd={val => console.log('slider', val)}
+            defaultValue={[MIN_DEFAULT, MAX_DEFAULT]}
+            min={MIN_DEFAULT}
+            max={MAX_DEFAULT}
+            onChangeEnd={val => {
+              setValue(val);
+              handlePriceChange(val);
+            }}
           >
             <RangeSliderTrack bg={SUB_BLU_COLOR} borderRadius={4}>
               <RangeSliderFilledTrack bg={TEXT_GREEN} />
@@ -49,6 +60,12 @@ function SliderRange({ titleRange }) {
             <RangeSliderThumb boxSize={4} bg={TEXT_PURPLE} index={0} />
             <RangeSliderThumb boxSize={4} bg={TEXT_PURPLE} index={1} />
           </RangeSlider>
+          {value.length > 0 && (
+            <Text color={SUB_BLU_COLOR} mt={4} fontSize={14} fontWeight={600}>
+              {numberWithCommas(value[0])} VND - {numberWithCommas(value[1])}
+              VND
+            </Text>
+          )}
         </Box>
       </MenuList>
     </Menu>
@@ -56,5 +73,25 @@ function SliderRange({ titleRange }) {
 }
 SliderRange.propTypes = {
   titleRange: PropTypes.string,
+  handlePriceChange: PropTypes.func,
 };
-export default memo(SliderRange);
+
+const mapStateToProps = createStructuredSelector({});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    handlePriceChange: priceRange => {
+      dispatch(changePriceRange(priceRange));
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(SliderRange);

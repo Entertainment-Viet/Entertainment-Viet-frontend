@@ -1,10 +1,3 @@
-/*
- * NFTPage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- */
-
 import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,16 +22,6 @@ import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-// import styled from 'styled-components';
-// import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
-
-// import { isAuthor } from 'utils/auth';
-
-// import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
-
-import {} from 'constants/routes';
-import {} from './styles';
-
 import { toIsoString } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
 import { messages } from './messages';
@@ -46,7 +29,6 @@ import {
   loadDataEvent,
   changePage,
   changeCity,
-  changeBudget,
   changeStart,
   changeEnd,
   changeCategory,
@@ -63,7 +45,6 @@ import {
   makeSelectData,
   makeSelectPage,
   makeSelectSearch,
-  makeSelectBudget,
   makeSelectCategory,
   makeSelectCity,
   makeSelectStart,
@@ -127,7 +108,7 @@ export function EventSearchResultPage({
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
-      <H1 color={TEXT_GREEN}>Result for "{search}"</H1>
+      <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
@@ -200,7 +181,6 @@ EventSearchResultPage.propTypes = {
   handlePageChange: PropTypes.func,
   handleCategoryChange: PropTypes.func,
   handleCityChange: PropTypes.func,
-  handleBudgetChange: PropTypes.func,
   handleOrganizerChange: PropTypes.func,
   handleSearchChange: PropTypes.func,
   handleStartChange: PropTypes.func,
@@ -214,7 +194,6 @@ EventSearchResultPage.propTypes = {
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  budget: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
@@ -229,7 +208,6 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   category: makeSelectCategory(),
   city: makeSelectCity(),
-  budget: makeSelectBudget(),
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
@@ -247,10 +225,6 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
-      dispatch(loadDataEvent());
-    },
-    handleBudgetChange: budget => {
-      dispatch(changeBudget(budget));
       dispatch(loadDataEvent());
     },
     handleOrganizerChange: organizer => {

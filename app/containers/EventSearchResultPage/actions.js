@@ -3,7 +3,6 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_ERROR,
   CHANGE_PAGE,
-  CHANGE_BUDGET,
   CHANGE_END,
   CHANGE_START,
   CHANGE_CATEGORY,
@@ -12,6 +11,8 @@ import {
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_SUCCESS,
   CHANGE_ORGANIZER,
+  LOAD_EVENT_PRICE_RANGE_SUCCESS,
+  CHANGE_EVENT_PRICE_RANGE,
 } from './constants';
 
 export function loadDataEvent(search) {
@@ -52,12 +53,6 @@ export function changeCity(city) {
     city,
   };
 }
-export function changeBudget(budget) {
-  return {
-    type: CHANGE_BUDGET,
-    budget,
-  };
-}
 export function changeOrganizer(organizer) {
   return {
     type: CHANGE_ORGANIZER,
@@ -77,7 +72,6 @@ export function changeEnd(end) {
   };
 }
 export function changeSearchEvent(search) {
-  console.log(search);
   return {
     type: CHANGE_SEARCH,
     search,
@@ -92,5 +86,20 @@ export function loadCategoriesSuccess(data) {
   return {
     type: LOAD_CATEGORIES_SUCCESS,
     data,
+  };
+}
+
+export function changePriceRange(priceRange) {
+  return {
+    type: CHANGE_EVENT_PRICE_RANGE,
+    priceRange,
+  };
+}
+
+export function loadPriceRangeSuccess(data, paging) {
+  return {
+    type: LOAD_EVENT_PRICE_RANGE_SUCCESS,
+    data,
+    paging,
   };
 }

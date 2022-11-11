@@ -12,14 +12,20 @@ import {
 } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import { API_EVENT_SEARCH } from 'constants/api';
-import { LOAD_CATEGORIES, LOAD_DATA } from './constants';
+import {
+  LOAD_CATEGORIES,
+  LOAD_DATA,
+  CHANGE_EVENT_PRICE_RANGE,
+} from './constants';
 import {
   loadDataSuccess,
   loadDataError,
+  loadPriceRangeSuccess,
   loadCategoriesSuccess,
 } from './actions';
 import {
-  makeSelectBudget,
+  makeSelectPriceMin,
+  makeSelectPriceMax,
   makeSelectCategory,
   makeSelectEnd,
   makeSelectPage,
@@ -34,7 +40,6 @@ export function* getData() {
   const page = yield select(makeSelectPage());
   const search = yield select(makeSelectSearch());
   const city = yield select(makeSelectCity());
-  const budget = yield select(makeSelectBudget());
   const start = yield select(makeSelectStart());
   const end = yield select(makeSelectEnd());
   const category = yield select(makeSelectCategory());
@@ -45,7 +50,6 @@ export function* getData() {
       name: search,
       category,
       city,
-      budget,
       startTime: start,
       endTime: end,
       organizer,
@@ -63,8 +67,23 @@ export function* getCategories() {
     yield put(loadDataError(err));
   }
 }
-
+export function* getPriceRange() {
+  try {
+    const currency = 'VND';
+    const maxPrice = yield select(makeSelectPriceMax());
+    const minPrice = yield select(makeSelectPriceMin());
+    const payload = yield call(get, API_EVENT_SEARCH, {
+      currency,
+      maxPrice,
+      minPrice,
+    });
+    yield put(loadPriceRangeSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 export default function* watchLatestAction() {
   yield takeLatest(LOAD_DATA, getData);
   yield takeEvery(LOAD_CATEGORIES, getCategories);
+  yield takeEvery(CHANGE_EVENT_PRICE_RANGE, getPriceRange);
 }
