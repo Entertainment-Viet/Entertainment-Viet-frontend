@@ -7,16 +7,15 @@ import {
   Container,
   Box,
   SimpleGrid,
-  Select,
   NumberInput,
   NumberInputField,
-  chakra,
   HStack,
   Text,
 } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
+import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
 import {
   TEXT_PURPLE,
   SEC_TEXT_COLOR,
@@ -28,8 +27,6 @@ import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-import styled from 'styled-components';
-// import { get } from 'utils/request';
 import { toIsoString } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
 import { messages } from './messages';
@@ -59,9 +56,6 @@ import {
   makeSelectCategories,
 } from './selectors';
 
-const CustomOption = styled.option`
-  color: black;
-`;
 const key = 'SearchResultPage';
 export function SearchResultPage({
   paging,
@@ -100,20 +94,6 @@ export function SearchResultPage({
     limit: paging.pageSize, // pageSize
     last: paging.last,
   };
-  const CustomSelect = chakra(Select, {
-    baseStyle: {
-      color: 'white',
-      bg: TEXT_PURPLE,
-      textAlign: 'center',
-      w: 'fit-content',
-    },
-  });
-  const FieldWrapper = chakra(Box, {
-    baseStyle: {
-      w: 'fit-content',
-      color: 'white',
-    },
-  });
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
@@ -122,29 +102,15 @@ export function SearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder="Categories"
-            onChange={val => handleCategoryChange(val.target.value)}
-          >
-            {categories &&
-              categories.map(item => (
-                <CustomOption value={item.uid}>{item.name}</CustomOption>
-              ))}
-          </CustomSelect>
-        </FieldWrapper>
-        <FieldWrapper>
-          <CustomSelect
-            isSearchable
-            placeholder={t(messages.location())}
-            onChange={val => handleCityChange(val.target.value)}
-          >
-            <CustomOption value="TPHCM">TPHCM</CustomOption>
-            <CustomOption value="option2">Option 2</CustomOption>
-            <CustomOption value="option3">Option 3</CustomOption>
-          </CustomSelect>
-        </FieldWrapper>
+        <SelectSearchCustom
+          placeholderName="Categories"
+          handleChange={handleCategoryChange}
+          listOption={categories}
+        />
+        <SelectSearchCustom
+          placeholderName={t(messages.location())}
+          handleChange={handleCityChange}
+        />
         <SliderRange titleRange={t(messages.incomeRange())} />
         <Text>Your budget</Text>
         <Box>
