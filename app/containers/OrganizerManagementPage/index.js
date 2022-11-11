@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import {
-  Box,
   Tab,
   TabList,
   Tabs,
@@ -37,6 +36,7 @@ import {
 import MyPackage from './MyEvents';
 import Orders from './Orders';
 import Calendar from '../Calendar';
+import Profile from './Profile';
 
 const key = 'OrganizerManagementPage';
 export function OrganizerManagementPage() {
@@ -68,7 +68,7 @@ export function OrganizerManagementPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Box>Comming soon</Box>
+            <Profile />
           </TabPanel>
           <TabPanel>
             <MyPackage />

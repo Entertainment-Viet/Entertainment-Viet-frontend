@@ -34,6 +34,8 @@ export const API_GET_UNREAD_NOTI = '/user/get-userinfo';
 
 /* ORGANIZER */
 export const API_CREATE_BOOKING = 'api/organizers/:id1/bookings';
+export const API_ORGANIZER_DETAIL = 'api/organizers/:id1';
+export const API_ORGANIZER_KYC = 'api/organizers/:id1/confidential';
 
 /* SHOPPINGCART */
 export const API_GET_SHOPPINGCART = 'api/organizers/:id1/shoppingcart';
@@ -61,4 +63,3 @@ export const API_EVENT_POSITION_DETAIL =
 /* CATEGORY */
 export const API_GET_CATEGORIES = 'api/categories';
 export const API_EVENT_SEARCH = 'api/events';
-
