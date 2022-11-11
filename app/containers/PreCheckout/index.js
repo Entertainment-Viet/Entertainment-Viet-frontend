@@ -34,7 +34,6 @@ export function PreCheckout({ onLoadData, cartData }) {
   useEffect(() => {
     onLoadData();
   }, []);
-
   const { t } = useTranslation();
   const { content } = cartData;
   const sortedPackage =
