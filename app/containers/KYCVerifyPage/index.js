@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, memo, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -174,18 +175,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         // avatar: data.avatar,
         // cccd1: data.cccd1,
         // cccd2: data.cccd2,
-        // yourSongs: JSON.stringify(dynamicDataYourSong),
-        // yourReward: JSON.stringify(dynamicDataYourReward),
+        songs: data.dynamicDataYourSong,
+        rewards: data.dynamicDataYourReward,
         citizenId: '0AB3425SD5FD',
         citizenPaper: ['string'],
-        scoreSystem: [
-          {
-            id: 'string',
-            name: 'string',
-            active: true,
-            proof: ['string'],
-          },
-        ],
       };
       put(API_TALENT_KYC, dataSubmit, talentId)
         .then(res => {
@@ -259,9 +252,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
+                      talentInfo.accountType ? (
                       dataType.filter(
                         item => item.value === talentInfo.accountType,
-                      )[0].value
+                      )[0].value) : null
                     }
                   >
                     {dataType.map((option, index) => (
@@ -366,9 +360,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('district')}
                         defaultValue={
+                          talentInfo.address ? (
                           dataDistrictHCM.filter(
                             item => item.name === talentInfo.address.district,
-                          )[0].name
+                          )[0].name) : null
                         }
                       >
                         {dataDistrictHCM.map((option, index) => (
@@ -391,14 +386,16 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('province')}
                         value={
+                          talentInfo.address ? (
                           dataProvince.filter(
                             item => item.name === talentInfo.address.city,
-                          )[0].name
+                          )[0].name) : null
                         }
                         defaultValue={
+                          talentInfo.address ? (
                           dataProvince.filter(
                             item => item.name === talentInfo.address.city,
-                          )[0].name
+                          )[0].name) : null
                         }
                       >
                         {dataProvince.map((option, index) => (
@@ -484,9 +481,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('bankName')}
                         defaultValue={
+                          talentInfo.bankName ? (
                           bankName.filter(
                             item => item.name === talentInfo.bankName,
-                          )[0].name
+                          )[0].name) : null
                         }
                       >
                         {bankName.map((option, index) => (
@@ -551,12 +549,14 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   <CustomFormLabel>{t(messages.yourSong())}</CustomFormLabel>
                   <DynamicFormYourSong
                     setDynamicData={setDynamicDataYourSong}
+                    data={talentInfo.songs}
                   />
                 </FormControl>
                 <FormControl>
                   <CustomFormLabel>{t(messages.yourReward())}</CustomFormLabel>
                   <DynamicFormYourReward
                     setDynamicData={setDynamicDataYourReward}
+                    data={talentInfo.rewards}
                   />
                 </FormControl>
                 <FormControl>

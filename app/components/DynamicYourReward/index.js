@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Image } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/core';
@@ -12,13 +13,130 @@ import InputCustomV2 from '../Controls/InputCustomV2';
 import SelectCustom from '../Controls/SelectCustom';
 import { AttachIcon } from '../Controls/UploadFileCustom';
 import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';
+
+const year = [
+  {
+    value: 2000,
+  },
+  {
+    value: 2001,
+  },
+  {
+    value: 2002,
+  },
+  {
+    value: 2003,
+  },
+  {
+    value: 2004,
+  },
+  {
+    value: 2005,
+  },
+  {
+    value: 2006,
+  },
+  {
+    value: 2007,
+  },
+  {
+    value: 2008,
+  },
+  {
+    value: 2009,
+  },
+  {
+    value: 2010,
+  },
+  {
+    value: 2011,
+  },
+  {
+    value: 2012,
+  },
+  {
+    value: 2013,
+  },
+  {
+    value: 2014,
+  },
+  {
+    value: 2015,
+  },
+  {
+    value: 2016,
+  },
+  {
+    value: 2017,
+  },
+  {
+    value: 2018,
+  },
+  {
+    value: 2019,
+  },
+  {
+    value: 2020,
+  },
+  {
+    value: 2021,
+  },
+  {
+    value: 2022,
+  },
+  {
+    value: 2023,
+  },
+  {
+    value: 2024,
+  },
+  {
+    value: 2025,
+  },
+];
+
+const dataScoreType = [
+  {
+    name: 'Giai 1',
+    id: 2,
+    rate: 0.5,
+  },
+  {
+    name: 'Giai 2',
+    id: 3,
+    rate: 2,
+  },
+  {
+    name: 'Giai 3',
+    id: 4,
+    rate: 2,
+  },
+  {
+    name: 'Giai 4',
+    id: 5,
+    rate: 5,
+  },
+];
+
 function DynamicFormYourReward(props) {
   const [formFields, setFormFields] = useState([
-    { key: '', value: '', file: null },
+    { scoreTypeId: dataScoreType[0].id, achievement: '', proof: ['string'] },
   ]);
   const controls = useAnimation();
   const startAnimation = () => controls.start('hover');
   const stopAnimation = () => controls.stop();
+
+  useEffect(() => {
+    if (props.data.length > 0) {
+      props.data.forEach(item => {
+        // eslint-disable-next-line no-param-reassign
+        delete item.scoreTypeName;
+        // eslint-disable-next-line no-param-reassign
+        delete item.approved;
+      });
+      setFormFields(props.data);
+    }
+  }, []);
 
   const handleUpload = (item, name, index) => {
     if (item) {
@@ -30,20 +148,25 @@ function DynamicFormYourReward(props) {
 
   const handleFormChange = (event, index) => {
     const data = [...formFields];
-    data[index][event.target.name] = event.target.value;
+    if (event.target.name === 'scoreTypeId') {
+      data[index][event.target.name] = Number(event.target.value);
+    } else {
+      data[index][event.target.name] = event.target.value;
+    }
     setFormFields(data);
   };
 
   const submit = e => {
     e.preventDefault();
+    console.log('formFields', formFields);
     props.setDynamicData(formFields);
   };
 
   const addFields = () => {
     const object = {
-      key: '',
-      value: '',
-      file: null,
+      scoreTypeId: null,
+      achievement: '',
+      proof: ['string'],
     };
 
     setFormFields([...formFields, object]);
@@ -56,103 +179,29 @@ function DynamicFormYourReward(props) {
     setFormFields(data);
   };
 
-  const year = [
-    {
-      value: 2000,
-    },
-    {
-      value: 2001,
-    },
-    {
-      value: 2002,
-    },
-    {
-      value: 2003,
-    },
-    {
-      value: 2004,
-    },
-    {
-      value: 2005,
-    },
-    {
-      value: 2006,
-    },
-    {
-      value: 2007,
-    },
-    {
-      value: 2008,
-    },
-    {
-      value: 2009,
-    },
-    {
-      value: 2010,
-    },
-    {
-      value: 2011,
-    },
-    {
-      value: 2012,
-    },
-    {
-      value: 2013,
-    },
-    {
-      value: 2014,
-    },
-    {
-      value: 2015,
-    },
-    {
-      value: 2016,
-    },
-    {
-      value: 2017,
-    },
-    {
-      value: 2018,
-    },
-    {
-      value: 2019,
-    },
-    {
-      value: 2020,
-    },
-    {
-      value: 2021,
-    },
-    {
-      value: 2022,
-    },
-    {
-      value: 2023,
-    },
-    {
-      value: 2024,
-    },
-    {
-      value: 2025,
-    },
-  ];
-
   return (
     <form onChange={submit}>
-      {formFields.map((form, index) => (
+      {formFields.map((form, index) => {
+        const defaultValue = props.data.length > 0 && props.data.length === formFields.length ? (
+          dataScoreType.filter(
+            item => item.id === form.scoreTypeId,
+          )[0].id) : null;
+        return (
         <Box display="flex" height="40px" marginBottom="20px">
           <Box width="350px">
             <SelectCustom
-              id="reward"
-              name="key"
+              id="scoreTypeId"
+              name="scoreTypeId"
               size="md"
-              value={form.key}
+              defaultValue={defaultValue}
               onChange={event => handleFormChange(event, index)}
-              placeholder="Select option"
             >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+              {/* eslint-disable-next-line no-shadow */}
+              {dataScoreType.map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
             </SelectCustom>
           </Box>
           <Box marginRight="4px" marginLeft="4px" />
@@ -161,9 +210,7 @@ function DynamicFormYourReward(props) {
               id="year"
               size="md"
               name="value"
-              value={form.value}
               onChange={event => handleFormChange(event, index)}
-              placeholder="Select option"
             >
               {/* eslint-disable-next-line no-shadow */}
               {year.map((option, index) => (
@@ -208,8 +255,8 @@ function DynamicFormYourReward(props) {
             alt="trash"
             onClick={() => removeFields(index)}
           />
-        </Box>
-      ))}
+        </Box>)
+      })}
       <Box width="100%">
         <Button
           onClick={addFields}
@@ -229,6 +276,7 @@ function DynamicFormYourReward(props) {
 
 DynamicFormYourReward.propTypes = {
   setDynamicData: PropTypes.func,
+  data: PropTypes.array,
   // eslint-disable-next-line react/no-unused-prop-types
   setDynamicValid: PropTypes.func,
 };
