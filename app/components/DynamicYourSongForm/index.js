@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Image } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/core';
@@ -6,7 +6,18 @@ import InputCustomV2 from '../Controls/InputCustomV2';
 import { SEC_TEXT_COLOR, SUB_BLU_COLOR } from '../../constants/styles';
 import trashCan from './assets/ic_delete.svg';
 function DynamicFormYourSong(props) {
-  const [formFields, setFormFields] = useState([{ key: '', value: '' }]);
+  const [formFields, setFormFields] = useState([
+    { achievement: '', proof: '' },
+  ]);
+
+  useEffect(() => {
+    if (props.data.length > 0) {
+      // eslint-disable-next-line no-param-reassign
+      props.data.forEach(item => delete item.approved);
+      setFormFields(props.data);
+      props.setDynamicData(props.data);
+    }
+  }, []);
 
   const handleFormChange = (event, index) => {
     const data = [...formFields];
@@ -21,12 +32,13 @@ function DynamicFormYourSong(props) {
 
   const addFields = () => {
     const object = {
-      key: '',
-      value: '',
+      achievement: '',
+      proof: '',
     };
 
     setFormFields([...formFields, object]);
   };
+
   const removeFields = index => {
     const data = [...formFields];
     data.splice(index, 1);
@@ -39,17 +51,17 @@ function DynamicFormYourSong(props) {
       {formFields.map((form, index) => (
         <Box display="flex" height="40px" marginBottom="20px">
           <InputCustomV2
-            name="key"
+            name="achievement"
             placeholder="Enter Song Name"
             onChange={event => handleFormChange(event, index)}
-            value={form.key}
+            value={form.achievement}
           />
           <Box marginRight="4px" marginLeft="4px" />
           <InputCustomV2
-            name="value"
+            name="proof"
             placeholder="Enter URL"
             onChange={event => handleFormChange(event, index)}
-            value={form.value}
+            value={form.proof}
           />
           <Image
             src={trashCan}
@@ -77,6 +89,7 @@ function DynamicFormYourSong(props) {
 
 DynamicFormYourSong.propTypes = {
   setDynamicData: PropTypes.func,
+  data: PropTypes.array,
   // eslint-disable-next-line react/no-unused-prop-types
   setDynamicValid: PropTypes.func,
 };
