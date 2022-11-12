@@ -86,7 +86,8 @@ function Card(props) {
               {props.data.displayName}
             </Box>
             <Box>
-              {props.data.offerCategories.length > 0
+              {props.data.offerCategories &&
+              props.data.offerCategories.length > 0
                 ? props.data.offerCategories[0].name
                 : 'Unknown'}
             </Box>
