@@ -1,0 +1,5 @@
+export const LOAD_ORGANIZER = 'App/Profile/LOAD_ORGANIZER';
+export const LOAD_ORGANIZER_SUCCESS = 'App/Profile/LOAD_ORGANIZER_SUCCESS';
+export const LOAD_DATA_ERROR = 'App/Profile/LOAD_DATA_ERROR';
+export const LOAD_CATEGORIES = 'App/Profile/LOAD_CATEGORIES';
+export const LOAD_CATEGORIES_SUCCESS = 'App/Profile/LOAD_CATEGORIES_SUCCESS';

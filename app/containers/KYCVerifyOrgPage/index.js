@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, memo, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -47,15 +48,13 @@ import {
   TEXT_GREEN,
 } from '../../constants/styles';
 import { messages } from './messages';
-import { API_TALENT_KYC } from '../../constants/api';
 import { cacthError } from '../../utils/helpers';
 import Metadata from '../../components/Metadata';
-import DynamicFormYourSong from '../../components/DynamicYourSongForm';
-import DynamicFormYourReward from '../../components/DynamicYourReward';
-import { makeSelectTalent } from './selectors';
-import { loadTalentInfo } from './actions';
+import { makeSelectOrg } from './selectors';
+import { loadOrgInfo } from './actions';
 import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
+import { API_ORGANIZER_KYC } from '../../constants/api';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -63,8 +62,8 @@ const CustomFormLabel = chakra(FormLabel, {
   },
 });
 
-const key = 'KYCVerifyPage';
-export function KYCVerifyPage({ talentInfo, loadTalent }) {
+const key = 'KYCVerifyOrgPage';
+export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const controls = useAnimation();
   const startAnimation = () => controls.start('hover');
   const stopAnimation = () => controls.stop();
@@ -78,12 +77,8 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const [urlCCCD2, setUrlCCCD2] = useState(example);
   const [fileCCCD2, setFileCCCD2] = useState({});
   const introductionNFTRef = useRef(null);
-  const [dynamicDataYourSong, setDynamicDataYourSong] = useState();
-  const [dynamicDataYourReward, setDynamicDataYourReward] = useState();
   const [isFullData, setFullData] = useState(true);
-  const talentId = window.localStorage.getItem('uid');
-  // eslint-disable-next-line no-console
-  console.log(talentInfo);
+  const organizerId = window.localStorage.getItem('uid');
 
   const {
     handleSubmit,
@@ -92,8 +87,8 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   } = useForm();
 
   useEffect(() => {
-    loadTalent(talentId);
-  }, [talentId]);
+    loadOrganizer(organizerId);
+  }, [organizerId]);
 
   useEffect(() => {}, []);
 
@@ -132,9 +127,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const onSubmit = async values => {
     const data = {
       avatar: fileAvatar,
-      fullName: values.fullName,
-      displayName: values.displayName,
+      accountType: values.type,
       phoneNumber: values.phoneNumber,
+      companyName: values.companyName,
+      displayName: values.displayName,
       street: values.street,
       district: values.district,
       province: values.province,
@@ -144,10 +140,9 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       bankName: values.bankName,
       cccd1: fileCCCD1,
       cccd2: fileCCCD2,
-      type: values.type,
+      representative: values.representative,
+      position: values.position,
       checkBoxRemember: values.checkBoxRemember,
-      dynamicDataYourSong,
-      dynamicDataYourReward,
     };
     if (fileAvatar === null || fileCCCD1 === null || fileCCCD2 === null) {
       setFullData(false);
@@ -156,7 +151,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       const preDataStreet = {
         street: data.street,
         district: data.district,
-        city: data.province,
+        city: 'Thành phố Hồ Chí Minh',
       };
 
       const dataSubmit = {
@@ -169,24 +164,16 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         bankName: data.bankName,
         bankBranchName: 'HCM',
         // introduction: data.introduction,
-        fullName: data.fullName,
+        companyName: data.companyName,
         // avatar: data.avatar,
         // cccd1: data.cccd1,
         // cccd2: data.cccd2,
-        // yourSongs: JSON.stringify(dynamicDataYourSong),
-        // yourReward: JSON.stringify(dynamicDataYourReward),
-        citizenId: '0AB3425SD5FD',
-        citizenPaper: ['string'],
-        scoreSystem: [
-          {
-            id: 'string',
-            name: 'string',
-            active: true,
-            proof: ['string'],
-          },
-        ],
+        representative: data.representative,
+        position: data.position,
+        businessPaper: ['string'],
       };
-      put(API_TALENT_KYC, dataSubmit, talentId)
+      console.log('dataSubmit', dataSubmit);
+      put(API_ORGANIZER_KYC, dataSubmit, organizerId)
         .then(res => {
           if (res) {
             window.location.reload();
@@ -202,7 +189,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       <H1 color={TEXT_GREEN} fontSize="30px">
         KYC Verification
       </H1>
-      {talentInfo ? (
+      {organizerInfo ? (
         <SimpleGrid
           width="100%"
           sx={{
@@ -258,10 +245,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
-                      dataType.filter(
-                        item => item.value === talentInfo.accountType,
-                      )[0].value
-                    }
+                      organizerInfo.accountType
+                        ? dataType.filter(
+                          item => item.value === organizerInfo.accountType)[0].value
+                        : null}
                   >
                     {dataType.map((option, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -275,24 +262,24 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   {errors.type && errors.type.message}
                 </Text>
                 <FormControl>
-                  <CustomFormLabel>{t(messages.fullName())}</CustomFormLabel>
+                  <CustomFormLabel>{t(messages.companyName())}</CustomFormLabel>
                   <InputCustomV2
                     id="fullName"
                     type="text"
                     size="md"
-                    placeholder="Enter your full name"
-                    {...register('fullName', {
+                    placeholder="Enter your company name"
+                    {...register('companyName', {
                       required: 'This is required',
                       minLength: {
                         value: 4,
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.fullName}
+                    defaultValue={organizerInfo.companyName}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
-                  {errors.fullName && errors.fullName.message}
+                  {errors.companyName && errors.companyName.message}
                 </Text>
                 <FormControl>
                   <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
@@ -308,7 +295,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.displayName}
+                    defaultValue={organizerInfo.displayName}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -328,12 +315,56 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.phoneNumber}
+                    defaultValue={organizerInfo.phoneNumber}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
                   {errors.phoneNumber && errors.phoneNumber.message}
                 </Text>
+                <FormControl>
+                  <SimpleGrid columns={2} spacing={2}>
+                    <Box>
+                      <CustomFormLabel>{t(messages.representative())}</CustomFormLabel>
+                      <InputCustomV2
+                        id="representative"
+                        type="text"
+                        size="md"
+                        placeholder="Enter your representative"
+                        {...register('representative', {
+                          required: 'This is required',
+                          minLength: {
+                            value: 4,
+                            message: 'Minimum length should be 4',
+                          },
+                        })}
+                        defaultValue={organizerInfo.representative}
+                      />
+                      <Text color={RED_COLOR}>
+                        {errors.representative && errors.representative.message}
+                      </Text>
+                    </Box>
+                    <Box>
+                      <CustomFormLabel>{t(messages.position())}</CustomFormLabel>
+                      <InputCustomV2
+                        id="position"
+                        type="text"
+                        size="md"
+                        placeholder="Enter your position"
+                        {...register('position', {
+                          required: 'This is required',
+                          minLength: {
+                            value: 4,
+                            message: 'Minimum length should be 4',
+                          },
+                        })}
+                        defaultValue={organizerInfo.position}
+                      />
+                      <Text color={RED_COLOR}>
+                        {errors.position && errors.position.message}
+                      </Text>
+                    </Box>
+                  </SimpleGrid>
+                </FormControl>
                 <FormControl>
                   <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
                   <InputCustomV2
@@ -348,7 +379,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.address.street}
+                    defaultValue={organizerInfo.address.street}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -365,9 +396,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('district')}
                         defaultValue={
+                          organizerInfo.address ? (
                           dataDistrictHCM.filter(
-                            item => item.name === talentInfo.address.district,
-                          )[0].name
+                            item => item.name === organizerInfo.address.district,
+                          )[0].name) : null
                         }
                       >
                         {dataDistrictHCM.map((option, index) => (
@@ -390,14 +422,16 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('province')}
                         value={
+                          organizerInfo.address ? (
                           dataProvince.filter(
-                            item => item.name === talentInfo.address.city,
-                          )[0].name
+                            item => item.name === organizerInfo.address.city,
+                          )[0].name) : null
                         }
                         defaultValue={
+                          organizerInfo.address ? (
                           dataProvince.filter(
-                            item => item.name === talentInfo.address.city,
-                          )[0].name
+                            item => item.name === organizerInfo.address.city,
+                          )[0].name) : null
                         }
                       >
                         {dataProvince.map((option, index) => (
@@ -444,7 +478,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.bankAccountOwner}
+                    defaultValue={organizerInfo.bankAccountOwner}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -468,7 +502,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                             message: 'Minimum length should be 4',
                           },
                         })}
-                        defaultValue={talentInfo.bankAccountNumber}
+                        defaultValue={organizerInfo.bankAccountNumber}
                       />
                       <Text color={RED_COLOR}>
                         {errors.accountNumber && errors.accountNumber.message}
@@ -483,9 +517,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('bankName')}
                         defaultValue={
+                          organizerInfo.bankName ? (
                           bankName.filter(
-                            item => item.name === talentInfo.bankName,
-                          )[0].name
+                            item => item.name === organizerInfo.bankName,
+                          )[0].name) : null
                         }
                       >
                         {bankName.map((option, index) => (
@@ -547,18 +582,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   </SimpleGrid>
                 </FormControl>
                 <FormControl>
-                  <CustomFormLabel>{t(messages.yourSong())}</CustomFormLabel>
-                  <DynamicFormYourSong
-                    setDynamicData={setDynamicDataYourSong}
-                  />
-                </FormControl>
-                <FormControl>
-                  <CustomFormLabel>{t(messages.yourReward())}</CustomFormLabel>
-                  <DynamicFormYourReward
-                    setDynamicData={setDynamicDataYourReward}
-                  />
-                </FormControl>
-                <FormControl>
                   <Box marginBottom={8} mt={10}>
                     <Checkbox
                       id="check-box-remember"
@@ -590,7 +613,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   bg={TEXT_GREEN}
                   color={SUB_BLU_COLOR}
                   type="submit"
-                  disabled={talentInfo.userState === USER_STATE.PENDING}
+                  disabled={organizerInfo.userState === USER_STATE.PENDING}
                 >
                   {t(messages.submit())}
                 </Button>
@@ -606,19 +629,19 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   );
 }
 
-KYCVerifyPage.propTypes = {
-  loadTalent: PropTypes.func,
-  talentInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+KYCVerifyOrgPage.propTypes = {
+  loadOrganizer: PropTypes.func,
+  organizerInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
-  talentInfo: makeSelectTalent(),
+  organizerInfo: makeSelectOrg(),
 });
 
 export function mapDispatchToProps(dispatch) {
   return {
-    loadTalent: talentId => {
-      dispatch(loadTalentInfo(talentId));
+    loadOrganizer: organizerId => {
+      dispatch(loadOrgInfo(organizerId));
     },
   };
 }
@@ -631,4 +654,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(KYCVerifyPage);
+)(KYCVerifyOrgPage);

@@ -13,6 +13,7 @@ export const ROUTE_SEARCH_RESULT = '/search';
 export const ROUTE_CALENDAR = '/calendar';
 export const ROUTE_MANAGER = '/manager';
 export const ROUTE_MANAGER_KYC = '/manager/kyc-verify';
+export const ROUTE_MANAGER_KYC_ORG = '/manager/kyc-verify-org';
 export const ROUTE_PRECHECKOUT = '/checkout';
 export const ROUTE_BOOKING_DETAIL_MANAGER = '/booking/:id';
 export const ROUTE_CREATE_CUSTOM_BOOKING = '/create-booking/:id';
