@@ -6,9 +6,7 @@ import InputCustomV2 from '../Controls/InputCustomV2';
 import { SEC_TEXT_COLOR, SUB_BLU_COLOR } from '../../constants/styles';
 import trashCan from './assets/ic_delete.svg';
 function DynamicFormYourSong(props) {
-  const [formFields, setFormFields] = useState([
-    { achievement: '', proof: '' },
-  ]);
+  const [formFields, setFormFields] = useState();
 
   useEffect(() => {
     if (props.data.length > 0) {
@@ -16,6 +14,9 @@ function DynamicFormYourSong(props) {
       props.data.forEach(item => delete item.approved);
       setFormFields(props.data);
       props.setDynamicData(props.data);
+    } else {
+      setFormFields([{ achievement: 'default', proof: 'default' }]);
+      props.setDynamicData([{ achievement: 'default', proof: 'default' }]);
     }
   }, []);
 
@@ -48,28 +49,29 @@ function DynamicFormYourSong(props) {
 
   return (
     <form onChange={submit}>
-      {formFields.map((form, index) => (
-        <Box display="flex" height="40px" marginBottom="20px">
-          <InputCustomV2
-            name="achievement"
-            placeholder="Enter Song Name"
-            onChange={event => handleFormChange(event, index)}
-            value={form.achievement}
-          />
-          <Box marginRight="4px" marginLeft="4px" />
-          <InputCustomV2
-            name="proof"
-            placeholder="Enter URL"
-            onChange={event => handleFormChange(event, index)}
-            value={form.proof}
-          />
-          <Image
-            src={trashCan}
-            alt="trash"
-            onClick={() => removeFields(index)}
-          />
-        </Box>
-      ))}
+      {formFields &&
+        formFields.map((form, index) => (
+          <Box display="flex" height="40px" marginBottom="20px">
+            <InputCustomV2
+              name="achievement"
+              placeholder="Enter Song Name"
+              onChange={event => handleFormChange(event, index)}
+              value={form.achievement}
+            />
+            <Box marginRight="4px" marginLeft="4px" />
+            <InputCustomV2
+              name="proof"
+              placeholder="Enter URL"
+              onChange={event => handleFormChange(event, index)}
+              value={form.proof}
+            />
+            <Image
+              src={trashCan}
+              alt="trash"
+              onClick={() => removeFields(index)}
+            />
+          </Box>
+        ))}
       <Box width="100%">
         <Button
           onClick={addFields}
