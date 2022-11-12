@@ -119,9 +119,7 @@ const dataScoreType = [
 ];
 
 function DynamicFormYourReward(props) {
-  const [formFields, setFormFields] = useState([
-    { scoreTypeId: dataScoreType[0].id, achievement: '', proof: ['string'] },
-  ]);
+  const [formFields, setFormFields] = useState();
   const controls = useAnimation();
   const startAnimation = () => controls.start('hover');
   const stopAnimation = () => controls.stop();
@@ -135,6 +133,11 @@ function DynamicFormYourReward(props) {
         delete item.approved;
       });
       setFormFields(props.data);
+      props.setDynamicData(props.data);
+    } else {
+      setFormFields([
+        { scoreTypeId: dataScoreType[0].id, achievement: '', proof: ['string'] },
+      ]);
     }
   }, []);
 
@@ -158,18 +161,17 @@ function DynamicFormYourReward(props) {
 
   const submit = e => {
     e.preventDefault();
-    console.log('formFields', formFields);
     props.setDynamicData(formFields);
   };
 
   const addFields = () => {
     const object = {
-      scoreTypeId: null,
-      achievement: '',
+      scoreTypeId: dataScoreType[0].id,
+      achievement: 'test',
       proof: ['string'],
     };
-
     setFormFields([...formFields, object]);
+    props.setDynamicData([...formFields, object]);
   };
 
   const removeFields = index => {
@@ -181,7 +183,7 @@ function DynamicFormYourReward(props) {
 
   return (
     <form onChange={submit}>
-      {formFields.map((form, index) => {
+      {formFields && formFields.map((form, index) => {
         const defaultValue = props.data.length > 0 && props.data.length === formFields.length ? (
           dataScoreType.filter(
             item => item.id === form.scoreTypeId,
