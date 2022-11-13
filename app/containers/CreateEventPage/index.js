@@ -31,6 +31,7 @@ import { dataDistrictHCM } from '../../utils/data-address';
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import { RED_COLOR } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
+import CitySelector from '../CitySelector/Loadable';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -140,23 +141,6 @@ export function CreateEventPage() {
                   // {...register('description')}
                 />
               </FormControl>
-              {/* <Box>
-                <CustomFormLabel htmlFor="location">Địa điểm</CustomFormLabel>
-                <InputCustomV2
-                  id="address"
-                  placeholder="Địa điểm"
-                  {...register('address', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                />
-                <Text color={RED_COLOR}>
-                  {errors.location && errors.location.message}
-                </Text>
-              </Box> */}
               <FormControl>
                 <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
                 <InputCustomV2
@@ -174,7 +158,7 @@ export function CreateEventPage() {
                   // defaultValue={talentInfo.address.street}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
                     <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
@@ -206,7 +190,8 @@ export function CreateEventPage() {
                     </Text>
                   </Box>
                 </SimpleGrid>
-              </FormControl>
+              </FormControl> */}
+              <CitySelector register={register} errors={errors} />
               {/* <FormControl>
                 <CustomFormLabel htmlFor="skills">
                   {t(messages.skills())}

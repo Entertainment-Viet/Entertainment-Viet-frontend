@@ -1,8 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Image } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/core';
+import { Button, Image, Box } from '@chakra-ui/react';
 import { useAnimation } from 'framer-motion';
 import {
   SEC_TEXT_COLOR,

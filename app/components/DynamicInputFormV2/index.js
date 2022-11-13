@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Image } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/core';
+import { Button, Image, Box } from '@chakra-ui/react';
 import InputCustomV2 from '../Controls/InputCustomV2';
 import { SEC_TEXT_COLOR, SUB_BLU_COLOR } from '../../constants/styles';
 import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';

@@ -15,6 +15,7 @@ import {
   Td,
   Button,
   Image,
+  Divider,
 } from '@chakra-ui/react';
 import Buttons from 'components/Buttons';
 import {
@@ -32,7 +33,6 @@ import {
   handleAddress,
 } from 'utils/helpers';
 import PropTypes from 'prop-types';
-import { Divider } from '@chakra-ui/core';
 import Cart from './assets/Cart-white.svg';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
