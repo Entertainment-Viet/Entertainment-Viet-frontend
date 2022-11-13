@@ -205,7 +205,8 @@ export function numberWithCommas(x) {
 }
 
 export function handleAddress(addr) {
-  return `${addr.street}, quận ${addr.district}, ${addr.city}`;
+  if (addr) return `${addr.street}, quận ${addr.district}, ${addr.city}`;
+  return null;
 }
 export function calculateTotalPrice(arr) {
   const totalPrice = arr.reduce(

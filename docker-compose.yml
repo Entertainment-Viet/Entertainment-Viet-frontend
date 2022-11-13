@@ -2,7 +2,10 @@ version: "3.8"
 
 services:
   app:
-    image: docker-learning/react:v1
+    container_name: docker-react-container
+    image: docker-react-image
+    build:
+      context: .
     ports:
       - "3000:80"
     restart: unless-stopped

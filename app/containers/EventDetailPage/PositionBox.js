@@ -12,6 +12,7 @@ import {
   Tbody,
   Td,
   Button,
+  Divider,
 } from '@chakra-ui/react';
 import {
   PRI_TEXT_COLOR,
@@ -21,7 +22,6 @@ import {
 } from 'constants/styles';
 import { numberWithCommas } from 'utils/helpers';
 import PropTypes from 'prop-types';
-import { Divider } from '@chakra-ui/core';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const PositionBox = ({ data, toggleModal }) => (
