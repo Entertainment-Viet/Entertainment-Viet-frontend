@@ -69,7 +69,7 @@ export function* getCategories() {
 }
 export function* getPriceRange() {
   try {
-    const currency = 'VND';
+    const currency = 'currency.vnd';
     const maxPrice = yield select(makeSelectPriceMax());
     const minPrice = yield select(makeSelectPriceMin());
     const payload = yield call(get, API_EVENT_SEARCH, {
