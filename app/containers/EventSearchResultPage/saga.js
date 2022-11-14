@@ -1,7 +1,3 @@
-/**
- * Gets the repositories of the user from Github
- */
-
 import {
   call,
   put,
@@ -11,6 +7,8 @@ import {
   takeLatest,
 } from 'redux-saga/effects';
 import { get } from 'utils/request';
+import { ENUM_CURRENCY } from 'constants/enums';
+
 import { API_EVENT_SEARCH } from 'constants/api';
 import {
   LOAD_CATEGORIES,
@@ -69,7 +67,7 @@ export function* getCategories() {
 }
 export function* getPriceRange() {
   try {
-    const currency = 'VND';
+    const currency = ENUM_CURRENCY.VND;
     const maxPrice = yield select(makeSelectPriceMax());
     const minPrice = yield select(makeSelectPriceMin());
     const payload = yield call(get, API_EVENT_SEARCH, {

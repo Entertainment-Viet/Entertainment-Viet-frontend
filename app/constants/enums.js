@@ -73,3 +73,8 @@ export const ENUM_PAYMENT_TYPE = {
   ONLINE: 'payment.online',
   OFFLINE: 'payment.offline',
 };
+
+export const ENUM_CURRENCY = {
+  VND: 'currency.vnd',
+  USD: 'currency.usd',
+};
