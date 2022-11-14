@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import { API_TALENT_LIST } from 'constants/api';
+import { ENUM_CURRENCY } from 'constants/enums';
 import { LOAD_CATEGORIES, LOAD_DATA, CHANGE_PRICE_RANGE } from './constants';
 import {
   loadDataSuccess,
@@ -51,7 +52,7 @@ export function* getCategories() {
 }
 export function* getPriceRange() {
   try {
-    const currency = 'currency.vnd';
+    const currency = ENUM_CURRENCY.VND;
     const maxPrice = yield select(makeSelectPriceMax());
     const minPrice = yield select(makeSelectPriceMin());
     const payload = yield call(get, API_TALENT_LIST, {
