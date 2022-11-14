@@ -23,5 +23,6 @@ export const messages = {
   resendSuccess: () => t(translations.loginPage.resendSuccess),
   resendError: () => t(translations.loginPage.resendError),
   incomeRange: () => t(translations.loginPage.incomeRange),
-  location: () => t(translations.loginPage.location),
+  locationDistrict: () => t(translations.loginPage.locationDistrict),
+  locationProvince: () => t(translations.loginPage.locationProvince),
 };
