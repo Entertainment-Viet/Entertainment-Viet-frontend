@@ -9,7 +9,8 @@
     "continueWith": "or continue with",
     "haveAccount": "Don’t have an account?",
     "incomeRange": "Khoảng thu nhập (1 session)",
-    "location": "Vị trí"
+    "locationDistrict": "Quận",
+    "locationProvince": "Tỉnh/Thành phố"
   },
   "registerPage": {
     "welcome": "Create an Account blah blah here.",
