@@ -5,6 +5,7 @@ import cRequest from 'utils/server';
 import { getResStatus, cacthError, cacthResponse } from 'utils/helpers';
 import { BsFacebook, BsInstagram, BsTwitter, BsLinkedin } from 'react-icons/bs';
 import { TEXT_COLOR } from 'constants/styles';
+import { categoriesMock } from 'constants/mock-data';
 import NavItem from './NavItem';
 import VE from '../assets/Entertainment Viet.svg';
 import EV from '../assets/EV.svg';
@@ -38,7 +39,8 @@ export default function Sidebar() {
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize === 'small' ? '15px' : '30px'}
-      w={navSize === 'small' ? '3rem' : '25%'}
+      w={navSize === 'small' ? '3rem' : '30%'}
+      overflow={navSize === 'large' && 'auto'}
       flexDir="column"
       justifyContent="space-between"
       transition="0.75s"
@@ -69,7 +71,7 @@ export default function Sidebar() {
           navSize={navSize}
           title="Categories"
           active
-          data={categories}
+          data={categoriesMock}
         />
         <DropdownItem navSize={navSize} title="About" data={dataAbout} />
         <DropdownItem navSize={navSize} title="Support" data={dataSupport} />

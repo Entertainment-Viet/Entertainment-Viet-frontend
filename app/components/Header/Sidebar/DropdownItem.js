@@ -9,9 +9,10 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  VStack,
   Link,
+  VStack,
   Box,
+  HStack,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
@@ -29,6 +30,14 @@ import {
   Support,
   About,
   Buyer,
+  Microphone,
+  Drum,
+  Dancer,
+  Instru,
+  DJ,
+  Bartender,
+  MakeUp,
+  Stylish,
 } from '../../Icon';
 
 export default function DropdownItem({ title, active, navSize, data }) {
@@ -43,7 +52,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
         <Accordion
           color={active && TEXT_GREEN}
           py={3}
-          _hover={{ textDecor: 'none', color: TEXT_GREEN }}
+          _hover={{ color: TEXT_GREEN }}
           w={navSize === 'large' && '100%'}
           allowMultiple
         >
@@ -82,16 +91,12 @@ export default function DropdownItem({ title, active, navSize, data }) {
             {navSize === 'large' && (
               <AccordionPanel pb={4} color={PRI_TEXT_COLOR} ml={12}>
                 <VStack alignItems="flex-start">
-                  {data &&
+                  {title === 'Categories' && data ? (
+                    <CategoriesTab dataCate={data} />
+                  ) : (
+                    data &&
                     data.map(value => (
-                      <Link
-                        href={
-                          value.uid
-                            ? `/search?category=${value.uid}`
-                            : `/${value.url}`
-                        }
-                        key={value.url}
-                      >
+                      <Link href={`/${value.url}`} key={value.url}>
                         <Flex>
                           <i style={{ marginTop: '2px', marginRight: '5px' }}>
                             <BodyIconAbout name={value.name} iconSize={20} />
@@ -119,12 +124,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
                               </i>
                               <Box
                                 color={PRI_TEXT_COLOR}
-                                fontWeight="500"
-                                as="h1"
-                                fontSize="xl"
-                                whiteSpace="nowrap"
-                                noOfLines={1}
-                                key={`title_${value.url}`}
+                                key={`title_${value.uid}`}
                               >
                                 {value.name}
                               </Box>
@@ -132,7 +132,8 @@ export default function DropdownItem({ title, active, navSize, data }) {
                           </Box>
                         </Flex>
                       </Link>
-                    ))}
+                    ))
+                  )}
                 </VStack>
               </AccordionPanel>
             )}
@@ -142,7 +143,76 @@ export default function DropdownItem({ title, active, navSize, data }) {
     </Flex>
   );
 }
-
+const CategoriesTab = ({ dataCate }) =>
+  dataCate.length > 0 &&
+  dataCate.map(items => (
+    <Box color={PRI_TEXT_COLOR} key={`title_${items.uid}`}>
+      <Menu>
+        <Accordion allowMultiple>
+          <AccordionItem
+            style={{ borderTopWidth: '0', borderBottomWidth: '0' }}
+          >
+            <HStack>
+              <CategoriesIcon parentName={items.parentName} iconSize={20} />
+              <Text style={{ margin: '0px' }}>
+                <AccordionButton>
+                  <Text fontWeight={500} fontSize={16}>
+                    {items.parentName}
+                  </Text>
+                  <AccordionIcon />
+                </AccordionButton>
+              </Text>
+            </HStack>
+            <AccordionPanel pb={4}>
+              <Box ml={8}>
+                <ul style={{ listStyle: 'circle' }}>
+                  {items.children.map(itemChildren => (
+                    <Link
+                      key={`sub-cate_${items.uid}`}
+                      href={`/search?category=${itemChildren.uid}`}
+                    >
+                      <li
+                        style={{
+                          marginBottom: '10px',
+                          marginLeft: '10px',
+                          fontWeight: '500',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {itemChildren.name}
+                      </li>
+                    </Link>
+                  ))}
+                </ul>
+              </Box>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </Menu>
+    </Box>
+  ));
+const CategoriesIcon = ({ parentName, iconSize }) => {
+  switch (parentName) {
+    case 'Solo Singers':
+      return <Microphone size={iconSize} />;
+    case 'Band':
+      return <Drum size={iconSize} />;
+    case 'Dancer':
+      return <Dancer size={iconSize} />;
+    case 'Instrument':
+      return <Instru size={iconSize} />;
+    case 'DJ':
+      return <DJ size={iconSize} />;
+    case 'Stylish':
+      return <Stylish size={iconSize} />;
+    case 'Make up':
+      return <MakeUp size={iconSize} />;
+    case 'Bartender':
+      return <Bartender size={iconSize} />;
+    default:
+      return null;
+  }
+};
 const BodyIconAbout = ({ name, iconSize }) => {
   switch (name) {
     case 'News & Announcement':
@@ -186,6 +256,13 @@ const HeaderIconSidebar = ({ title, isActive }) => {
     default:
       return null;
   }
+};
+CategoriesTab.propTypes = {
+  dataCate: PropTypes.object,
+};
+CategoriesIcon.propTypes = {
+  parentName: PropTypes.string,
+  iconSize: PropTypes.number,
 };
 HeaderIconSidebar.propTypes = {
   title: PropTypes.string.isRequired,
