@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Flex,
   Text,
@@ -14,6 +14,7 @@ import {
   Box,
   HStack,
 } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import { HiOutlineNewspaper } from 'react-icons/hi';
@@ -143,54 +144,54 @@ export default function DropdownItem({ title, active, navSize, data }) {
     </Flex>
   );
 }
-const CategoriesTab = ({ dataCate }) =>
-  dataCate.length > 0 &&
-  dataCate.map(items => (
-    <Box color={PRI_TEXT_COLOR} key={`title_${items.uid}`}>
-      <Menu>
-        <Accordion allowMultiple>
-          <AccordionItem
-            style={{ borderTopWidth: '0', borderBottomWidth: '0' }}
+const CategoriesTab = ({ dataCate }) => {
+  const [categoryHovered, setCategoryHovered] = useState('');
+  return (
+    dataCate.length > 0 &&
+    dataCate.map(items => (
+      <Box color={PRI_TEXT_COLOR} key={`title_${items.uid}`} py={2}>
+        <HStack onMouseEnter={() => setCategoryHovered(items.parentName)}>
+          <CategoriesIcon parentName={items.parentName} iconSize={20} />
+          <Link
+            href={`/search?category=${items.uid}`}
+            fontWeight={500}
+            fontSize={16}
+            value={items.parentName}
           >
-            <HStack>
-              <CategoriesIcon parentName={items.parentName} iconSize={20} />
-              <Text style={{ margin: '0px' }}>
-                <AccordionButton>
-                  <Text fontWeight={500} fontSize={16}>
-                    {items.parentName}
-                  </Text>
-                  <AccordionIcon />
-                </AccordionButton>
-              </Text>
-            </HStack>
-            <AccordionPanel pb={4}>
-              <Box ml={8}>
-                <ul style={{ listStyle: 'circle' }}>
-                  {items.children.map(itemChildren => (
-                    <Link
-                      key={`sub-cate_${items.uid}`}
-                      href={`/search?category=${itemChildren.uid}`}
-                    >
-                      <li
-                        style={{
-                          marginBottom: '10px',
-                          marginLeft: '10px',
-                          fontWeight: '500',
-                          fontSize: '16px',
-                        }}
-                      >
-                        {itemChildren.name}
-                      </li>
-                    </Link>
-                  ))}
-                </ul>
-              </Box>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </Menu>
-    </Box>
-  ));
+            {items.parentName}
+          </Link>
+          {categoryHovered === items.parentName ? (
+            <ChevronDownIcon />
+          ) : (
+            <ChevronUpIcon />
+          )}
+        </HStack>
+        <Box ml={8} pt={2} hidden={categoryHovered !== items.parentName}>
+          <ul style={{ listStyle: 'circle' }}>
+            {items.children.map(itemChildren => (
+              <Link
+                key={`sub-cate_${items.uid}`}
+                href={`/search?category=${itemChildren.uid}`}
+              >
+                <li
+                  style={{
+                    marginBottom: '10px',
+                    marginLeft: '10px',
+                    fontWeight: '500',
+                    fontSize: '16px',
+                  }}
+                >
+                  {itemChildren.name}
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </Box>
+      </Box>
+    ))
+  );
+};
+
 const CategoriesIcon = ({ parentName, iconSize }) => {
   switch (parentName) {
     case 'Solo Singers':
