@@ -35,4 +35,5 @@ export const messages = {
   kycVerify: () => t(translations.TalentManagementPage.kycVerify),
   kycVerified: () => t(translations.TalentManagementPage.kycVerified),
   category: () => t(translations.TalentManagementPage.category),
+  subCategory: () => t(translations.TalentManagementPage.subCategory),
 };

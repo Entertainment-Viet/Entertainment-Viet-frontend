@@ -83,8 +83,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const [dynamicDataYourReward, setDynamicDataYourReward] = useState();
   const [isFullData, setFullData] = useState(true);
   const talentId = window.localStorage.getItem('uid');
-  // eslint-disable-next-line no-console
-  console.log(talentInfo);
 
   const {
     handleSubmit,
@@ -282,7 +280,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.fullName}
+                    defaultValue={talentInfo.fullName ? talentInfo.fullName : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -302,7 +300,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.displayName}
+                    defaultValue={talentInfo.displayName ? talentInfo.displayName : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -322,7 +320,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.phoneNumber}
+                    defaultValue={talentInfo.phoneNumber ? talentInfo.phoneNumber : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -342,7 +340,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.address.street}
+                    defaultValue={talentInfo.address && talentInfo.address.street ? talentInfo.address.street : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -359,7 +357,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('district')}
                         defaultValue={
-                          talentInfo.address ? (
+                          talentInfo.address && talentInfo.address.strict ? (
                           dataDistrictHCM.filter(
                             item => item.name === talentInfo.address.district,
                           )[0].name) : null
@@ -385,13 +383,13 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('province')}
                         value={
-                          talentInfo.address ? (
+                          talentInfo.address && talentInfo.address.city ? (
                           dataProvince.filter(
                             item => item.name === talentInfo.address.city,
                           )[0].name) : null
                         }
                         defaultValue={
-                          talentInfo.address ? (
+                          talentInfo.address && talentInfo.address.city  ? (
                           dataProvince.filter(
                             item => item.name === talentInfo.address.city,
                           )[0].name) : null
@@ -441,7 +439,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.bankAccountOwner}
+                    defaultValue={talentInfo.bankAccountOwner ? talentInfo.bankAccountOwner : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -465,7 +463,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                             message: 'Minimum length should be 4',
                           },
                         })}
-                        defaultValue={talentInfo.bankAccountNumber}
+                        defaultValue={talentInfo.bankAccountNumber ? talentInfo.bankAccountNumber : null}
                       />
                       <Text color={RED_COLOR}>
                         {errors.accountNumber && errors.accountNumber.message}

@@ -19,7 +19,12 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString, getResStatus, cacthResponse } from 'utils/helpers';
+import {
+  toIsoString,
+  getResStatus,
+  cacthResponse,
+  getSubCategory,
+} from 'utils/helpers';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -61,10 +66,26 @@ export function CreatePackagePage({ getCategories, categories }) {
   const describeNFTRef = useRef(null);
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
+  const [subCategory, setSubCategory] = useState(null);
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    if (categories) {
+      const category = categories[0];
+      const sub = getSubCategory(category, categories);
+      setSubCategory(sub.chilren);
+    }
+  }, [categories]);
+
+  const handleChangeCategory = e => {
+    const { value } = e.target;
+    const cat = categories.find(item => item.uid === value);
+    const subTemp = getSubCategory(cat, categories);
+    setSubCategory(subTemp.chilren);
+  };
 
   const onSubmit = async () => {
     const talentId = window.localStorage.getItem('uid');
@@ -271,8 +292,8 @@ export function CreatePackagePage({ getCategories, categories }) {
                       {t(messages.category())}
                     </CustomFormLabel>
                     <SelectCustom
-                      placeholder="Select option"
                       {...register('category')}
+                      onChange={handleChangeCategory}
                     >
                       {categories &&
                         categories.map((option, index) => (
@@ -287,16 +308,15 @@ export function CreatePackagePage({ getCategories, categories }) {
                     <CustomFormLabel htmlFor="subcategory">
                       {t(messages.subCategory())}
                     </CustomFormLabel>
-                    <SelectCustom
-                      placeholder="Select option"
-                      {...register('subcategory')}
-                    >
-                      {/* {optionsCategory.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))} */}
+                    <SelectCustom {...register('subcategory')}>
+                      {subCategory &&
+                        subCategory.length > 0 &&
+                        subCategory.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>

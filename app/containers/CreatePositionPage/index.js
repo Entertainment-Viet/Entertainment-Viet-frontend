@@ -19,7 +19,12 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString, getResStatus, cacthResponse } from 'utils/helpers';
+import {
+  toIsoString,
+  getResStatus,
+  cacthResponse,
+  getSubCategory,
+} from 'utils/helpers';
 import { API_EVENT_POSITIONS } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -37,6 +42,7 @@ import {
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -59,10 +65,26 @@ export function CreatePositionPage({ getCategories, categories, match }) {
   const describeNFTRef = useRef(null);
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
+  const [subCategory, setSubCategory] = useState(null);
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    if (categories) {
+      const category = categories[0];
+      const sub = getSubCategory(category, categories);
+      setSubCategory(sub.chilren);
+    }
+  }, [categories]);
+
+  const handleChangeCategory = e => {
+    const { value } = e.target;
+    const cat = categories.find(item => item.uid === value);
+    const subTemp = getSubCategory(cat, categories);
+    setSubCategory(subTemp.chilren);
+  };
 
   const onSubmit = async () => {
     const eventId = match.params.id;
@@ -71,7 +93,9 @@ export function CreatePositionPage({ getCategories, categories, match }) {
       jobOffer: {
         name: getValues('name'),
         jobDetail: {
-          categoryId: getValues('category'),
+          categoryId: getValues('subCategory')
+            ? getValues('subCategory')
+            : getValues('category'),
           workType: getValues('workType'),
           price: {
             min: getValues('min'),
@@ -254,13 +278,14 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                       {t(messages.category())}
                     </CustomFormLabel>
                     <SelectCustom
-                      placeholder="Select option"
+                      id="category"
                       {...register('category')}
+                      onChange={handleChangeCategory}
                     >
                       {categories &&
-                        categories.map((option, index) => (
+                        categories.map(option => (
                           // eslint-disable-next-line react/no-array-index-key
-                          <option key={index} value={option.uid}>
+                          <option key={option.uid} value={option.uid}>
                             {option.name}
                           </option>
                         ))}
@@ -270,16 +295,15 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                     <CustomFormLabel htmlFor="subcategory">
                       {t(messages.subCategory())}
                     </CustomFormLabel>
-                    <SelectCustom
-                      placeholder="Select option"
-                      {...register('subcategory')}
-                    >
-                      {/* {optionsCategory.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))} */}
+                    <SelectCustom {...register('subcategory')}>
+                      {subCategory &&
+                        subCategory.length > 0 &&
+                        subCategory.map(option => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={option.uid} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>

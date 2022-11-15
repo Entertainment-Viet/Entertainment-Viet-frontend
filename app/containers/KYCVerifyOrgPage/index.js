@@ -275,7 +275,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.companyName}
+                    defaultValue={organizerInfo.companyName ? organizerInfo.companyName : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -295,7 +295,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.displayName}
+                    defaultValue={organizerInfo.displayName ? organizerInfo.displayName : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -315,7 +315,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.phoneNumber}
+                    defaultValue={organizerInfo.phoneNumber ? organizerInfo.phoneNumber : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -337,7 +337,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                             message: 'Minimum length should be 4',
                           },
                         })}
-                        defaultValue={organizerInfo.representative}
+                        defaultValue={organizerInfo.representative ? organizerInfo.representative : null}
                       />
                       <Text color={RED_COLOR}>
                         {errors.representative && errors.representative.message}
@@ -357,7 +357,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                             message: 'Minimum length should be 4',
                           },
                         })}
-                        defaultValue={organizerInfo.position}
+                        defaultValue={organizerInfo.position ? organizerInfo.position : null}
                       />
                       <Text color={RED_COLOR}>
                         {errors.position && errors.position.message}
@@ -379,7 +379,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.address.street}
+                    defaultValue={organizerInfo.address && organizerInfo.address.street ? organizerInfo.address.street : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -396,7 +396,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         size="md"
                         {...register('district')}
                         defaultValue={
-                          organizerInfo.address ? (
+                          organizerInfo.address && organizerInfo.address.district ? (
                           dataDistrictHCM.filter(
                             item => item.name === organizerInfo.address.district,
                           )[0].name) : null
@@ -422,13 +422,13 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         size="md"
                         {...register('province')}
                         value={
-                          organizerInfo.address ? (
+                          organizerInfo.address && organizerInfo.address.city ? (
                           dataProvince.filter(
                             item => item.name === organizerInfo.address.city,
                           )[0].name) : null
                         }
                         defaultValue={
-                          organizerInfo.address ? (
+                          organizerInfo.address && organizerInfo.address.city ? (
                           dataProvince.filter(
                             item => item.name === organizerInfo.address.city,
                           )[0].name) : null
@@ -478,7 +478,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.bankAccountOwner}
+                    defaultValue={organizerInfo.bankAccountOwner ? organizerInfo.bankAccountOwner : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -502,7 +502,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                             message: 'Minimum length should be 4',
                           },
                         })}
-                        defaultValue={organizerInfo.bankAccountNumber}
+                        defaultValue={organizerInfo.bankAccountNumber ? organizerInfo.bankAccountNumber : null}
                       />
                       <Text color={RED_COLOR}>
                         {errors.accountNumber && errors.accountNumber.message}

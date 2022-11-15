@@ -40,7 +40,7 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import { cacthError } from '../../../utils/helpers';
+import { cacthError, getSubCategory } from '../../../utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
@@ -74,6 +74,7 @@ const Profile = ({
   const activityNFTRef = useRef(null);
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
+  const [subCategory, setSubCategory] = useState(null);
 
   const {
     handleSubmit,
@@ -86,11 +87,27 @@ const Profile = ({
     loadCategories();
   }, [talentId]);
 
+  useEffect(() => {
+    if (talentInfo && categoriesInfo) {
+      const category = talentInfo.offerCategories.length > 0 ?
+        talentInfo.offerCategories[0] : categoriesInfo[0];
+      const sub = getSubCategory(category, categoriesInfo);
+      setSubCategory(sub.chilren);
+    }
+  }, [talentInfo, categoriesInfo]);
+
   const handleUpload = item => {
     if (item) {
       setFile(item);
       setUrl(URL.createObjectURL(item));
     }
+  };
+
+  const handleChangeCategory = (e) => {
+    const value = e.target.value;
+    const cat = categoriesInfo.find(item => item.uid === value);
+    const subTemp = getSubCategory(cat, categoriesInfo);
+    setSubCategory(subTemp.chilren);
   };
 
   const onSubmit = async values => {
@@ -100,7 +117,7 @@ const Profile = ({
       history: historyNFTRef.current.getContent(),
       activity: activityNFTRef.current.getContent(),
       bio: bioNFTRef.current.getContent(),
-      category: values.category,
+      category: values.subCategory ? values.subCategory : values.category,
     };
     const preData = [
       {
@@ -232,23 +249,43 @@ const Profile = ({
                 {errors.displayName && errors.displayName.message}
               </Text>
               <FormControl>
-                <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
-                <SelectCustom
-                  id="category"
-                  size="md"
-                  {...register('category')}
-                  defaultValue={
-                    talentInfo.offerCategories.length > 0
-                      ? categoriesInfo.filter(
-                        item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
-                >
-                  {categoriesInfo.map(option => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <option key={option.uid} value={option.uid}>
-                      {option.name}
-                    </option>
-                  ))}
-                </SelectCustom>
+                <SimpleGrid columns={2} spacing={2}>
+                  <Box>
+                    <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
+                    <SelectCustom
+                      id="category"
+                      size="md"
+                      {...register('category')}
+                      onChange={handleChangeCategory}
+                      defaultValue={
+                        talentInfo.offerCategories.length > 0
+                          ? categoriesInfo.filter(
+                            item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
+                    >
+                      {categoriesInfo.map(option => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={option.uid} value={option.uid}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectCustom>
+                  </Box>
+                  <Box>
+                    <CustomFormLabel>{t(messages.subCategory())}</CustomFormLabel>
+                    <SelectCustom
+                      id="subCategory"
+                      size="md"
+                      {...register('subCategory')}
+                    >
+                      {subCategory && subCategory.length > 0 && subCategory.map(option => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <option key={option.uid} value={option.uid}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </SelectCustom>
+                  </Box>
+                </SimpleGrid>
               </FormControl>
               <FormControl>
                 <CustomFormLabel htmlFor="description">

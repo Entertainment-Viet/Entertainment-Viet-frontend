@@ -219,3 +219,12 @@ export function calculateTotalPrice(arr) {
 export function convertReadableTime(timestamp) {
   return new Date(timestamp).toLocaleString();
 }
+
+export function getSubCategory(category, categories) {
+  let children = [];
+  children = categories.filter(
+    item => item.parentUid === category.uid && item.parentUid !== null,
+  );
+  category.chilren = children;
+  return category;
+}

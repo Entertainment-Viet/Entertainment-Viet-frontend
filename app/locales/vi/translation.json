@@ -198,7 +198,8 @@
     "save": "Save",
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
-    "category": "Category"
+    "category": "Category",
+    "subCategory": "Sub Category"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",
