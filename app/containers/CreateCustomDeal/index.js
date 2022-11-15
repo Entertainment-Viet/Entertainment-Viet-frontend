@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString } from 'utils/helpers';
+import { toIsoString , getSubCategory } from 'utils/helpers';
 import { API_CREATE_BOOKING } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -48,6 +48,7 @@ import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -69,9 +70,25 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
   useInjectSaga({ key, saga });
   const describeNFTRef = useRef(null);
   const orgId = window.localStorage.getItem('uid');
+  const [subCategory, setSubCategory] = useState(null);
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    if (categories) {
+      const category = categories[0];
+      const sub = getSubCategory(category, categories);
+      setSubCategory(sub.chilren);
+    }
+  }, [categories]);
+
+  const handleChangeCategory = (e) => {
+    const { value } = e.target;
+    const cat = categories.find(item => item.uid === value);
+    const subTemp = getSubCategory(cat, categories);
+    setSubCategory(subTemp.chilren);
+  };
 
   function onSubmit() {
     // console.log('file: ', file);
@@ -86,7 +103,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
           city: getValues('city')
         },
         note: describeNFTRef.current.getContent(),
-        categoryId: getValues('category'),
+        categoryId: getValues('subCategory') ? getValues('subCategory') : getValues('category'),
         workType: getValues('workType'),
         price: {
           min: getValues('min'),
@@ -104,7 +121,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
     post(API_CREATE_BOOKING, val, orgId).then(res1 => {
       if (res1 > 300) {
         // console.log('error');
-      } 
+      }
       // redirectTo('/');
     });
   }
@@ -278,8 +295,9 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                       {t(messages.category())}
                     </CustomFormLabel>
                     <SelectCustom
-                      placeholder="Select option"
+                      id="category"
                       {...register('category')}
+                      onChange={handleChangeCategory}
                     >
                       {categories &&
                         categories.map((option, index) => (
@@ -295,20 +313,19 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                       {t(messages.subCategory())}
                     </CustomFormLabel>
                     <SelectCustom
-                      placeholder="Select option"
                       {...register('subcategory')}
                     >
-                      {/* {optionsCategory.map((option, index) => (
+                      {subCategory && subCategory.length > 0 && subCategory.map((option, index) => (
                         // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.value}>
-                          {option.label}
+                        <option key={index} value={option.uid}>
+                          {option.name}
                         </option>
-                      ))} */}
+                      ))}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
               </FormControl>
-              
+
             </Stack>
           </Box>
         </Box>
