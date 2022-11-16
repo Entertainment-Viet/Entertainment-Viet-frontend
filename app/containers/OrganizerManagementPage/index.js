@@ -37,6 +37,7 @@ import MyPackage from './MyEvents';
 import Orders from './Orders';
 import Calendar from '../Calendar';
 import Profile from './Profile';
+import BillDetail from './Billing';
 
 const key = 'OrganizerManagementPage';
 export function OrganizerManagementPage() {
@@ -65,6 +66,7 @@ export function OrganizerManagementPage() {
           <CustomTab>{t(messages.myEvents())}</CustomTab>
           <CustomTab>{t(messages.orders())}</CustomTab>
           <CustomTab>{t(messages.schedule())}</CustomTab>
+          <CustomTab>{t(messages.billing())}</CustomTab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -82,6 +84,9 @@ export function OrganizerManagementPage() {
               roles={localStorage.getItem('role')}
               uid={localStorage.getItem('uid')}
             />
+          </TabPanel>
+          <TabPanel>
+            <BillDetail />
           </TabPanel>
         </TabPanels>
       </Tabs>

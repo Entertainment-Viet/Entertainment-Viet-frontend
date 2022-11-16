@@ -38,4 +38,5 @@ export const messages = {
   kycVerify: () => t(translations.OrganizerManagementPage.kycVerify),
   kycVerified: () => t(translations.OrganizerManagementPage.kycVerified),
   category: () => t(translations.OrganizerManagementPage.category),
+  billing: () => t(translations.OrganizerManagementPage.billing),
 };

@@ -229,7 +229,8 @@
     "save": "Save",
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
-    "category": "Category"
+    "category": "Category",
+    "billing": "Billing"
   },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",
