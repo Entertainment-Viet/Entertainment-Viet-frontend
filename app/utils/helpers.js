@@ -220,11 +220,29 @@ export function convertReadableTime(timestamp) {
   return new Date(timestamp).toLocaleString();
 }
 
-export function classifyCategories(category, categories) {
+export function getSubCategory(category, categories) {
   let children = [];
   children = categories.filter(
     item => item.parentUid === category.uid && item.parentUid !== null,
   );
   category.chilren = children;
   return category;
+}
+export function classifyCategories(categories) {
+  let parentCategories = [];
+  let children = [];
+  // Only filter parent categories
+  parentCategories =
+    categories && categories.filter(item => item.parentUid === null);
+
+  // Filter children and put to their parent
+  // eslint-disable-next-line no-unused-expressions
+  parentCategories &&
+    parentCategories.forEach(item => {
+      children = categories.filter(child => child.parentUid === item.uid);
+      // eslint-disable-next-line no-param-reassign
+      item.children = children;
+    });
+
+  return parentCategories;
 }
