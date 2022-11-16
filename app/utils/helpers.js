@@ -220,7 +220,7 @@ export function convertReadableTime(timestamp) {
   return new Date(timestamp).toLocaleString();
 }
 
-export function getSubCategory(category, categories) {
+export function classifyCategories(category, categories) {
   let children = [];
   children = categories.filter(
     item => item.parentUid === category.uid && item.parentUid !== null,

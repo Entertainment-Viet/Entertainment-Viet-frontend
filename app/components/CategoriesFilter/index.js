@@ -51,7 +51,7 @@ function CategoriesFilter({
                   _hover={{ cursor: 'pointer', opacity: 0.7 }}
                   onClick={() => handleNavigateCategory(item.uid)}
                 >
-                  {item.parentName}
+                  {item.name}
                 </Text>
                 {item.children.map(itemChild => (
                   <Text
