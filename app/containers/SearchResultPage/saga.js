@@ -2,7 +2,12 @@ import { call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import { API_TALENT_LIST } from 'constants/api';
 import { ENUM_CURRENCY } from 'constants/enums';
-import { LOAD_CATEGORIES, LOAD_DATA, CHANGE_PRICE_RANGE } from './constants';
+import {
+  LOAD_CATEGORIES,
+  LOAD_DATA,
+  CHANGE_PRICE_RANGE,
+  CHANGE_CATEGORY,
+} from './constants';
 import {
   loadDataSuccess,
   loadDataError,
@@ -50,6 +55,15 @@ export function* getCategories() {
     yield put(loadDataError(err));
   }
 }
+export function* getCategoriesByChanging() {
+  try {
+    const category = yield select(makeSelectCategory());
+    const payload = yield call(get, API_TALENT_LIST, { category });
+    yield put(loadDataSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 export function* getPriceRange() {
   try {
     const currency = ENUM_CURRENCY.VND;
@@ -69,5 +83,6 @@ export function* getPriceRange() {
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_DATA, getData);
   yield takeEvery(LOAD_CATEGORIES, getCategories);
+  yield takeEvery(CHANGE_CATEGORY, getCategoriesByChanging);
   yield takeEvery(CHANGE_PRICE_RANGE, getPriceRange);
 }

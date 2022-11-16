@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import CategoriesFilter from 'components/CategoriesFilter';
 import {
   Container,
   Box,
@@ -29,6 +30,7 @@ import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
 import { toIsoString } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
+import { categoriesMock } from 'constants/mock-data.js';
 import { messages } from './messages';
 import {
   loadData,
@@ -69,7 +71,7 @@ export function SearchResultPage({
   handleEndChange,
   onLoadData,
   search,
-  categories,
+  // categories,
   onLoadCategory,
 }) {
   useInjectReducer({ key, reducer });
@@ -102,10 +104,9 @@ export function SearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <SelectSearchCustom
-          placeholderName="Categories"
-          handleChange={handleCategoryChange}
-          listOption={categories}
+        <CategoriesFilter
+          placeholder="Categories"
+          listOptions={categoriesMock}
         />
         <SelectSearchCustom
           placeholderName={t(messages.location())}
