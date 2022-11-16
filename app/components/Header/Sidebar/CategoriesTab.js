@@ -3,16 +3,16 @@ import { Box, Link, HStack } from '@chakra-ui/react';
 import { PRI_TEXT_COLOR } from 'constants/styles';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
-import {
-  Microphone,
-  Drum,
-  Dancer,
-  Instru,
-  DJ,
-  Bartender,
-  MakeUp,
-  Stylish,
-} from '../../Icon';
+// import {
+//   Microphone,
+//   Drum,
+//   Dancer,
+//   Instru,
+//   DJ,
+//   Bartender,
+//   MakeUp,
+//   Stylish,
+// } from '../../Icon';
 
 const CategoriesTab = ({ dataCate }) => {
   const [categoryHovered, setCategoryHovered] = useState('');
@@ -31,7 +31,7 @@ const CategoriesTab = ({ dataCate }) => {
         onMouseEnter={() => handleHover(items.name)}
       >
         <HStack>
-          <CategoriesIcon name={items.name} iconSize={20} />
+          {/* <CategoriesIcon name={items.name} iconSize={20} /> */}
           <Link
             href={`/search?category=${items.uid}`}
             fontWeight={500}
@@ -77,33 +77,33 @@ const CategoriesTab = ({ dataCate }) => {
     ))
   );
 };
-const CategoriesIcon = ({ parentName, iconSize }) => {
-  switch (parentName) {
-    case 'Solo Singers':
-      return <Microphone size={iconSize} />;
-    case 'Band':
-      return <Drum size={iconSize} />;
-    case 'Dancer':
-      return <Dancer size={iconSize} />;
-    case 'Instrument':
-      return <Instru size={iconSize} />;
-    case 'DJ':
-      return <DJ size={iconSize} />;
-    case 'Stylish':
-      return <Stylish size={iconSize} />;
-    case 'Make up':
-      return <MakeUp size={iconSize} />;
-    case 'Bartender':
-      return <Bartender size={iconSize} />;
-    default:
-      return null;
-  }
-};
+// const CategoriesIcon = ({ parentName, iconSize }) => {
+//   switch (parentName) {
+//     case 'Solo Singers':
+//       return <Microphone size={iconSize} />;
+//     case 'Band':
+//       return <Drum size={iconSize} />;
+//     case 'Dancer':
+//       return <Dancer size={iconSize} />;
+//     case 'Instrument':
+//       return <Instru size={iconSize} />;
+//     case 'DJ':
+//       return <DJ size={iconSize} />;
+//     case 'Stylish':
+//       return <Stylish size={iconSize} />;
+//     case 'Make up':
+//       return <MakeUp size={iconSize} />;
+//     case 'Bartender':
+//       return <Bartender size={iconSize} />;
+//     default:
+//       return null;
+//   }
+// };
 CategoriesTab.propTypes = {
   dataCate: PropTypes.any,
 };
-CategoriesIcon.propTypes = {
-  parentName: PropTypes.string,
-  iconSize: PropTypes.number,
-};
+// CategoriesIcon.propTypes = {
+//   parentName: PropTypes.string,
+//   iconSize: PropTypes.number,
+// };
 export default CategoriesTab;
