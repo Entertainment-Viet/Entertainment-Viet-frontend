@@ -19,6 +19,7 @@ export const ROUTE_BOOKING_DETAIL_MANAGER = '/booking/:id';
 export const ROUTE_CREATE_CUSTOM_BOOKING = '/create-booking/:id';
 export const ROUTE_CREATE_PACKAGE = '/create-package';
 export const ROUTE_CREATE_POSITION = '/create-position/:id';
+export const ROUTE_EVENT_BILLING = '/event-billing/:id';
 // ================================================================
 export const ROUTE_PRODUCTS = '/products';
 export const ROUTE_NEWS = '/news';
