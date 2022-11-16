@@ -39,6 +39,7 @@ import CreatePackagePage from 'containers/CreatePackagePage/Loadable';
 import TalentHomePage from 'containers/TalentHomepage/Loadable';
 import EventSearchResultPage from 'containers/EventSearchResultPage/Loadable';
 import EventDetailPage from 'containers/EventDetailPage/Loadable';
+import EventBillingPage from 'containers/EventBillingPage/Loadable';
 // Components
 import GlobalFonts from 'components/GlobalFonts';
 import Banner from 'components/DevelopmentBanner';
@@ -215,6 +216,14 @@ export default function App() {
           roles={[ENUM_ROLES.ORG, ENUM_ROLES.TAL]}
         >
           <Calendar />
+        </PrivateRoute>
+        <PrivateRoute
+          exact
+          path={Paths.ROUTE_EVENT_BILLING}
+          isAuthenticated={isAuthenticated}
+          roles={[ENUM_ROLES.ORG]}
+        >
+          <EventBillingPage />
         </PrivateRoute>
         <Route path="*" component={NotFoundPage} />
       </Switch>
