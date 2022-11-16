@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Text,
@@ -14,6 +14,7 @@ import {
   Box,
   HStack,
 } from '@chakra-ui/react';
+
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import PropTypes from 'prop-types';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
@@ -22,6 +23,7 @@ import { MdOutlinePrivacyTip } from 'react-icons/md';
 import { AiOutlineStar } from 'react-icons/ai';
 import { BiSupport } from 'react-icons/bi';
 import { FiHelpCircle } from 'react-icons/fi';
+import { classifyCategories } from 'utils/helpers';
 import {
   TermOfService,
   Safety,
@@ -42,6 +44,11 @@ import {
 } from '../../Icon';
 
 export default function DropdownItem({ title, active, navSize, data }) {
+  const [categoriesFiltered, setCategoriesFiltered] = useState(data);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(data);
+    setCategoriesFiltered(categoriesClassified);
+  }, [data]);
   return (
     <Flex
       mt={30}
@@ -93,7 +100,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
               <AccordionPanel pb={4} color={PRI_TEXT_COLOR} ml={12}>
                 <VStack alignItems="flex-start">
                   {title === 'Categories' && data ? (
-                    <CategoriesTab dataCate={data} />
+                    <CategoriesTab dataCate={categoriesFiltered} />
                   ) : (
                     data &&
                     data.map(value => (
@@ -146,47 +153,64 @@ export default function DropdownItem({ title, active, navSize, data }) {
 }
 const CategoriesTab = ({ dataCate }) => {
   const [categoryHovered, setCategoryHovered] = useState('');
+  const handleHover = name => {
+    setTimeout(() => {
+      setCategoryHovered(name);
+    }, 600);
+  };
   return (
     dataCate.length > 0 &&
     dataCate.map(items => (
-      <Box color={PRI_TEXT_COLOR} key={`title_${items.uid}`} py={2}>
-        <HStack onMouseEnter={() => setCategoryHovered(items.parentName)}>
-          <CategoriesIcon parentName={items.parentName} iconSize={20} />
+      <Box
+        color={PRI_TEXT_COLOR}
+        key={`title_${items.uid}`}
+        py={2}
+        onMouseEnter={() => handleHover(items.name)}
+        onMouseLeave={() => handleHover('')}
+      >
+        <HStack>
+          <CategoriesIcon name={items.name} iconSize={20} />
           <Link
             href={`/search?category=${items.uid}`}
             fontWeight={500}
             fontSize={16}
-            value={items.parentName}
+            value={items.name}
           >
-            {items.parentName}
+            {items.name}
           </Link>
-          {categoryHovered === items.parentName ? (
+          {categoryHovered === items.name ? (
             <ChevronDownIcon />
           ) : (
             <ChevronUpIcon />
           )}
         </HStack>
-        <Box ml={8} pt={2} hidden={categoryHovered !== items.parentName}>
-          <ul style={{ listStyle: 'circle' }}>
-            {items.children.map(itemChildren => (
-              <Link
-                key={`sub-cate_${items.uid}`}
-                href={`/search?category=${itemChildren.uid}`}
-              >
-                <li
-                  style={{
-                    marginBottom: '10px',
-                    marginLeft: '10px',
-                    fontWeight: '500',
-                    fontSize: '16px',
-                  }}
+        {items.children.length > 0 && (
+          <Box
+            ml={8}
+            pt={2}
+            display={categoryHovered === items.name ? 'block' : 'none'}
+          >
+            <ul style={{ listStyle: 'circle' }}>
+              {items.children.map(itemChildren => (
+                <Link
+                  key={`sub-cate_${items.uid}`}
+                  href={`/search?category=${itemChildren.uid}`}
                 >
-                  {itemChildren.name}
-                </li>
-              </Link>
-            ))}
-          </ul>
-        </Box>
+                  <li
+                    style={{
+                      marginBottom: '10px',
+                      marginLeft: '10px',
+                      fontWeight: '500',
+                      fontSize: '16px',
+                    }}
+                  >
+                    {itemChildren.name}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          </Box>
+        )}
       </Box>
     ))
   );
@@ -259,7 +283,7 @@ const HeaderIconSidebar = ({ title, isActive }) => {
   }
 };
 CategoriesTab.propTypes = {
-  dataCate: PropTypes.object,
+  dataCate: PropTypes.any,
 };
 CategoriesIcon.propTypes = {
   parentName: PropTypes.string,

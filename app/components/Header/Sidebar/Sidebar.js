@@ -5,7 +5,6 @@ import cRequest from 'utils/server';
 import { getResStatus, cacthError, cacthResponse } from 'utils/helpers';
 import { BsFacebook, BsInstagram, BsTwitter, BsLinkedin } from 'react-icons/bs';
 import { TEXT_COLOR } from 'constants/styles';
-import { categoriesMock } from 'constants/mock-data';
 import NavItem from './NavItem';
 import VE from '../assets/Entertainment Viet.svg';
 import EV from '../assets/EV.svg';
@@ -71,7 +70,7 @@ export default function Sidebar() {
           navSize={navSize}
           title="Categories"
           active
-          data={categoriesMock}
+          data={categories}
         />
         <DropdownItem navSize={navSize} title="About" data={dataAbout} />
         <DropdownItem navSize={navSize} title="Support" data={dataSupport} />
