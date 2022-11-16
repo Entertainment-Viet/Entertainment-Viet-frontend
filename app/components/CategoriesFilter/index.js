@@ -12,9 +12,23 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import styled from 'styled-components';
 import { TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import PropTypes from 'prop-types';
 import { changeCategory } from './action';
+
+const CategoriesText = styled(Text)`
+  color: ${props => props.color};
+  font-size: ${props => props.fontSize};
+  font-weight: ${props => props.fontWeight};
+  padding-bottom: ${props => props.pb || '0px'};
+  padding-top: ${props => props.pt || '0px'};
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+`;
+
 function CategoriesFilter({
   placeholder,
   listOptions,
@@ -43,27 +57,26 @@ function CategoriesFilter({
           {listOptions.length > 0 &&
             listOptions.map(item => (
               <Box key={item.uid}>
-                <Text
-                  color={SUB_BLU_COLOR}
+                <CategoriesText
+                  onClick={() => handleNavigateCategory(item.uid)}
                   fontWeight={600}
                   fontSize={15}
+                  color={SUB_BLU_COLOR}
                   pb={2}
-                  _hover={{ cursor: 'pointer', opacity: 0.7 }}
-                  onClick={() => handleNavigateCategory(item.uid)}
                 >
                   {item.name}
-                </Text>
+                </CategoriesText>
                 {item.children.map(itemChild => (
-                  <Text
+                  <CategoriesText
                     color={SUB_BLU_COLOR}
                     fontWeight={400}
-                    py={2}
+                    pb={2}
+                    pt={2}
                     fontSize={15}
-                    _hover={{ cursor: 'pointer', opacity: 0.7 }}
                     onClick={() => handleNavigateCategory(itemChild.uid)}
                   >
                     {itemChild.name}
-                  </Text>
+                  </CategoriesText>
                 ))}
               </Box>
             ))}
