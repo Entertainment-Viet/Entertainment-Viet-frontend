@@ -228,3 +228,21 @@ export function getSubCategory(category, categories) {
   category.chilren = children;
   return category;
 }
+export function classifyCategories(categories) {
+  let parentCategories = [];
+  let children = [];
+  // Only filter parent categories
+  parentCategories =
+    categories && categories.filter(item => item.parentUid === null);
+
+  // Filter children and put to their parent
+  // eslint-disable-next-line no-unused-expressions
+  parentCategories &&
+    parentCategories.forEach(item => {
+      children = categories.filter(child => child.parentUid === item.uid);
+      // eslint-disable-next-line no-param-reassign
+      item.children = children;
+    });
+
+  return parentCategories;
+}

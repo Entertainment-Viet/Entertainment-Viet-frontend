@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Text,
@@ -9,8 +9,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  VStack,
   Link,
+  VStack,
   Box,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
@@ -20,6 +20,7 @@ import { MdOutlinePrivacyTip } from 'react-icons/md';
 import { AiOutlineStar } from 'react-icons/ai';
 import { BiSupport } from 'react-icons/bi';
 import { FiHelpCircle } from 'react-icons/fi';
+import { classifyCategories } from 'utils/helpers';
 import {
   TermOfService,
   Safety,
@@ -30,8 +31,14 @@ import {
   About,
   Buyer,
 } from '../../Icon';
+import CategoriesTab from './CategoriesTab';
 
 export default function DropdownItem({ title, active, navSize, data }) {
+  const [categoriesFiltered, setCategoriesFiltered] = useState(data);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(data);
+    setCategoriesFiltered(categoriesClassified);
+  }, [data]);
   return (
     <Flex
       mt={30}
@@ -43,7 +50,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
         <Accordion
           color={active && TEXT_GREEN}
           py={3}
-          _hover={{ textDecor: 'none', color: TEXT_GREEN }}
+          _hover={{ color: TEXT_GREEN }}
           w={navSize === 'large' && '100%'}
           allowMultiple
         >
@@ -82,16 +89,12 @@ export default function DropdownItem({ title, active, navSize, data }) {
             {navSize === 'large' && (
               <AccordionPanel pb={4} color={PRI_TEXT_COLOR} ml={12}>
                 <VStack alignItems="flex-start">
-                  {data &&
+                  {title === 'Categories' && data ? (
+                    <CategoriesTab dataCate={categoriesFiltered} />
+                  ) : (
+                    data &&
                     data.map(value => (
-                      <Link
-                        href={
-                          value.uid
-                            ? `/search?category=${value.uid}`
-                            : `/${value.url}`
-                        }
-                        key={value.url}
-                      >
+                      <Link href={`/${value.url}`} key={value.url}>
                         <Flex>
                           <i style={{ marginTop: '2px', marginRight: '5px' }}>
                             <BodyIconAbout name={value.name} iconSize={20} />
@@ -119,12 +122,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
                               </i>
                               <Box
                                 color={PRI_TEXT_COLOR}
-                                fontWeight="500"
-                                as="h1"
-                                fontSize="xl"
-                                whiteSpace="nowrap"
-                                noOfLines={1}
-                                key={`title_${value.url}`}
+                                key={`title_${value.uid}`}
                               >
                                 {value.name}
                               </Box>
@@ -132,7 +130,8 @@ export default function DropdownItem({ title, active, navSize, data }) {
                           </Box>
                         </Flex>
                       </Link>
-                    ))}
+                    ))
+                  )}
                 </VStack>
               </AccordionPanel>
             )}
