@@ -1,8 +1,9 @@
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import CategoriesFilter from 'components/CategoriesFilter';
 import {
   Container,
   Box,
@@ -27,7 +28,7 @@ import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-import { toIsoString } from 'utils/helpers';
+import { toIsoString, classifyCategories } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
 import { messages } from './messages';
 import {
@@ -80,6 +81,7 @@ export function SearchResultPage({
   const searchParams = urlParams.get('search');
   const category = urlParams.get('category');
   const { t } = useTranslation();
+  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
   useEffect(() => {
     onLoadCategory();
     if (category) handleCategoryChange(category);
@@ -87,6 +89,10 @@ export function SearchResultPage({
     else if (searchParams) handleSearchChange(searchParams);
     else onLoadData();
   }, []);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(categories);
+    setCategoriesFiltered(categoriesClassified);
+  }, [categories]);
   // remember to +1 vào pageNumber
   const pageProps = {
     // total: paging.totalElement, // totalElement
@@ -102,10 +108,9 @@ export function SearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <SelectSearchCustom
-          placeholderName="Categories"
-          handleChange={handleCategoryChange}
-          listOption={categories}
+        <CategoriesFilter
+          placeholder="Categories"
+          listOptions={categoriesFiltered}
         />
         <SelectSearchCustom
           placeholderName={t(messages.location())}
