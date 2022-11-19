@@ -9,8 +9,6 @@ services:
       - REACT_APP_MOCK_API=${REACT_APP_MOCK_API}
       - REACT_APP_ENV=${REACT_APP_ENV}
       - REACT_KEYCLOAK_API=${REACT_KEYCLOAK_API}
-    build:
-      context: .
     ports:
       - "3000:80"
     restart: unless-stopped
