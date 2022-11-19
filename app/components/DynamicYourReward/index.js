@@ -5,7 +5,7 @@ import { Button, Image, Box } from '@chakra-ui/react';
 import { useAnimation } from 'framer-motion';
 import {
   SEC_TEXT_COLOR,
-  SUB_BLU_COLOR,
+  SUB_BLU_COLOR, TEXT_GREEN,
   TEXT_PURPLE,
 } from '../../constants/styles';
 import InputCustomV2 from '../Controls/InputCustomV2';
@@ -143,7 +143,7 @@ function DynamicFormYourReward(props) {
   const handleUpload = (item, name, index) => {
     if (item) {
       const data = [...formFields];
-      data[index][name] = item;
+      data[index][name] = item.name;
       setFormFields(data);
     }
   };
@@ -188,75 +188,79 @@ function DynamicFormYourReward(props) {
             item => item.id === form.scoreTypeId,
           )[0].id) : null;
         return (
-        <Box display="flex" height="40px" marginBottom="20px">
-          <Box width="350px">
-            <SelectCustom
-              id="scoreTypeId"
-              name="scoreTypeId"
-              size="md"
-              defaultValue={defaultValue}
-              onChange={event => handleFormChange(event, index)}
-            >
-              {/* eslint-disable-next-line no-shadow */}
-              {dataScoreType.map(option => (
-                <option key={option.id} value={option.id}>
-                  {option.name}
-                </option>
-              ))}
-            </SelectCustom>
-          </Box>
-          <Box marginRight="4px" marginLeft="4px" />
-          <Box width="250px">
-            <SelectCustom
-              id="year"
-              size="md"
-              name="value"
-              onChange={event => handleFormChange(event, index)}
-            >
-              {/* eslint-disable-next-line no-shadow */}
-              {year.map((option, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <option key={index} value={option.value}>
-                  {option.value}
-                </option>
-              ))}
-            </SelectCustom>
-          </Box>
-          <Box marginRight="4px" marginLeft="4px" />
-          <Box
-            width="220px"
-            marginBottom="0"
-            bg={TEXT_PURPLE}
-            borderRadius="5px"
-            display="flex"
-            position="relative"
-          >
-            <Box display="flex" pt="8px" pl="6px">
-              <AttachIcon
-                sx={{
-                  marginTop: '5px',
-                }}
+          <Box>
+            <Box display="flex" height="40px" marginBottom="20px">
+              <Box width="350px">
+                <SelectCustom
+                  id="scoreTypeId"
+                  name="scoreTypeId"
+                  size="md"
+                  defaultValue={defaultValue}
+                  onChange={event => handleFormChange(event, index)}
+                >
+                  {/* eslint-disable-next-line no-shadow */}
+                  {dataScoreType.map(option => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </SelectCustom>
+              </Box>
+              <Box marginRight="4px" marginLeft="4px" />
+              <Box width="250px">
+                <SelectCustom
+                  id="year"
+                  size="md"
+                  name="value"
+                  onChange={event => handleFormChange(event, index)}
+                >
+                  {/* eslint-disable-next-line no-shadow */}
+                  {year.map((option, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={index} value={option.value}>
+                      {option.value}
+                    </option>
+                  ))}
+                </SelectCustom>
+              </Box>
+              <Box marginRight="4px" marginLeft="4px" />
+              <Box
+                width="220px"
+                marginBottom="0"
+                bg={TEXT_PURPLE}
+                borderRadius="5px"
+                display="flex"
+                position="relative"
+              >
+                <Box display="flex" pt="8px" pl="6px">
+                  <AttachIcon
+                    sx={{
+                      marginTop: '5px',
+                    }}
+                  />
+                  <Box>Attach prove</Box>
+                </Box>
+                <InputCustomV2
+                  type="file"
+                  onDragEnter={startAnimation}
+                  onDragLeave={stopAnimation}
+                  bg={TEXT_PURPLE}
+                  borderRadius="5px"
+                  opacity="0"
+                  position="absolute"
+                  name="achievement"
+                  onChange={e => handleUpload(e.target.files[0], 'achievement', index)}
+                />
+              </Box>
+              <Image
+                src={trashCan}
+                alt="trash"
+                onClick={() => removeFields(index)}
               />
-              <Box>Attach prove</Box>
             </Box>
-            <InputCustomV2
-              type="file"
-              onDragEnter={startAnimation}
-              onDragLeave={stopAnimation}
-              bg={TEXT_PURPLE}
-              borderRadius="5px"
-              opacity="0"
-              position="absolute"
-              name="file"
-              onChange={e => handleUpload(e.target.files[0], 'file', index)}
-            />
+            <Box marginBottom="20px" color={TEXT_GREEN}>{form.achievement || 'no choose file'}</Box>
           </Box>
-          <Image
-            src={trashCan}
-            alt="trash"
-            onClick={() => removeFields(index)}
-          />
-        </Box>)
+        )
       })}
       <Box width="100%">
         <Button
