@@ -222,10 +222,15 @@ export function convertReadableTime(timestamp) {
 
 export function getSubCategory(category, categories) {
   let children = [];
-  children = categories.filter(
-    item => item.parentUid === category.uid && item.parentUid !== null,
-  );
-  category.chilren = children;
+  children =
+    categories &&
+    categories.length > 0 &&
+    categories.filter(
+      item => item.parentUid === category.uid && item.parentUid !== null,
+    );
+  if (children) {
+    category.chilren = children;
+  }
   return category;
 }
 export function classifyCategories(categories) {

@@ -89,7 +89,7 @@ const Profile = ({
 
   useEffect(() => {
     if (talentInfo && categoriesInfo) {
-      const category = talentInfo.offerCategories.length > 0 ?
+      const category = talentInfo.offerCategories && talentInfo.offerCategories.length > 0 ?
         talentInfo.offerCategories[0] : categoriesInfo[0];
       const sub = getSubCategory(category, categoriesInfo);
       setSubCategory(sub.chilren);
@@ -107,7 +107,11 @@ const Profile = ({
     const value = e.target.value;
     const cat = categoriesInfo.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categoriesInfo);
-    setSubCategory(subTemp.chilren);
+    if (subTemp && subTemp.chilren) {
+      setSubCategory(subTemp.chilren);
+    } else {
+      setSubCategory([]);
+    }
   };
 
   const onSubmit = async values => {
@@ -258,11 +262,11 @@ const Profile = ({
                       {...register('category')}
                       onChange={handleChangeCategory}
                       defaultValue={
-                        talentInfo.offerCategories.length > 0
+                        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
                           ? categoriesInfo.filter(
                             item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
                     >
-                      {categoriesInfo.map(option => (
+                      {categoriesInfo && categoriesInfo.length > 0 && categoriesInfo.map(option => (
                         // eslint-disable-next-line react/no-array-index-key
                         <option key={option.uid} value={option.uid}>
                           {option.name}
