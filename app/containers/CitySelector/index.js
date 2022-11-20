@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useRef, useState } from 'react';
+import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -19,7 +19,7 @@ import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
 import SelectCustom from '../../components/Controls/SelectCustom';
-import { dataDistrictHCM } from '../../utils/data-address';
+// import { dataDistrictHCM } from '../../utils/data-address';
 
 import { RED_COLOR } from '../../constants/styles';
 import { loadCity, loadDistrict } from './actions';
@@ -61,7 +61,9 @@ export function CitySelector({
             {...register('city')}
             onChange={e => getDistricts(e.target.value)}
           >
-            <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
+            {citiData.map(option => (
+              <option value={option.uid}>{option.name}</option>
+            ))}
           </SelectCustom>
           <Text color={RED_COLOR}>
             {errors.province && errors.province.message}
@@ -75,11 +77,9 @@ export function CitySelector({
             placeholder="Select district"
             {...register('district')}
           >
-            {dataDistrictHCM.map((option, index) => (
+            {districtData.map(option => (
               // eslint-disable-next-line react/no-array-index-key
-              <option key={index} value={option.name}>
-                {option.name}
-              </option>
+              <option value={option.uid}>{option.name}</option>
             ))}
           </SelectCustom>
           <Text color={RED_COLOR}>

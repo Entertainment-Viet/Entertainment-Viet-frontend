@@ -11,8 +11,8 @@ import { makeSelectCity } from './selectors';
 
 export function* getCityData() {
   try {
-    const payload = yield call(get, API_GET_LOCATION, {});
-    yield put(loadCitySuccess(payload));
+    const payload = yield call(get, API_GET_LOCATION, { type: 'city' });
+    yield put(loadCitySuccess(payload.content));
   } catch (err) {
     console.log(err);
   }
@@ -21,8 +21,11 @@ export function* getCityData() {
 export function* getDistrictData() {
   try {
     const city = yield select(makeSelectCity());
-    const payload = yield call(get, API_GET_LOCATION, { city });
-    yield put(loadDistrictSuccess(payload));
+    const payload = yield call(get, API_GET_LOCATION, {
+      type: 'district',
+      parentId: city,
+    });
+    yield put(loadDistrictSuccess(payload.content));
   } catch (err) {
     console.log(err);
   }

@@ -25,8 +25,8 @@ import Form from 'components/Form';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
-import SelectCustom from '../../components/Controls/SelectCustom';
-import { dataDistrictHCM } from '../../utils/data-address';
+// import SelectCustom from '../../components/Controls/SelectCustom';
+// import { dataDistrictHCM } from '../../utils/data-address';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import { RED_COLOR } from '../../constants/styles';
