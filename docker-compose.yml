@@ -3,7 +3,7 @@ version: "3.8"
 services:
   app:
     container_name: vietentertainment-viet-frontend
-    image: vietentertainment2023/frontend:0.0.2
+    image: vietentertainment2023/frontend:0.0.4
     environment:
       - REACT_APP_API=${REACT_APP_API}
       - REACT_APP_MOCK_API=${REACT_APP_MOCK_API}
