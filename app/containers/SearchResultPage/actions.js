@@ -7,9 +7,12 @@ import {
   CHANGE_START,
   CHANGE_CATEGORY,
   CHANGE_CITY,
+  CHANGE_DISTRICT,
   CHANGE_SEARCH,
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_SUCCESS,
+  LOAD_LOCATION,
+  LOAD_LOCATION_SUCCESS,
   LOAD_TALENT_PRICE_RANGE_SUCCESS,
 } from './constants';
 
@@ -51,6 +54,13 @@ export function changeCity(city) {
     city,
   };
 }
+export function changeDistrict(district) {
+  return {
+    type: CHANGE_DISTRICT,
+    district,
+  };
+}
+
 export function changeStart(start) {
   return {
     type: CHANGE_START,
@@ -72,6 +82,17 @@ export function changeSearch(search) {
 export function loadCategories() {
   return {
     type: LOAD_CATEGORIES,
+  };
+}
+export function loadLocation() {
+  return {
+    type: LOAD_LOCATION,
+  };
+}
+export function loadLocationSuccess(data) {
+  return {
+    type: LOAD_LOCATION_SUCCESS,
+    data,
   };
 }
 export function loadCategoriesSuccess(data) {

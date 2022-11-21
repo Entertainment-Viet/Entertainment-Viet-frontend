@@ -10,7 +10,7 @@
     "haveAccount": "Don’t have an account?",
     "incomeRange": "Khoảng thu nhập (1 session)",
     "locationDistrict": "Quận",
-    "locationProvince": "Tỉnh/Thành phố"
+    "locationCity": "Tỉnh/Thành phố"
   },
   "registerPage": {
     "welcome": "Create an Account blah blah here.",
