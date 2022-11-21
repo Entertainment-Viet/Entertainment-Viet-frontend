@@ -10,6 +10,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
+import SearchLocation from 'components/SearchLocation';
+import { dataProvince, dataDistrictHCM } from 'utils/data-address';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
@@ -49,7 +51,7 @@ export function EventSearchResultPage({
   data,
   handlePageChange,
   handleCategoryChange,
-  handleCityChange,
+  // handleCityChange,
   handleSearchChange,
   handleStartChange,
   handleEndChange,
@@ -93,9 +95,13 @@ export function EventSearchResultPage({
           handleChange={handleCategoryChange}
           listOption={categories}
         />
-        <SelectSearchCustom
-          placeholderName={t(messages.location())}
-          handleChange={handleCityChange}
+        <SearchLocation
+          placeholder={t(messages.locationDistrict())}
+          optionList={dataDistrictHCM}
+        />
+        <SearchLocation
+          placeholder={t(messages.locationProvince())}
+          optionList={dataProvince}
         />
         <SliderRange titleRange={t(messages.incomeRange())} />
         <Text>Start time</Text>
