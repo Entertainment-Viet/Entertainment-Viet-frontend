@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+
 import styled from 'styled-components';
 import { Box, chakra, Select } from '@chakra-ui/react';
 import { TEXT_PURPLE } from 'constants/styles';
@@ -19,12 +20,12 @@ const FieldWrapper = chakra(Box, {
     color: 'white',
   },
 });
-function SearchLocation({ placeholder, optionList }) {
+function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
   return (
     <FieldWrapper>
       <CustomSelect
         isSearchable
-        // onChange={val => handleCityChange(val.target.value)}
+        onChange={val => handleChangeLocation(val.target.value)}
       >
         <CustomOption selected hidden disabled value="">
           {placeholder}
@@ -42,6 +43,8 @@ function SearchLocation({ placeholder, optionList }) {
 }
 SearchLocation.propTypes = {
   placeholder: PropTypes.string,
-  optionList: PropTypes.array,
+  optionList: PropTypes.any,
+  handleChangeLocation: PropTypes.func,
 };
-export default SearchLocation;
+
+export default memo(SearchLocation);
