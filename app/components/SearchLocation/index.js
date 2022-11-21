@@ -19,7 +19,7 @@ const FieldWrapper = chakra(Box, {
     color: 'white',
   },
 });
-function SearchLocation({ placeholder, dataList }) {
+function SearchLocation({ placeholder, optionList }) {
   return (
     <FieldWrapper>
       <CustomSelect
@@ -29,8 +29,8 @@ function SearchLocation({ placeholder, dataList }) {
         <CustomOption selected hidden disabled value="">
           {placeholder}
         </CustomOption>
-        {dataList &&
-          dataList.map((item, index) => (
+        {optionList &&
+          optionList.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <CustomOption key={index} value={item.name}>
               {item.name}
@@ -42,6 +42,6 @@ function SearchLocation({ placeholder, dataList }) {
 }
 SearchLocation.propTypes = {
   placeholder: PropTypes.string,
-  dataList: PropTypes.array,
+  optionList: PropTypes.array,
 };
 export default SearchLocation;

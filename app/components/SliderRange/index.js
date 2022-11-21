@@ -29,8 +29,8 @@ function SliderRange({ titleRange, handlePriceChange }) {
         borderRadius="5px"
         color="white"
         bg={TEXT_PURPLE}
-        py={2}
-        px={4}
+        p={2}
+        w="fit-content"
       >
         Price
         <ChevronDownIcon />
