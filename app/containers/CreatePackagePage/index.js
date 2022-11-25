@@ -42,7 +42,8 @@ import {
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
-import { dataDistrictHCM } from '../../utils/data-address';
+// import { dataDistrictHCM } from '../../utils/data-address';
+import CitySelector from '../CitySelector';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -101,9 +102,8 @@ export function CreatePackagePage({ getCategories, categories }) {
         },
         note: describeNFTRef.current.getContent(),
         location: {
-          street: getValues('street'),
-          district: getValues('district'),
-          city: getValues('city'),
+          address: getValues('street'),
+          parentId: getValues('district'),
         },
         performanceStartTime: toIsoString(start),
         performanceEndTime: toIsoString(end),
@@ -237,7 +237,7 @@ export function CreatePackagePage({ getCategories, categories }) {
                   // defaultValue={talentInfo.address.street}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
                     <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
@@ -269,7 +269,8 @@ export function CreatePackagePage({ getCategories, categories }) {
                     </Text>
                   </Box>
                 </SimpleGrid>
-              </FormControl>
+              </FormControl> */}
+              <CitySelector register={register} errors={errors} />
               <Box>
                 <CustomFormLabel htmlFor="subcategory">
                   {t(messages.workType())}

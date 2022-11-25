@@ -113,6 +113,7 @@ const PackagesBox = ({ data, id, toggleModal }) => {
                         </Text>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                           {handleAddress(item.jobDetail.location)}
+                          {console.log('location: ', item.jobDetail.location)}
                         </Text>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                           {new Date(
