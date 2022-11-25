@@ -378,6 +378,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     type="text"
                     size="md"
                     placeholder="Enter your street"
+                    defaultValue={organizerInfo.address ? organizerInfo.address.name : null}
                     {...register('street', {
                       required: 'This is required',
                       minLength: {
@@ -385,7 +386,6 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={organizerInfo.address && organizerInfo.address.street ? organizerInfo.address.street : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
@@ -453,7 +453,12 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     </Box>
                   </SimpleGrid>
                 </FormControl> */}
-                <CitySelector register={register} errors={errors} />
+                <CitySelector 
+                  register={register} 
+                  errors={errors} 
+                  defaultDistrict={organizerInfo.address ? organizerInfo.address.parent.uid: null} 
+                  defaultCity={organizerInfo.address ? organizerInfo.address.parent.parent.uid : null} 
+                />
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
                     {t(messages.introduce())}

@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -46,10 +46,20 @@ export function CitySelector({
 
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-
+  const [city, setCity] = useState();
+  const [district, setDistrict] = useState();
+  function handleChangeCity(val) {
+    setCity(val);
+    getDistricts(val);
+  }
+  function handleChangeDistrict(val) {
+    setDistrict(val);
+  }
   useEffect(() => {
     getCities();
     if (defaultCity || defaultDistrict) {
+      setCity(defaultCity);
+      setDistrict(defaultDistrict);
       getDistricts(defaultCity);
     }
   }, []);
@@ -59,36 +69,46 @@ export function CitySelector({
       <SimpleGrid columns={2} spacing={2}>
         <Box>
           <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
-          <SelectCustom
-            id="city"
-            size="md"
-            placeholder="Select city"
-            {...register('city')}
-            onChange={e => getDistricts(e.target.value)}
-            defaultValue={defaultCity && null}
-          >
-            {citiData.map(option => (
-              <option value={option.uid}>{option.name}</option>
-            ))}
-          </SelectCustom>
+          {citiData ? (
+            <SelectCustom
+              id="city"
+              size="md"
+              placeholder="Select city"
+              {...register('city')}
+              onChange={e => handleChangeCity(e.target.value)}
+              value={city}
+            >
+              {citiData.map(option => (
+                <option value={option.uid.toString()} key={option.uid}>
+                  {option.name}
+                </option>
+              ))}
+            </SelectCustom>
+          ) : null}
+
           <Text color={RED_COLOR}>
             {errors.province && errors.province.message}
           </Text>
         </Box>
         <Box>
           <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
-          <SelectCustom
-            id="district"
-            size="md"
-            placeholder="Select district"
-            {...register('district')}
-            defaultValue={defaultDistrict && null}
-          >
-            {districtData.map(option => (
-              // eslint-disable-next-line react/no-array-index-key
-              <option value={option.uid}>{option.name}</option>
-            ))}
-          </SelectCustom>
+          {districtData ? (
+            <SelectCustom
+              id="district"
+              size="md"
+              placeholder="Select district"
+              {...register('district')}
+              onChange={e => handleChangeDistrict(e.target.value)}
+              value={district}
+            >
+              {districtData.map(option => (
+                <option value={option.uid} key={option.uid}>
+                  {option.name}
+                </option>
+              ))}
+            </SelectCustom>
+          ) : null}
+
           <Text color={RED_COLOR}>
             {errors.district && errors.district.message}
           </Text>

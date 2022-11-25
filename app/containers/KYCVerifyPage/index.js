@@ -417,7 +417,12 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                       </Text>
                     </Box>
                   </SimpleGrid> */}
-                  <CitySelector register={register} errors={errors} />
+                  <CitySelector 
+                    register={register} 
+                    errors={errors} 
+                    defaultDistrict={talentInfo.address ? talentInfo.address.parent.uid: null} 
+                    defaultCity={talentInfo.address ? talentInfo.address.parent.parent.uid : null} 
+                  />
                 {/* </FormControl> */}
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
