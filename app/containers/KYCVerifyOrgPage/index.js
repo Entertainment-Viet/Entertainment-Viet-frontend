@@ -55,6 +55,7 @@ import { loadOrgInfo } from './actions';
 import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
 import { API_ORGANIZER_KYC } from '../../constants/api';
+import CitySelector from '../CitySelector';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -83,6 +84,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -131,9 +133,13 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       phoneNumber: values.phoneNumber,
       companyName: values.companyName,
       displayName: values.displayName,
-      street: values.street,
-      district: values.district,
-      province: values.province,
+      // street: values.street,
+      // district: values.district,
+      // province: values.province,
+      address: {
+        address: values.street,
+        parentUid: getValues('district')
+      },
       introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
@@ -148,16 +154,16 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       setFullData(false);
     } else {
       setFullData(true);
-      const preDataStreet = {
-        street: data.street,
-        district: data.district,
-        city: 'Thành phố Hồ Chí Minh',
-      };
+      // const preDataStreet = {
+      //   street: data.street,
+      //   district: data.district,
+      //   city: 'Thành phố Hồ Chí Minh',
+      // };
 
       const dataSubmit = {
         accountType: data.type,
         phoneNumber: data.phoneNumber,
-        address: preDataStreet,
+        address: data.address,
         taxId: '1123123123123',
         bankAccountNumber: data.accountNumber,
         bankAccountOwner: data.accountNameOwner,
@@ -385,7 +391,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                 <Text color={RED_COLOR}>
                   {errors.street && errors.street.message}
                 </Text>
-                <FormControl>
+                {/* <FormControl>
                   <SimpleGrid columns={2} spacing={2}>
                     <Box>
                       <CustomFormLabel>
@@ -446,7 +452,8 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                       </Text>
                     </Box>
                   </SimpleGrid>
-                </FormControl>
+                </FormControl> */}
+                <CitySelector register={register} errors={errors} />
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
                     {t(messages.introduce())}

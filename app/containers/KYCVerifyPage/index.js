@@ -57,6 +57,7 @@ import { makeSelectTalent } from './selectors';
 import { loadTalentInfo } from './actions';
 import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
+import CitySelector from '../CitySelector';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -87,6 +88,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -134,9 +136,13 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       fullName: values.fullName,
       displayName: values.displayName,
       phoneNumber: values.phoneNumber,
-      street: values.street,
-      district: values.district,
-      province: values.province,
+      // street: values.street,
+      // district: values.district,
+      // province: values.province,
+      address: {
+        address: values.street,
+        parentUid: getValues('district')
+      },
       introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
@@ -161,7 +167,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       const dataSubmit = {
         accountType: data.type,
         phoneNumber: data.phoneNumber,
-        address: preDataStreet,
+        address: data.address,
         taxId: '1123123123123',
         bankAccountNumber: data.accountNumber,
         bankAccountOwner: data.accountNameOwner,
@@ -172,6 +178,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         // avatar: data.avatar,
         // cccd1: data.cccd1,
         // cccd2: data.cccd2,
+        address: {
+          address: getValues('street'),
+          parentUid: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        },
         songs: data.dynamicDataYourSong,
         rewards: data.dynamicDataYourReward,
         citizenId: '0AB3425SD5FD',
@@ -346,8 +356,8 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 <Text color={RED_COLOR}>
                   {errors.street && errors.street.message}
                 </Text>
-                <FormControl>
-                  <SimpleGrid columns={2} spacing={2}>
+                {/* <FormControl> */}
+                  {/* <SimpleGrid columns={2} spacing={2}>
                     <Box>
                       <CustomFormLabel>
                         {t(messages.district())}
@@ -406,8 +416,9 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         {errors.province && errors.province.message}
                       </Text>
                     </Box>
-                  </SimpleGrid>
-                </FormControl>
+                  </SimpleGrid> */}
+                  <CitySelector register={register} errors={errors} />
+                {/* </FormControl> */}
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
                     {t(messages.introduce())}

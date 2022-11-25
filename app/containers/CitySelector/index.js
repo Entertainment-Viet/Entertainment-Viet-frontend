@@ -39,6 +39,8 @@ export function CitySelector({
   districtData,
   getCities,
   getDistricts,
+  defaultCity,
+  defaultDistrict,
 }) {
   const { t } = useTranslation();
 
@@ -47,6 +49,9 @@ export function CitySelector({
 
   useEffect(() => {
     getCities();
+    if (defaultCity || defaultDistrict) {
+      getDistricts(defaultCity);
+    }
   }, []);
 
   return (
@@ -60,6 +65,7 @@ export function CitySelector({
             placeholder="Select city"
             {...register('city')}
             onChange={e => getDistricts(e.target.value)}
+            defaultValue={defaultCity && null}
           >
             {citiData.map(option => (
               <option value={option.uid}>{option.name}</option>
@@ -76,6 +82,7 @@ export function CitySelector({
             size="md"
             placeholder="Select district"
             {...register('district')}
+            defaultValue={defaultDistrict && null}
           >
             {districtData.map(option => (
               // eslint-disable-next-line react/no-array-index-key
@@ -99,6 +106,8 @@ CitySelector.propTypes = {
   districtData: PropTypes.any,
   getCities: PropTypes.func,
   getDistricts: PropTypes.func,
+  defaultCity: PropTypes.string,
+  defaultDistrict: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
