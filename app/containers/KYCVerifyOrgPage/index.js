@@ -138,7 +138,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       // province: values.province,
       address: {
         address: values.street,
-        parentUid: getValues('district')
+        parentId: getValues('district') || organizerInfo.address.parent.uid
       },
       introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,

@@ -141,7 +141,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       // province: values.province,
       address: {
         address: values.street,
-        parentUid: getValues('district')
+        parentId: getValues('district') || talentInfo.address.parent.uid
       },
       introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
@@ -158,12 +158,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       setFullData(false);
     } else {
       setFullData(true);
-      const preDataStreet = {
-        street: data.street,
-        district: data.district,
-        city: data.province,
-      };
-
       const dataSubmit = {
         accountType: data.type,
         phoneNumber: data.phoneNumber,
@@ -179,8 +173,8 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         // cccd1: data.cccd1,
         // cccd2: data.cccd2,
         address: {
-          address: getValues('street'),
-          parentUid: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          address: values.street,
+          parentId: getValues('district')
         },
         songs: data.dynamicDataYourSong,
         rewards: data.dynamicDataYourReward,
@@ -350,80 +344,18 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         message: 'Minimum length should be 4',
                       },
                     })}
-                    defaultValue={talentInfo.address && talentInfo.address.street ? talentInfo.address.street : null}
+                    defaultValue={talentInfo.address && talentInfo.address.name ? talentInfo.address.name : null}
                   />
                 </FormControl>
                 <Text color={RED_COLOR}>
                   {errors.street && errors.street.message}
                 </Text>
-                {/* <FormControl> */}
-                  {/* <SimpleGrid columns={2} spacing={2}>
-                    <Box>
-                      <CustomFormLabel>
-                        {t(messages.district())}
-                      </CustomFormLabel>
-                      <SelectCustom
-                        id="district"
-                        size="md"
-                        {...register('district')}
-                        defaultValue={
-                          talentInfo.address && talentInfo.address.strict ? (
-                          dataDistrictHCM.filter(
-                            item => item.name === talentInfo.address.district,
-                          )[0].name) : null
-                        }
-                      >
-                        {dataDistrictHCM.map((option, index) => (
-                          // eslint-disable-next-line react/no-array-index-key
-                          <option key={index} value={option.name}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </SelectCustom>
-                      <Text color={RED_COLOR}>
-                        {errors.district && errors.district.message}
-                      </Text>
-                    </Box>
-                    <Box>
-                      <CustomFormLabel>
-                        {t(messages.province())}
-                      </CustomFormLabel>
-                      <SelectCustom
-                        id="province"
-                        size="md"
-                        {...register('province')}
-                        value={
-                          talentInfo.address && talentInfo.address.city ? (
-                          dataProvince.filter(
-                            item => item.name === talentInfo.address.city,
-                          )[0].name) : null
-                        }
-                        defaultValue={
-                          talentInfo.address && talentInfo.address.city  ? (
-                          dataProvince.filter(
-                            item => item.name === talentInfo.address.city,
-                          )[0].name) : null
-                        }
-                      >
-                        {dataProvince.map((option, index) => (
-                          // eslint-disable-next-line react/no-array-index-key
-                          <option key={index} value={option.name}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </SelectCustom>
-                      <Text color={RED_COLOR}>
-                        {errors.province && errors.province.message}
-                      </Text>
-                    </Box>
-                  </SimpleGrid> */}
-                  <CitySelector 
+                <CitySelector 
                     register={register} 
                     errors={errors} 
-                    defaultDistrict={talentInfo.address ? talentInfo.address.parent.uid: null} 
+                    defaultDistrict={talentInfo.address ? talentInfo.address.parent.uid : null} 
                     defaultCity={talentInfo.address ? talentInfo.address.parent.parent.uid : null} 
                   />
-                {/* </FormControl> */}
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
                     {t(messages.introduce())}
