@@ -14,6 +14,7 @@ import {
   LOAD_DATA_SUCCESS,
   // CHANGE_PROVINCE,
   LOAD_LOCATION_SUCCESS,
+  CHANGE_DISTRICT,
 } from './constants';
 
 export const initialState = {
@@ -25,7 +26,7 @@ export const initialState = {
   search: '',
   category: '',
   city: '',
-  province: '',
+  district: '',
   locationData: false,
   priceRange: [],
   start: '',
@@ -61,9 +62,9 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_CITY:
         draft.city = action.city;
         break;
-      // case CHANGE_PROVINCE:
-      //   draft.province = action.province;
-      // break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
+        break;
       case CHANGE_SEARCH:
         draft.search = action.search;
         break;

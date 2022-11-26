@@ -11,9 +11,9 @@ import {
   LOAD_DATA,
   CHANGE_PRICE_RANGE,
   CHANGE_CATEGORY,
-  // CHANGE_CITY,
-  // CHANGE_DISTRICT,
   LOAD_LOCATION,
+  CHANGE_CITY,
+  CHANGE_DISTRICT,
 } from './constants';
 import {
   loadDataSuccess,
@@ -31,7 +31,7 @@ import {
   makeSelectSearch,
   makeSelectStart,
   makeSelectCity,
-  // makeSelectProvince,
+  makeSelectDistrict,
 } from './selectors';
 
 export function* getData() {
@@ -96,17 +96,19 @@ export function* getLocation() {
     yield put(loadDataError(err));
   }
 }
-// export function* getLocationChange() {
-//   try {
-//     const locationType = yield select(makeSelectLocationType());
-//     const locationName = yield select(makeSelectProvince());
-//     const payload = yield call(get, API_TALENT_LIST, { locationType, locationName });
-//     console.log('city, province', city, );
-//     yield put(loadDataSuccess(payload.content, payload.paging));
-//   } catch (err) {
-//     yield put(loadDataError(err));
-//   }
-// }
+export function* getLocationChange() {
+  try {
+    const cityName = yield select(makeSelectCity());
+    const districtName = yield select(makeSelectDistrict());
+    const payload = yield call(get, API_TALENT_LIST, {
+      locationParentName: cityName,
+      name: districtName,
+    });
+    yield put(loadDataSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_DATA, getData);
@@ -114,6 +116,6 @@ export default function* watchLatestAction() {
   yield takeEvery(CHANGE_CATEGORY, getCategoriesByChanging);
   yield takeEvery(CHANGE_PRICE_RANGE, getPriceRange);
   yield takeEvery(LOAD_LOCATION, getLocation);
-  // yield takeEvery(CHANGE_CITY, getLocationChange);
-  // yield takeEvery(CHANGE_DISTRICT, getLocationChange);
+  yield takeEvery(CHANGE_CITY, getLocationChange);
+  yield takeEvery(CHANGE_DISTRICT, getLocationChange);
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -9,25 +9,26 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
-import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
+import CategoriesFilter from 'components/CategoriesFilter';
 import SearchLocation from 'components/SearchLocation';
-import { dataProvince, dataDistrictHCM } from 'utils/data-address';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-import { toIsoString } from 'utils/helpers';
+import { toIsoString, classifyCategories } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
 import { messages } from './messages';
 import {
   loadDataEvent,
   changePage,
   changeCity,
+  changeDistrict,
   changeStart,
   changeEnd,
   changeCategory,
   changeSearchEvent,
   loadCategories,
+  loadLocation,
   changeOrganizer,
 } from './actions';
 import saga from './saga';
@@ -41,6 +42,7 @@ import {
   makeSelectSearch,
   makeSelectCategory,
   makeSelectCity,
+  makeSelectLocationData,
   makeSelectStart,
   makeSelectEnd,
   makeSelectCategories,
@@ -51,7 +53,10 @@ export function EventSearchResultPage({
   data,
   handlePageChange,
   handleCategoryChange,
-  // handleCityChange,
+  handleCityChange,
+  handleDistrictChange,
+  locationData,
+  city,
   handleSearchChange,
   handleStartChange,
   handleEndChange,
@@ -59,21 +64,27 @@ export function EventSearchResultPage({
   search,
   categories,
   onLoadCategory,
+  onLoadLocation,
 }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
-
+  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const searchParams = urlParams.get('search');
   const category = urlParams.get('category');
   useEffect(() => {
     onLoadCategory();
+    onLoadLocation();
     if (category) handleCategoryChange(category);
     else if (searchParams) handleSearchChange(searchParams);
     else onLoadData();
   }, []);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(categories);
+    setCategoriesFiltered(categoriesClassified);
+  }, [categories]);
   // remember to +1 vào pageNumber
   const pageProps = {
     // total: paging.totalElement, // totalElement
@@ -81,6 +92,17 @@ export function EventSearchResultPage({
     limit: paging.pageSize, // pageSize
     last: paging.last,
   };
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item =>
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
+    );
 
   return (
     <div style={{ width: '100%' }}>
@@ -90,19 +112,22 @@ export function EventSearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <SelectSearchCustom
-          placeholderName="Categories"
-          handleChange={handleCategoryChange}
-          listOption={categories}
+        <CategoriesFilter
+          placeholder="Categories"
+          listOptions={categoriesFiltered}
         />
         <SearchLocation
-          placeholder={t(messages.locationDistrict())}
-          optionList={dataDistrictHCM}
+          placeholder={t(messages.locationCity())}
+          optionList={cityNameList}
+          handleChangeLocation={handleCityChange}
         />
-        <SearchLocation
-          placeholder={t(messages.locationProvince())}
-          optionList={dataProvince}
-        />
+        {city && (
+          <SearchLocation
+            placeholder={t(messages.locationDistrict())}
+            handleChangeLocation={handleDistrictChange}
+            optionList={districtData}
+          />
+        )}
         <SliderRange titleRange={t(messages.incomeRange())} />
         <Text>Start time</Text>
         <Box>
@@ -149,6 +174,7 @@ EventSearchResultPage.propTypes = {
   handlePageChange: PropTypes.func,
   handleCategoryChange: PropTypes.func,
   handleCityChange: PropTypes.func,
+  handleDistrictChange: PropTypes.func,
   handleOrganizerChange: PropTypes.func,
   handleSearchChange: PropTypes.func,
   handleStartChange: PropTypes.func,
@@ -162,9 +188,11 @@ EventSearchResultPage.propTypes = {
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  onLoadLocation: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -176,6 +204,7 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   category: makeSelectCategory(),
   city: makeSelectCity(),
+  locationData: makeSelectLocationData(),
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
@@ -193,7 +222,9 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
-      dispatch(loadDataEvent());
+    },
+    handleDistrictChange: district => {
+      dispatch(changeDistrict(district));
     },
     handleOrganizerChange: organizer => {
       dispatch(changeOrganizer(organizer));
@@ -209,13 +240,15 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCategoryChange: category => {
       dispatch(changeCategory(category));
-      dispatch(loadDataEvent());
     },
     onLoadData: category => {
       dispatch(loadDataEvent(category));
     },
     onLoadCategory: () => {
       dispatch(loadCategories());
+    },
+    onLoadLocation: () => {
+      dispatch(loadLocation());
     },
   };
 }

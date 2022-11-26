@@ -24,5 +24,5 @@ export const messages = {
   resendError: () => t(translations.loginPage.resendError),
   incomeRange: () => t(translations.loginPage.incomeRange),
   locationDistrict: () => t(translations.loginPage.locationDistrict),
-  locationProvince: () => t(translations.loginPage.locationProvince),
+  locationCity: () => t(translations.loginPage.locationCity),
 };

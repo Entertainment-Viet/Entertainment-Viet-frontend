@@ -54,7 +54,6 @@ import {
   makeSelectSearch,
   makeSelectCategory,
   makeSelectCity,
-  makeSelectProvince,
   makeSelectLocationData,
   makeSelectStart,
   makeSelectEnd,
@@ -72,6 +71,7 @@ export function SearchResultPage({
   handleStartChange,
   handleEndChange,
   handleCityChange,
+  city,
   handleDistrictChange,
   onLoadData,
   onLoadCategory,
@@ -109,17 +109,16 @@ export function SearchResultPage({
     last: paging.last,
   };
 
-  const cityData =
-    locationData &&
-    locationData.filter(
-      item =>
-        item.locationType.type === 'city' && item.locationType.level === 1,
-    );
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
   const districtData =
     locationData &&
+    city &&
     locationData.filter(
       item =>
-        item.locationType.type === 'district' && item.locationType.level === 2,
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
     );
   return (
     <div style={{ width: '100%' }}>
@@ -135,15 +134,17 @@ export function SearchResultPage({
             listOptions={categoriesFiltered}
           />
           <SearchLocation
-            placeholder={t(messages.locationDistrict())}
-            handleChangeLocation={handleDistrictChange}
-            optionList={districtData}
-          />
-          <SearchLocation
             placeholder={t(messages.locationCity())}
-            optionList={cityData}
+            optionList={cityNameList}
             handleChangeLocation={handleCityChange}
           />
+          {city && (
+            <SearchLocation
+              placeholder={t(messages.locationDistrict())}
+              handleChangeLocation={handleDistrictChange}
+              optionList={districtData}
+            />
+          )}
           <SliderRange titleRange={t(messages.incomeRange())} />
         </HStack>
         <HStack w="50%">
@@ -232,9 +233,8 @@ SearchResultPage.propTypes = {
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  province: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   onLoadLocation: PropTypes.func,
@@ -249,11 +249,10 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   category: makeSelectCategory(),
   city: makeSelectCity(),
-  province: makeSelectProvince(),
+  locationData: makeSelectLocationData(),
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
-  locationData: makeSelectLocationData(),
 });
 
 export function mapDispatchToProps(dispatch) {

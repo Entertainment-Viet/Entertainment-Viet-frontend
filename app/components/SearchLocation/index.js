@@ -34,7 +34,7 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
           optionList.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <CustomOption key={index} value={item.name}>
-              {item.name}
+              {item.name ? item.name : item}
             </CustomOption>
           ))}
       </CustomSelect>

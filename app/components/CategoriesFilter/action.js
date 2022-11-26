@@ -1,7 +1,10 @@
-import { CHANGE_CATEGORY } from './constant';
+import { ENUM_ROLES } from 'constants/enums';
+import { CHANGE_CATEGORY, CHANGE_CATEGORY_EVENT } from './constant';
 export function changeCategory(category) {
+  const role = localStorage.getItem('role');
+
   return {
-    type: CHANGE_CATEGORY,
+    type: role === ENUM_ROLES.ORG ? CHANGE_CATEGORY : CHANGE_CATEGORY_EVENT,
     category,
   };
 }
