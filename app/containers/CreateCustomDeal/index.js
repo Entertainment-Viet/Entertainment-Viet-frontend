@@ -20,6 +20,7 @@ import {
   Text,
   Stack,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +37,7 @@ import reducer from './reducer';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
+import NotificationProvider from '../../components/NotificationProvider';
 import { dataDistrictHCM } from '../../utils/data-address';
 
 import {
@@ -58,7 +60,14 @@ const key = 'CreateCustomDeal';
 export function CreateCustomDealPage({ match, getCategories, categories }) {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
-
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const { t } = useTranslation();
   const {
     handleSubmit,
@@ -120,9 +129,12 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
     };
     post(API_CREATE_BOOKING, val, orgId).then(res1 => {
       if (res1 > 300) {
-        // console.log('error');
+        notify(
+          'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
+        );
+        return;
       }
-      // redirectTo('/');
+      notify('Thành công');
     });
   }
 

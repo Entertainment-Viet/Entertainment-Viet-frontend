@@ -12,6 +12,7 @@ import {
   Text,
   Stack,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,12 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import {
-  toIsoString,
-  getResStatus,
-  cacthResponse,
-  getSubCategory,
-} from 'utils/helpers';
+import { toIsoString, getSubCategory } from 'utils/helpers';
 import { API_EVENT_POSITIONS } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -40,6 +36,8 @@ import {
   TEXT_GREEN,
 } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
+import NotificationProvider from '../../components/NotificationProvider';
+
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
 
@@ -66,7 +64,14 @@ export function CreatePositionPage({ getCategories, categories, match }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [subCategory, setSubCategory] = useState(null);
-
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   useEffect(() => {
     getCategories();
   }, []);
@@ -113,14 +118,11 @@ export function CreatePositionPage({ getCategories, categories, match }) {
       quantity: getValues('quantity'),
     };
     post(API_EVENT_POSITIONS, val, myId, eventId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        // console.log('ok')
-      } else if (status1 === '400') {
-        // console.log('error')
-      } else {
-        cacthResponse(res1);
+      if (res1 > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
       }
+      notify('Tạo thành công');
     });
   };
 

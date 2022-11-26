@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, { useEffect, useState } from 'react';
-import { Box, Text, chakra, VStack } from '@chakra-ui/react';
+import { Box, Text, chakra, VStack, useToast } from '@chakra-ui/react';
 import {
   SUB_BLU_COLOR,
   TEXT_GREEN,
@@ -10,6 +10,7 @@ import {
 import Buttons from 'components/Buttons';
 import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
+
 import { post, del } from 'utils/request';
 import { numberWithCommas, getResStatus, cacthResponse } from 'utils/helpers';
 import {
@@ -19,6 +20,7 @@ import {
 
 import FeedbackOfferModal from 'components/Modal/FeedbackOfferModal';
 import { useTranslation } from 'react-i18next';
+import NotificationProvider from '../../components/NotificationProvider';
 import AcceptOfferModal from '../../components/Modal/AcceptOfferModal';
 import ConfirmFinishModal from '../../components/Modal/ConfirmFinishModal';
 import { globalMessages } from '../App/globalMessage';
@@ -60,6 +62,14 @@ const GradientBox = chakra(Box, {
 // If you want to use your own Selectors look up the Advancaed Story book examples
 
 const BookingGeneralCard = ({ data }) => {
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const { t } = useTranslation();
   const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
@@ -92,25 +102,19 @@ const BookingGeneralCard = ({ data }) => {
   function handleAccept() {
     if (role === 'talent')
       post(API_GET_BOOKING_TALENT_INFO, {}, id, data.uid).then(res1 => {
-        const status1 = getResStatus(res1);
-        if (status1 === '201') {
-          console.log('sent');
-        } else if (status1 === '400') {
-          console.log('fail');
-        } else {
-          cacthResponse(res1);
+        if (res1 > 300) {
+          notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Thành công');
       });
     else if (role === 'organizer')
       post(API_GET_BOOKING_ORG_INFO, {}, id, data.uid).then(res1 => {
-        const status1 = getResStatus(res1);
-        if (status1 === '201') {
-          console.log('sent');
-        } else if (status1 === '400') {
-          console.log('fail');
-        } else {
-          cacthResponse(res1);
+        if (res1 > 300) {
+          notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Thành công');
       });
     // window.location.reload();
   }

@@ -9,11 +9,11 @@ import {
   FormErrorMessage,
   FormLabel,
   chakra,
+  useToast,
 } from '@chakra-ui/react';
 import { TEXT_GREEN, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
 import Button from 'components/Buttons';
-import { getResStatus, cacthError, cacthResponse } from 'utils/helpers';
 import { useForm } from 'react-hook-form';
 import { post } from 'utils/request';
 import {
@@ -22,6 +22,7 @@ import {
 } from 'constants/api';
 import TextAreaCustom from 'components/Controls/TextAreaCustom';
 import BasicRating from '../Rating/BasicRating';
+import NotificationProvider from '../NotificationProvider';
 import { messages } from './messages';
 
 const CustomFormLabel = chakra(FormLabel, {
@@ -37,6 +38,14 @@ const ConfirmFinishModal = props => {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm();
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const [rating, setRating] = useState(0);
   const { t } = useTranslation();
   const role = window.localStorage.getItem('role');
@@ -49,20 +58,17 @@ const ConfirmFinishModal = props => {
         comment: getValues('comment'),
         score: rating,
       };
-      post(API_TALENT_FINISH_BOOKING, val, data.talentId, data.uid)
-        .then(res => {
-          const status = getResStatus(res);
-          if (status === 200) {
-            console.log(res.data);
-          } else if (status === 400) {
-            console.log('error while logging out 400');
-          } else if (status === 500) {
-            console.log('error while logging out 500');
-          } else {
-            cacthResponse(res);
+      post(API_TALENT_FINISH_BOOKING, val, data.talentId, data.uid).then(
+        res => {
+          if (res > 300) {
+            notify(
+              'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
+            );
+            return;
           }
-        })
-        .catch(err => cacthError(err));
+          notify('Thành công');
+        },
+      );
     } else if (role === 'organizer') {
       const val = {
         organizerId: data.organizerId,
@@ -70,20 +76,17 @@ const ConfirmFinishModal = props => {
         comment: getValues('comment'),
         score: rating,
       };
-      post(API_ORG_FINISH_BOOKING, val, data.organizerId, data.uid)
-        .then(res => {
-          const status = getResStatus(res);
-          if (status === 200) {
-            console.log(res.data);
-          } else if (status === 400) {
-            console.log('error while logging out 400');
-          } else if (status === 500) {
-            console.log('error while logging out 500');
-          } else {
-            cacthResponse(res);
+      post(API_ORG_FINISH_BOOKING, val, data.organizerId, data.uid).then(
+        res => {
+          if (res > 300) {
+            notify(
+              'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
+            );
+            return;
           }
-        })
-        .catch(err => cacthError(err));
+          notify('Thành công');
+        },
+      );
     }
   }
 

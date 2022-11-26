@@ -8,9 +8,9 @@ const NotificationProvider = ({ title }) => (
   <Box
     color={TEXT_GREEN}
     fontWeight="600"
-    fontSize="30px"
-    px={20}
-    py={8}
+    fontSize="20px"
+    px={12}
+    py={6}
     sx={{
       textAlign: 'center',
     }}

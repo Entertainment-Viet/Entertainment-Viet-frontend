@@ -13,19 +13,17 @@ import {
   FormLabel,
   Input,
   chakra,
+  useToast,
 } from '@chakra-ui/react';
+
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
 import Button from 'components/Buttons';
-import {
-  getResStatus,
-  cacthError,
-  cacthResponse,
-  numberWithCommas,
-} from 'utils/helpers';
+import { numberWithCommas } from 'utils/helpers';
 import parserHtml from 'utils/html';
 import { post } from 'utils/request';
 import { useForm } from 'react-hook-form';
+import NotificationProvider from '../NotificationProvider';
 // import { GoogleMap, Phone } from '../Icon';
 import { messages } from './messages';
 
@@ -43,6 +41,14 @@ const PackageModal = props => {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   let jobDetail;
   if (props.data.jobDetail) {
     // eslint-disable-next-line prefer-destructuring
@@ -61,20 +67,13 @@ const PackageModal = props => {
         props.id
       }/bookings/shoppingcart`,
       val,
-    )
-      .then(res => {
-        const status = getResStatus(res);
-        if (status === 200) {
-          // console.log(res.data);
-        } else if (status === 400) {
-          // console.log('error while logging out 400');
-        } else if (status === 500) {
-          // console.log('error while logging out 500');
-        } else {
-          cacthResponse(res);
-        }
-      })
-      .catch(err => cacthError(err));
+    ).then(res => {
+      if (res > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
+      }
+      notify('Thành công');
+    });
   }
   // function handleAddToCart() {
   //   post(

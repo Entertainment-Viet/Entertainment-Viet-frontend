@@ -78,45 +78,47 @@ function LoginPageV2() {
       data: qs.stringify(data),
       url: `${process.env.REACT_KEYCLOAK_API}${API_LOGIN}`,
     };
-    // eslint-disable-next-line no-console
-    console.log('data', data);
-    const result = await axios(options);
-    const { roles } = jwt(result.data.access_token).realm_access;
-    if (result.status === 200) {
-      notify('Đăng nhập thành công');
-      window.localStorage.setItem('exp', jwt(result.data.access_token).exp);
-      window.localStorage.setItem('uid', jwt(result.data.access_token).sub);
-      setSecureCookie(
-        'token',
-        result.data.access_token,
-        jwt(result.data.access_token).exp,
-      );
-      if (data.checkBoxRemember === true) {
-        // window.localStorage.setItem('refreshToken', result.data.refresh_token);
-        setSecureCookie('refreshToken', result.data.refresh_token, 30);
-      } else {
-        setSecureCookie('refreshToken', result.data.refresh_token, 0);
+    try {
+      const result = await axios(options);
+      const { roles } = jwt(result.data.access_token).realm_access;
+      if (result.status === 200) {
+        notify('Đăng nhập thành công');
+        window.localStorage.setItem('exp', jwt(result.data.access_token).exp);
+        window.localStorage.setItem('uid', jwt(result.data.access_token).sub);
+        setSecureCookie(
+          'token',
+          result.data.access_token,
+          jwt(result.data.access_token).exp,
+        );
+        if (data.checkBoxRemember === true) {
+          // window.localStorage.setItem('refreshToken', result.data.refresh_token);
+          setSecureCookie('refreshToken', result.data.refresh_token, 30);
+        } else {
+          setSecureCookie('refreshToken', result.data.refresh_token, 0);
+        }
+        const role = roles.every(element => {
+          if (talentRole === element) {
+            window.localStorage.setItem('role', ENUM_ROLES.TAL);
+            window.location.href = '/';
+            return false;
+          }
+          if (orgRole === element) {
+            window.localStorage.setItem('role', ENUM_ROLES.ORG);
+            window.location.href = '/';
+            return false;
+          }
+          if (adminRole.includes(element)) {
+            window.localStorage.setItem('role', ENUM_ROLES.ADMIN);
+            window.location.href = '/admin';
+            return false;
+          }
+          return true;
+        });
+        // eslint-disable-next-line no-console
+        console.log(role);
       }
-      const role = roles.every(element => {
-        if (talentRole === element) {
-          window.localStorage.setItem('role', ENUM_ROLES.TAL);
-          window.location.href = '/';
-          return false;
-        }
-        if (orgRole === element) {
-          window.localStorage.setItem('role', ENUM_ROLES.ORG);
-          window.location.href = '/';
-          return false;
-        }
-        if (adminRole.includes(element)) {
-          window.localStorage.setItem('role', ENUM_ROLES.ADMIN);
-          window.location.href = '/admin';
-          return false;
-        }
-        return true;
-      });
-      // eslint-disable-next-line no-console
-      console.log(role);
+    } catch (err) {
+      notify('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin');
     }
   };
 

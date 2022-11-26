@@ -12,6 +12,7 @@ import {
   Text,
   Stack,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,12 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import {
-  toIsoString,
-  getResStatus,
-  cacthResponse,
-  getSubCategory,
-} from 'utils/helpers';
+import { toIsoString, getSubCategory } from 'utils/helpers';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -44,6 +40,7 @@ import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
 // import { dataDistrictHCM } from '../../utils/data-address';
 import CitySelector from '../CitySelector';
+import NotificationProvider from '../../components/NotificationProvider';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -57,7 +54,14 @@ export function CreatePackagePage({ getCategories, categories }) {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
-
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const {
     handleSubmit,
     register,
@@ -112,14 +116,11 @@ export function CreatePackagePage({ getCategories, categories }) {
       },
     };
     post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        // console.log('ok')
-      } else if (status1 === '400') {
-        // console.log('error')
-      } else {
-        cacthResponse(res1);
+      if (res1 > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
       }
+      notify('Tạo thành công');
     });
   };
 

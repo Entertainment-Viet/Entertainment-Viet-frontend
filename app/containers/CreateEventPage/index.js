@@ -11,6 +11,7 @@ import {
   chakra,
   Text,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { getResStatus, cacthResponse } from 'utils/helpers';
 import { API_LIST_EVENTS } from 'constants/api';
 import { post } from 'utils/request';
 import Form from 'components/Form';
@@ -32,6 +32,8 @@ import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import { RED_COLOR } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import CitySelector from '../CitySelector/Loadable';
+import NotificationProvider from '../../components/NotificationProvider';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -44,7 +46,14 @@ export function CreateEventPage() {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
-
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const {
     handleSubmit,
     register,
@@ -72,14 +81,11 @@ export function CreateEventPage() {
       description: describeNFTRef.current.getContent(),
     };
     post(API_LIST_EVENTS, val, orgId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        // console.log('ok')
-      } else if (status1 === '400') {
-        // console.log('error')
-      } else {
-        cacthResponse(res1);
+      if (res1 > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
       }
+      notify('Tạo thành công');
     });
   };
   return (

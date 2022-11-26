@@ -16,7 +16,9 @@ import {
   Button,
   Image,
   Divider,
+  useToast,
 } from '@chakra-ui/react';
+
 import Buttons from 'components/Buttons';
 import {
   PRI_TEXT_COLOR,
@@ -25,18 +27,21 @@ import {
   TEXT_GREEN,
 } from 'constants/styles';
 import cRequest from 'utils/server';
-import {
-  getResStatus,
-  cacthError,
-  cacthResponse,
-  numberWithCommas,
-  handleAddress,
-} from 'utils/helpers';
+import { numberWithCommas, handleAddress } from 'utils/helpers';
 import PropTypes from 'prop-types';
+import NotificationProvider from '../../components/NotificationProvider';
 import Cart from './assets/Cart-white.svg';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const PackagesBox = ({ data, id, toggleModal }) => {
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   function handleSelect(pId, price) {
     cRequest
       .post(`/api/talents/${id}/packages/${pId}/bookings/shoppingcart`, {
@@ -44,18 +49,14 @@ const PackagesBox = ({ data, id, toggleModal }) => {
         organizerId: window.localStorage.getItem('uid'),
       })
       .then(res => {
-        const status = getResStatus(res);
-        if (status === 200) {
-          // console.log(res.data);
-        } else if (status === 400) {
-          // console.log('error while logging out 400');
-        } else if (status === 500) {
-          // console.log('error while logging out 500');
-        } else {
-          cacthResponse(res);
+        if (res > 300) {
+          notify(
+            'Thêm thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
+          );
+          return;
         }
-      })
-      .catch(err => cacthError(err));
+        notify('Thêm thành công');
+      });
   }
   return (
     <Container>
