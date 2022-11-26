@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   Text,
@@ -14,6 +13,7 @@ import {
   AvatarBadge,
   IconButton,
   Link,
+  useToast,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -35,11 +35,11 @@ import PropTypes from 'prop-types';
 import reducer from './slice/reducer';
 import saga from './slice/saga';
 import InputCustomV2 from '../../../components/Controls/InputCustomV2';
+import NotificationProvider from '../../../components/NotificationProvider';
 
 import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { API_ORGANIZER_DETAIL } from '../../../constants/api';
-import { cacthError } from '../../../utils/helpers';
 import { loadCategoriesInfo, loadOrganizerInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectOrganizer } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
@@ -67,6 +67,14 @@ const Profile = ({
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const [url, setUrl] = useState('https://bit.ly/sage-adebayo');
   const [file, setFile] = useState(null);
   const activityNFTRef = useRef(null);
@@ -116,13 +124,13 @@ const Profile = ({
       extensions: JSON.stringify(preData),
       // offerCategories: [data.category],
     };
-    put(API_ORGANIZER_DETAIL, dataSubmit, organizerId)
-      .then(res => {
-        if (res) {
-          window.location.reload();
-        }
-      })
-      .catch(err => cacthError(err));
+    put(API_ORGANIZER_DETAIL, dataSubmit, organizerId).then(res => {
+      if (res > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
+      }
+      notify('Tạo thành công');
+    });
   };
 
   return (
@@ -229,21 +237,6 @@ const Profile = ({
               <Text color={RED_COLOR}>
                 {errors.displayName && errors.displayName.message}
               </Text>
-              {/*<FormControl>*/}
-              {/*  <CustomFormLabel>{t(messages.category())}</CustomFormLabel>*/}
-              {/*  <SelectCustom*/}
-              {/*    id="category"*/}
-              {/*    size="md"*/}
-              {/*    {...register('category')}*/}
-              {/*  >*/}
-              {/*    {categoriesInfo.map(option => (*/}
-              {/*      // eslint-disable-next-line react/no-array-index-key*/}
-              {/*      <option key={option.uid} value={option.uid}>*/}
-              {/*        {option.name}*/}
-              {/*      </option>*/}
-              {/*    ))}*/}
-              {/*  </SelectCustom>*/}
-              {/*</FormControl>*/}
               <FormControl>
                 <CustomFormLabel htmlFor="bio">
                   {t(messages.bio())}
