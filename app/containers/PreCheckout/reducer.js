@@ -5,6 +5,7 @@ import {
   LOAD_INFO_SUCCESS,
   LOAD_INFO_ERROR,
   PAY_INSTANT,
+  PAY_METHOD_VIEW,
   PAY_LATER,
 } from './constants';
 
@@ -12,7 +13,7 @@ export const initialState = {
   loading: false,
   error: false,
   data: false,
-  payMethod: 'payLater',
+  payMethod: PAY_METHOD_VIEW.LATER,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -38,11 +39,11 @@ const pageReducer = (state = initialState, action) =>
         break;
 
       case PAY_INSTANT:
-        draft.payMethod = 'payInstant';
+        draft.payMethod = PAY_METHOD_VIEW.INSTANT;
         break;
 
       case PAY_LATER:
-        draft.payMethod = 'payLater';
+        draft.payMethod = PAY_METHOD_VIEW.LATER;
         break;
     }
   });

@@ -10,6 +10,7 @@ import { H1 } from 'components/Elements';
 import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
+import { PAY_METHOD_VIEW } from '../constants';
 import PayLater from './PayLater';
 import PayInstant from './PayInstant';
 function PayMethod({ payMethod }) {
@@ -17,7 +18,7 @@ function PayMethod({ payMethod }) {
   return (
     <div style={{ width: '80%' }}>
       <H1 color={TEXT_PURPLE} py={0} fontSize="30" whiteSpace="nowrap">
-        {payMethod === 'payLater'
+        {payMethod === PAY_METHOD_VIEW.LATER
           ? t(messages.method())
           : t(messages.methodPay())}
       </H1>
@@ -27,11 +28,11 @@ function PayMethod({ payMethod }) {
         style={{ marginTop: '0px' }}
         fontSize={15}
       >
-        {payMethod === 'payLater'
+        {payMethod === PAY_METHOD_VIEW.LATER
           ? t(messages.methodDesc())
           : t(messages.methodDescPay())}
       </Text>
-      {payMethod === 'payLater' ? <PayLater /> : <PayInstant />}
+      {payMethod === PAY_METHOD_VIEW.LATER ? <PayLater /> : <PayInstant />}
     </div>
   );
 }
