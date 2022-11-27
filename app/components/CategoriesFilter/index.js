@@ -15,7 +15,13 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import styled from 'styled-components';
 import { TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import PropTypes from 'prop-types';
-import { changeCategory } from './action';
+import { ENUM_ROLES } from 'constants/enums';
+
+import {
+  changeCategory,
+  changeCategoryEvent,
+  changeCategoryPackage,
+} from './action';
 
 const CategoriesText = styled(Text)`
   color: ${props => props.color};
@@ -34,10 +40,24 @@ function CategoriesFilter({
   listOptions,
   history,
   handleCategoryChange,
+  handleCategoryChangeEvent,
+  handleCategoryChangePackage,
+  typePage,
 }) {
+  const role = localStorage.getItem('role');
   const handleNavigateCategory = itemUid => {
-    handleCategoryChange(itemUid);
-    history.push(`/search?category=${itemUid}`);
+    // if component has typePage which means
+    // this component is used in OrganizerManagementPage or TalentManagementPage
+    if (typePage) {
+      if (role === ENUM_ROLES.ORG) {
+        handleCategoryChangeEvent(itemUid);
+      } else {
+        handleCategoryChangePackage(itemUid);
+      }
+    } else {
+      handleCategoryChange(itemUid);
+      history.push(`/search?category=${itemUid}`);
+    }
   };
   return (
     <Menu>
@@ -90,6 +110,9 @@ CategoriesFilter.propTypes = {
   listOptions: PropTypes.array,
   history: PropTypes.object,
   handleCategoryChange: PropTypes.func,
+  handleCategoryChangeEvent: PropTypes.func,
+  handleCategoryChangePackage: PropTypes.func,
+  typePage: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({});
@@ -98,6 +121,12 @@ export function mapDispatchToProps(dispatch) {
   return {
     handleCategoryChange: category => {
       dispatch(changeCategory(category));
+    },
+    handleCategoryChangeEvent: category => {
+      dispatch(changeCategoryEvent(category));
+    },
+    handleCategoryChangePackage: category => {
+      dispatch(changeCategoryPackage(category));
     },
   };
 }

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { HStack, Text, Flex, Box, Link, Button } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -6,15 +6,23 @@ import PageSpinner from 'components/PageSpinner';
 import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
-
+import SliderRange from 'components/SliderRange';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
+import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
 import { del } from 'utils/request';
 import { ENUM_BOOKING_STATUS } from 'constants/enums';
+import { DateTimeCustom } from 'components/Controls';
+import CategoriesFilter from 'components/CategoriesFilter';
+import {
+  numberWithCommas,
+  toIsoString,
+  classifyCategories,
+} from 'utils/helpers';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -22,6 +30,10 @@ import {
   loadPackages,
   changeMode,
   changeLimit,
+  changeEnd,
+  changeStart,
+  changeCategory,
+  loadCategories,
   loadPackageInfo,
 } from './slice/actions';
 import saga from './slice/saga';
@@ -34,9 +46,10 @@ import {
   makeSelectMode,
   makeSelectPaging,
   makeSelectPackageInfo,
+  makeSelectCategory,
+  makeSelectCategories,
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
-import { numberWithCommas } from '../../../utils/helpers';
 import { globalMessages } from '../../App/globalMessage';
 const StatusCell = styled(Text)`
   text-align: center;
@@ -130,17 +143,27 @@ const MyPackage = ({
   handleModeChange,
   paging,
   handlePageChange,
-  handleLimitchange,
+  handleLimitChange,
   loadPackage,
+  onLoadCategory,
   packageInfo,
+  categories,
+  handleStartChange,
+  handleEndChange,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
+  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
 
   useEffect(() => {
     onLoadData();
+    onLoadCategory();
   }, []);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(categories);
+    setCategoriesFiltered(categoriesClassified);
+  }, [categories]);
   const userId = window.localStorage.getItem('uid');
   function handleDelete(id) {
     del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
@@ -232,10 +255,46 @@ const MyPackage = ({
       <Flex justifyContent="space-between" mb={2}>
         {mode === 1 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
-        ) : null}
-        <Link href="/create-package">
-          <CustomButton>{t(messages.createPackage())}</CustomButton>
-        </Link>
+        ) : (
+          <HStack maxW="100%" mb="6">
+            <CategoriesFilter
+              placeholder="Categories"
+              typePage="manager"
+              listOptions={categoriesFiltered}
+            />
+            <SelectSearchCustom
+              placeholderName={t(messages.location())}
+              // handleChange={handleCityChange}
+            />
+            <SliderRange
+              typePage="package-manager"
+              titleRange={t(messages.incomeRange())}
+            />
+            <Text>Start time</Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={handleStartChange}
+              />
+            </Box>
+            <Text>End time</Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={handleEndChange}
+              />
+            </Box>
+            <Link href="/create-package">
+              <CustomButton>{t(messages.createPackage())}</CustomButton>
+            </Link>
+          </HStack>
+        )}
       </Flex>
       {!data ? (
         <PageSpinner />
@@ -248,7 +307,7 @@ const MyPackage = ({
               data={mode === 0 ? tablePackage : tableBooking}
               {...pageProps}
               handlePageChange={handlePageChange}
-              setLimit={handleLimitchange}
+              setLimit={handleLimitChange}
             />
           </Box>
         </Flex>
@@ -266,7 +325,11 @@ MyPackage.propTypes = {
   handleModeChange: PropTypes.func,
   paging: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   handlePageChange: PropTypes.func,
-  handleLimitchange: PropTypes.func,
+  handleLimitChange: PropTypes.func,
+  handleStartChange: PropTypes.func,
+  handleEndChange: PropTypes.func,
+  onLoadCategory: PropTypes.func,
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
@@ -277,6 +340,8 @@ const mapStateToProps = createStructuredSelector({
   packageId: makeSelectPackage(),
   mode: makeSelectMode(),
   paging: makeSelectPaging(),
+  categories: makeSelectCategories(),
+  category: makeSelectCategory(),
   packageInfo: makeSelectPackageInfo(),
 });
 
@@ -292,12 +357,24 @@ export function mapDispatchToProps(dispatch) {
     handleModeChange: mode => {
       dispatch(changeMode(mode));
     },
-    handleLimitchange: limit => {
+    handleLimitChange: limit => {
       dispatch(changeLimit(limit));
       dispatch(loadPackages());
     },
     loadPackage: (id, talentId) => {
       dispatch(loadPackageInfo(id, talentId));
+    },
+    handleStartChange: start => {
+      dispatch(changeStart(toIsoString(start)));
+    },
+    handleEndChange: end => {
+      dispatch(changeEnd(toIsoString(end)));
+    },
+    handleCategoryChange: category => {
+      dispatch(changeCategory(category));
+    },
+    onLoadCategory: () => {
+      dispatch(loadCategories());
     },
   };
 }

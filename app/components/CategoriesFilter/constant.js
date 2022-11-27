@@ -1,3 +1,5 @@
 export const CHANGE_CATEGORY = 'App/SearchResultPage/CHANGE_CATEGORY';
 export const CHANGE_CATEGORY_EVENT =
   'App/EventSearchResultPage/CHANGE_CATEGORY';
+export const CHANGE_CATEGORY_OWN_EVENT = 'App/MyEvents/CHANGE_CATEGORY_EVENT';
+export const CHANGE_CATEGORY_PACKAGE = 'App/MyPackage/CHANGE_CATEGORY_PACKAGE';

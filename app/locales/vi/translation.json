@@ -200,7 +200,9 @@
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
     "category": "Category",
-    "subCategory": "Sub Category"
+    "subCategory": "Sub Category",
+    "incomeRange": "Khoảng thu nhập (1 session)",
+    "location": "Vị trí"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",
@@ -231,7 +233,9 @@
     "save": "Save",
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
-    "category": "Category"
+    "category": "Category",
+    "incomeRange": "Khoảng thu nhập (1 session)",
+    "location": "Vị trí"
   },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",

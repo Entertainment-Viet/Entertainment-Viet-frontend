@@ -8,6 +8,13 @@ import {
   CHANGE_LIMIT,
   LOAD_EVENT,
   LOAD_EVENT_SUCCESS,
+  LOAD_CATEGORIES,
+  LOAD_DATA_SUCCESS,
+  LOAD_DATA_ERROR,
+  LOAD_CATEGORIES_SUCCESS,
+  CHANGE_CATEGORY_EVENT,
+  CHANGE_START,
+  CHANGE_END,
 } from './constants';
 
 export function loadEvents(eventId, positionId) {
@@ -44,7 +51,12 @@ export function changeMode(mode) {
     mode,
   };
 }
-
+export function changeCategory(category) {
+  return {
+    type: CHANGE_CATEGORY_EVENT,
+    category,
+  };
+}
 export function loadEventsInfoSuccess(data, paging) {
   return {
     type: LOAD_INFO_SUCCESS,
@@ -58,7 +70,24 @@ export function loadEventInfoError(error) {
     error,
   };
 }
-
+export function loadCategories() {
+  return {
+    type: LOAD_CATEGORIES,
+  };
+}
+export function loadDataSuccess(data, paging) {
+  return {
+    type: LOAD_DATA_SUCCESS,
+    data,
+    paging,
+  };
+}
+export function loadCategoriesSuccess(data) {
+  return {
+    type: LOAD_CATEGORIES_SUCCESS,
+    data,
+  };
+}
 export function loadEventInfo(eventId, positionId) {
   return {
     type: LOAD_EVENT,
@@ -70,5 +99,23 @@ export function loadEventInfoSuccess(payload) {
   return {
     type: LOAD_EVENT_SUCCESS,
     payload,
+  };
+}
+export function loadDataError(error) {
+  return {
+    type: LOAD_DATA_ERROR,
+    error,
+  };
+}
+export function changeStart(start) {
+  return {
+    type: CHANGE_START,
+    start,
+  };
+}
+export function changeEnd(end) {
+  return {
+    type: CHANGE_END,
+    end,
   };
 }

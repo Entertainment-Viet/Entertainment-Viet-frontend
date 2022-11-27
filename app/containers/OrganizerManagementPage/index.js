@@ -11,15 +11,9 @@ import {
   TabPanels,
   TabPanel,
 } from '@chakra-ui/react';
-
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
-// import { loadNFTFilter } from 'containers/NFTFilterProvider/actions';
-
-// import { isAuthor } from 'utils/auth';
-
-// import { InputCustom, SelectCustom, ButtonCustom } from 'components/Controls';
 import { H1 } from 'components/Elements';
 import { messages } from './messages';
 
@@ -77,7 +71,6 @@ export function OrganizerManagementPage() {
             <Orders />
           </TabPanel>
           <TabPanel>
-            {/* <MySchedule /> */}
             <Calendar
               roles={localStorage.getItem('role')}
               uid={localStorage.getItem('uid')}

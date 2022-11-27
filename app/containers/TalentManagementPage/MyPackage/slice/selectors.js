@@ -55,6 +55,36 @@ const makeSelectPackageInfo = () =>
     selectState,
     State => State.packageInfo,
   );
+const makeSelectCategory = () =>
+  createSelector(
+    selectState,
+    State => State.category,
+  );
+const makeSelectCategories = () =>
+  createSelector(
+    selectState,
+    State => State.categories,
+  );
+const makeSelectPriceMax = () =>
+  createSelector(
+    selectState,
+    State => State.priceRange[1],
+  );
+const makeSelectPriceMin = () =>
+  createSelector(
+    selectState,
+    State => State.priceRange[0],
+  );
+const makeSelectStart = () =>
+  createSelector(
+    selectState,
+    State => State.start,
+  );
+const makeSelectEnd = () =>
+  createSelector(
+    selectState,
+    State => State.end,
+  );
 export {
   makeSelectDetailLoading,
   makeSelectDetailError,
@@ -65,4 +95,10 @@ export {
   makeSelectPaging,
   makeSelectLimit,
   makeSelectPackageInfo,
+  makeSelectEnd,
+  makeSelectStart,
+  makeSelectPriceMax,
+  makeSelectPriceMin,
+  makeSelectCategory,
+  makeSelectCategories,
 };
