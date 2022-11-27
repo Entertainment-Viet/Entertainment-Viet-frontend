@@ -7,12 +7,14 @@ import {
   CHANGE_START,
   CHANGE_CATEGORY,
   CHANGE_CITY,
+  CHANGE_DISTRICT,
   CHANGE_SEARCH,
   LOAD_CATEGORIES_SUCCESS,
   LOAD_DATA_SUCCESS,
   CHANGE_ORGANIZER,
   CHANGE_EVENT_PRICE_RANGE,
   LOAD_EVENT_PRICE_RANGE_SUCCESS,
+  LOAD_LOCATION_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -24,6 +26,8 @@ export const initialState = {
   search: '',
   category: '',
   city: '',
+  district: '',
+  locationData: false,
   priceRange: [],
   organizer: '',
   start: '',
@@ -59,6 +63,9 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_CITY:
         draft.city = action.city;
         break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
+        break;
       case CHANGE_EVENT_PRICE_RANGE:
         draft.priceRange = action.priceRange;
         break;
@@ -72,6 +79,9 @@ const pageReducer = (state = initialState, action) =>
         break;
       case LOAD_CATEGORIES_SUCCESS:
         draft.categories = action.data;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
         break;
       case LOAD_EVENT_PRICE_RANGE_SUCCESS:
         draft.loading = false;

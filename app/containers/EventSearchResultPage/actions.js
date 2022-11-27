@@ -7,12 +7,15 @@ import {
   CHANGE_START,
   CHANGE_CATEGORY,
   CHANGE_CITY,
+  CHANGE_DISTRICT,
   CHANGE_SEARCH,
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_SUCCESS,
   CHANGE_ORGANIZER,
   LOAD_EVENT_PRICE_RANGE_SUCCESS,
   CHANGE_EVENT_PRICE_RANGE,
+  LOAD_LOCATION,
+  LOAD_LOCATION_SUCCESS,
 } from './constants';
 
 export function loadDataEvent(search) {
@@ -51,6 +54,12 @@ export function changeCity(city) {
   return {
     type: CHANGE_CITY,
     city,
+  };
+}
+export function changeDistrict(district) {
+  return {
+    type: CHANGE_DISTRICT,
+    district,
   };
 }
 export function changeOrganizer(organizer) {
@@ -101,5 +110,16 @@ export function loadPriceRangeSuccess(data, paging) {
     type: LOAD_EVENT_PRICE_RANGE_SUCCESS,
     data,
     paging,
+  };
+}
+export function loadLocation() {
+  return {
+    type: LOAD_LOCATION,
+  };
+}
+export function loadLocationSuccess(data) {
+  return {
+    type: LOAD_LOCATION_SUCCESS,
+    data,
   };
 }

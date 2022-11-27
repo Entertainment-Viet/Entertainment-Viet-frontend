@@ -12,6 +12,9 @@ import {
   LOAD_CATEGORIES_SUCCESS,
   LOAD_TALENT_PRICE_RANGE_SUCCESS,
   LOAD_DATA_SUCCESS,
+  // CHANGE_PROVINCE,
+  LOAD_LOCATION_SUCCESS,
+  CHANGE_DISTRICT,
 } from './constants';
 
 export const initialState = {
@@ -23,6 +26,8 @@ export const initialState = {
   search: '',
   category: '',
   city: '',
+  district: '',
+  locationData: false,
   priceRange: [],
   start: '',
   end: '',
@@ -57,6 +62,9 @@ const pageReducer = (state = initialState, action) =>
       case CHANGE_CITY:
         draft.city = action.city;
         break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
+        break;
       case CHANGE_SEARCH:
         draft.search = action.search;
         break;
@@ -67,6 +75,9 @@ const pageReducer = (state = initialState, action) =>
         break;
       case LOAD_CATEGORIES_SUCCESS:
         draft.categories = action.data;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
         break;
       case LOAD_TALENT_PRICE_RANGE_SUCCESS:
         draft.loading = false;
