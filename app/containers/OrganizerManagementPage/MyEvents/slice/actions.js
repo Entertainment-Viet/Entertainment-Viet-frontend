@@ -9,12 +9,15 @@ import {
   LOAD_EVENT,
   LOAD_EVENT_SUCCESS,
   LOAD_CATEGORIES,
-  LOAD_DATA_SUCCESS,
   LOAD_DATA_ERROR,
   LOAD_CATEGORIES_SUCCESS,
   CHANGE_CATEGORY_EVENT,
   CHANGE_START,
   CHANGE_END,
+  LOAD_LOCATION,
+  LOAD_LOCATION_SUCCESS,
+  CHANGE_CITY,
+  CHANGE_DISTRICT,
 } from './constants';
 
 export function loadEvents(eventId, positionId) {
@@ -75,13 +78,6 @@ export function loadCategories() {
     type: LOAD_CATEGORIES,
   };
 }
-export function loadDataSuccess(data, paging) {
-  return {
-    type: LOAD_DATA_SUCCESS,
-    data,
-    paging,
-  };
-}
 export function loadCategoriesSuccess(data) {
   return {
     type: LOAD_CATEGORIES_SUCCESS,
@@ -117,5 +113,28 @@ export function changeEnd(end) {
   return {
     type: CHANGE_END,
     end,
+  };
+}
+export function loadLocation() {
+  return {
+    type: LOAD_LOCATION,
+  };
+}
+export function changeCity(city) {
+  return {
+    type: CHANGE_CITY,
+    city,
+  };
+}
+export function changeDistrict(district) {
+  return {
+    type: CHANGE_DISTRICT,
+    district,
+  };
+}
+export function loadLocationSuccess(data) {
+  return {
+    type: LOAD_LOCATION_SUCCESS,
+    data,
   };
 }

@@ -10,7 +10,7 @@ import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
 import SliderRange from 'components/SliderRange';
-import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
+import SearchLocation from 'components/SearchLocation';
 import { connect } from 'react-redux';
 import { DateTimeCustom } from 'components/Controls';
 import { compose } from 'redux';
@@ -37,6 +37,9 @@ import {
   changeCategory,
   changeStart,
   changeEnd,
+  loadLocation,
+  changeCity,
+  changeDistrict,
 } from './slice/actions';
 import saga from './slice/saga';
 import reducer from './slice/reducer';
@@ -49,6 +52,8 @@ import {
   makeSelectPaging,
   makeSelectCategory,
   makeSelectCategories,
+  makeSelectCity,
+  makeSelectLocationData,
   makeSelectEventInfo,
 } from './slice/selectors';
 import EventDetailCard from './EventDetailCard';
@@ -172,10 +177,15 @@ const MyEvents = ({
   handleLimitChange,
   onLoadDetailData,
   eventInfo,
+  handleCityChange,
+  handleDistrictChange,
   categories,
   onLoadCategory,
+  locationData,
+  city,
   handleStartChange,
   handleEndChange,
+  onLoadLocation,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -185,6 +195,7 @@ const MyEvents = ({
   useEffect(() => {
     if (mode === 0) {
       onLoadTableData();
+      onLoadLocation();
       onLoadCategory();
     }
   }, []);
@@ -193,6 +204,17 @@ const MyEvents = ({
     setCategoriesFiltered(categoriesClassified);
   }, [categories]);
   const userId = localStorage.getItem('uid');
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item =>
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
+    );
   // function handleDelete(id) {
   //   del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
   //     console.log(res1);
@@ -342,10 +364,18 @@ const MyEvents = ({
               typePage="manager"
               listOptions={categoriesFiltered}
             />
-            <SelectSearchCustom
-              placeholderName={t(messages.location())}
-              // handleChange={handleCityChange}
+            <SearchLocation
+              placeholder={t(messages.locationCity())}
+              optionList={cityNameList}
+              handleChangeLocation={handleCityChange}
             />
+            {city && (
+              <SearchLocation
+                placeholder={t(messages.locationDistrict())}
+                handleChangeLocation={handleDistrictChange}
+                optionList={districtData}
+              />
+            )}
             <SliderRange
               typePage="manager"
               titleRange={t(messages.incomeRange())}
@@ -428,7 +458,12 @@ MyEvents.propTypes = {
   handleLimitChange: PropTypes.func,
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   eventInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  locationData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  city: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   onLoadCategory: PropTypes.func,
+  onLoadLocation: PropTypes.func,
+  handleCityChange: PropTypes.func,
+  handleDistrictChange: PropTypes.func,
   handleStartChange: PropTypes.func,
   handleEndChange: PropTypes.func,
 };
@@ -442,6 +477,8 @@ const mapStateToProps = createStructuredSelector({
   category: makeSelectCategory(),
   paging: makeSelectPaging(),
   categories: makeSelectCategories(),
+  city: makeSelectCity(),
+  locationData: makeSelectLocationData(),
   eventInfo: makeSelectEventInfo(),
 });
 
@@ -475,6 +512,15 @@ export function mapDispatchToProps(dispatch) {
     },
     onLoadCategory: () => {
       dispatch(loadCategories());
+    },
+    handleCityChange: city => {
+      dispatch(changeCity(city));
+    },
+    handleDistrictChange: district => {
+      dispatch(changeDistrict(district));
+    },
+    onLoadLocation: () => {
+      dispatch(loadLocation());
     },
   };
 }

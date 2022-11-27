@@ -85,6 +85,21 @@ const makeSelectEnd = () =>
     selectState,
     State => State.end,
   );
+const makeSelectCity = () =>
+  createSelector(
+    selectState,
+    State => State.city,
+  );
+const makeSelectDistrict = () =>
+  createSelector(
+    selectState,
+    State => State.district,
+  );
+const makeSelectLocationData = () =>
+  createSelector(
+    selectState,
+    State => State.locationData,
+  );
 export {
   makeSelectDetailLoading,
   makeSelectDetailError,
@@ -101,4 +116,7 @@ export {
   makeSelectPriceMin,
   makeSelectCategory,
   makeSelectCategories,
+  makeSelectCity,
+  makeSelectDistrict,
+  makeSelectLocationData,
 };

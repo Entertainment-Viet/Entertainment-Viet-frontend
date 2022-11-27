@@ -7,6 +7,7 @@ import {
   API_GET_CATEGORIES,
   API_EVENT_POSITION_DETAIL,
   API_EVENT_POSITIONS_BOOKINGS,
+  API_GET_LOCATION,
 } from 'constants/api';
 import { ENUM_CURRENCY } from 'constants/enums';
 
@@ -18,6 +19,10 @@ import {
   CHANGE_OWN_EVENT_PRICE_RANGE,
   CHANGE_START,
   CHANGE_END,
+  CHANGE_PRICE_RANGE,
+  CHANGE_CITY,
+  CHANGE_DISTRICT,
+  LOAD_LOCATION,
 } from './constants';
 import {
   loadEventsInfoSuccess,
@@ -25,6 +30,7 @@ import {
   loadEventInfoSuccess,
   loadDataError,
   loadCategoriesSuccess,
+  loadLocationSuccess,
 } from './actions';
 import {
   makeSelectLimit,
@@ -35,6 +41,8 @@ import {
   makeSelectPriceMin,
   makeSelectCategory,
   makeSelectPage,
+  makeSelectCity,
+  makeSelectDistrict,
 } from './selectors';
 const USER_ID = localStorage.getItem('uid');
 
@@ -154,6 +162,32 @@ export function* getPriceRange() {
     yield put(loadDataError(err));
   }
 }
+export function* getLocation() {
+  try {
+    const payload = yield call(get, API_GET_LOCATION, {});
+    yield put(loadLocationSuccess(payload.content));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
+export function* getLocationChange() {
+  try {
+    const cityName = yield select(makeSelectCity());
+    const districtName = yield select(makeSelectDistrict());
+    const payload = yield call(
+      get,
+      API_LIST_EVENTS,
+      {
+        locationParentName: cityName,
+        name: districtName,
+      },
+      USER_ID,
+    );
+    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_EVENTS, getEventData);
   yield takeEvery(LOAD_EVENT, getEventDetail);
@@ -162,5 +196,8 @@ export default function* watchLatestAction() {
   yield takeEvery(CHANGE_OWN_EVENT_PRICE_RANGE, getPriceRange);
   yield takeEvery(CHANGE_START, getEventByTime);
   yield takeEvery(CHANGE_END, getEventByTime);
-  // yield takeEvery(LOAD_BOOKING_PACKAGES, getBookingData);
+  yield takeEvery(CHANGE_PRICE_RANGE, getPriceRange);
+  yield takeEvery(LOAD_LOCATION, getLocation);
+  yield takeEvery(CHANGE_CITY, getLocationChange);
+  yield takeEvery(CHANGE_DISTRICT, getLocationChange);
 }

@@ -14,6 +14,9 @@ import {
   CHANGE_OWN_EVENT_PRICE_RANGE,
   CHANGE_END,
   CHANGE_START,
+  CHANGE_CITY,
+  CHANGE_DISTRICT,
+  LOAD_LOCATION_SUCCESS,
   LOAD_EVENT_SUCCESS,
 } from './constants';
 
@@ -29,6 +32,9 @@ export const initialState = {
   total: 0,
   paging: ENUM_PAGGING,
   eventInfo: false,
+  city: '',
+  district: '',
+  locationData: false,
   priceRange: [],
   start: '',
   end: '',
@@ -54,7 +60,12 @@ const pageReducer = (state = initialState, action) =>
         draft.data = false;
         draft.eventId = action.eventId;
         break;
-
+      case CHANGE_CITY:
+        draft.city = action.city;
+        break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
+        break;
       case LOAD_INFO_SUCCESS:
         draft.loading = false;
         draft.error = false;
@@ -63,6 +74,9 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_CATEGORY_EVENT:
         draft.category = action.category;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
         break;
       case LOAD_CATEGORIES_SUCCESS:
         draft.categories = action.data;

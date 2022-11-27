@@ -37,5 +37,6 @@ export const messages = {
   category: () => t(translations.TalentManagementPage.category),
   subCategory: () => t(translations.TalentManagementPage.subCategory),
   incomeRange: () => t(translations.TalentManagementPage.incomeRange),
-  location: () => t(translations.TalentManagementPage.location),
+  locationDistrict: () => t(translations.loginPage.locationDistrict),
+  locationCity: () => t(translations.loginPage.locationCity),
 };

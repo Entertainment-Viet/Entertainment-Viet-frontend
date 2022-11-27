@@ -14,7 +14,9 @@ import {
   CHANGE_CATEGORY_PACKAGE,
   CHANGE_OWN_PACKAGE_PRICE_RANGE,
   CHANGE_END,
+  LOAD_LOCATION_SUCCESS,
   CHANGE_START,
+  CHANGE_CITY,
 } from './constants';
 
 export const initialState = {
@@ -28,6 +30,9 @@ export const initialState = {
   total: 0,
   paging: ENUM_PAGGING,
   packageInfo: false,
+  city: '',
+  district: '',
+  locationData: false,
   priceRange: [],
   start: '',
   end: '',
@@ -79,6 +84,12 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_START:
         draft.start = action.start;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
+        break;
+      case CHANGE_CITY:
+        draft.city = action.city;
         break;
       case CHANGE_CATEGORY_PACKAGE:
         draft.category = action.category;

@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
-import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
+import SearchLocation from 'components/SearchLocation';
 import { del } from 'utils/request';
 import { ENUM_BOOKING_STATUS } from 'constants/enums';
 import { DateTimeCustom } from 'components/Controls';
@@ -35,6 +35,9 @@ import {
   changeCategory,
   loadCategories,
   loadPackageInfo,
+  changeCity,
+  loadLocation,
+  changeDistrict,
 } from './slice/actions';
 import saga from './slice/saga';
 import reducer from './slice/reducer';
@@ -48,6 +51,8 @@ import {
   makeSelectPackageInfo,
   makeSelectCategory,
   makeSelectCategories,
+  makeSelectCity,
+  makeSelectLocationData,
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
 import { globalMessages } from '../../App/globalMessage';
@@ -150,6 +155,11 @@ const MyPackage = ({
   categories,
   handleStartChange,
   handleEndChange,
+  locationData,
+  city,
+  onLoadLocation,
+  handleCityChange,
+  handleDistrictChange,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -158,6 +168,7 @@ const MyPackage = ({
 
   useEffect(() => {
     onLoadData();
+    onLoadLocation();
     onLoadCategory();
   }, []);
   useEffect(() => {
@@ -165,6 +176,17 @@ const MyPackage = ({
     setCategoriesFiltered(categoriesClassified);
   }, [categories]);
   const userId = window.localStorage.getItem('uid');
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item =>
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
+    );
   function handleDelete(id) {
     del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
       console.log(res1);
@@ -262,10 +284,18 @@ const MyPackage = ({
               typePage="manager"
               listOptions={categoriesFiltered}
             />
-            <SelectSearchCustom
-              placeholderName={t(messages.location())}
-              // handleChange={handleCityChange}
+            <SearchLocation
+              placeholder={t(messages.locationCity())}
+              optionList={cityNameList}
+              handleChangeLocation={handleCityChange}
             />
+            {city && (
+              <SearchLocation
+                placeholder={t(messages.locationDistrict())}
+                handleChangeLocation={handleDistrictChange}
+                optionList={districtData}
+              />
+            )}
             <SliderRange
               typePage="package-manager"
               titleRange={t(messages.incomeRange())}
@@ -329,8 +359,13 @@ MyPackage.propTypes = {
   handleStartChange: PropTypes.func,
   handleEndChange: PropTypes.func,
   onLoadCategory: PropTypes.func,
+  onLoadLocation: PropTypes.func,
+  handleCityChange: PropTypes.func,
+  handleDistrictChange: PropTypes.func,
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  city: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -343,6 +378,8 @@ const mapStateToProps = createStructuredSelector({
   categories: makeSelectCategories(),
   category: makeSelectCategory(),
   packageInfo: makeSelectPackageInfo(),
+  city: makeSelectCity(),
+  locationData: makeSelectLocationData(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -373,8 +410,17 @@ export function mapDispatchToProps(dispatch) {
     handleCategoryChange: category => {
       dispatch(changeCategory(category));
     },
+    handleCityChange: city => {
+      dispatch(changeCity(city));
+    },
+    handleDistrictChange: district => {
+      dispatch(changeDistrict(district));
+    },
     onLoadCategory: () => {
       dispatch(loadCategories());
+    },
+    onLoadLocation: () => {
+      dispatch(loadLocation());
     },
   };
 }
