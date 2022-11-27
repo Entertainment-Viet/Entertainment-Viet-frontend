@@ -10,6 +10,13 @@ import {
   CHANGE_PAGE,
   LOAD_PACKAGE,
   LOAD_PACKAGE_SUCCESS,
+  LOAD_CATEGORIES_SUCCESS,
+  CHANGE_CATEGORY_PACKAGE,
+  CHANGE_OWN_PACKAGE_PRICE_RANGE,
+  CHANGE_END,
+  LOAD_LOCATION_SUCCESS,
+  CHANGE_START,
+  CHANGE_CITY,
 } from './constants';
 
 export const initialState = {
@@ -23,6 +30,14 @@ export const initialState = {
   total: 0,
   paging: ENUM_PAGGING,
   packageInfo: false,
+  city: '',
+  district: '',
+  locationData: false,
+  priceRange: [],
+  start: '',
+  end: '',
+  category: '',
+  categories: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -63,6 +78,27 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_PAGE:
         draft.page = action.page;
+        break;
+      case CHANGE_END:
+        draft.end = action.end;
+        break;
+      case CHANGE_START:
+        draft.start = action.start;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
+        break;
+      case CHANGE_CITY:
+        draft.city = action.city;
+        break;
+      case CHANGE_CATEGORY_PACKAGE:
+        draft.category = action.category;
+        break;
+      case LOAD_CATEGORIES_SUCCESS:
+        draft.categories = action.data;
+        break;
+      case CHANGE_OWN_PACKAGE_PRICE_RANGE:
+        draft.priceRange = action.priceRange;
         break;
       case LOAD_PACKAGE:
         draft.error = false;
