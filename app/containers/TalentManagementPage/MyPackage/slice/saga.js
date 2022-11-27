@@ -142,7 +142,6 @@ export function* getPriceRange() {
       },
       USER_ID,
     );
-
     yield put(loadInfoSuccess(payload.content, payload.paging));
   } catch (err) {
     yield put(loadDataError(err));

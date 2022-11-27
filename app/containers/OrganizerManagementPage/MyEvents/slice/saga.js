@@ -19,7 +19,6 @@ import {
   CHANGE_OWN_EVENT_PRICE_RANGE,
   CHANGE_START,
   CHANGE_END,
-  CHANGE_PRICE_RANGE,
   CHANGE_CITY,
   CHANGE_DISTRICT,
   LOAD_LOCATION,
@@ -128,6 +127,7 @@ export function* getEventByTime() {
       },
       USER_ID,
     );
+
     yield put(loadEventsInfoSuccess(payload.content, payload.paging));
   } catch (err) {
     yield put(loadDataError(err));
@@ -196,7 +196,6 @@ export default function* watchLatestAction() {
   yield takeEvery(CHANGE_OWN_EVENT_PRICE_RANGE, getPriceRange);
   yield takeEvery(CHANGE_START, getEventByTime);
   yield takeEvery(CHANGE_END, getEventByTime);
-  yield takeEvery(CHANGE_PRICE_RANGE, getPriceRange);
   yield takeEvery(LOAD_LOCATION, getLocation);
   yield takeEvery(CHANGE_CITY, getLocationChange);
   yield takeEvery(CHANGE_DISTRICT, getLocationChange);

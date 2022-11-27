@@ -18,10 +18,26 @@ import { TEXT_PURPLE, SUB_BLU_COLOR, TEXT_GREEN } from 'constants/styles';
 import PropTypes from 'prop-types';
 import { numberWithCommas } from 'utils/helpers';
 import { MAX_DEFAULT, MIN_DEFAULT } from './constants';
-import { changePriceRange } from './action';
+import { changePriceRange, filterPriceOwnManager } from './action';
 
-function SliderRange({ titleRange, handlePriceChange }) {
+function SliderRange({
+  titleRange,
+  handlePriceChange,
+  handlePriceChangeManager,
+  typePage,
+}) {
   const [value, setValue] = useState([]);
+  const handleChangePricing = val => {
+    // if component has typePage which means
+    // this component is used in OrganizerManagementPage or TalentManagementPage
+    if (typePage) {
+      setValue(val);
+      handlePriceChangeManager(val);
+    } else {
+      setValue(val);
+      handlePriceChange(val);
+    }
+  };
   return (
     <Menu>
       <MenuButton
@@ -49,10 +65,7 @@ function SliderRange({ titleRange, handlePriceChange }) {
             defaultValue={[MIN_DEFAULT, MAX_DEFAULT]}
             min={MIN_DEFAULT}
             max={MAX_DEFAULT}
-            onChangeEnd={val => {
-              setValue(val);
-              handlePriceChange(val);
-            }}
+            onChangeEnd={val => handleChangePricing(val)}
           >
             <RangeSliderTrack bg={SUB_BLU_COLOR} borderRadius={4}>
               <RangeSliderFilledTrack bg={TEXT_GREEN} />
@@ -74,6 +87,8 @@ function SliderRange({ titleRange, handlePriceChange }) {
 SliderRange.propTypes = {
   titleRange: PropTypes.string,
   handlePriceChange: PropTypes.func,
+  handlePriceChangeManager: PropTypes.func,
+  typePage: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({});
@@ -82,6 +97,9 @@ export function mapDispatchToProps(dispatch) {
   return {
     handlePriceChange: priceRange => {
       dispatch(changePriceRange(priceRange));
+    },
+    handlePriceChangeManager: priceRange => {
+      dispatch(filterPriceOwnManager(priceRange));
     },
   };
 }

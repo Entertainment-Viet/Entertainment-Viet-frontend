@@ -12,11 +12,10 @@ export const LOAD_CATEGORIES_SUCCESS = 'App/MyEvents/LOAD_CATEGORIES_SUCCESS';
 export const LOAD_DATA_ERROR = 'App/MyEvents/LOAD_DATA_ERROR';
 export const CHANGE_CATEGORY_EVENT = 'App/MyEvents/CHANGE_CATEGORY_EVENT';
 export const CHANGE_OWN_EVENT_PRICE_RANGE =
-  'App/MyEvents/CHANGE_EVENT_PRICE_RANGE';
+  'App/MyEvents/CHANGE_OWN_EVENT_PRICE_RANGE';
 export const CHANGE_START = 'App/MyEvents/CHANGE_START';
 export const CHANGE_END = 'App/MyEvents/CHANGE_END';
 export const CHANGE_CITY = 'App/MyEvents/CHANGE_CITY';
 export const CHANGE_DISTRICT = 'App/MyEvents/CHANGE_DISTRICT';
 export const LOAD_LOCATION = 'App/MyEvents/LOAD_LOCATION';
 export const LOAD_LOCATION_SUCCESS = 'App/MyEvents/LOAD_LOCATION_SUCCESS';
-export const CHANGE_PRICE_RANGE = 'App/MyEvents/CHANGE_PRICE_RANGE';
