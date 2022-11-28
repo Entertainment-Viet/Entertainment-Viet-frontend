@@ -31,6 +31,20 @@ function PayLater({ choosePayMethod }) {
       render: () => <NotificationProvider title={title} />,
     });
   };
+  function instantPay() {
+    const val = {
+      paymentType: 'payment.online',
+    };
+    post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res => {
+      if (res >= 400 && res < 500) {
+        notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+      } else if (res >= 500) {
+        notify('Thất bại, lỗi hệ thống. Vui lòng thử lại sau!');
+      } else {
+        notify('Thành công');
+      }
+    });
+  }
   function laterPay() {
     const val = {
       paymentType: 'payment.offline',
@@ -60,7 +74,10 @@ function PayLater({ choosePayMethod }) {
           boxShadow: `-1px 5px ${BOX_SHADOW_CHECKOUT}`,
           transition: 'ease 0.3s',
         }}
-        onClick={() => choosePayMethod(PAY_METHOD_VIEW.INSTANT)}
+        onClick={() => {
+          instantPay();
+          choosePayMethod(PAY_METHOD_VIEW.INSTANT);
+        }}
       >
         <HStack whiteSpace="nowrap">
           <Wallet size={24} colorIcon={TEXT_GREEN} />
