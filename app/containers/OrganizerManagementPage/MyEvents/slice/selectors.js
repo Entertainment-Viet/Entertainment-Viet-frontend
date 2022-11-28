@@ -13,7 +13,51 @@ const makeSelectPage = () =>
     selectState,
     State => State.page,
   );
-
+const makeSelectCategory = () =>
+  createSelector(
+    selectState,
+    State => State.category,
+  );
+const makeSelectCategories = () =>
+  createSelector(
+    selectState,
+    State => State.categories,
+  );
+const makeSelectCity = () =>
+  createSelector(
+    selectState,
+    State => State.city,
+  );
+const makeSelectDistrict = () =>
+  createSelector(
+    selectState,
+    State => State.district,
+  );
+const makeSelectLocationData = () =>
+  createSelector(
+    selectState,
+    State => State.locationData,
+  );
+const makeSelectPriceMax = () =>
+  createSelector(
+    selectState,
+    State => State.priceRange[1],
+  );
+const makeSelectPriceMin = () =>
+  createSelector(
+    selectState,
+    State => State.priceRange[0],
+  );
+const makeSelectStart = () =>
+  createSelector(
+    selectState,
+    State => State.start,
+  );
+const makeSelectEnd = () =>
+  createSelector(
+    selectState,
+    State => State.end,
+  );
 const makeSelectLimit = () =>
   createSelector(
     selectState,
@@ -72,4 +116,13 @@ export {
   makeSelectLimit,
   makeSelectEventInfo,
   makeSelectPosition,
+  makeSelectCategory,
+  makeSelectCategories,
+  makeSelectPriceMax,
+  makeSelectPriceMin,
+  makeSelectEnd,
+  makeSelectStart,
+  makeSelectCity,
+  makeSelectDistrict,
+  makeSelectLocationData,
 };

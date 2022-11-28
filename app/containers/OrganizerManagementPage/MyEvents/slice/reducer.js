@@ -9,6 +9,14 @@ import {
   CHANGE_LIMIT,
   CHANGE_PAGE,
   LOAD_EVENT,
+  LOAD_CATEGORIES_SUCCESS,
+  CHANGE_CATEGORY_EVENT,
+  CHANGE_OWN_EVENT_PRICE_RANGE,
+  CHANGE_END,
+  CHANGE_START,
+  CHANGE_CITY,
+  CHANGE_DISTRICT,
+  LOAD_LOCATION_SUCCESS,
   LOAD_EVENT_SUCCESS,
 } from './constants';
 
@@ -24,6 +32,14 @@ export const initialState = {
   total: 0,
   paging: ENUM_PAGGING,
   eventInfo: false,
+  city: '',
+  district: '',
+  locationData: false,
+  priceRange: [],
+  start: '',
+  end: '',
+  category: '',
+  categories: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -44,15 +60,30 @@ const pageReducer = (state = initialState, action) =>
         draft.data = false;
         draft.eventId = action.eventId;
         break;
-
+      case CHANGE_CITY:
+        draft.city = action.city;
+        break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
+        break;
       case LOAD_INFO_SUCCESS:
         draft.loading = false;
         draft.error = false;
         draft.data = action.data;
-        console.log('action: ', action.paging);
         draft.paging = action.paging;
         break;
-
+      case CHANGE_CATEGORY_EVENT:
+        draft.category = action.category;
+        break;
+      case LOAD_LOCATION_SUCCESS:
+        draft.locationData = action.data;
+        break;
+      case LOAD_CATEGORIES_SUCCESS:
+        draft.categories = action.data;
+        break;
+      case CHANGE_OWN_EVENT_PRICE_RANGE:
+        draft.priceRange = action.priceRange;
+        break;
       case LOAD_INFO_ERROR:
         draft.loading = false;
         draft.error = action.error;
@@ -66,6 +97,12 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_PAGE:
         draft.page = action.page;
+        break;
+      case CHANGE_END:
+        draft.end = action.end;
+        break;
+      case CHANGE_START:
+        draft.start = action.start;
         break;
       case LOAD_EVENT:
         draft.error = false;

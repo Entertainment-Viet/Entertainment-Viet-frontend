@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable indent */
 /* eslint-disable no-nested-ternary */
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { HStack, Text, Flex, Box, Link, Button } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -9,15 +9,22 @@ import PageSpinner from 'components/PageSpinner';
 import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
-
+import SliderRange from 'components/SliderRange';
+import SearchLocation from 'components/SearchLocation';
 import { connect } from 'react-redux';
+import { DateTimeCustom } from 'components/Controls';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-// import { API_EVENT_DETAIL } from 'constants/api';
-// import { del } from 'utils/request';
+import CategoriesFilter from 'components/CategoriesFilter';
 import { ENUM_BOOKING_STATUS } from 'constants/enums';
+import {
+  numberWithCommas,
+  handleAddress,
+  toIsoString,
+  classifyCategories,
+} from 'utils/helpers';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -26,6 +33,13 @@ import {
   changeMode,
   changeLimit,
   loadEventInfo,
+  loadCategories,
+  changeCategory,
+  changeStart,
+  changeEnd,
+  loadLocation,
+  changeCity,
+  changeDistrict,
 } from './slice/actions';
 import saga from './slice/saga';
 import reducer from './slice/reducer';
@@ -36,10 +50,13 @@ import {
   makeSelectEvent,
   makeSelectMode,
   makeSelectPaging,
+  makeSelectCategory,
+  makeSelectCategories,
+  makeSelectCity,
+  makeSelectLocationData,
   makeSelectEventInfo,
 } from './slice/selectors';
 import EventDetailCard from './EventDetailCard';
-import { numberWithCommas , handleAddress } from '../../../utils/helpers';
 import { globalMessages } from '../../App/globalMessage';
 import PositionDetailCard from './PositionDetailCard';
 
@@ -157,18 +174,47 @@ const MyEvents = ({
   handleModeChange,
   paging,
   handlePageChange,
-  handleLimitchange,
+  handleLimitChange,
   onLoadDetailData,
   eventInfo,
+  handleCityChange,
+  handleDistrictChange,
+  categories,
+  onLoadCategory,
+  locationData,
+  city,
+  handleStartChange,
+  handleEndChange,
+  onLoadLocation,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
+  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
 
   useEffect(() => {
-    if (mode === 0) onLoadTableData();
+    if (mode === 0) {
+      onLoadTableData();
+      onLoadLocation();
+      onLoadCategory();
+    }
   }, []);
+  useEffect(() => {
+    const categoriesClassified = classifyCategories(categories);
+    setCategoriesFiltered(categoriesClassified);
+  }, [categories]);
   const userId = localStorage.getItem('uid');
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item =>
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
+    );
   // function handleDelete(id) {
   //   del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
   //     console.log(res1);
@@ -242,8 +288,13 @@ const MyEvents = ({
         totalApply: position.applicantCount,
         time: (
           <Text>
-            {new Date(position.jobOffer.jobDetail.performanceStartTime).toLocaleString()} -{' '}
-            {new Date(position.jobOffer.jobDetail.performanceEndTime).toLocaleString()}
+            {new Date(
+              position.jobOffer.jobDetail.performanceStartTime,
+            ).toLocaleString()}{' '}
+            -{' '}
+            {new Date(
+              position.jobOffer.jobDetail.performanceEndTime,
+            ).toLocaleString()}
           </Text>
         ),
         status: (
@@ -307,9 +358,52 @@ const MyEvents = ({
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
         {mode === 0 ? (
-          <Link href="/event/create">
-            <CustomButton>{t(messages.createEvent())}</CustomButton>
-          </Link>
+          <HStack maxW="100%" mb="6">
+            <CategoriesFilter
+              placeholder="Categories"
+              typePage="manager"
+              listOptions={categoriesFiltered}
+            />
+            <SearchLocation
+              placeholder={t(messages.locationCity())}
+              optionList={cityNameList}
+              handleChangeLocation={handleCityChange}
+            />
+            {city && (
+              <SearchLocation
+                placeholder={t(messages.locationDistrict())}
+                handleChangeLocation={handleDistrictChange}
+                optionList={districtData}
+              />
+            )}
+            <SliderRange
+              typePage="manager"
+              titleRange={t(messages.incomeRange())}
+            />
+            <Text>Start time</Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={handleStartChange}
+              />
+            </Box>
+            <Text>End time</Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={handleEndChange}
+              />
+            </Box>
+            <Link href="/event/create">
+              <CustomButton>{t(messages.createEvent())}</CustomButton>
+            </Link>
+          </HStack>
         ) : (
           <Link href={`/create-position/${eventInfo.uid}`}>
             <CustomButton>{t(messages.createPosition())}</CustomButton>
@@ -322,7 +416,9 @@ const MyEvents = ({
         <Flex zIndex={1} position="relative" gap={4}>
           {mode === 1 ? (
             <EventDetailCard data={eventInfo} />
-          ) : mode === 2 ? <PositionDetailCard data={eventInfo} /> : null}
+          ) : mode === 2 ? (
+            <PositionDetailCard data={eventInfo} />
+          ) : null}
           <Box w={mode === 1 || mode === 2 ? 'auto' : '100%'} flexGrow={1}>
             <AdvancedTable
               columns={
@@ -341,7 +437,7 @@ const MyEvents = ({
               }
               {...pageProps}
               handlePageChange={handlePageChange}
-              setLimit={handleLimitchange}
+              setLimit={handleLimitChange}
             />
           </Box>
         </Flex>
@@ -359,8 +455,17 @@ MyEvents.propTypes = {
   handleModeChange: PropTypes.func,
   paging: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   handlePageChange: PropTypes.func,
-  handleLimitchange: PropTypes.func,
+  handleLimitChange: PropTypes.func,
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   eventInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  locationData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  city: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  onLoadCategory: PropTypes.func,
+  onLoadLocation: PropTypes.func,
+  handleCityChange: PropTypes.func,
+  handleDistrictChange: PropTypes.func,
+  handleStartChange: PropTypes.func,
+  handleEndChange: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -369,7 +474,11 @@ const mapStateToProps = createStructuredSelector({
   data: makeSelectDetail(),
   eventId: makeSelectEvent(),
   mode: makeSelectMode(),
+  category: makeSelectCategory(),
   paging: makeSelectPaging(),
+  categories: makeSelectCategories(),
+  city: makeSelectCity(),
+  locationData: makeSelectLocationData(),
   eventInfo: makeSelectEventInfo(),
 });
 
@@ -385,12 +494,33 @@ export function mapDispatchToProps(dispatch) {
     handleModeChange: mode => {
       dispatch(changeMode(mode));
     },
-    handleLimitchange: limit => {
+    handleLimitChange: limit => {
       dispatch(changeLimit(limit));
       dispatch(loadEvents());
     },
     onLoadDetailData: (eventId, positionId) => {
       dispatch(loadEventInfo(eventId, positionId));
+    },
+    handleStartChange: start => {
+      dispatch(changeStart(toIsoString(start)));
+    },
+    handleEndChange: end => {
+      dispatch(changeEnd(toIsoString(end)));
+    },
+    handleCategoryChange: category => {
+      dispatch(changeCategory(category));
+    },
+    onLoadCategory: () => {
+      dispatch(loadCategories());
+    },
+    handleCityChange: city => {
+      dispatch(changeCity(city));
+    },
+    handleDistrictChange: district => {
+      dispatch(changeDistrict(district));
+    },
+    onLoadLocation: () => {
+      dispatch(loadLocation());
     },
   };
 }
