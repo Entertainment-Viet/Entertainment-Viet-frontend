@@ -19,19 +19,23 @@ import {
   RED_COLOR,
 } from 'constants/styles';
 import PropTypes from 'prop-types';
-import { numberWithCommas, convertReadableTime } from 'utils/helpers';
+import {
+  numberWithCommas,
+  convertReadableTime,
+  handleAddress,
+} from 'utils/helpers';
 import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
+import { PAY_METHOD_VIEW } from '../constants';
 
 const DetailPackage = ({ dataPackage, payMethod }) => {
   const { t } = useTranslation();
   const { jobDetail, suggestedPrice, name } = dataPackage;
-  const { city, district, street } = dataPackage.jobDetail.location;
   return (
     <>
       <Divider my={5} w="100%" style={{ padding: '0' }} />
-      <Box ps={4} style={{ paddingLeft: '3rem' }}>
+      <Box ps={4} style={{ paddingLeft: '3rem', paddingRight: '2.5rem' }}>
         <HStack align="center" justifyContent="space-between">
           <HStack w="60%">
             <Image
@@ -57,13 +61,13 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
                 overflow="hidden"
               >
                 {t(messages.packageBoxLocation())}:&nbsp;
-                {street}&nbsp;{district}&nbsp;{city}
+                {handleAddress(dataPackage.jobDetail.location)}
               </Text>
             </VStack>
           </HStack>
           <HStack
             style={
-              payMethod === 'payLater'
+              payMethod === PAY_METHOD_VIEW.LATER
                 ? {
                     justifyContent: 'space-between',
                     width: '40%',
@@ -80,7 +84,7 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
             >
               {numberWithCommas(suggestedPrice)}&nbsp;VND
             </Text>
-            {payMethod === 'payLater' && (
+            {payMethod === PAY_METHOD_VIEW.LATER && (
               <VStack justify="space-between">
                 <Button
                   bg="transparent"

@@ -5,6 +5,7 @@ import {
   TEXT_PURPLE,
   SUB_BLU_COLOR,
 } from 'constants/styles';
+import { PAY_METHOD_VIEW } from './constants';
 export const FilterWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -69,9 +70,8 @@ export const TotalTrayWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: ${props =>
-    props.payMethod === 'payInstant' ? 'space-between' : null};
-  padding: 1rem;
-  padding-left: 3rem;
+    props.payMethod === PAY_METHOD_VIEW.INSTANT ? 'space-between' : null};
+  padding: 1rem 3rem;
   border-radius: 10px;
   color: ${TEXT_PURPLE};
   background-color: ${SUB_BLU_COLOR};
@@ -86,8 +86,7 @@ export const HeaderCheckout = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  padding-left: 3rem;
+  padding: 1rem 3rem;
   border-radius: 10px;
   color: ${TEXT_PURPLE};
   background-color: ${SUB_BLU_COLOR};
