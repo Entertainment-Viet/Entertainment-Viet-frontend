@@ -28,6 +28,7 @@ import {} from './styles';
 import WeeklyCalendar from 'components/WeeklyCalendar';
 // import { messages } from './messages';
 
+import PageSpinner from 'components/PageSpinner';
 import { loadInfo } from './actions';
 import saga from './saga';
 import reducer from './reducer';
@@ -40,7 +41,7 @@ import {
 // import { propTypes } from 'qrcode.react';
 
 const key = 'Calendar';
-export function BookManagementPage({ data, onLoadData, roles, uid }) {
+export function BookManagementPage({ data, onLoadData, loading, roles, uid }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [selectedDate, selectDate] = useState();
@@ -48,14 +49,15 @@ export function BookManagementPage({ data, onLoadData, roles, uid }) {
     onLoadData(roles, uid);
   }, []);
   // const { t } = useTranslation();
-
   return (
     <Flex color={PRI_TEXT_COLOR} gap={8} minWidth="max-content">
-      {data && (
+      {data || !loading ? (
         <>
           <WeeklyCalendar toDate={selectedDate} data={data} />
           <Calendar onSelectDate={selectDate} data={data} />
         </>
+      ) : (
+        <PageSpinner />
       )}
     </Flex>
   );
@@ -65,6 +67,7 @@ BookManagementPage.propTypes = {
   onLoadData: PropTypes.func,
   roles: PropTypes.string,
   uid: PropTypes.string,
+  loading: PropTypes.bool,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 

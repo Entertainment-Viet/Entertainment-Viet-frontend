@@ -8,6 +8,11 @@ const makeSelectCityData = () =>
     selectState,
     State => State.cityData,
   );
+const makeSelectCityLoading = () =>
+  createSelector(
+    selectState,
+    State => State.loading,
+  );
 const makeSelectCity = () =>
   createSelector(
     selectState,
@@ -26,6 +31,7 @@ const makeSelectDistrict = () =>
 
 export {
   makeSelectCity,
+  makeSelectCityLoading,
   makeSelectCityData,
   makeSelectDistrict,
   makeSelectDistrictData,

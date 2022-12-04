@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { CardEvent } from 'components/Cards';
+import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
 //
 // import {} from 'constants/routes';
@@ -70,7 +71,9 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
   };
   const priceRange = [0, 0];
 
-  return (
+  return loading ? (
+    <PageSpinner />
+  ) : (
     <div style={{ width: '85%', margin: '0 auto' }}>
       <Metadata />
       <Box px={10}>

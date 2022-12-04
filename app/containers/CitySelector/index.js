@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import PageSpinner from 'components/PageSpinner';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
@@ -23,7 +24,11 @@ import SelectCustom from '../../components/Controls/SelectCustom';
 
 import { RED_COLOR } from '../../constants/styles';
 import { loadCity, loadDistrict } from './actions';
-import { makeSelectCityData, makeSelectDistrictData } from './selectors';
+import {
+  makeSelectCityData,
+  makeSelectDistrictData,
+  makeSelectCityLoading,
+} from './selectors';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -38,6 +43,7 @@ export function CitySelector({
   citiData,
   districtData,
   getCities,
+  loading,
   getDistricts,
   defaultCity,
   defaultDistrict,
@@ -64,57 +70,61 @@ export function CitySelector({
     }
   }, []);
 
-  return (
-    <FormControl>
-      <SimpleGrid columns={2} spacing={2}>
-        <Box>
-          <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
-          {citiData ? (
-            <SelectCustom
-              id="city"
-              size="md"
-              placeholder="Select city"
-              {...register('city')}
-              onChange={e => handleChangeCity(e.target.value)}
-              value={city}
-            >
-              {citiData.map(option => (
-                <option value={option.uid.toString()} key={option.uid}>
-                  {option.name}
-                </option>
-              ))}
-            </SelectCustom>
-          ) : null}
+  return loading ? (
+    <PageSpinner />
+  ) : (
+    <>
+      <FormControl>
+        <SimpleGrid columns={2} spacing={2}>
+          <Box>
+            <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
+            {citiData ? (
+              <SelectCustom
+                id="city"
+                size="md"
+                placeholder="Select city"
+                {...register('city')}
+                onChange={e => handleChangeCity(e.target.value)}
+                value={city}
+              >
+                {citiData.map(option => (
+                  <option value={option.uid.toString()} key={option.uid}>
+                    {option.name}
+                  </option>
+                ))}
+              </SelectCustom>
+            ) : null}
 
-          <Text color={RED_COLOR}>
-            {errors.province && errors.province.message}
-          </Text>
-        </Box>
-        <Box>
-          <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
-          {districtData ? (
-            <SelectCustom
-              id="district"
-              size="md"
-              placeholder="Select district"
-              {...register('district')}
-              onChange={e => handleChangeDistrict(e.target.value)}
-              value={district}
-            >
-              {districtData.map(option => (
-                <option value={option.uid} key={option.uid}>
-                  {option.name}
-                </option>
-              ))}
-            </SelectCustom>
-          ) : null}
+            <Text color={RED_COLOR}>
+              {errors.province && errors.province.message}
+            </Text>
+          </Box>
+          <Box>
+            <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
+            {districtData ? (
+              <SelectCustom
+                id="district"
+                size="md"
+                placeholder="Select district"
+                {...register('district')}
+                onChange={e => handleChangeDistrict(e.target.value)}
+                value={district}
+              >
+                {districtData.map(option => (
+                  <option value={option.uid} key={option.uid}>
+                    {option.name}
+                  </option>
+                ))}
+              </SelectCustom>
+            ) : null}
 
-          <Text color={RED_COLOR}>
-            {errors.district && errors.district.message}
-          </Text>
-        </Box>
-      </SimpleGrid>
-    </FormControl>
+            <Text color={RED_COLOR}>
+              {errors.district && errors.district.message}
+            </Text>
+          </Box>
+        </SimpleGrid>
+      </FormControl>
+    </>
   );
 }
 
@@ -123,6 +133,7 @@ CitySelector.propTypes = {
   register: PropTypes.any,
   errors: PropTypes.any,
   citiData: PropTypes.any,
+  loading: PropTypes.bool,
   districtData: PropTypes.any,
   getCities: PropTypes.func,
   getDistricts: PropTypes.func,
@@ -132,6 +143,7 @@ CitySelector.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   citiData: makeSelectCityData(),
+  loading: makeSelectCityLoading(),
   districtData: makeSelectDistrictData(),
 });
 export function mapDispatchToProps(dispatch) {
