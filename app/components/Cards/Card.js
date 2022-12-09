@@ -68,7 +68,7 @@ function Card(props) {
         style={{ aspectRatio: '1/1.2' }}
         zIndex={50}
         mt="0.3rem"
-        ml="1px"
+        // ml="1px"
       />
       <Link href={`/artist/${props.data.uid}`} zIndex={1}>
         <GradientBox>

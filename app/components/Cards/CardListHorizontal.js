@@ -5,7 +5,7 @@ import Card from './Card';
 
 const CardListHorizontal = ({ dataList, columns, spacing }) => (
   <Container maxW="100%" centerContent>
-    <SimpleGrid maxW="100%" columns={columns} spacing={spacing}>
+    <SimpleGrid columns={columns} spacing={spacing}>
       {/* eslint-disable-next-line func-names */}
       {dataList.map(function(data) {
         const { id } = data;
@@ -39,8 +39,15 @@ CardListHorizontal.defaultProps = {
       id: '5',
     },
   ],
-  columns: [1, 2, 3, 4, 5],
-  spacing: '40px',
+  columns: { sm: 1, md: 2, lg: 3, xl: 4, '2xl': 4, '3xl': 5 },
+  spacing: {
+    sm: '1rem',
+    md: '1.5rem',
+    lg: '1.5rem',
+    xl: '1.5rem',
+    '2xl': '2.5rem',
+    '3xl': '2.5rem',
+  },
 };
 
 export default CardListHorizontal;

@@ -5,10 +5,12 @@ import { PRI_TEXT_COLOR, TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 // import { StyleFunctionProps } from '@chakra-ui/theme-tools';
 const breakpoints = {
   sm: '320px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1200px',
-  '2xl': '1537px',
+  md: '768px', // tablet
+  lg: '1024px', // small screen
+  xl: '1200px', // small screen
+  '2xl': '1537px', // medium screen
+  '3xl': '1920px', // casual screen
+  '4xl': '2560px', // large screen
 };
 const theme = extendTheme(
   {

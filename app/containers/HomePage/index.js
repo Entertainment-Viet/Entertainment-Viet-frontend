@@ -92,6 +92,14 @@ export function HomePage({ loading, error, data, onLoadData }) {
           mt="12"
           mb="6"
           ml="10"
+          textAlign={{
+            base: 'center',
+            md: 'center',
+            lg: 'left',
+            xl: 'left',
+            '2xl': 'left',
+            '3xl': 'left',
+          }}
           fontWeight="600"
           fontSize="20px"
           lineHeight="24px"
