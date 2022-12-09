@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import PageSpinner from 'components/PageSpinner';
 import Metadata from 'components/Metadata';
 import { toIsoString, getSubCategory } from 'utils/helpers';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
@@ -37,7 +36,7 @@ import {
   TEXT_GREEN,
 } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
-import { makeSelectCategories, makeSelectLoading } from './selectors';
+import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
 // import { dataDistrictHCM } from '../../utils/data-address';
 import CitySelector from '../CitySelector';
@@ -51,7 +50,7 @@ const CustomFormLabel = chakra(FormLabel, {
 
 const key = 'CreatePackagePage';
 
-export function CreatePackagePage({ getCategories, categories, loading }) {
+export function CreatePackagePage({ getCategories, categories }) {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
@@ -125,9 +124,7 @@ export function CreatePackagePage({ getCategories, categories, loading }) {
     });
   };
 
-  return loading ? (
-    <PageSpinner />
-  ) : (
+  return (
     <SimpleGrid
       sx={{
         justifyContent: 'center',
@@ -417,13 +414,11 @@ export function CreatePackagePage({ getCategories, categories, loading }) {
 CreatePackagePage.propTypes = {
   match: PropTypes.object,
   getCategories: PropTypes.func,
-  loading: PropTypes.bool,
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   categories: makeSelectCategories(),
-  loading: makeSelectLoading(),
 });
 export function mapDispatchToProps(dispatch) {
   return {

@@ -18,7 +18,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import PageSpinner from 'components/PageSpinner';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { toIsoString, getSubCategory } from 'utils/helpers';
@@ -39,7 +38,7 @@ import {
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import NotificationProvider from '../../components/NotificationProvider';
 
-import { makeSelectCategories, makeSelectLoading } from './selectors';
+import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
 
 const CustomFormLabel = chakra(FormLabel, {
@@ -50,12 +49,7 @@ const CustomFormLabel = chakra(FormLabel, {
 
 const key = 'CreatePositionPage';
 
-export function CreatePositionPage({
-  getCategories,
-  categories,
-  match,
-  loading,
-}) {
+export function CreatePositionPage({ getCategories, categories, match }) {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
@@ -132,9 +126,7 @@ export function CreatePositionPage({
     });
   };
 
-  return loading ? (
-    <PageSpinner />
-  ) : (
+  return (
     <SimpleGrid
       sx={{
         justifyContent: 'center',
@@ -409,13 +401,11 @@ export function CreatePositionPage({
 CreatePositionPage.propTypes = {
   match: PropTypes.object,
   getCategories: PropTypes.func,
-  loading: PropTypes.bool,
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   categories: makeSelectCategories(),
-  loading: makeSelectLoading(),
 });
 export function mapDispatchToProps(dispatch) {
   return {
