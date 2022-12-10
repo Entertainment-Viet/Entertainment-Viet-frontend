@@ -38,4 +38,8 @@ export const messages = {
   kycVerify: () => t(translations.OrganizerManagementPage.kycVerify),
   kycVerified: () => t(translations.OrganizerManagementPage.kycVerified),
   category: () => t(translations.OrganizerManagementPage.category),
+  incomeRange: () => t(translations.OrganizerManagementPage.incomeRange),
+  location: () => t(translations.OrganizerManagementPage.location),
+  locationDistrict: () => t(translations.loginPage.locationDistrict),
+  locationCity: () => t(translations.loginPage.locationCity),
 };

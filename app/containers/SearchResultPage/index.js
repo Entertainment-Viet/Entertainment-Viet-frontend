@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import CategoriesFilter from 'components/CategoriesFilter';
+import SearchLocation from 'components/SearchLocation';
 import {
   Container,
   Box,
@@ -16,7 +17,6 @@ import {
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import SelectSearchCustom from 'components/Controls/SelectSearchCustom';
 import {
   TEXT_PURPLE,
   SEC_TEXT_COLOR,
@@ -35,11 +35,13 @@ import {
   loadData,
   changePage,
   changeCity,
+  changeDistrict,
   changeStart,
   changeEnd,
   changeCategory,
   changeSearch,
   loadCategories,
+  loadLocation,
 } from './actions';
 import saga from './saga';
 import reducer from './reducer';
@@ -52,6 +54,7 @@ import {
   makeSelectSearch,
   makeSelectCategory,
   makeSelectCity,
+  makeSelectLocationData,
   makeSelectStart,
   makeSelectEnd,
   makeSelectCategories,
@@ -63,15 +66,19 @@ export function SearchResultPage({
   data,
   handlePageChange,
   handleCategoryChange,
-  handleCityChange,
   handleBudgetChange,
   handleSearchChange,
   handleStartChange,
   handleEndChange,
+  handleCityChange,
+  city,
+  handleDistrictChange,
   onLoadData,
+  onLoadCategory,
+  onLoadLocation,
   search,
   categories,
-  onLoadCategory,
+  locationData,
 }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -84,6 +91,7 @@ export function SearchResultPage({
   const [categoriesFiltered, setCategoriesFiltered] = useState([]);
   useEffect(() => {
     onLoadCategory();
+    onLoadLocation();
     if (category) handleCategoryChange(category);
     // else if (searchParams) handleSearchChange(searchParams.replace('+', ' '));
     else if (searchParams) handleSearchChange(searchParams);
@@ -100,6 +108,18 @@ export function SearchResultPage({
     limit: paging.pageSize, // pageSize
     last: paging.last,
   };
+
+  const cityData = locationData && locationData.map(item => item.parentName);
+  const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item =>
+        item.locationType.type === 'district' &&
+        item.locationType.level === 2 &&
+        item.parentName === city,
+    );
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
@@ -107,47 +127,59 @@ export function SearchResultPage({
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
-      <HStack maxW="100%" mb="6">
-        <CategoriesFilter
-          placeholder="Categories"
-          listOptions={categoriesFiltered}
-        />
-        <SelectSearchCustom
-          placeholderName={t(messages.location())}
-          handleChange={handleCityChange}
-        />
-        <SliderRange titleRange={t(messages.incomeRange())} />
-        <Text>Your budget</Text>
-        <Box>
-          <NumberInput
-            color={PRI_TEXT_COLOR}
-            bg="transparent"
-            borderColor={TEXT_PURPLE}
-            onChange={val => handleBudgetChange(val)}
-          >
-            <NumberInputField placeholder="Budget" />
-          </NumberInput>
-        </Box>
-        <Text>Start time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="Start date"
-            handleDateChange={handleStartChange}
+      <HStack mb="6">
+        <HStack w="50%">
+          <CategoriesFilter
+            placeholder="Categories"
+            listOptions={categoriesFiltered}
           />
-        </Box>
-        <Text>End time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="End date"
-            handleDateChange={handleEndChange}
+          <SearchLocation
+            placeholder={t(messages.locationCity())}
+            optionList={cityNameList}
+            handleChangeLocation={handleCityChange}
           />
-        </Box>
+          {city && (
+            <SearchLocation
+              placeholder={t(messages.locationDistrict())}
+              handleChangeLocation={handleDistrictChange}
+              optionList={districtData}
+            />
+          )}
+          <SliderRange titleRange={t(messages.incomeRange())} />
+        </HStack>
+        <HStack w="50%">
+          <Text>Your budget</Text>
+          <Box>
+            <NumberInput
+              color={PRI_TEXT_COLOR}
+              bg="transparent"
+              borderColor={TEXT_PURPLE}
+              onChange={val => handleBudgetChange(val)}
+            >
+              <NumberInputField placeholder="Budget" />
+            </NumberInput>
+          </Box>
+          <Text>Start time</Text>
+          <Box>
+            <DateTimeCustom
+              template="datetime-picker right"
+              name="end_vip_date"
+              type="hm"
+              message="Start date"
+              handleDateChange={handleStartChange}
+            />
+          </Box>
+          <Text>End time</Text>
+          <Box>
+            <DateTimeCustom
+              template="datetime-picker right"
+              name="end_vip_date"
+              type="hm"
+              message="End date"
+              handleDateChange={handleEndChange}
+            />
+          </Box>
+        </HStack>
       </HStack>
       <Container maxW="100%" ps={0}>
         <SimpleGrid
@@ -187,6 +219,7 @@ SearchResultPage.propTypes = {
   handlePageChange: PropTypes.func,
   handleCategoryChange: PropTypes.func,
   handleCityChange: PropTypes.func,
+  handleDistrictChange: PropTypes.func,
   handleBudgetChange: PropTypes.func,
   handleSearchChange: PropTypes.func,
   handleStartChange: PropTypes.func,
@@ -200,9 +233,11 @@ SearchResultPage.propTypes = {
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   start: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  onLoadLocation: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -214,6 +249,7 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   category: makeSelectCategory(),
   city: makeSelectCity(),
+  locationData: makeSelectLocationData(),
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
@@ -231,7 +267,9 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
-      dispatch(loadData());
+    },
+    handleDistrictChange: district => {
+      dispatch(changeDistrict(district));
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
@@ -250,6 +288,9 @@ export function mapDispatchToProps(dispatch) {
     },
     onLoadCategory: () => {
       dispatch(loadCategories());
+    },
+    onLoadLocation: () => {
+      dispatch(loadLocation());
     },
   };
 }

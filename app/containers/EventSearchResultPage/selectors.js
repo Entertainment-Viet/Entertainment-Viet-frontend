@@ -51,6 +51,16 @@ const makeSelectCity = () =>
     selectState,
     State => State.city,
   );
+const makeSelectDistrict = () =>
+  createSelector(
+    selectState,
+    State => State.district,
+  );
+const makeSelectLocationData = () =>
+  createSelector(
+    selectState,
+    State => State.locationData,
+  );
 const makeSelectStart = () =>
   createSelector(
     selectState,
@@ -86,6 +96,8 @@ export {
   makeSelectSearch,
   makeSelectCategory,
   makeSelectCity,
+  makeSelectDistrict,
+  makeSelectLocationData,
   makeSelectPriceMax,
   makeSelectPriceMin,
   makeSelectStart,

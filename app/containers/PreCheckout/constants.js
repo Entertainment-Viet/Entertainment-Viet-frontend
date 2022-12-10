@@ -3,3 +3,7 @@ export const LOAD_INFO_SUCCESS = 'App/PreCheckout/LOAD_INFO_SUCCESS';
 export const LOAD_INFO_ERROR = 'App/PreCheckout/LOAD_INFO_ERROR';
 export const PAY_INSTANT = 'App/PreCheckout/PAY_INSTANT';
 export const PAY_LATER = 'App/PreCheckout/PAY_LATER';
+export const PAY_METHOD_VIEW = {
+  LATER: 'payLater',
+  INSTANT: 'payInstant',
+};

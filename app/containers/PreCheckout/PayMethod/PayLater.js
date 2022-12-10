@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Box, Text, HStack } from '@chakra-ui/react';
+import { Box, Text, HStack, useToast } from '@chakra-ui/react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,24 +15,33 @@ import { post } from 'utils/request';
 import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
 import Arrow from 'components/Icon/Arrow';
 import Wallet from 'components/Icon/Wallet';
+import NotificationProvider from 'components/NotificationProvider';
+import { PAY_METHOD_VIEW } from '../constants';
 import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
-function PayLater({ chooseMethod }) {
+function PayLater({ choosePayMethod }) {
   const { t } = useTranslation();
   const orgId = localStorage.getItem('uid');
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 1500,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   function instantPay() {
     const val = {
       paymentType: 'payment.online',
     };
-    post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        console.log('sent');
-      } else if (status1 === '400') {
-        console.log('fail');
+    post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res => {
+      if (res >= 400 && res < 500) {
+        notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+      } else if (res >= 500) {
+        notify('Thất bại, lỗi hệ thống. Vui lòng thử lại sau!');
       } else {
-        cacthResponse(res1);
+        notify('Thành công');
       }
     });
   }
@@ -40,17 +49,17 @@ function PayLater({ chooseMethod }) {
     const val = {
       paymentType: 'payment.offline',
     };
-    post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res1 => {
-      const status1 = getResStatus(res1);
-      if (status1 === '201') {
-        console.log('sent');
-      } else if (status1 === '400') {
-        console.log('fail');
+    post(API_ORG_ACTION_SHOPPINGCART, val, orgId).then(res => {
+      if (res >= 400 && res < 500) {
+        notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+      } else if (res >= 500) {
+        notify('Thất bại, lỗi hệ thống. Vui lòng thử lại sau!');
       } else {
-        cacthResponse(res1);
+        notify('Thành công');
       }
     });
   }
+
   return (
     <Box py={4}>
       <Box
@@ -66,8 +75,8 @@ function PayLater({ chooseMethod }) {
           transition: 'ease 0.3s',
         }}
         onClick={() => {
-          chooseMethod('payInstant');
-          // instantPay();
+          instantPay();
+          choosePayMethod(PAY_METHOD_VIEW.INSTANT);
         }}
       >
         <HStack whiteSpace="nowrap">
@@ -96,9 +105,7 @@ function PayLater({ chooseMethod }) {
           boxShadow: '-1px 5px #404b8d',
           transition: 'ease 0.3s',
         }}
-        onClick={() => {
-          laterPay();
-        }}
+        onClick={() => laterPay()}
       >
         <HStack whiteSpace="nowrap">
           <Wallet size={24} colorIcon={TEXT_PURPLE} />
@@ -118,10 +125,10 @@ function PayLater({ chooseMethod }) {
 }
 
 PayLater.propTypes = {
-  chooseMethod: PropTypes.func,
+  choosePayMethod: PropTypes.func,
 };
 const mapDispatchToProps = dispatch => ({
-  chooseMethod: payType => dispatch(choosePaymentType(payType)),
+  choosePayMethod: payType => dispatch(choosePaymentType(payType)),
 });
 
 const mapStateToProps = createStructuredSelector({

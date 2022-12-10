@@ -36,4 +36,7 @@ export const messages = {
   kycVerified: () => t(translations.TalentManagementPage.kycVerified),
   category: () => t(translations.TalentManagementPage.category),
   subCategory: () => t(translations.TalentManagementPage.subCategory),
+  incomeRange: () => t(translations.TalentManagementPage.incomeRange),
+  locationDistrict: () => t(translations.loginPage.locationDistrict),
+  locationCity: () => t(translations.loginPage.locationCity),
 };
