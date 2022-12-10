@@ -18,7 +18,7 @@ const CardListHorizontal = ({ dataList, columns, spacing }) => (
 CardListHorizontal.propTypes = {
   dataList: PropTypes.array,
   columns: PropTypes.array,
-  spacing: PropTypes.string,
+  spacing: PropTypes.array,
 };
 
 CardListHorizontal.defaultProps = {

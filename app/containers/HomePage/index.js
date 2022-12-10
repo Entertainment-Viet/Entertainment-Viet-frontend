@@ -76,8 +76,41 @@ export function HomePage({ loading, error, data, onLoadData }) {
     },
   ];
 
-  const columns = [1, 2, 3];
-
+  const columns = { sm: 1, md: 1, lg: 2, xl: 4, '2xl': 4, '3xl': 5 };
+  const spacing = {
+    sm: '1rem',
+    md: '5rem',
+    lg: '5rem',
+    xl: '20rem',
+    '2xl': '20rem',
+    '3xl': '20rem',
+  };
+  const flexDir = {
+    sm: 'column',
+    md: 'column',
+    lg: 'row',
+    xl: 'row',
+    '2xl': 'row',
+    '3xl': 'row',
+  };
+  const widthWelcomeBox = {
+    sm: '100%',
+    md: '80%',
+    lg: '50%',
+    xl: '70%',
+    '2xl': '50%',
+    '3xl': '50%',
+    '4xl': '50%',
+  };
+  const textAlign = {
+    base: 'center',
+    sm: 'center',
+    md: 'center',
+    lg: 'left',
+    xl: 'left',
+    '2xl': 'left',
+    '3xl': 'left',
+  };
   return loading ? (
     <PageSpinner />
   ) : (
@@ -92,14 +125,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
           mt="12"
           mb="6"
           ml="10"
-          textAlign={{
-            base: 'center',
-            md: 'center',
-            lg: 'left',
-            xl: 'left',
-            '2xl': 'left',
-            '3xl': 'left',
-          }}
+          textAlign={textAlign}
           fontWeight="600"
           fontSize="20px"
           lineHeight="24px"
@@ -110,10 +136,19 @@ export function HomePage({ loading, error, data, onLoadData }) {
         <Box>
           <CardListHorizontal />
         </Box>
-        <Box display="flex" pl={10}>
+        <Box
+          display="flex"
+          flexDir={flexDir}
+          w="100%"
+          mr="auto"
+          ml="auto"
+          pl={10}
+        >
           <Box
-            width="37%"
+            width={widthWelcomeBox}
             mt="12"
+            mr="auto"
+            ml="auto"
             backgroundImage={background}
             backgroundSize="100% 100%"
             borderRadius="10px"
@@ -136,7 +171,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
             <CardListHorizontal
               dataList={dataList}
               columns={columns}
-              spacing="45px"
+              spacing={spacing}
             />
           </Box>
         </Box>

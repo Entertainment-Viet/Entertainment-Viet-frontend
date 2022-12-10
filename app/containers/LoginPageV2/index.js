@@ -11,7 +11,6 @@ import { ROUTE_REGISTER, ROUTE_FORGOTPASSWORD } from 'constants/routes';
 import { ENUM_ROLES } from 'constants/enums';
 import { setSecureCookie, getCookie } from 'utils/cookie';
 import {
-  SimpleGrid,
   Box,
   Stack,
   HStack,
@@ -123,11 +122,7 @@ function LoginPageV2() {
   };
 
   return (
-    <SimpleGrid
-      sx={{
-        justifyContent: 'center',
-      }}
-    >
+    <Box mt="auto" mb="auto">
       <Metadata />
       <Box
         color={TEXT_GREEN}
@@ -144,14 +139,25 @@ function LoginPageV2() {
         sx={{
           backgroundColor: PRI_BACKGROUND,
         }}
-        width="545px"
-        borderRadius="10px"
+        mr="auto"
+        ml="auto"
+        width={{
+          base: '100%',
+          sm: '80%',
+          md: '50%',
+          lg: '50%',
+          xl: '40%',
+          '2xl': '40%',
+          '3xl': '40%',
+          '4xl': '40%',
+        }}
+        borderRadius="0.7rem"
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
       >
         <Box
           sx={{
-            marginBottom: '10px',
+            marginBottom: '0.7rem',
           }}
           fontWeight="600"
           fontSize="35px"
@@ -244,7 +250,7 @@ function LoginPageV2() {
           </Stack>
         </form>
       </Box>
-    </SimpleGrid>
+    </Box>
   );
 }
 
