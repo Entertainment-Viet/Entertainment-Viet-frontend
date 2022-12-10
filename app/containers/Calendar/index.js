@@ -49,17 +49,13 @@ export function BookManagementPage({ data, onLoadData, loading, roles, uid }) {
     onLoadData(roles, uid);
   }, []);
   // const { t } = useTranslation();
-  return (
+  return data && !loading ? (
     <Flex color={PRI_TEXT_COLOR} gap={8} minWidth="max-content">
-      {data || !loading ? (
-        <>
-          <WeeklyCalendar toDate={selectedDate} data={data} />
-          <Calendar onSelectDate={selectDate} data={data} />
-        </>
-      ) : (
-        <PageSpinner />
-      )}
+      <WeeklyCalendar toDate={selectedDate} data={data} />
+      <Calendar onSelectDate={selectDate} data={data} />
     </Flex>
+  ) : (
+    <PageSpinner />
   );
 }
 
