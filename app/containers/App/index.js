@@ -39,6 +39,7 @@ import CreatePackagePage from 'containers/CreatePackagePage/Loadable';
 import TalentHomePage from 'containers/TalentHomepage/Loadable';
 import EventSearchResultPage from 'containers/EventSearchResultPage/Loadable';
 import EventDetailPage from 'containers/EventDetailPage/Loadable';
+import PDFViewer from 'containers/PDFViewer/Loadable';
 // Components
 import GlobalFonts from 'components/GlobalFonts';
 import Banner from 'components/DevelopmentBanner';
@@ -110,7 +111,8 @@ export default function App() {
           isAuthenticated={isAuthenticated}
           roles={[ENUM_ROLES.ORG, ENUM_ROLES.TAL]}
         >
-          <PreCheckout />
+          {/* <PreCheckout /> */}
+          <PDFViewer />
         </PrivateRoute>
         <PrivateRoute
           exact

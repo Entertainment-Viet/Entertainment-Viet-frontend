@@ -9,7 +9,9 @@ import { Box, Divider } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { CardListHorizontal } from 'components/Cards';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import Metadata from 'components/Metadata';
+import PDFView from 'containers/PDFViewer';
 import background from './image/image.png';
 //
 // import {} from 'constants/routes';
@@ -80,6 +82,15 @@ export function HomePage({ loading, error, data, onLoadData }) {
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
+      <PDFDownloadLink document={<PDFView />} fileName="test.pdf">
+        {({ blob, url, loading, error }) =>
+          loading ? 'Loading document...' : 'Download now!'
+        }
+      </PDFDownloadLink>
+      
+      <PDFViewer>
+        <PDFView />
+      </PDFViewer>
       <Box px={10}>
         <ImageSlider slides={SlideData} />
       </Box>
