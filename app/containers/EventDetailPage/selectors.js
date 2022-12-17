@@ -3,7 +3,7 @@ import { initialState } from './reducer';
 
 const selectState = state => state.EventDetailPage || initialState;
 
-const makeSelectNFTLoading = () =>
+const makeSelectLoading = () =>
   createSelector(
     selectState,
     State => State.loading,
@@ -36,7 +36,7 @@ const makeSelectPositionInfo = () =>
 export {
   makeSelectData,
   makeSelectNFTError,
-  makeSelectNFTLoading,
+  makeSelectLoading,
   makeSelectPositions,
   makeSelectPositionInfo,
 };

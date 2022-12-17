@@ -3,13 +3,13 @@ import { initialState } from './reducer';
 
 const selectState = state => state.BookingDetail || initialState;
 
-const makeSelectNFTLoading = () =>
+const makeSelectBookingSuccess = () =>
   createSelector(
     selectState,
     State => State.loading,
   );
 
-const makeSelectNFTError = () =>
+const makeSelectBookingError = () =>
   createSelector(
     selectState,
     State => State.error,
@@ -29,7 +29,7 @@ const makeSelectId = () =>
 
 export {
   makeSelectData,
-  makeSelectNFTError,
-  makeSelectNFTLoading,
+  makeSelectBookingError,
+  makeSelectBookingSuccess,
   makeSelectId,
 };

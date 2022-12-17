@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString , getSubCategory } from 'utils/helpers';
+import { toIsoString, getSubCategory } from 'utils/helpers';
 import { API_CREATE_BOOKING } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -92,7 +92,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
     }
   }, [categories]);
 
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     const { value } = e.target;
     const cat = categories.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categories);
@@ -109,10 +109,12 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
         location: {
           street: getValues('street'),
           district: getValues('district'),
-          city: getValues('city')
+          city: getValues('city'),
         },
         note: describeNFTRef.current.getContent(),
-        categoryId: getValues('subCategory') ? getValues('subCategory') : getValues('category'),
+        categoryId: getValues('subCategory')
+          ? getValues('subCategory')
+          : getValues('category'),
         workType: getValues('workType'),
         price: {
           min: getValues('min'),
@@ -125,13 +127,11 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
         extensions: 'string',
       },
       paymentType: getValues('paymentType'),
-      extensions: "string"
+      extensions: 'string',
     };
     post(API_CREATE_BOOKING, val, orgId).then(res1 => {
       if (res1 > 300) {
-        notify(
-          'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
-        );
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
         return;
       }
       notify('Thành công');
@@ -324,20 +324,19 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     <CustomFormLabel htmlFor="subcategory">
                       {t(messages.subCategory())}
                     </CustomFormLabel>
-                    <SelectCustom
-                      {...register('subcategory')}
-                    >
-                      {subCategory && subCategory.length > 0 && subCategory.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
+                    <SelectCustom {...register('subcategory')}>
+                      {subCategory &&
+                        subCategory.length > 0 &&
+                        subCategory.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
               </FormControl>
-
             </Stack>
           </Box>
         </Box>
@@ -402,8 +401,12 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   placeholder="Select option"
                   {...register('paymentType')}
                 >
-                  <option value={ENUM_PAYMENT_TYPE.OFFLINE}>{t(messages.laterPay())}</option>
-                  <option value={ENUM_PAYMENT_TYPE.ONLINE}>{t(messages.instantPay())}</option>
+                  <option value={ENUM_PAYMENT_TYPE.OFFLINE}>
+                    {t(messages.laterPay())}
+                  </option>
+                  <option value={ENUM_PAYMENT_TYPE.ONLINE}>
+                    {t(messages.instantPay())}
+                  </option>
                 </SelectCustom>
               </Box>
             </Stack>

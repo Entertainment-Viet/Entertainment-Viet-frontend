@@ -78,9 +78,11 @@ const pageReducer = (state = initialState, action) =>
         draft.paging = action.paging;
         break;
       case LOAD_CATEGORIES_SUCCESS:
+        draft.loading = false;
         draft.categories = action.data;
         break;
       case LOAD_LOCATION_SUCCESS:
+        draft.loading = false;
         draft.locationData = action.data;
         break;
       case LOAD_EVENT_PRICE_RANGE_SUCCESS:
