@@ -11,6 +11,7 @@ import Metadata from 'components/Metadata';
 import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import CategoriesFilter from 'components/CategoriesFilter';
 import SearchLocation from 'components/SearchLocation';
+import PageSpinner from 'components/PageSpinner';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
@@ -62,6 +63,7 @@ export function EventSearchResultPage({
   handleEndChange,
   onLoadData,
   search,
+  loading,
   categories,
   onLoadCategory,
   onLoadLocation,
@@ -104,7 +106,9 @@ export function EventSearchResultPage({
         item.parentName === city,
     );
 
-  return (
+  return loading ? (
+    <PageSpinner />
+  ) : (
     <div style={{ width: '100%' }}>
       <Metadata />
       <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>

@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { CardListHorizontal } from 'components/Cards';
 import Metadata from 'components/Metadata';
+import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
 //
 // import {} from 'constants/routes';
@@ -77,74 +78,78 @@ export function HomePage({ loading, error, data, onLoadData }) {
 
   const columns = [1, 2, 3];
 
-  return (
+  return loading ? (
+    <PageSpinner />
+  ) : (
     <div style={{ width: '100%' }}>
       <Metadata />
-      <Box px={10}>
-        <ImageSlider slides={SlideData} />
-      </Box>
-      <Box
-        color={TEXT_GREEN}
-        mt="12"
-        mb="6"
-        ml="10"
-        fontWeight="600"
-        fontSize="20px"
-        lineHeight="24px"
-        noOfLines={1}
-      >
-        {t(messages.popularTalent())}
-      </Box>
-      <Box>
-        <CardListHorizontal />
-      </Box>
-      <Box display="flex" pl={10}>
+      <>
+        <Box px={10}>
+          <ImageSlider slides={SlideData} />
+        </Box>
         <Box
-          width="37%"
+          color={TEXT_GREEN}
           mt="12"
-          backgroundImage={background}
-          backgroundSize="100% 100%"
-          borderRadius="10px"
-          height="10%"
+          mb="6"
+          ml="10"
+          fontWeight="600"
+          fontSize="20px"
+          lineHeight="24px"
+          noOfLines={1}
         >
-          <WelcomeBox />
+          {t(messages.popularTalent())}
         </Box>
-        <Box pl={8}>
+        <Box>
+          <CardListHorizontal />
+        </Box>
+        <Box display="flex" pl={10}>
           <Box
-            color={TEXT_GREEN}
-            mb="6"
-            ml="4"
-            fontWeight="600"
-            fontSize="20px"
-            lineHeight="24px"
-            noOfLines={1}
+            width="37%"
+            mt="12"
+            backgroundImage={background}
+            backgroundSize="100% 100%"
+            borderRadius="10px"
+            height="10%"
           >
-            {t(messages.recentTalent())}
+            <WelcomeBox />
           </Box>
-          <CardListHorizontal
-            dataList={dataList}
-            columns={columns}
-            spacing="45px"
-          />
+          <Box pl={8}>
+            <Box
+              color={TEXT_GREEN}
+              mb="6"
+              ml="4"
+              fontWeight="600"
+              fontSize="20px"
+              lineHeight="24px"
+              noOfLines={1}
+            >
+              {t(messages.recentTalent())}
+            </Box>
+            <CardListHorizontal
+              dataList={dataList}
+              columns={columns}
+              spacing="45px"
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box px={10}>
-        <ImageSlider slides={SlideData} />
-      </Box>
-      <Box
-        color={TEXT_GREEN}
-        mt="12"
-        mb="6"
-        ml="10"
-        fontWeight="600"
-        fontSize="20px"
-        lineHeight="24px"
-        noOfLines={1}
-      >
-        {t(messages.editorChoice())}
-      </Box>
-      <CardListHorizontal />
-      <Divider />
+        <Box px={10}>
+          <ImageSlider slides={SlideData} />
+        </Box>
+        <Box
+          color={TEXT_GREEN}
+          mt="12"
+          mb="6"
+          ml="10"
+          fontWeight="600"
+          fontSize="20px"
+          lineHeight="24px"
+          noOfLines={1}
+        >
+          {t(messages.editorChoice())}
+        </Box>
+        <CardListHorizontal />
+        <Divider />
+      </>
     </div>
   );
 }

@@ -43,11 +43,11 @@ import { messages } from './messages';
 
 import saga from './saga';
 import reducer from './reducer';
-import { makeSelectData } from './selectors';
+import { makeSelectData, makeSelectBookingSuccess } from './selectors';
 import BookingDetailCard from './BookingDetailCard';
 
 const key = 'BookingDetail';
-export function BookingDetailPage({ match, onLoadData, data }) {
+export function BookingDetailPage({ match, onLoadData, data, loading }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
@@ -60,7 +60,7 @@ export function BookingDetailPage({ match, onLoadData, data }) {
   return (
     <div>
       <Metadata />
-      {
+      {data || !loading ? (
         /* <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
         <GridItem colSpan={2}>
           <VStack
@@ -108,7 +108,9 @@ export function BookingDetailPage({ match, onLoadData, data }) {
             <BookingDetailCard data={data} />
           </Box>
         </Flex>
-      }
+      ) : (
+        <PageSpinner />
+      )}
     </div>
   );
 }
@@ -116,11 +118,13 @@ export function BookingDetailPage({ match, onLoadData, data }) {
 BookingDetailPage.propTypes = {
   match: PropTypes.object,
   onLoadData: PropTypes.func,
+  loading: PropTypes.bool,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   data: makeSelectData(),
+  loading: makeSelectBookingSuccess(),
 });
 
 export function mapDispatchToProps(dispatch) {
