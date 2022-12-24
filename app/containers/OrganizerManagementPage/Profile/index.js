@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import {
   Text,
   Box,
@@ -89,35 +90,62 @@ const Profile = ({
     register,
     formState: { errors },
   } = useForm();
-
+  const access = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJxMmtLMktQcy1HQ1AyVjF3QXF6aGsxcVQ3SFpUVHN2OE1XMllqTVFHMG5FIn0.eyJleHAiOjE2NzE1NTc1NjgsImlhdCI6MTY3MTU1NzI2OCwianRpIjoiMDYwYWMzYmUtZjFmYi00Nzc2LWIyYjItZWRjZDg1YjU4MGM4IiwiaXNzIjoiaHR0cHM6Ly8xMy4yMTQuMTk3LjgxOjg0NDMvYXV0aC9yZWFsbXMvdmUtc3NvIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjYyMDNmY2Q3LWRkMGMtNDk5YS1hOTNhLTIyYTBjYmUyNzE2ZiIsInR5cCI6IkJlYXJlciIsImF6cCI6ImJhY2tlbmQiLCJzZXNzaW9uX3N0YXRlIjoiMDg5NjJkOTItMThlNS00MjUxLWJhN2QtZmE5NTU3NGM4ZjlmIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIk9SR0FOSVpFUl9QQVlNRU5UX0FDQ0VTUyIsIk9SR0FOSVpFUl9XUklURV9BQ0NFU1MiLCJPUkdBTklaRVJfTU9ESUZZX0FDQ0VTUyIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJPUkdBTklaRVJfUkVBRF9BQ0NFU1MiLCJkZWZhdWx0LXJvbGVzLXZlLXNzbyJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImJhY2tlbmQiOnsicm9sZXMiOlsiQ0xFQVJfU0hPUFBJTkdfQ0FSVCIsIlJFQURfQk9PS0lORyIsIlJFSkVDVF9QT1NJVElPTl9BUFBMSUNBTlQiLCJQQVlfT1JHQU5JWkVSX0NBU0giLCJBRERfQk9PS0lORyIsIlJFQURfVEFMRU5UIiwiUkVBRF9TQ09SRSIsIlJFQURfQ0FSVF9JVEVNIiwiVkVSSUZZX09SR0FOSVpFUiIsIkRFTEVURV9KT0JPRkZFUiIsIkJST1dTRV9FVkVOVCIsIkRFTEVURV9GSUxFIiwiQUREX1JFVklFVyIsIkFERF9PUkdBTklaRVJfRkVFREJBQ0siLCJCUk9XU0VfSk9CT0ZGRVIiLCJTRUxGX1VQREFURV9PUkdBTklaRVIiLCJBRERfRVZFTlRfUE9TSVRJT04iLCJSRUFEX1JFVklFVyIsIk9SREVSX1RBTEVOVF9QQUNLQUdFIiwiVVBEQVRFX0VWRU5UX1BPU0lUSU9OIiwiQlJPV1NFX0JPT0tJTkdfT1JHQU5JWkVSIiwiUkVBRF9PUkdBTklaRVJfRkVFREJBQ0siLCJVUERBVEVfQ0FSVF9JVEVNIiwiQlJPV1NFX0JPT0tJTkdfT1JHQU5JWkVSX0RFVEFJTCIsIkNBTkNFTF9CT09LSU5HX09SR0FOSVpFUiIsIlJFQ0VJVkVfT1JHQU5JWkVSX0NBU0giLCJBRERfSk9CT0ZGRVIiLCJCUk9XU0VfUEFDS0FHRSIsIkFDQ0VQVF9CT09LSU5HX09SR0FOSVpFUiIsIlJFQURfSk9CT0ZGRVIiLCJGSU5JU0hfQk9PS0lOR19PUkdBTklaRVIiLCJCUk9XU0VfUE9TSVRJT05fQVBQTElDQU5UIiwiUkVBRF9FVkVOVCIsIlJFQURfT1JHQU5JWkVSIiwiREVMRVRFX0VWRU5UX1BPU0lUSU9OIiwiUkVBRF9FVkVOVF9QT1NJVElPTiIsIlVQREFURV9FVkVOVCIsIkFERF9FVkVOVCIsIkJST1dTRV9UQUxFTlQiLCJVUERBVEVfQk9PS0lORyIsIlJFQURfUEFDS0FHRSIsIkJST1dTRV9PUkdBTklaRVJfRkVFREJBQ0siLCJBRERfQ0FSVF9JVEVNIiwiQlJPV1NFX0JPT0tJTkdfVEFMRU5UIiwiUkVBRF9PUkdBTklaRVJfREVUQUlMIiwiVVBMT0FEX0ZJTEUiLCJSRUFEX0ZJTEUiLCJCUk9XU0VfRVZFTlRfUE9TSVRJT04iLCJERUxFVEVfRVZFTlQiLCJSRUFEX1NIT1BQSU5HX0NBUlQiLCJBQ0NFUFRfUE9TSVRJT05fQVBQTElDQU5UIiwiUkVBRF9MT0NBVElPTiIsIkRFTEVURV9DQVJUX0lURU0iLCJSRUFEX0NBVEVHT1JZIiwiVVBEQVRFX0pPQk9GRkVSIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDg5NjJkOTItMThlNS00MjUxLWJhN2QtZmE5NTU3NGM4ZjlmIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJvcmdhbml6ZXIifQ.wlM8Aa6RdoW48rXQ4f0m_sGCbUVTxBY41NXCsunRg40pgwge8iEGlOkfY6Rk5MRbWH3XW6DT3acXaGs_9T51P0DQ3-PNnn5L6oUauNvz0Vm_-_Zjor2b19W3-PR0z4kKTbGdpTlvi5qFHYgkKVlg6rr_zlDUSaYPa0ubOHH_9UrHfj1HhAeSr4dVuCUaKtMjSsUdRYIFaHhtDbsVMYGQpjQX20-vatpTDW0Kyd7Ek6R3cfKqHiatU3XrTfdZahfbebWLNbMYN7CfpusMq775C8dCcJRByf0_jiqIAsoeSxsG6hxTOuKntWo8b0ej9Y4ejesuXsvCt07eIAg6ea1NaQ'
   useEffect(() => {
     loadOrganizer(organizerId);
     loadCategories();
-    get(
-      'http://13.214.197.81:8888/api/aws/files/6203fcd7-dd0c-499a-a93a-22a0cbe2716f_false_1670856120632.png',
-    ).then(res => {
-      console.log(res);
-      const arrayBufferView = new Uint8Array(res);
-      const reader = new FileReader();
-      const blob = new Blob([arrayBufferView], { type: 'image/png' });
-      reader.readAsDataURL(blob);
-      console.log(reader.result)
-      const urlCreator = window.URL || window.webkitURL;
-      const imageUrl = urlCreator.createObjectURL(blob);
-      console.log(imageUrl);
-      //   const arrayBufferView = new Uint8Array(res);
-      //   const blobURL = URL.createObjectURL(new Blob([res]));
-      //   const base64string = btoa(String.fromCharCode(...new Uint8Array(res)));
-      //   console.log('blob', blobURL);
-      //   console.log('blob', base64string);
-      //   const base64ImageString = Buffer.from(res, 'binary').toString('base64');
-      //   const utf8Encode = new TextEncoder();
-      //   console.log(res);
-      //   utf8Encode.encode(res);
-      //   console.log(utf8Encode.toString());
-      // setTest(blobURL);
-      setTest(imageUrl);
-    });
+    // get(
+    //   'http://13.214.197.81:8888/api/aws/files/6203fcd7-dd0c-499a-a93a-22a0cbe2716f_false_1670856120632.png',
+    // ).then(res => {
+    //   console.log(res);
+    //   const bytes = Array.from(new Uint8Array(res));
+
+    //   // const base64string = btoa(String.fromCharCode(...new Uint8Array(res)));
+    //   // console.log('blob', base64string);
+    //   const base64ImageString = Buffer.from(res, 'binary').toString('base64');
+    //   // const utf8Encode = new TextEncoder();
+    //   console.log(Image.resolveAssetSource(res));
+    //   // utf8Encode.encode(res);
+    //   // console.log(utf8Encode.toString());
+    //   setTest(ImageresolveAssetSource(res));
+    //   // setTest(base64string);
+    // });
+    axios
+      .get(
+        'http://13.214.197.81:8888/api/aws/files/6203fcd7-dd0c-499a-a93a-22a0cbe2716f_false_1670856120632.png',
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+          responseType: 'arraybuffer',
+        },
+      )
+      .then(res => {
+        const base64ImageString = Buffer.from(res.data, 'binary').toString(
+          'base64',
+        );
+        console.log('log: ', base64ImageString);
+        setTest(base64ImageString);
+      });
+    axios
+      .get(
+        'http://13.214.197.81:8888/api/aws/files/6203fcd7-dd0c-499a-a93a-22a0cbe2716f_true_1671556329142.pdf',
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+          responseType: 'arraybuffer',
+        },
+      )
+      .then(res => {
+        const aa = new Blob([res.blob()], {
+          type: 'application/pdf',
+        });
+        const fileURL = URL.createObjectURL(aa);
+        window.open(fileURL);
+        console.log('log: ', base64ImageString);
+        // setTest(base64ImageString)
+      });
   }, [organizerId]);
 
   const handleUpload = item => {
@@ -186,11 +214,11 @@ const Profile = ({
                 <Box>
                   <Avatar
                     size="2xl"
-                    src={`data:image/png;base64,${test}`}
+                    src={`${test}`}
                     borderColor="transparent"
                     showBorder
                   >
-                    <img src={`${test}`} />
+                    <img src={`data:image/png;base64,${test}`} />
                     <AvatarBadge
                       as={IconButton}
                       size="sm"
