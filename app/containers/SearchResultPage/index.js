@@ -23,6 +23,8 @@ import {
   PRI_TEXT_COLOR,
   TEXT_GREEN,
 } from 'constants/styles';
+import PageSpinner from 'components/PageSpinner';
+
 import { useTranslation } from 'react-i18next';
 import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
@@ -121,7 +123,7 @@ export function SearchResultPage({
         item.parentName === city,
     );
   const columns = { sm: 1, md: 2, lg: 3, xl: 4 };
-  return (
+  return data ? (
     <div style={{ width: '100%' }}>
       <Metadata />
       <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>
@@ -220,6 +222,8 @@ export function SearchResultPage({
         </Box>
       </Container>
     </div>
+  ) : (
+    <PageSpinner />
   );
 }
 

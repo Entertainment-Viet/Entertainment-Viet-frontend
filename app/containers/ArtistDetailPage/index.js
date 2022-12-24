@@ -120,7 +120,7 @@ export function ArtistDetailPage({
   const handleSeeMore = () => {
     setPageNumberComments(pageNumberComments + 1);
   };
-  return (
+  return data ? (
     <div w="100%">
       <Metadata />
       <H1 color={TEXT_GREEN} ml={4}>
@@ -180,6 +180,8 @@ export function ArtistDetailPage({
         data={packageInfo}
       />
     </div>
+  ) : (
+    <PageSpinner />
   );
 }
 

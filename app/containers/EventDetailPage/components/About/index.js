@@ -35,7 +35,7 @@ const About = ({ data, positions, toggleModal }) => {
     ));
   const ARTIST_IMAGE =
     'https://vnn-imgs-a1.vgcloud.vn/znews-photo.zadn.vn/Uploaded/izhqv/2020_11_12/viechannelphotos_rap_viet_tap_15_thi_sinh_rpt_mck_1_16050204487251365930315_crop_1605020583124889154191.jpg';
-  return (
+  return data ? (
     <Flex direction="column" w="100%">
       <Flex direction={{ sm: 'column-reverse', lg: 'row' }}>
         <Box>
@@ -63,6 +63,8 @@ const About = ({ data, positions, toggleModal }) => {
         <RenderProfile />
       </Box>
     </Flex>
+  ) : (
+    <PageSpinner />
   );
 };
 

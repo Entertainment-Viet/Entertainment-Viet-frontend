@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import parserHtml from 'utils/html';
 import PropTypes from 'prop-types';
+import PageSpinner from 'components/PageSpinner';
 import { messages } from '../../messages';
 import Header from '../../Header';
 import NormalProfile from '../../NormalProfile';
@@ -43,7 +44,7 @@ const Overview = ({ data, match, packages, toggleModal, comments }) => {
         'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80',
     },
   ];
-  return (
+  return data ? (
     <Flex direction="column" w="100%">
       <Flex
         direction={{ sm: 'column-reverse', lg: 'row' }}
@@ -94,6 +95,8 @@ const Overview = ({ data, match, packages, toggleModal, comments }) => {
         </VStack>
       </Box>
     </Flex>
+  ) : (
+    <PageSpinner />
   );
 };
 

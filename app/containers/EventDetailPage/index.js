@@ -74,7 +74,7 @@ export function EventDetailPage({
   useEffect(() => {
     onLoadData(match.params.id1, match.params.id2);
   }, [match.params.id]);
-  return (
+  return data ? (
     <div>
       <Metadata />
       {/* <H1 color={TEXT_GREEN} ml={4}>
@@ -118,6 +118,8 @@ export function EventDetailPage({
         data={positionInfo}
       />
     </div>
+  ) : (
+    <PageSpinner />
   );
 }
 

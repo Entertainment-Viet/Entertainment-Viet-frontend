@@ -3,6 +3,7 @@ import { Text, Divider, Image, Box, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 import parserHtml from 'utils/html';
+import PageSpinner from 'components/PageSpinner';
 import PropTypes from 'prop-types';
 import { messages } from '../../messages';
 import Header from '../../Header';
@@ -34,7 +35,7 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
 
   const ARTIST_IMAGE =
     'https://vnn-imgs-a1.vgcloud.vn/znews-photo.zadn.vn/Uploaded/izhqv/2020_11_12/viechannelphotos_rap_viet_tap_15_thi_sinh_rpt_mck_1_16050204487251365930315_crop_1605020583124889154191.jpg';
-  return (
+  return data ? (
     <Flex direction="column" w="100%">
       <Flex
         direction={{ sm: 'column-reverse', lg: 'row' }}
@@ -73,14 +74,9 @@ const About = ({ data, match, packages, toggleModal, comments }) => {
         {data.displayName}
       </Text>
       <RenderProfile />
-      {/*
-        <PackagesBox
-          data={packages.content}
-          id={match.params.id}
-          toggleModal={toggleModal}
-        />
-      </GridItem> */}
     </Flex>
+  ) : (
+    <PageSpinner />
   );
 };
 
