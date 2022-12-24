@@ -74,42 +74,37 @@ export function HomePage({ loading, error, data, onLoadData }) {
     {
       id: '3',
     },
+    {
+      id: '4',
+    },
+    {
+      id: '5',
+    },
   ];
 
-  const columns = { sm: 1, md: 1, lg: 2, xl: 4, '2xl': 4, '3xl': 5 };
+  const columns = { sm: 1, md: 2, xl: 3, '2xl': 4, '3xl': 5 };
   const spacing = {
     sm: '1rem',
-    md: '5rem',
-    lg: '5rem',
-    xl: '20rem',
-    '2xl': '20rem',
-    '3xl': '20rem',
+    md: '0.5rem',
+    lg: '1.5rem',
+    xl: '1.5rem',
+    '2xl': '2rem',
+    '3xl': '1rem',
   };
   const flexDir = {
     sm: 'column',
-    md: 'column',
     lg: 'row',
-    xl: 'row',
-    '2xl': 'row',
-    '3xl': 'row',
   };
   const widthWelcomeBox = {
-    sm: '100%',
-    md: '80%',
-    lg: '50%',
-    xl: '70%',
-    '2xl': '50%',
-    '3xl': '50%',
-    '4xl': '50%',
+    md: '60%',
+    lg: '35%',
+    xl: '25%',
+    '2xl': '20%',
+    '3xl': '15%',
   };
   const textAlign = {
-    base: 'center',
     sm: 'center',
-    md: 'center',
-    lg: 'left',
-    xl: 'left',
-    '2xl': 'left',
-    '3xl': 'left',
+    md: 'left',
   };
   return loading ? (
     <PageSpinner />
@@ -124,45 +119,40 @@ export function HomePage({ loading, error, data, onLoadData }) {
           color={TEXT_GREEN}
           mt="12"
           mb="6"
-          ml="10"
+          ml={{ md: '16', lg: '10', '2xl': '10' }}
           textAlign={textAlign}
           fontWeight="600"
-          fontSize="20px"
+          fontSize={{ sm: '1.5rem', md: '1.25rem' }}
           lineHeight="24px"
-          noOfLines={1}
+          noOfLines={{ sm: 2, md: 1 }}
         >
           {t(messages.popularTalent())}
         </Box>
         <Box>
           <CardListHorizontal />
         </Box>
-        <Box
-          display="flex"
-          flexDir={flexDir}
-          w="100%"
-          mr="auto"
-          ml="auto"
-          pl={10}
-        >
+        <Box display="flex" flexDir={flexDir} pl={{ sm: 0, lg: 10 }}>
           <Box
             width={widthWelcomeBox}
             mt="12"
-            mr="auto"
-            ml="auto"
+            mr={{ md: 'auto', xl: 0 }}
+            ml={{ md: 'auto', xl: 0 }}
             backgroundImage={background}
             backgroundSize="100% 100%"
-            borderRadius="10px"
+            borderRadius="0.625rem"
             height="10%"
           >
             <WelcomeBox />
           </Box>
-          <Box pl={8}>
+          <Box pl={{ lg: 8 }}>
             <Box
               color={TEXT_GREEN}
               mb="6"
-              ml="4"
+              ml={{ md: '16', lg: '4' }}
+              mt={{ sm: '16', lg: '0' }}
+              textAlign={textAlign}
               fontWeight="600"
-              fontSize="20px"
+              fontSize="1.25rem"
               lineHeight="24px"
               noOfLines={1}
             >
@@ -182,9 +172,10 @@ export function HomePage({ loading, error, data, onLoadData }) {
           color={TEXT_GREEN}
           mt="12"
           mb="6"
-          ml="10"
+          textAlign={textAlign}
+          ml={{ md: '16', lg: '10', '2xl': '10' }}
           fontWeight="600"
-          fontSize="20px"
+          fontSize={{ sm: '1.5rem', md: '1.25rem' }}
           lineHeight="24px"
           noOfLines={1}
         >

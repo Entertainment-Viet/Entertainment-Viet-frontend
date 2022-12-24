@@ -34,7 +34,9 @@ export default function Sidebar() {
     <Flex
       pos="sticky"
       left="5"
+      zIndex="999"
       h="100vh"
+      display={{ base: 'none', lg: 'block' }}
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize === 'small' ? '15px' : '30px'}

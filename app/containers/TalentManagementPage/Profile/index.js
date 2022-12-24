@@ -89,8 +89,10 @@ const Profile = ({
 
   useEffect(() => {
     if (talentInfo && categoriesInfo) {
-      const category = talentInfo.offerCategories && talentInfo.offerCategories.length > 0 ?
-        talentInfo.offerCategories[0] : categoriesInfo[0];
+      const category =
+        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
+          ? talentInfo.offerCategories[0]
+          : categoriesInfo[0];
       const sub = getSubCategory(category, categoriesInfo);
       setSubCategory(sub.chilren);
     }
@@ -103,7 +105,7 @@ const Profile = ({
     }
   };
 
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     const value = e.target.value;
     const cat = categoriesInfo.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categoriesInfo);
@@ -149,221 +151,267 @@ const Profile = ({
       .catch(err => cacthError(err));
   };
 
-  return (
-    <SimpleGrid
-      width="100%"
+  const flexDir = {
+    base: 'column',
+    md: 'row',
+  };
+  return talentInfo && categoriesInfo ? (
+    <Box
+      color={PRI_TEXT_COLOR}
+      bg={SUB_BLU_COLOR}
+      w={{ sm: '100%', lg: '80%', xl: '50%' }}
+      mr={{ md: 'auto' }}
+      ml={{ md: 'auto' }}
+      px={{ sm: '3rem', md: '7rem' }}
+      py={{ sm: '1.5rem', md: '4.625rem' }}
       sx={{
-        justifyContent: 'center',
+        marginTop: '10px',
+        borderRadius: '5px',
       }}
     >
-      {talentInfo && categoriesInfo ? (
-        <Box
-          color={PRI_TEXT_COLOR}
-          bg={SUB_BLU_COLOR}
-          width="700px"
-          sx={{
-            marginTop: '10px',
-            borderRadius: '5px',
-          }}
-          px="112px"
-          py="74px"
-        >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing="2">
-              <Box display="flex" marginBottom="20px">
-                <Box>
-                  <Avatar
-                    size="2xl"
-                    src={url}
-                    borderColor="transparent"
-                    showBorder
-                  >
-                    <AvatarBadge
-                      as={IconButton}
-                      size="sm"
-                      top="-8px"
-                      left="50px"
-                      colorScheme="transparent"
-                      borderColor="transparent"
-                      icon={<AddAvatarIcon />}
-                    />
-                    <Input
-                      type="file"
-                      top="0"
-                      left="0"
-                      opacity="0"
-                      onDragEnter={startAnimation}
-                      onDragLeave={stopAnimation}
-                      position="absolute"
-                      onChange={e => handleUpload(e.target.files[0])}
-                    />
-                  </Avatar>
-                </Box>
-                <Box m="auto" width="50%">
-                  <Box
-                    fontWeight="600px"
-                    fontSize="30px"
-                    lineHeight="36px"
-                    color={TEXT_PURPLE}
-                  >
-                    {talentInfo.displayName}
-                  </Box>
-                  <Box
-                    border="1px solid"
-                    borderRadius="5px"
-                    width="120px"
-                    fontWeight="600px"
-                    fontSize="15px"
-                    lineHeight="18px"
-                    color={
-                      talentInfo.userState === USER_STATE.VERIFIED
-                        ? TEXT_GREEN
-                        : PRI_TEXT_COLOR
-                    }
-                    display="flex"
-                    px={4}
-                  >
-                    Talent
-                    {talentInfo.userState === USER_STATE.VERIFIED && (
-                      <Box ml={7}>
-                        <AddVerifyIcon />
-                      </Box>
-                    )}
-                  </Box>
-                </Box>
-              </Box>
-              <FormControl>
-                <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
-                <InputCustomV2
-                  id="displayName"
-                  type="text"
-                  size="md"
-                  placeholder="Enter your name"
-                  {...register('displayName', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                  defaultValue={talentInfo.displayName}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing="2">
+          <Box
+            display="flex"
+            flexDir={flexDir}
+            justifyContent="center"
+            alignItems="center"
+            marginBottom="20px"
+          >
+            <Box>
+              <Avatar size="2xl" src={url} borderColor="transparent" showBorder>
+                <AvatarBadge
+                  as={IconButton}
+                  size="sm"
+                  top="-8px"
+                  left="50px"
+                  colorScheme="transparent"
+                  borderColor="transparent"
+                  icon={<AddAvatarIcon />}
                 />
-              </FormControl>
-              <Text color={RED_COLOR}>
-                {errors.displayName && errors.displayName.message}
-              </Text>
-              <FormControl>
-                <SimpleGrid columns={2} spacing={2}>
-                  <Box>
-                    <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
-                    <SelectCustom
-                      id="category"
-                      size="md"
-                      {...register('category')}
-                      onChange={handleChangeCategory}
-                      defaultValue={
-                        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
-                          ? categoriesInfo.filter(
-                            item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
-                    >
-                      {categoriesInfo && categoriesInfo.length > 0 && categoriesInfo.map(option => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={option.uid} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </SelectCustom>
-                  </Box>
-                  <Box>
-                    <CustomFormLabel>{t(messages.subCategory())}</CustomFormLabel>
-                    <SelectCustom
-                      id="subCategory"
-                      size="md"
-                      {...register('subCategory')}
-                    >
-                      {subCategory && subCategory.length > 0 && subCategory.map(option => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={option.uid} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </SelectCustom>
-                  </Box>
-                </SimpleGrid>
-              </FormControl>
-              <FormControl>
-                <CustomFormLabel htmlFor="description">
-                  {t(messages.history())}
-                </CustomFormLabel>
-                <QWERTYEditor
-                  ref={historyNFTRef}
-                  name="history"
-                  id="history"
-                  required
-                  val={
-                    talentInfo.extensions
-                      ? JSON.parse(talentInfo.extensions)[1].value
-                      : null
-                  }
+                <Input
+                  type="file"
+                  top="0"
+                  left="0"
+                  opacity="0"
+                  onDragEnter={startAnimation}
+                  onDragLeave={stopAnimation}
+                  position="absolute"
+                  onChange={e => handleUpload(e.target.files[0])}
                 />
-              </FormControl>
-              <FormControl>
-                <CustomFormLabel htmlFor="activity">
-                  {t(messages.activity())}
-                </CustomFormLabel>
-                <QWERTYEditor
-                  ref={activityNFTRef}
-                  name="activity"
-                  id="activity"
-                  required
-                  val={
-                    talentInfo.extensions
-                      ? JSON.parse(talentInfo.extensions)[0].value
-                      : null
-                  }
-                />
-              </FormControl>
-              <FormControl>
-                <CustomFormLabel htmlFor="bio">
-                  {t(messages.bio())}
-                </CustomFormLabel>
-                <QWERTYEditor
-                  ref={bioNFTRef}
-                  name="bio"
-                  id="bio"
-                  required
-                  val={talentInfo.bio}
-                />
-              </FormControl>
-              <Box />
-              <Button bg={TEXT_GREEN} color={SUB_BLU_COLOR} type="submit">
-                {t(messages.save())}
-              </Button>
-              <Box />
-              <Button
-                bg={TEXT_PURPLE}
-                color={SUB_BLU_COLOR}
-                disabled={talentInfo.userState === USER_STATE.VERIFIED}
+              </Avatar>
+            </Box>
+            <Box
+              display="flex"
+              flexDir={{
+                base: 'column',
+              }}
+              m={{ sm: '10% 10%', md: '0 10%' }}
+            >
+              <Box
+                fontWeight="600px"
+                lineHeight="36px"
+                fontSize={{ sm: '3rem', md: '1.8rem' }}
+                textAlign={{ sm: 'center', md: 'left' }}
+                mb={{ sm: '1rem', md: '0' }}
+                color={TEXT_PURPLE}
               >
-                <Link
-                  href={
-                    talentInfo.userState === USER_STATE.VERIFIED
-                      ? null
-                      : ROUTE_MANAGER_KYC
+                {talentInfo.displayName}
+              </Box>
+              <Box
+                border="1px solid"
+                borderRadius="5px"
+                width={{ sm: 'fit-content', md: '7.5rem' }}
+                height={{ sm: 'fit-content' }}
+                py={{ sm: '1rem', md: '1rem' }}
+                h={{ sm: 15, md: 11 }}
+                fontWeight="600px"
+                whiteSpace={{ sm: 'nowrap' }}
+                fontSize={{ sm: '1.5rem', md: '1rem' }}
+                lineHeight="18px"
+                color={
+                  talentInfo.userState === USER_STATE.VERIFIED
+                    ? TEXT_GREEN
+                    : PRI_TEXT_COLOR
+                }
+                display="flex"
+                alignItems={{ sm: 'center' }}
+                justifyContent={
+                  talentInfo.userState !== USER_STATE.VERIFIED && 'center'
+                }
+                px={4}
+              >
+                Talent
+                {talentInfo.userState === USER_STATE.VERIFIED && (
+                  <Box ml={7}>
+                    <AddVerifyIcon />
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </Box>
+          <FormControl>
+            <CustomFormLabel fontSize={{ sm: '1.5rem', md: '1rem' }}>
+              {t(messages.displayName())}
+            </CustomFormLabel>
+            <InputCustomV2
+              id="displayName"
+              type="text"
+              size="md"
+              placeholder="Enter your name"
+              {...register('displayName', {
+                required: 'This is required',
+                minLength: {
+                  value: 4,
+                  message: 'Minimum length should be 4',
+                },
+              })}
+              defaultValue={talentInfo.displayName}
+            />
+          </FormControl>
+          <Text color={RED_COLOR}>
+            {errors.displayName && errors.displayName.message}
+          </Text>
+          <FormControl>
+            <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={2}>
+              <Box>
+                <CustomFormLabel fontSize={{ sm: '1.5rem', md: '1rem' }}>
+                  {t(messages.category())}
+                </CustomFormLabel>
+                <SelectCustom
+                  id="category"
+                  size="md"
+                  {...register('category')}
+                  onChange={handleChangeCategory}
+                  defaultValue={
+                    talentInfo.offerCategories &&
+                    talentInfo.offerCategories.length > 0
+                      ? categoriesInfo.filter(
+                          item =>
+                            item.uid === talentInfo.offerCategories[0].uid,
+                        )[0].uid
+                      : null
                   }
                 >
-                  {talentInfo.userState === USER_STATE.VERIFIED
-                    ? t(messages.kycVerified())
-                    : t(messages.kycVerify())}
-                </Link>
-              </Button>
-            </Stack>
-          </form>
-        </Box>
-      ) : (
-        <PageSpinner />
-      )}
-    </SimpleGrid>
+                  {categoriesInfo &&
+                    categoriesInfo.length > 0 &&
+                    categoriesInfo.map(option => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <option key={option.uid} value={option.uid}>
+                        {option.name}
+                      </option>
+                    ))}
+                </SelectCustom>
+              </Box>
+              <Box>
+                <CustomFormLabel fontSize={{ sm: '1.5rem', md: '1rem' }}>
+                  {t(messages.subCategory())}
+                </CustomFormLabel>
+                <SelectCustom
+                  id="subCategory"
+                  size="md"
+                  {...register('subCategory')}
+                >
+                  {subCategory &&
+                    subCategory.length > 0 &&
+                    subCategory.map(option => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <option key={option.uid} value={option.uid}>
+                        {option.name}
+                      </option>
+                    ))}
+                </SelectCustom>
+              </Box>
+            </SimpleGrid>
+          </FormControl>
+          <FormControl>
+            <CustomFormLabel
+              htmlFor="description"
+              fontSize={{ sm: '1.5rem', md: '1rem' }}
+            >
+              {t(messages.history())}
+            </CustomFormLabel>
+            <QWERTYEditor
+              ref={historyNFTRef}
+              name="history"
+              id="history"
+              required
+              val={
+                talentInfo.extensions
+                  ? JSON.parse(talentInfo.extensions)[1].value
+                  : null
+              }
+            />
+          </FormControl>
+          <FormControl>
+            <CustomFormLabel
+              htmlFor="activity"
+              fontSize={{ sm: '1.5rem', md: '1rem' }}
+            >
+              {t(messages.activity())}
+            </CustomFormLabel>
+            <QWERTYEditor
+              ref={activityNFTRef}
+              name="activity"
+              id="activity"
+              required
+              val={
+                talentInfo.extensions
+                  ? JSON.parse(talentInfo.extensions)[0].value
+                  : null
+              }
+            />
+          </FormControl>
+          <FormControl>
+            <CustomFormLabel
+              fontSize={{ sm: '1.5rem', md: '1rem' }}
+              htmlFor="bio"
+            >
+              {t(messages.bio())}
+            </CustomFormLabel>
+            <QWERTYEditor
+              ref={bioNFTRef}
+              name="bio"
+              id="bio"
+              required
+              val={talentInfo.bio}
+            />
+          </FormControl>
+          <Box />
+          <Button
+            bg={TEXT_GREEN}
+            color={SUB_BLU_COLOR}
+            p={{ sm: '2rem', md: '1rem' }}
+            fontSize={{ sm: '1.5rem', md: '1rem' }}
+            type="submit"
+          >
+            {t(messages.save())}
+          </Button>
+          <Box />
+          <Button
+            bg={TEXT_PURPLE}
+            p={{ sm: '2rem', md: '1rem' }}
+            fontSize={{ sm: '1.5rem', md: '1rem' }}
+            color={SUB_BLU_COLOR}
+            disabled={talentInfo.userState === USER_STATE.VERIFIED}
+          >
+            <Link
+              href={
+                talentInfo.userState === USER_STATE.VERIFIED
+                  ? null
+                  : ROUTE_MANAGER_KYC
+              }
+            >
+              {talentInfo.userState === USER_STATE.VERIFIED
+                ? t(messages.kycVerified())
+                : t(messages.kycVerify())}
+            </Link>
+          </Button>
+        </Stack>
+      </form>
+    </Box>
+  ) : (
+    <PageSpinner />
   );
 };
 

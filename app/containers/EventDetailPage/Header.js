@@ -40,7 +40,7 @@ const Header = ({ profile }) => (
           height="14px"
           borderColor={TEXT_GREEN}
         />
-        <Text color={TEXT_GREEN}>
+        <Text color={TEXT_GREEN} fontSize={{ sm: '8px', md: '18px' }}>
           {new Date(profile.occurrenceStartTime).toLocaleString()} -{' '}
           {new Date(profile.occurrenceEndTime).toLocaleString()}
         </Text>

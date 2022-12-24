@@ -17,8 +17,8 @@ const CardListHorizontal = ({ dataList, columns, spacing }) => (
 
 CardListHorizontal.propTypes = {
   dataList: PropTypes.array,
-  columns: PropTypes.array,
-  spacing: PropTypes.array,
+  columns: PropTypes.number,
+  spacing: PropTypes.string,
 };
 
 CardListHorizontal.defaultProps = {
@@ -39,15 +39,8 @@ CardListHorizontal.defaultProps = {
       id: '5',
     },
   ],
-  columns: { sm: 1, md: 2, lg: 3, xl: 4, '2xl': 4, '3xl': 5 },
-  spacing: {
-    sm: '1rem',
-    md: '1.5rem',
-    lg: '1.5rem',
-    xl: '1.5rem',
-    '2xl': '2.5rem',
-    '3xl': '2.5rem',
-  },
+  columns: { sm: 1, md: 2, lg: 3, xl: 4, '2xl': 5 },
+  spacing: { base: '0.5rem' },
 };
 
 export default CardListHorizontal;

@@ -24,7 +24,7 @@ const Cart = ({ data }) => {
   const { content } = data;
   return (
     <Menu onCloseSelect={false}>
-      <MenuButton>
+      <MenuButton position="relative">
         {content.length > 0 ? (
           <>
             <NumberedCart />

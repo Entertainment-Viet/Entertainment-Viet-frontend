@@ -8,17 +8,19 @@ import { device } from 'constants/styles';
 
 const Wrapper = styled.div`
   @media ${device.mob} {
+    width: 100%;
     padding: 0px 2rem;
     margin: 0 auto;
   }
   @media ${device.tab} {
     padding: 0px 2rem;
+    width: 100%;
     margin: 4rem auto;
   }
   @media ${device.lap} {
-    margin: 0px 1rem 1.5rem 1rem;
+    padding: 0px 1rem 1.5rem 1rem;
     width: 100%;
-    margin-left: 3rem;
+    padding-left: 3rem;
     // margin-right: auto;
   }
 `;

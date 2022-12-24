@@ -1,12 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import {
-  Container,
-  VStack,
-  Grid,
-  GridItem,
-  Text,
-  Divider,
-} from '@chakra-ui/react';
+import { Container, VStack, Box, Text, Divider, Flex } from '@chakra-ui/react';
 import { ImageSliderWithPreview } from 'components/Carousel';
 import { useTranslation } from 'react-i18next';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
@@ -45,25 +38,21 @@ const Overview = ({ data, match, positions, toggleModal }) => {
     },
   ];
   return (
-    <Grid
-      templateRows="repeat(2, 1fr)"
-      templateColumns="repeat(6, 1fr)"
-      gap={2}
-    >
-      <GridItem colSpan={6}>
-        <VStack align="flex-start">
+    <Flex direction="column" w="100%">
+      <Flex direction={{ sm: 'column-reverse', md: 'row' }}>
+        <Box w={{ md: '45%', lg: '50%' }}>
           <Header profile={data} />
-          <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-            <GridItem colSpan={4}>
-              <ImageSliderWithPreview slides={SlideData} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <PositionBox data={positions.content} toggleModal={toggleModal} />
-            </GridItem>
-          </Grid>
-        </VStack>
-      </GridItem>
-      <GridItem colSpan={4}>
+          <ImageSliderWithPreview slides={SlideData} />
+        </Box>
+        <Box
+          w={{ md: '60%', lg: '50%' }}
+          mt={{ sm: '1rem', md: '10rem' }}
+          mb={{ sm: 8, lg: 0 }}
+        >
+          <PositionBox data={positions.content} toggleModal={toggleModal} />
+        </Box>
+      </Flex>
+      <Box>
         <VStack align="flex-start">
           <Divider />
           <Text as="h1" fontWeight={700} color={TEXT_GREEN}>
@@ -78,8 +67,8 @@ const Overview = ({ data, match, positions, toggleModal }) => {
           </Text>
           <NormalProfile profile={data} />
         </VStack>
-      </GridItem>
-    </Grid>
+      </Box>
+    </Flex>
   );
 };
 

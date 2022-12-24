@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { Container, Box, SimpleGrid, HStack, Text } from '@chakra-ui/react';
+import {
+  Container,
+  Box,
+  SimpleGrid,
+  HStack,
+  Flex,
+  Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -105,7 +112,7 @@ export function EventSearchResultPage({
         item.locationType.level === 2 &&
         item.parentName === city,
     );
-
+  const columns = { sm: 1, md: 2, '2xl': 4, '3xl': 5 };
   return loading ? (
     <PageSpinner />
   ) : (
@@ -115,52 +122,58 @@ export function EventSearchResultPage({
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
-      <HStack maxW="100%" mb="6">
-        <CategoriesFilter
-          placeholder="Categories"
-          listOptions={categoriesFiltered}
-        />
-        <SearchLocation
-          placeholder={t(messages.locationCity())}
-          optionList={cityNameList}
-          handleChangeLocation={handleCityChange}
-        />
-        {city && (
-          <SearchLocation
-            placeholder={t(messages.locationDistrict())}
-            handleChangeLocation={handleDistrictChange}
-            optionList={districtData}
-          />
-        )}
-        <SliderRange titleRange={t(messages.incomeRange())} />
-        <Text>Start time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="Start date"
-            handleDateChange={handleStartChange}
-          />
-        </Box>
-        <Text>End time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="End date"
-            handleDateChange={handleEndChange}
-          />
-        </Box>
-      </HStack>
-      <Container maxW="100%" ps={0}>
-        <SimpleGrid
-          maxW="100%"
-          columns={{ xl: 3, '2xl': 4 }}
-          spacing="30px"
-          alignItems="start"
+      <Flex
+        direction={{ sm: 'column', lg: 'row' }}
+        justifyContent="space-between"
+        mb="6"
+      >
+        <Flex
+          direction={{ sm: 'column', md: 'row' }}
+          w={{ lg: '50%', '2xl': 'auto' }}
         >
+          <CategoriesFilter
+            placeholder="Categories"
+            listOptions={categoriesFiltered}
+          />
+          <SearchLocation
+            placeholder={t(messages.locationCity())}
+            optionList={cityNameList}
+            handleChangeLocation={handleCityChange}
+          />
+          {city && (
+            <SearchLocation
+              placeholder={t(messages.locationDistrict())}
+              handleChangeLocation={handleDistrictChange}
+              optionList={districtData}
+            />
+          )}
+          <SliderRange titleRange={t(messages.incomeRange())} />
+        </Flex>
+        <HStack w={{ lg: '50%', '2xl': 'auto' }} mt={{ sm: 5, lg: 0 }}>
+          <Text>Start time</Text>
+          <Box>
+            <DateTimeCustom
+              template="datetime-picker right"
+              name="end_vip_date"
+              type="hm"
+              message="Start date"
+              handleDateChange={handleStartChange}
+            />
+          </Box>
+          <Text>End time</Text>
+          <Box>
+            <DateTimeCustom
+              template="datetime-picker right"
+              name="end_vip_date"
+              type="hm"
+              message="End date"
+              handleDateChange={handleEndChange}
+            />
+          </Box>
+        </HStack>
+      </Flex>
+      <Container maxW="100%" p={0} centerContent>
+        <SimpleGrid maxW="100%" spacing="2rem" columns={columns}>
           {data &&
             data.map(tempt => {
               const { uid } = tempt;

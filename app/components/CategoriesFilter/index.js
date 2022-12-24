@@ -48,11 +48,18 @@ function CategoriesFilter({
         bg={TEXT_PURPLE}
         py={2}
         px={4}
+        fontSize={{ sm: 10, md: 15 }}
       >
         {placeholder}
         <ChevronDownIcon />
       </MenuButton>
-      <MenuList zIndex={99} bg="#BDC1EA" py={6} px={8}>
+      <MenuList
+        zIndex={99}
+        bg="#BDC1EA"
+        py={6}
+        px={8}
+        w={{ sm: '55%', md: '100%' }}
+      >
         <SimpleGrid columns={listOptions && listOptions.length} spacing={4}>
           {listOptions.length > 0 &&
             listOptions.map(item => (

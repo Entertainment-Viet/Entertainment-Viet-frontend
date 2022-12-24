@@ -49,7 +49,12 @@ const Header = ({ profile, comments }) => {
   return (
     <Container marginInlineStart="inherit" paddingInlineStart="inherit" mb={6}>
       <VStack align="flex-start" spacing={4} w="max-content">
-        <Text as="h1" fontWeight={700} fontSize="30px" color={TEXT_PURPLE}>
+        <Text
+          as="h1"
+          fontWeight={700}
+          fontSize={{ sm: '10px', md: '25px', lg: '30px' }}
+          color={TEXT_PURPLE}
+        >
           Singer performs for music festival, bar, club and pub
         </Text>
         <HStack>

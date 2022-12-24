@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, HStack, Container } from '@chakra-ui/react';
+import { Box, Flex, Container } from '@chakra-ui/react';
 import { PRI_BACKGROUND } from 'constants/styles';
 
 import PropTypes from 'prop-types';
@@ -8,13 +8,13 @@ import parserHtml from 'utils/html';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const NormalProfile = ({ profile }) => (
-  <Container ps={0}>
-    <HStack w={{ '2xl': '73rem', xl: '57rem' }}>
+  <Container p={0}>
+    <Flex direction={{ sm: 'column', md: 'row' }} justifyContent="flex-start">
       <ProfileCard data={{ displayName: profile.organizerName }} />
-      <Box bg={PRI_BACKGROUND} h="26rem" w="1000%" p={4}>
+      <Box bg={PRI_BACKGROUND} h="26rem" w="100%" p={4} mt={{ sm: 4, md: 0 }}>
         {parserHtml(profile.organizer.bio)}
       </Box>
-    </HStack>
+    </Flex>
   </Container>
 );
 

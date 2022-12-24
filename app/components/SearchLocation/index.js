@@ -22,7 +22,11 @@ const FieldWrapper = chakra(Box, {
 });
 function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
   return (
-    <FieldWrapper>
+    <FieldWrapper
+      mt={{ sm: 2, md: 0 }}
+      ml={{ md: 2 }}
+      w={{ sm: '100%', md: '20%', lg: 'fit-content' }}
+    >
       <CustomSelect
         isSearchable
         onChange={val => handleChangeLocation(val.target.value)}

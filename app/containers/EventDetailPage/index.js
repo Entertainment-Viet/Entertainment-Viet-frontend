@@ -47,7 +47,7 @@ import About from './components/About';
 const CustomTab = chakra(Tab, {
   baseStyle: {
     fontWeight: '500',
-    fontSize: '18px',
+    fontSize: { sm: '13px', lg: '18px' },
     _hover: { color: TEXT_GREEN },
     _focus: { color: TEXT_GREEN },
   },

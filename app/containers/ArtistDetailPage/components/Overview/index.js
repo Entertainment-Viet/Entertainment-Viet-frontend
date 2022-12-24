@@ -3,10 +3,10 @@ import {
   Container,
   VStack,
   HStack,
-  Grid,
-  GridItem,
   Text,
+  Box,
   Link,
+  Flex,
   Divider,
 } from '@chakra-ui/react';
 import { ImageSliderWithPreview, CommentCarousel } from 'components/Carousel';
@@ -44,29 +44,29 @@ const Overview = ({ data, match, packages, toggleModal, comments }) => {
     },
   ];
   return (
-    <Grid
-      templateRows="repeat(2, 1fr)"
-      templateColumns="repeat(6, 1fr)"
-      gap={2}
-    >
-      <GridItem colSpan={6}>
-        <VStack align="flex-start">
+    <Flex direction="column" w="100%">
+      <Flex
+        direction={{ sm: 'column-reverse', lg: 'row' }}
+        alignItems={{ sm: 'center', lg: 'flex-start' }}
+        justifyContent={{ sm: 'center', lg: 'flex-start' }}
+      >
+        <Box w={{ sm: '100%', lg: '50%' }}>
           <Header profile={data} comments={comments} />
-          <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-            <GridItem colSpan={4}>
-              <ImageSliderWithPreview slides={SlideData} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <PackagesBox
-                data={packages.content}
-                id={match.params.id}
-                toggleModal={toggleModal}
-              />
-            </GridItem>
-          </Grid>
-        </VStack>
-      </GridItem>
-      <GridItem colSpan={4}>
+          <ImageSliderWithPreview slides={SlideData} />
+        </Box>
+        <Box
+          w={{ sm: '20%', md: '50%', lg: '50%' }}
+          mt={{ sm: '1rem', lg: '5rem' }}
+          mb={{ sm: '2rem', lg: 0 }}
+        >
+          <PackagesBox
+            data={packages.content}
+            id={match.params.id}
+            toggleModal={toggleModal}
+          />
+        </Box>
+      </Flex>
+      <Box w={{ sm: '100%', md: '100%', lg: '50%' }}>
         <VStack align="flex-start">
           <HStack
             justifyContent="space-between"
@@ -91,18 +91,9 @@ const Overview = ({ data, match, packages, toggleModal, comments }) => {
             {t(messages.basicInfo())}
           </Text>
           <NormalProfile profile={data} />
-          {/* <Text as="h1" fontWeight={700} color={TEXT_GREEN}>{t(messages.questions())}</Text>
-          <Dropdown /> */}
         </VStack>
-      </GridItem>
-      {/* <GridItem colSpan={1}>
-        <PackagesBox
-          data={packages.content}
-          id={match.params.id}
-          toggleModal={toggleModal}
-        />
-      </GridItem> */}
-    </Grid>
+      </Box>
+    </Flex>
   );
 };
 

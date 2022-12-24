@@ -11,8 +11,8 @@ import {
   SimpleGrid,
   NumberInput,
   NumberInputField,
-  HStack,
   Text,
+  Flex,
 } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -120,6 +120,7 @@ export function SearchResultPage({
         item.locationType.level === 2 &&
         item.parentName === city,
     );
+  const columns = { sm: 1, md: 2, lg: 3, xl: 4 };
   return (
     <div style={{ width: '100%' }}>
       <Metadata />
@@ -127,8 +128,15 @@ export function SearchResultPage({
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
-      <HStack mb="6">
-        <HStack w="50%">
+      <Flex
+        direction={{ sm: 'column', lg: 'row' }}
+        justifyContent="space-between"
+        mb="6"
+      >
+        <Flex
+          direction={{ sm: 'column', md: 'row' }}
+          w={{ lg: '50%', '2xl': 'auto' }}
+        >
           <CategoriesFilter
             placeholder="Categories"
             listOptions={categoriesFiltered}
@@ -146,8 +154,12 @@ export function SearchResultPage({
             />
           )}
           <SliderRange titleRange={t(messages.incomeRange())} />
-        </HStack>
-        <HStack w="50%">
+        </Flex>
+        <Flex
+          direction={{ sm: 'column', lg: 'row' }}
+          w={{ lg: '50%', '2xl': 'auto' }}
+          mt={{ sm: 5, lg: 0 }}
+        >
           <Text>Your budget</Text>
           <Box>
             <NumberInput
@@ -179,15 +191,10 @@ export function SearchResultPage({
               handleDateChange={handleEndChange}
             />
           </Box>
-        </HStack>
-      </HStack>
-      <Container maxW="100%" ps={0}>
-        <SimpleGrid
-          maxW="100%"
-          columns={{ xl: 4, '2xl': 5 }}
-          spacing="30px"
-          alignItems="start"
-        >
+        </Flex>
+      </Flex>
+      <Container maxW="100%" p={0} centerContent>
+        <SimpleGrid columns={columns} spacing="1.875rem">
           {data &&
             data.map(tempt => {
               const { uid } = tempt;
@@ -208,7 +215,9 @@ export function SearchResultPage({
               );
             })}
         </SimpleGrid>
-        <Pagination {...pageProps} onPageChange={handlePageChange} />
+        <Box mt={6}>
+          <Pagination {...pageProps} onPageChange={handlePageChange} />
+        </Box>
       </Container>
     </div>
   );

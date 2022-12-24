@@ -52,7 +52,8 @@ import About from './components/About';
 const CustomTab = chakra(Tab, {
   baseStyle: {
     fontWeight: '500',
-    fontSize: '18px',
+    fontSize: { sm: '10px', lg: '18px' },
+    whiteSpace: 'nowrap',
     _hover: { color: TEXT_GREEN },
     _focus: { color: TEXT_GREEN },
   },
@@ -120,7 +121,7 @@ export function ArtistDetailPage({
     setPageNumberComments(pageNumberComments + 1);
   };
   return (
-    <div>
+    <div w="100%">
       <Metadata />
       <H1 color={TEXT_GREEN} ml={4}>
         {data && data.offerCategories.length > 0

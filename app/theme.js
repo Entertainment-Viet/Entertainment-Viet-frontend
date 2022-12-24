@@ -7,10 +7,9 @@ const breakpoints = {
   sm: '320px',
   md: '768px', // tablet
   lg: '1024px', // small screen
-  xl: '1200px', // small screen
-  '2xl': '1537px', // medium screen
-  '3xl': '1920px', // casual screen
-  '4xl': '2560px', // large screen
+  xl: '1440px', // medium screen
+  '2xl': '1920px', // casual screen
+  '3xl': '2560px', // large screen
 };
 const theme = extendTheme(
   {

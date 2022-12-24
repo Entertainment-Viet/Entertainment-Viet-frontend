@@ -33,6 +33,12 @@ const PositionBox = ({ data, toggleModal }) => (
           <Table
             variant="unstyled"
             overflowX="hidden"
+            whiteSpace={{
+              sm: 'normal',
+              md: 'nowrap',
+              lg: 'normal',
+              xl: 'nowrap',
+            }}
             style={{
               width: '25rem',
               wordWrap: 'break-word',

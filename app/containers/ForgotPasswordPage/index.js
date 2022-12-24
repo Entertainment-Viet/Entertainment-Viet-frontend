@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { getCookie } from 'utils/cookie';
 import {
-  SimpleGrid,
   Box,
   Stack,
   FormControl,
@@ -48,8 +47,16 @@ function ForgotPasswordPage() {
     console.log(values);
   };
 
+  const widthForgotBox = {
+    sm: '100%',
+    md: '60%',
+    xl: '40rem',
+  };
+
   return (
-    <SimpleGrid
+    <Box
+      mt="auto"
+      mb="auto"
       sx={{
         justifyContent: 'center',
       }}
@@ -70,7 +77,9 @@ function ForgotPasswordPage() {
         sx={{
           backgroundColor: PRI_BACKGROUND,
         }}
-        width="545px"
+        mr="auto"
+        ml="auto"
+        width={widthForgotBox}
         borderRadius="10px"
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
@@ -88,17 +97,15 @@ function ForgotPasswordPage() {
             marginBottom: '10px',
           }}
           fontWeight="600"
-          fontSize="35px"
+          fontSize={{ sm: '2.2rem', lg: '1rem' }}
           color={TEXT_PURPLE}
         >
           {t(messages.forgot())}
         </Box>
-        <Box
-          sx={{
-            marginBottom: '35px',
-          }}
-        >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
+        <Box mb={{ sm: '2.2rem', lg: '1rem' }}>
+          <Text fontSize={{ sm: '1.3rem', lg: '1rem' }} color={PRI_TEXT_COLOR}>
+            {t(messages.welcome())}
+          </Text>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="6">
@@ -136,6 +143,7 @@ function ForgotPasswordPage() {
               color={SEC_TEXT_COLOR}
               isLoading={isSubmitting}
               type="submit"
+              fontSize={{ sm: '1.5rem', md: '1.25rem' }}
             >
               {t(messages.send())}
             </Button>
@@ -144,7 +152,7 @@ function ForgotPasswordPage() {
           </Stack>
         </form>
       </Box>
-    </SimpleGrid>
+    </Box>
   );
 }
 

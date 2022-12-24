@@ -120,7 +120,11 @@ function LoginPageV2() {
       notify('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin');
     }
   };
-
+  const widthLoginBox = {
+    sm: '100%',
+    md: '60%',
+    xl: '40rem',
+  };
   return (
     <Box mt="auto" mb="auto">
       <Metadata />
@@ -141,16 +145,7 @@ function LoginPageV2() {
         }}
         mr="auto"
         ml="auto"
-        width={{
-          base: '100%',
-          sm: '80%',
-          md: '50%',
-          lg: '50%',
-          xl: '40%',
-          '2xl': '40%',
-          '3xl': '40%',
-          '4xl': '40%',
-        }}
+        width={widthLoginBox}
         borderRadius="0.7rem"
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
@@ -160,7 +155,8 @@ function LoginPageV2() {
             marginBottom: '0.7rem',
           }}
           fontWeight="600"
-          fontSize="35px"
+          textAlign={{ sm: 'center', md: 'left' }}
+          fontSize={{ sm: '3.5rem', md: '2.1rem', lg: '1.8rem' }}
           color={TEXT_PURPLE}
         >
           {t(messages.signin())}
@@ -170,7 +166,13 @@ function LoginPageV2() {
             marginBottom: '35px',
           }}
         >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
+          <Text
+            fontSize={{ sm: '1.3rem', md: '1.2rem', lg: '1.5rem' }}
+            color={PRI_TEXT_COLOR}
+            textAlign={{ sm: 'center', md: 'left' }}
+          >
+            {t(messages.welcome())}
+          </Text>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="2">
@@ -220,9 +222,16 @@ function LoginPageV2() {
               color={PRI_TEXT_COLOR}
               {...register('checkBoxRemember')}
             >
-              {t(messages.remember())}
+              <Text fontSize={{ sm: '1rem', lg: '1rem' }}>
+                {t(messages.remember())}
+              </Text>
             </Checkbox>
-            <Button variant="link" color={TEXT_PURPLE} size="sm">
+            <Button
+              variant="link"
+              color={TEXT_PURPLE}
+              fontSize="1rem"
+              size="sm"
+            >
               <Link href={ROUTE_FORGOTPASSWORD}>
                 {t(messages.forgotPassword())}
               </Link>
@@ -236,14 +245,24 @@ function LoginPageV2() {
               isLoading={isSubmitting}
               type="submit"
             >
-              {t(messages.signin())}
+              <Text fontSize="1.3rem">{t(messages.signin())}</Text>
             </Button>
             {/* eslint-disable-next-line no-console */}
             {errors.password && console.log(errors.password.message)}
             <OAuthButtonGroup />
             <HStack spacing="1" justify="center">
-              <Text color={PRI_TEXT_COLOR}>{t(messages.haveAccount())}</Text>
-              <Button variant="link" color={TEXT_GREEN}>
+              <Text
+                color={PRI_TEXT_COLOR}
+                fontSize={{ sm: '1rem', md: '1.25rem' }}
+                whiteSpace="nowrap"
+              >
+                {t(messages.haveAccount())}
+              </Text>
+              <Button
+                variant="link"
+                fontSize={{ sm: '1.2rem', md: '1.25rem' }}
+                color={TEXT_GREEN}
+              >
                 <Link href={ROUTE_REGISTER}>{t(messages.signup())}</Link>
               </Button>
             </HStack>

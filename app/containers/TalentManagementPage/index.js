@@ -41,7 +41,8 @@ export function ManagementPage() {
   const CustomTab = chakra(Tab, {
     baseStyle: {
       fontWeight: '500',
-      fontSize: '18px',
+      fontSize: { sm: '10px', md: '18px' },
+      whiteSpace: 'nowrap',
       _hover: { color: TEXT_GREEN },
       _focus: { color: TEXT_PURPLE },
     },
