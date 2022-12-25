@@ -31,12 +31,15 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
           {placeholder}
         </CustomOption>
         {optionList &&
-          optionList.map((item, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <CustomOption key={index} value={item.name}>
-              {item.name ? item.name : item}
-            </CustomOption>
-          ))}
+          optionList.map(
+            (item, index) =>
+              item && (
+                // eslint-disable-next-line react/no-array-index-key
+                <CustomOption key={index} value={item}>
+                  {item}
+                </CustomOption>
+              ),
+          )}
       </CustomSelect>
     </FieldWrapper>
   );
