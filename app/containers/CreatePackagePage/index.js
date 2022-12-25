@@ -229,7 +229,7 @@ export function CreatePackagePage({ getCategories, categories }) {
                   size="md"
                   placeholder="Enter your street"
                   {...register('street', {
-                    required: 'This is required',
+                    // required: 'This is required',
                     minLength: {
                       value: 4,
                       message: 'Minimum length should be 4',
