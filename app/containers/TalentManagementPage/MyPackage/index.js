@@ -216,7 +216,7 @@ const MyPackage = ({
         ),
         totalBooking: user.orderNum,
         price: `${numberWithCommas(
-          user.jobDetail.price.max,
+          user.jobDetail.price.min,
         )} - ${numberWithCommas(user.jobDetail.price.max)}`,
         status: (
           <StatusCell type={user.isActive ? 'active' : 'disable'}>

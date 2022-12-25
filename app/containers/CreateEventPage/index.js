@@ -72,9 +72,8 @@ export function CreateEventPage() {
       name: getValues('name'),
       isActive: true,
       occurrenceAddress: {
-        street: getValues('street'),
-        district: getValues('district'),
-        city: getValues('city'),
+        address: getValues('street'),
+        parentId: getValues('district'),
       },
       occurrenceStartTime: start,
       occurrenceEndTime: end,

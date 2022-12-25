@@ -38,7 +38,7 @@ import reducer from './reducer';
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import NotificationProvider from '../../components/NotificationProvider';
-import { dataDistrictHCM } from '../../utils/data-address';
+// import { dataDistrictHCM } from '../../utils/data-address';
 
 import {
   PRI_BACKGROUND,
@@ -50,6 +50,7 @@ import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
+import CitySelector from '../CitySelector/Loadable';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -107,9 +108,8 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
       talentId: match.params.id,
       jobDetail: {
         location: {
-          street: getValues('street'),
-          district: getValues('district'),
-          city: getValues('city'),
+          address: getValues('street'),
+          parentId: getValues('district'),
         },
         note: describeNFTRef.current.getContent(),
         categoryId: getValues('subCategory')
@@ -267,7 +267,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   // defaultValue={talentInfo.address.street}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
                     <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
@@ -299,7 +299,8 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     </Text>
                   </Box>
                 </SimpleGrid>
-              </FormControl>
+              </FormControl> */}
+              <CitySelector register={register} errors={errors} />
               <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
