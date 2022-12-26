@@ -20,7 +20,12 @@ const FieldWrapper = chakra(Box, {
     color: 'white',
   },
 });
-function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
+function SearchLocation({
+  placeholder,
+  typeHandle,
+  optionList,
+  handleChangeLocation,
+}) {
   return (
     <FieldWrapper>
       <CustomSelect
@@ -31,14 +36,19 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
           {placeholder}
         </CustomOption>
         {optionList &&
-          optionList.map(
-            (item, index) =>
+          optionList.map((item, index) =>
+            typeHandle === 'city' ? (
               item && (
                 // eslint-disable-next-line react/no-array-index-key
-                <CustomOption key={index} value={item}>
+                <CustomOption key={`option_${index}`} value={item}>
                   {item}
                 </CustomOption>
-              ),
+              )
+            ) : (
+              <CustomOption key={item.uid} value={item.name}>
+                {item.name}
+              </CustomOption>
+            ),
           )}
       </CustomSelect>
     </FieldWrapper>
@@ -47,6 +57,7 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
 SearchLocation.propTypes = {
   placeholder: PropTypes.string,
   optionList: PropTypes.any,
+  typeHandle: PropTypes.string,
   handleChangeLocation: PropTypes.func,
 };
 

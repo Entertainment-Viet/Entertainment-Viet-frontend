@@ -137,12 +137,14 @@ export function SearchResultPage({
             placeholder={t(messages.locationCity())}
             optionList={cityNameList}
             handleChangeLocation={handleCityChange}
+            typeHandle="city"
           />
           {city && (
             <SearchLocation
               placeholder={t(messages.locationDistrict())}
               handleChangeLocation={handleDistrictChange}
               optionList={districtData}
+              typeHandle="district"
             />
           )}
           <SliderRange titleRange={t(messages.incomeRange())} />
