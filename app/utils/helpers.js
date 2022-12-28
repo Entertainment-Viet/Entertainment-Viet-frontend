@@ -2,6 +2,19 @@
 /* eslint-disable no-param-reassign */
 import * as Paths from 'constants/routes';
 import * as Storages from 'constants/storage';
+// eslint-disable-next-line import/no-cycle
+import qs from 'qs';
+import axios from 'axios';
+import jwt from 'jwt-decode';
+// eslint-disable-next-line import/no-cycle
+import { post } from './request';
+// eslint-disable-next-line import/no-cycle
+import {
+  getLocalAccessTokenExpire,
+  getLocalRefreshToken,
+  getLocalToken,
+} from './auth';
+import { setSecureCookie } from './cookie';
 // import { useHistory } from 'react-router-dom';
 // import { getCookie } from 'utils/cookie';
 
@@ -251,4 +264,53 @@ export function classifyCategories(categories) {
     });
 
   return parentCategories;
+}
+
+export function sendFileToAWS(file, isPublic = true) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('public', isPublic);
+  return post(`${process.env.REACT_APP_API}/api/aws/files`, formData);
+}
+
+export async function getFileFromAWS(keyFile) {
+  if (Date.now() > getLocalAccessTokenExpire() * 1000 || !getLocalToken()) {
+    const data = {
+      client_id: 'backend',
+      grant_type: 'refresh_token',
+      refresh_token: getLocalRefreshToken(),
+      scope: 'openid',
+    };
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify(data),
+      url: `${
+        process.env.REACT_KEYCLOAK_API
+      }/auth/realms/ve-sso/protocol/openid-connect/token`,
+    };
+    const result = await axios(options);
+    if (result.status === 200) {
+      setSecureCookie(
+        'token',
+        result.data.access_token,
+        jwt(result.data.access_token).exp,
+      );
+      // eslint-disable-next-line no-console
+      console.log(jwt(result.data.access_token));
+      window.localStorage.setItem('exp', jwt(result.data.access_token).exp);
+    }
+  }
+  const accessToken = getLocalToken();
+  const response = await axios.get(
+    `${process.env.REACT_APP_API}/api/aws/files/${keyFile}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      responseType: 'arraybuffer',
+    },
+  );
+  const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+  return `data:image/*;base64,${base64Image}`;
 }
