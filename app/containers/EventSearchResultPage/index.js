@@ -123,11 +123,13 @@ export function EventSearchResultPage({
         <SearchLocation
           placeholder={t(messages.locationCity())}
           optionList={cityNameList}
+          typeHandle="city"
           handleChangeLocation={handleCityChange}
         />
         {city && (
           <SearchLocation
             placeholder={t(messages.locationDistrict())}
+            typeHandle="district"
             handleChangeLocation={handleDistrictChange}
             optionList={districtData}
           />
