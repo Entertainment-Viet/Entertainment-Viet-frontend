@@ -1,24 +1,25 @@
 import produce from 'immer';
-import { CATEGORY_LOAD, CATEGORY_LOAD_SUCCESS } from './constants';
+import { DATA_LOAD, DATA_LOAD_SUCCESS } from './constants';
 
 export const initialState = {
   loading: false,
   error: false,
-  categories: false,
+  data: false,
+  event: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
 const pageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case CATEGORY_LOAD:
+      case DATA_LOAD:
         draft.loading = true;
         draft.error = false;
-        draft.categories = false;
+        draft.data = false;
         break;
-      case CATEGORY_LOAD_SUCCESS:
-        console.log(action.data);
-        draft.categories = action.data;
+      case DATA_LOAD_SUCCESS:
+        draft.data = action.data;
+        draft.event = action.event;
         draft.loading = false;
     }
   });

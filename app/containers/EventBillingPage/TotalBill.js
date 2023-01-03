@@ -44,7 +44,7 @@ const TotalBill = ({ data }) => (
       </GridItem>
       <GridItem />
       <GridItem colSpan={3} textAlign="end">
-        <Title color={TEXT_GREEN}>$5000</Title>
+        <Title color={TEXT_GREEN}>{data.price}</Title>
       </GridItem>
     </Grid>
     <Grid templateColumns="repeat(5, 1fr)" gap={6}>
@@ -55,14 +55,14 @@ const TotalBill = ({ data }) => (
         <Content>8%/10%</Content>
       </GridItem>
       <GridItem colSpan={3} textAlign="end">
-        <Title color={TEXT_GREEN}>$500</Title>
+        <Title color={TEXT_GREEN}>{data.tax}</Title>
       </GridItem>
     </Grid>
     <Divider my={4} />
     <SimpleGrid justifyContent="space-between" columns={2}>
       <Title>Total cost:</Title>
       <Title color={TEXT_GREEN} textAlign="end">
-        $5500
+        {data.total}
       </Title>
     </SimpleGrid>
   </>

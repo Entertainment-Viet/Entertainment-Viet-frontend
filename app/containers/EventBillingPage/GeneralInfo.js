@@ -2,10 +2,12 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { TEXT_GREEN } from 'constants/styles';
 import { PropTypes } from 'prop-types';
+import { handleAddress } from 'utils/helpers';
 import { Title, Content } from './styles';
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const GeneralInfo = ({ data }) => (
+const GeneralInfo = ({ event, info }) => (
   <>
+    {console.log(info.bookings.content)}
     <Box
       color={TEXT_GREEN}
       fontWeight="600"
@@ -18,19 +20,29 @@ const GeneralInfo = ({ data }) => (
     </Box>
     <Box>
       <Title>Event occurence date:&nbsp;</Title>
-      <Content>10/10/2022 - 13/10/2022</Content>
+      <Content>
+        {new Date(event.occurrenceStartTime).toLocaleString()} -{' '}
+        {new Date(event.occurrenceEndTime).toLocaleString()}
+      </Content>
+    </Box>
+    <Box>
+      <Title>Event occurence place:&nbsp;</Title>
+      <Content>
+        {event.occurrenceAddress && handleAddress(event.occurrenceAddress)}
+      </Content>
     </Box>
     <Box>
       <Title>Total Bookings:&nbsp;</Title>
-      <Content>15</Content>
+      <Content>{info.bookings.content.length}</Content>
     </Box>
     <Box>
       <Title>Total Outcome:&nbsp;</Title>
-      <Content style={{ color: TEXT_GREEN }}>35000$</Content>
+      <Content styles={{ color: TEXT_GREEN }}>{info.total} VND</Content>
     </Box>
   </>
 );
 GeneralInfo.propTypes = {
-  data: PropTypes.any,
+  event: PropTypes.any,
+  info: PropTypes.any,
 };
 export default GeneralInfo;

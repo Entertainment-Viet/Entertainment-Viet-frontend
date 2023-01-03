@@ -12,22 +12,20 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
   chakra,
 } from '@chakra-ui/react';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
+import { API_EVENT_POSITIONS_BOOKINGS } from 'constants/api';
 import { useTranslation } from 'react-i18next';
 import Button from 'components/Buttons';
-import {
-  getResStatus,
-  cacthError,
-  cacthResponse,
-  numberWithCommas,
-} from 'utils/helpers';
+import { numberWithCommas } from 'utils/helpers';
 import parserHtml from 'utils/html';
 import { post } from 'utils/request';
 import { useForm } from 'react-hook-form';
 // import { GoogleMap, Phone } from '../Icon';
 import styled from 'styled-components';
+import NotificationProvider from '../NotificationProvider';
 import { messages } from './messages';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -47,39 +45,42 @@ const PositionModal = props => {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
+  const toast = useToast();
+
   let jobOffer;
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   console.log(props.data);
   if (props.data) {
     // eslint-disable-next-line prefer-destructuring
     jobOffer = props.data.jobOffer;
   }
   const [offerData, setOfferData] = useState();
-
+  const myId = localStorage.getItem('uid');
   function onSubmit(values) {
     const val = {
       // attachment: file,
       ...values,
-      organizerId: window.localStorage.getItem('uid'),
+      talentId: myId,
     };
     post(
-      `/api/talents/${props.talentId}/packages/${
-        props.id
-      }/bookings/shoppingcart`,
+      API_EVENT_POSITIONS_BOOKINGS,
       val,
-    )
-      .then(res => {
-        const status = getResStatus(res);
-        if (status === 200) {
-          // console.log(res.data);
-        } else if (status === 400) {
-          // console.log('error while logging out 400');
-        } else if (status === 500) {
-          // console.log('error while logging out 500');
-        } else {
-          cacthResponse(res);
-        }
-      })
-      .catch(err => cacthError(err));
+      props.data.jobOffer.organizerId,
+      props.data.eventId,
+      props.data.uid,
+    ).then(res => {
+      if (res > 300) {
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+        return;
+      }
+      notify('Tạo thành công');
+    });
   }
   // function handleAddToCart() {
   //   post(
