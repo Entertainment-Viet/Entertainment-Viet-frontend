@@ -84,6 +84,11 @@ const PackageDetailCard = ({ data }) => (
             <Text>Note: {parserHtml(data.description)} </Text>
           </ListItem>
         </UnorderedList>
+        <Link href={`event-billing/${data.uid}`}>
+          <Text textAlign="right" color={TEXT_GREEN} mt="30px" mb="-30px">
+            Tổng chi Event
+          </Text>
+        </Link>
         <CustomLink href="/#">
           <Buttons width="100%" bg={TEXT_PURPLE} color={SUB_BLU_COLOR}>
             Edit

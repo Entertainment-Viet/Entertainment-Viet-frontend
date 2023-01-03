@@ -281,7 +281,7 @@ const MyEvents = ({
               onLoadDetailData(position.eventId, position.uid);
             }}
           >
-            {position.jobOffer.jobDetail.category.name}
+            {position.jobOffer.jobDetail.category && position.jobOffer.jobDetail.category.name}
           </Text>
         ),
         totalSlot: position.quantity,

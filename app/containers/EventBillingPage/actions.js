@@ -1,18 +1,17 @@
-import {
-  CATEGORY_LOAD,
-  LOAD_DATA_ERROR,
-  CATEGORY_LOAD_SUCCESS,
-} from './constants';
+import { DATA_LOAD, LOAD_DATA_ERROR, DATA_LOAD_SUCCESS } from './constants';
 
-export function loadCategories() {
+export function loadData(id) {
   return {
-    type: CATEGORY_LOAD,
+    type: DATA_LOAD,
+    id,
   };
 }
-export function loadCategoriesSuccess(data) {
+export function loadDataSuccess(data, paging, event) {
   return {
-    type: CATEGORY_LOAD_SUCCESS,
+    type: DATA_LOAD_SUCCESS,
     data,
+    paging,
+    event,
   };
 }
 export function loadDataError(error) {
