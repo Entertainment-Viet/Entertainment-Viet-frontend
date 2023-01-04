@@ -26,6 +26,7 @@ function SearchLocation({
   optionList,
   handleChangeLocation,
 }) {
+  console.log(typeHandle, optionList);
   return (
     <FieldWrapper>
       <CustomSelect
