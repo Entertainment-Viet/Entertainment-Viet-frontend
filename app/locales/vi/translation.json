@@ -233,7 +233,8 @@
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
     "incomeRange": "Khoảng thu nhập (1 session)",
-    "category": "Category"
+    "category": "Category",
+    "billing": "Billing"
   },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",

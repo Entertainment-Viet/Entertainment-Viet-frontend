@@ -42,4 +42,5 @@ export const messages = {
   location: () => t(translations.OrganizerManagementPage.location),
   locationDistrict: () => t(translations.loginPage.locationDistrict),
   locationCity: () => t(translations.loginPage.locationCity),
+  billing: () => t(translations.OrganizerManagementPage.billing),
 };
