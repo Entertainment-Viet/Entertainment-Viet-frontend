@@ -39,4 +39,5 @@ export const messages = {
   incomeRange: () => t(translations.TalentManagementPage.incomeRange),
   locationDistrict: () => t(translations.loginPage.locationDistrict),
   locationCity: () => t(translations.loginPage.locationCity),
+  billing: () => t(translations.OrganizerManagementPage.billing),
 };
