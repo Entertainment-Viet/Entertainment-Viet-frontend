@@ -34,10 +34,12 @@ function CategoriesFilter({
   listOptions,
   history,
   handleCategoryChange,
+  loadDataAction,
 }) {
   const handleNavigateCategory = itemUid => {
     handleCategoryChange(itemUid);
     history.push(`/search?category=${itemUid}`);
+    loadDataAction();
   };
   return (
     <Menu>
@@ -90,6 +92,7 @@ CategoriesFilter.propTypes = {
   listOptions: PropTypes.array,
   history: PropTypes.object,
   handleCategoryChange: PropTypes.func,
+  loadDataAction: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({});

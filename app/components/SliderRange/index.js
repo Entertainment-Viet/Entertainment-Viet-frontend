@@ -25,6 +25,7 @@ function SliderRange({
   handlePriceChange,
   handlePriceChangeManager,
   typePage,
+  loadDataAction,
 }) {
   const [value, setValue] = useState([]);
   const handleChangePricing = val => {
@@ -36,6 +37,7 @@ function SliderRange({
     } else {
       setValue(val);
       handlePriceChange(val);
+      loadDataAction();
     }
   };
   return (
@@ -87,6 +89,7 @@ function SliderRange({
 SliderRange.propTypes = {
   titleRange: PropTypes.string,
   handlePriceChange: PropTypes.func,
+  loadDataAction: PropTypes.func,
   handlePriceChangeManager: PropTypes.func,
   typePage: PropTypes.string,
 };

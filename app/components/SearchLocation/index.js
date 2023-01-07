@@ -36,21 +36,27 @@ function SearchLocation({
         <CustomOption selected hidden disabled value="">
           {placeholder}
         </CustomOption>
-        {optionList &&
+        {/* {optionList &&
           optionList.map((item, index) =>
             typeHandle === 'city' ? (
               item && (
                 // eslint-disable-next-line react/no-array-index-key
-                <CustomOption key={`option_${index}`} value={item}>
+                <CustomOption key={`option_${index}`} value={item.uid}>
                   {item}
                 </CustomOption>
               )
             ) : (
-              <CustomOption key={item.uid} value={item.name}>
+              <CustomOption key={item.uid} value={item.uid}>
                 {item.name}
               </CustomOption>
             ),
-          )}
+          )} */}
+        {optionList &&
+          optionList.map(item => (
+            <CustomOption key={item.uid} value={item.uid}>
+              {item.name}
+            </CustomOption>
+          ))}
       </CustomSelect>
     </FieldWrapper>
   );

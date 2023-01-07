@@ -1,22 +1,32 @@
-import React, { useEffect, memo, useState } from 'react';
+import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { Container, Box, SimpleGrid, HStack, Text } from '@chakra-ui/react';
+import {
+  Container,
+  Box,
+  SimpleGrid,
+  HStack,
+  Text,
+  Input,
+  InputGroup,
+  InputLeftElement,
+} from '@chakra-ui/react';
+import { SearchIcon } from '@chakra-ui/icons';
+
 import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
-import CategoriesFilter from 'components/CategoriesFilter';
+import { SEC_TEXT_COLOR, TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
+// import CategoriesFilter from 'components/CategoriesFilter';
 import SearchLocation from 'components/SearchLocation';
-import PageSpinner from 'components/PageSpinner';
 import { CardEvent } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
-import { toIsoString, classifyCategories } from 'utils/helpers';
+import { toIsoString } from 'utils/helpers';
 import SliderRange from 'components/SliderRange';
 import { messages } from './messages';
 import {
@@ -47,6 +57,7 @@ import {
   makeSelectStart,
   makeSelectEnd,
   makeSelectCategories,
+  makeSelectOrganizer,
 } from './selectors';
 const key = 'EventSearchResultPage';
 export function EventSearchResultPage({
@@ -63,15 +74,16 @@ export function EventSearchResultPage({
   handleEndChange,
   onLoadData,
   search,
-  loading,
-  categories,
+  // categories,
   onLoadCategory,
   onLoadLocation,
+  handleReloadEventData,
+  handleOrganizerChange,
 }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
-  const [categoriesFiltered, setCategoriesFiltered] = useState([]);
+  // const [categoriesFiltered, setCategoriesFiltered] = useState([]);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const searchParams = urlParams.get('search');
@@ -83,10 +95,10 @@ export function EventSearchResultPage({
     else if (searchParams) handleSearchChange(searchParams);
     else onLoadData();
   }, []);
-  useEffect(() => {
-    const categoriesClassified = classifyCategories(categories);
-    setCategoriesFiltered(categoriesClassified);
-  }, [categories]);
+  // useEffect(() => {
+  //   const categoriesClassified = classifyCategories(categories);
+  //   setCategoriesFiltered(categoriesClassified);
+  // }, [categories]);
   // remember to +1 vào pageNumber
   const pageProps = {
     // total: paging.totalElement, // totalElement
@@ -94,35 +106,33 @@ export function EventSearchResultPage({
     limit: paging.pageSize, // pageSize
     last: paging.last,
   };
-  const cityData = locationData && locationData.map(item => item.parentName);
-  const cityNameList = cityData && Array.from(new Set(cityData));
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
+  // const cityNameList = cityData && Array.from(new Set(cityData));
   const districtData =
     locationData &&
     city &&
     locationData.filter(
-      item =>
-        item.locationType.type === 'district' &&
-        item.locationType.level === 2 &&
-        item.parentName === city,
+      item => item.locationType.type === 'district' && item.parentUid === city,
     );
 
-  return loading ? (
-    <PageSpinner />
-  ) : (
-    <div style={{ width: '100%' }}>
+  return (
+    <div styles={{ width: '100%' }}>
       <Metadata />
       <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
       <HStack maxW="100%" mb="6">
-        <CategoriesFilter
+        {/* <CategoriesFilter
           placeholder="Categories"
           listOptions={categoriesFiltered}
-        />
+          loadDataAction={handleReloadEventData}
+        /> */}
         <SearchLocation
           placeholder={t(messages.locationCity())}
-          optionList={cityNameList}
+          optionList={cityData}
           typeHandle="city"
           handleChangeLocation={handleCityChange}
         />
@@ -134,7 +144,10 @@ export function EventSearchResultPage({
             optionList={districtData}
           />
         )}
-        <SliderRange titleRange={t(messages.incomeRange())} />
+        <SliderRange
+          titleRange={t(messages.incomeRange())}
+          loadDataAction={handleReloadEventData}
+        />
         <Text>Start time</Text>
         <Box>
           <DateTimeCustom
@@ -154,6 +167,23 @@ export function EventSearchResultPage({
             message="End date"
             handleDateChange={handleEndChange}
           />
+        </Box>
+        <Text>Organizer name</Text>
+        <Box>
+          <InputGroup>
+            <Input
+              // value={org}
+              onChange={e => handleOrganizerChange(e.target.value)}
+              bg="transparent"
+              placeholder="Search"
+              _placeholder={{ opacity: 1, color: `${TEXT_PURPLE}` }}
+              border={`1px solid ${TEXT_PURPLE}`}
+              borderRadius="2rem"
+            />
+            <InputLeftElement>
+              <SearchIcon color={TEXT_PURPLE} />
+            </InputLeftElement>
+          </InputGroup>
         </Box>
       </HStack>
       <Container maxW="100%" ps={0}>
@@ -192,6 +222,7 @@ EventSearchResultPage.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   page: PropTypes.number,
   search: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  org: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   category: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   city: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
@@ -199,6 +230,7 @@ EventSearchResultPage.propTypes = {
   end: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   onLoadLocation: PropTypes.func,
+  handleReloadEventData: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -214,6 +246,7 @@ const mapStateToProps = createStructuredSelector({
   start: makeSelectStart(),
   end: makeSelectEnd(),
   categories: makeSelectCategories(),
+  org: makeSelectOrganizer(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -228,9 +261,14 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadDataEvent());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadDataEvent());
+    },
+    handleReloadEventData: () => {
+      dispatch(loadDataEvent());
     },
     handleOrganizerChange: organizer => {
       dispatch(changeOrganizer(organizer));
