@@ -325,7 +325,7 @@ const Profile = ({
                   id="history"
                   required
                   val={
-                    talentInfo.extensions
+                    talentInfo.extensions && JSON.parse(talentInfo.extensions)[1]
                       ? JSON.parse(talentInfo.extensions)[1].value
                       : null
                   }
@@ -341,7 +341,7 @@ const Profile = ({
                   id="activity"
                   required
                   val={
-                    talentInfo.extensions
+                    talentInfo.extensions && JSON.parse(talentInfo.extensions)[0]
                       ? JSON.parse(talentInfo.extensions)[0].value
                       : null
                   }

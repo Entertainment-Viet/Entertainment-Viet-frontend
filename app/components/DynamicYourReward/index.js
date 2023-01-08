@@ -12,6 +12,8 @@ import InputCustomV2 from '../Controls/InputCustomV2';
 import SelectCustom from '../Controls/SelectCustom';
 import { AttachIcon } from '../Controls/UploadFileCustom';
 import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';
+import { get } from '../../utils/request';
+import { API_GET_SCORE_TYPE } from '../../constants/api';
 
 const year = [
   {
@@ -94,31 +96,9 @@ const year = [
   },
 ];
 
-const dataScoreType = [
-  {
-    name: 'Giai 1',
-    id: 2,
-    rate: 0.5,
-  },
-  {
-    name: 'Giai 2',
-    id: 3,
-    rate: 2,
-  },
-  {
-    name: 'Giai 3',
-    id: 4,
-    rate: 2,
-  },
-  {
-    name: 'Giai 4',
-    id: 5,
-    rate: 5,
-  },
-];
-
 function DynamicFormYourReward(props) {
   const [formFields, setFormFields] = useState();
+  const [dataScoreType, setDataScoreType] = useState([]);
   const controls = useAnimation();
   const startAnimation = () => controls.start('hover');
   const stopAnimation = () => controls.stop();
@@ -134,10 +114,21 @@ function DynamicFormYourReward(props) {
       setFormFields(props.data);
       props.setDynamicData(props.data);
     } else {
-      setFormFields([
-        { scoreTypeId: dataScoreType[0].id, achievement: '', proof: ['string'] },
-      ]);
+      if (dataScoreType.length > 0) {
+        const value = [
+          { scoreTypeId: dataScoreType[0].uid, achievement: '', proof: ['string'] },
+        ];
+        setFormFields(value);
+        props.setDynamicData(value);
+      }
     }
+  }, [props.data, dataScoreType]);
+
+  useEffect(() => {
+    const talentId = window.localStorage.getItem('uid');
+    get(API_GET_SCORE_TYPE, null, talentId).then(res => {
+      setDataScoreType(res);
+    })
   }, []);
 
   const handleUpload = (item, name, index) => {
@@ -151,10 +142,11 @@ function DynamicFormYourReward(props) {
   const handleFormChange = (event, index) => {
     const data = [...formFields];
     if (event.target.name === 'scoreTypeId') {
-      data[index][event.target.name] = Number(event.target.value);
-    } else {
       data[index][event.target.name] = event.target.value;
     }
+    // else {
+    //   data[index][event.target.name] = event.target.value;
+    // }
     setFormFields(data);
   };
 
@@ -165,8 +157,8 @@ function DynamicFormYourReward(props) {
 
   const addFields = () => {
     const object = {
-      scoreTypeId: dataScoreType[0].id,
-      achievement: 'test',
+      scoreTypeId: dataScoreType[0].uid,
+      achievement: '',
       proof: ['string'],
     };
     setFormFields([...formFields, object]);
@@ -185,8 +177,8 @@ function DynamicFormYourReward(props) {
       {formFields && formFields.map((form, index) => {
         const defaultValue = props.data.length > 0 && props.data.length === formFields.length ? (
           dataScoreType.filter(
-            item => item.id === form.scoreTypeId,
-          )[0].id) : null;
+            item => item.uid === form.scoreTypeId,
+          )[0].uid) : null;
         return (
           <Box>
             <Box display="flex" height="40px" marginBottom="20px">
@@ -200,7 +192,7 @@ function DynamicFormYourReward(props) {
                 >
                   {/* eslint-disable-next-line no-shadow */}
                   {dataScoreType.map(option => (
-                    <option key={option.id} value={option.id}>
+                    <option key={option.uid} value={option.uid}>
                       {option.name}
                     </option>
                   ))}
@@ -258,7 +250,7 @@ function DynamicFormYourReward(props) {
                 onClick={() => removeFields(index)}
               />
             </Box>
-            <Box marginBottom="20px" color={TEXT_GREEN}>{form.achievement || 'no choose file'}</Box>
+            <Box marginBottom="20px" color={TEXT_GREEN}>{form.achievement}</Box>
           </Box>
         )
       })}

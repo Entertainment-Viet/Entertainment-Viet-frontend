@@ -110,13 +110,13 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         setUrlAvatar(res);
       });
     }
-    if (talentInfo && talentInfo.cccd1) {
-      getFileFromAWS(talentInfo.cccd1).then(res => {
+    if (talentInfo && talentInfo.citizenPaper && talentInfo.citizenPaper[0]) {
+      getFileFromAWS(talentInfo.citizenPaper[0]).then(res => {
         setUrlCCCD1(res);
       });
     }
-    if (talentInfo && talentInfo.cccd2) {
-      getFileFromAWS(talentInfo.cccd2).then(res => {
+    if (talentInfo && talentInfo.citizenPaper && talentInfo.citizenPaper[1]) {
+      getFileFromAWS(talentInfo.citizenPaper[1]).then(res => {
         setUrlCCCD2(res);
       });
     }
@@ -146,11 +146,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const dataType = [
     {
       label: 'Cá nhân',
-      value: 'account.type.individual',
+      value: 'user.type.individual',
     },
     {
       label: 'Công ty',
-      value: 'account.type.company',
+      value: 'user.type.company',
     },
   ];
 
@@ -169,6 +169,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
     }
     const data = {
       avatar: fileCodeAvatar,
+      userType: values.type,
       fullName: values.fullName,
       displayName: values.displayName,
       phoneNumber: values.phoneNumber,
@@ -182,18 +183,19 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       bankName: values.bankName,
       cccd1: fileCodeCCCD1,
       cccd2: fileCodeCCCD2,
-      type: values.type,
       checkBoxRemember: values.checkBoxRemember,
       dynamicDataYourSong,
       dynamicDataYourReward,
     };
-    if (fileCCCD1 === null || fileCCCD2 === null) {
+
+    if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
     } else {
       setFullData(true);
       const dataSubmit = {
-        accountType: data.type,
+        userType: data.userType,
         phoneNumber: data.phoneNumber,
+        address: data.address,
         taxId: '1123123123123',
         bankAccountNumber: data.accountNumber,
         bankAccountOwner: data.accountNameOwner,
@@ -201,14 +203,10 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         bankBranchName: 'HCM',
         // introduction: data.introduction,
         fullName: data.fullName,
-        avatar: data.avatar,
-        cccd1: data.cccd1,
-        cccd2: data.cccd2,
-        address: data.address,
+        citizenId: '0AB3425SD5FD',
+        citizenPaper: [data.cccd1, data.cccd2] || [],
         songs: data.dynamicDataYourSong || [],
         rewards: data.dynamicDataYourReward || [],
-        citizenId: '0AB3425SD5FD',
-        citizenPaper: ['string'],
       };
       put(API_TALENT_KYC, dataSubmit, talentId)
         .then(res => {
@@ -284,9 +282,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
-                      talentInfo.accountType ? (
+                      talentInfo.userType && dataType.filter(
+                        item => item.value === talentInfo.userType,
+                      )[0] ? (
                       dataType.filter(
-                        item => item.value === talentInfo.accountType,
+                        item => item.value === talentInfo.userType,
                       )[0].value) : null
                     }
                   >
@@ -384,8 +384,8 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 <CitySelector
                     register={register}
                     errors={errors}
-                    defaultDistrict={talentInfo.address ? talentInfo.address.parent.uid : null}
-                    defaultCity={talentInfo.address ? talentInfo.address.parent.parent.uid : null}
+                    defaultDistrict={talentInfo.address && talentInfo.address.parent ? talentInfo.address.parent.uid : null}
+                    defaultCity={talentInfo.address && talentInfo.address.parent && talentInfo.address.parent.parent ? talentInfo.address.parent.parent.uid : null}
                   />
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">
@@ -457,7 +457,9 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('bankName')}
                         defaultValue={
-                          talentInfo.bankName ? (
+                          talentInfo.bankName && bankName.filter(
+                            item => item.name === talentInfo.bankName,
+                          )[0] ? (
                           bankName.filter(
                             item => item.name === talentInfo.bankName,
                           )[0].name) : null
@@ -567,7 +569,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   bg={TEXT_GREEN}
                   color={SUB_BLU_COLOR}
                   type="submit"
-                  disabled={talentInfo.userState === USER_STATE.PENDING}
+                  // disabled={talentInfo.userState === USER_STATE.PENDING}
                 >
                   {t(messages.submit())}
                 </Button>
