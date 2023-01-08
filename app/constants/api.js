@@ -68,3 +68,7 @@ export const API_EVENT_SEARCH = 'api/events';
 
 /* LOCATION */
 export const API_GET_LOCATION = 'api/locations';
+
+/* AWS */
+export const API_UPLOAD_FILE = 'api/aws/files';
+export const API_GET_FILE = 'api/aws/files/:key';

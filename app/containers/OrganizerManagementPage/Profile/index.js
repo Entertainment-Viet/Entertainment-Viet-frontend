@@ -46,6 +46,7 @@ import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import { ROUTE_MANAGER_KYC_ORG } from '../../../constants/routes';
+import { getFileFromAWS, sendFileToAWS } from '../../../utils/helpers';
 
 const key = 'ProfileOrganizer';
 
@@ -92,6 +93,14 @@ const Profile = ({
     loadCategories();
   }, [organizerId]);
 
+  useEffect(() => {
+    if (organizerInfo && organizerInfo.avatar) {
+      getFileFromAWS(organizerInfo.avatar).then(res => {
+        setUrl(res);
+      });
+    }
+  }, [organizerInfo]);
+
   const handleUpload = item => {
     if (item) {
       setFile(item);
@@ -100,8 +109,12 @@ const Profile = ({
   };
 
   const onSubmit = async values => {
+    let fileCode = '';
+    if (file) {
+      fileCode = await sendFileToAWS(file, true);
+    }
     const data = {
-      avatar: file,
+      avatar: fileCode,
       displayName: values.displayName,
       activity: activityNFTRef.current.getContent(),
       bio: bioNFTRef.current.getContent(),
@@ -118,7 +131,7 @@ const Profile = ({
       },
     ];
     const dataSubmit = {
-      // avatar: file,
+      avatar: data.avatar,
       displayName: data.displayName,
       bio: data.bio,
       extensions: JSON.stringify(preData),
