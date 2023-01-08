@@ -175,7 +175,9 @@ function DynamicFormYourReward(props) {
   return (
     <form onChange={submit}>
       {formFields && formFields.map((form, index) => {
-        const defaultValue = props.data.length > 0 && props.data.length === formFields.length ? (
+        const defaultValue = props.data.length > 0 &&  dataScoreType.filter(
+          item => item.uid === form.scoreTypeId,
+        )[0] ? (
           dataScoreType.filter(
             item => item.uid === form.scoreTypeId,
           )[0].uid) : null;
@@ -189,6 +191,7 @@ function DynamicFormYourReward(props) {
                   size="md"
                   defaultValue={defaultValue}
                   onChange={event => handleFormChange(event, index)}
+                  key={defaultValue}
                 >
                   {/* eslint-disable-next-line no-shadow */}
                   {dataScoreType.map(option => (
