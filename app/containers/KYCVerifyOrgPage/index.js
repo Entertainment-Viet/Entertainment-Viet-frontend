@@ -18,7 +18,7 @@ import {
   SimpleGrid,
   FormLabel,
   Checkbox,
-  Image,
+  Image, useToast,
 } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -36,8 +36,6 @@ import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import {
   bankName,
-  dataDistrictHCM,
-  dataProvince,
 } from '../../utils/data-address';
 import { QWERTYEditor } from '../../components/Controls';
 import example from './image/example.png';
@@ -48,7 +46,7 @@ import {
   TEXT_GREEN,
 } from '../../constants/styles';
 import { messages } from './messages';
-import { cacthError } from '../../utils/helpers';
+import { cacthError, getFileFromAWS, sendFileToAWS } from '../../utils/helpers';
 import Metadata from '../../components/Metadata';
 import { makeSelectOrg } from './selectors';
 import { loadOrgInfo } from './actions';
@@ -56,6 +54,7 @@ import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
 import { API_ORGANIZER_KYC } from '../../constants/api';
 import CitySelector from '../CitySelector';
+import NotificationProvider from '../../components/NotificationProvider';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -72,14 +71,23 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [urlAvtar, setUrlAvatar] = useState('https://bit.ly/sage-adebayo');
-  const [fileAvatar, setFileAvatar] = useState({});
+  const [fileAvatar, setFileAvatar] = useState(null);
   const [urlCCCD1, setUrlCCCD1] = useState(example);
-  const [fileCCCD1, setFileCCCD1] = useState({});
+  const [fileCCCD1, setFileCCCD1] = useState(null);
   const [urlCCCD2, setUrlCCCD2] = useState(example);
-  const [fileCCCD2, setFileCCCD2] = useState({});
+  const [fileCCCD2, setFileCCCD2] = useState(null);
   const introductionNFTRef = useRef(null);
   const [isFullData, setFullData] = useState(true);
   const organizerId = window.localStorage.getItem('uid');
+  const toast = useToast();
+
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
 
   const {
     handleSubmit,
@@ -92,7 +100,23 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
     loadOrganizer(organizerId);
   }, [organizerId]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (organizerInfo && organizerInfo.avatar) {
+      getFileFromAWS(organizerInfo.avatar).then(res => {
+        setUrlAvatar(res);
+      });
+    }
+    if (organizerInfo && organizerInfo.cccd1) {
+      getFileFromAWS(organizerInfo.cccd1).then(res => {
+        setUrlCCCD1(res);
+      });
+    }
+    if (organizerInfo && organizerInfo.cccd2) {
+      getFileFromAWS(organizerInfo.cccd2).then(res => {
+        setUrlCCCD2(res);
+      });
+    }
+  }, [organizerInfo]);
 
   const handleUploadAvatar = item => {
     if (item) {
@@ -127,15 +151,24 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   ];
 
   const onSubmit = async values => {
+    let fileCodeAvatar = '';
+    if (fileAvatar) {
+      fileCodeAvatar = await sendFileToAWS(fileAvatar, true);
+    }
+    let fileCodeCCCD1= '';
+    if (fileCCCD1) {
+      fileCodeCCCD1 = await sendFileToAWS(fileCCCD1, true);
+    }
+    let fileCodeCCCD2 = '';
+    if (fileCCCD2) {
+      fileCodeCCCD2 = await sendFileToAWS(fileCCCD2, true);
+    }
     const data = {
-      avatar: fileAvatar,
+      avatar: fileCodeAvatar,
       accountType: values.type,
       phoneNumber: values.phoneNumber,
       companyName: values.companyName,
       displayName: values.displayName,
-      // street: values.street,
-      // district: values.district,
-      // province: values.province,
       address: {
         address: values.street,
         parentId: getValues('district') || organizerInfo.address.parent.uid
@@ -144,23 +177,19 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
-      cccd1: fileCCCD1,
-      cccd2: fileCCCD2,
+      cccd1: fileCodeCCCD1,
+      cccd2: fileCodeCCCD2,
       representative: values.representative,
       position: values.position,
       checkBoxRemember: values.checkBoxRemember,
     };
-    if (fileAvatar === null || fileCCCD1 === null || fileCCCD2 === null) {
+    if (fileCCCD1 === null || fileCCCD2 === null) {
       setFullData(false);
     } else {
       setFullData(true);
-      // const preDataStreet = {
-      //   street: data.street,
-      //   district: data.district,
-      //   city: 'Thành phố Hồ Chí Minh',
-      // };
 
       const dataSubmit = {
+        avatar: data.avatar || '',
         accountType: data.type,
         phoneNumber: data.phoneNumber,
         address: data.address,
@@ -171,19 +200,19 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         bankBranchName: 'HCM',
         // introduction: data.introduction,
         companyName: data.companyName,
-        // avatar: data.avatar,
-        // cccd1: data.cccd1,
-        // cccd2: data.cccd2,
+        cccd1: data.cccd1,
+        cccd2: data.cccd2,
         representative: data.representative,
         position: data.position,
         businessPaper: ['string'],
       };
-      console.log('dataSubmit', dataSubmit);
       put(API_ORGANIZER_KYC, dataSubmit, organizerId)
         .then(res => {
-          if (res) {
-            window.location.reload();
+          if (res > 300) {
+            notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+            return;
           }
+          notify('Tạo thành công');
         })
         .catch(err => cacthError(err));
     }
@@ -453,11 +482,11 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     </Box>
                   </SimpleGrid>
                 </FormControl> */}
-                <CitySelector 
-                  register={register} 
-                  errors={errors} 
-                  defaultDistrict={organizerInfo.address ? organizerInfo.address.parent.uid: null} 
-                  defaultCity={organizerInfo.address ? organizerInfo.address.parent.parent.uid : null} 
+                <CitySelector
+                  register={register}
+                  errors={errors}
+                  defaultDistrict={organizerInfo.address ? organizerInfo.address.parent.uid: null}
+                  defaultCity={organizerInfo.address ? organizerInfo.address.parent.parent.uid : null}
                 />
                 <FormControl>
                   <CustomFormLabel htmlFor="introduce">

@@ -13,7 +13,7 @@ import {
   Avatar,
   AvatarBadge,
   IconButton,
-  Link,
+  Link, useToast,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -40,13 +40,14 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import { cacthError, getSubCategory } from '../../../utils/helpers';
+import { cacthError, getFileFromAWS, getSubCategory, sendFileToAWS } from '../../../utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import SelectCustom from '../../../components/Controls/SelectCustom';
+import NotificationProvider from '../../../components/NotificationProvider';
 
 const key = 'Profile';
 
@@ -75,6 +76,15 @@ const Profile = ({
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
   const [subCategory, setSubCategory] = useState(null);
+  const toast = useToast();
+
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
 
   const {
     handleSubmit,
@@ -86,6 +96,14 @@ const Profile = ({
     loadTalent(talentId);
     loadCategories();
   }, [talentId]);
+
+  useEffect(() => {
+    if (talentInfo && talentInfo.avatar) {
+      getFileFromAWS(talentInfo.avatar).then(res => {
+        setUrl(res);
+      });
+    }
+  }, [talentInfo]);
 
   useEffect(() => {
     if (talentInfo && categoriesInfo) {
@@ -115,8 +133,12 @@ const Profile = ({
   };
 
   const onSubmit = async values => {
+    let fileCode = '';
+    if (file) {
+      fileCode = await sendFileToAWS(file, true);
+    }
     const data = {
-      avatar: file,
+      avatar: fileCode,
       displayName: values.displayName,
       history: historyNFTRef.current.getContent(),
       activity: activityNFTRef.current.getContent(),
@@ -134,17 +156,19 @@ const Profile = ({
       },
     ];
     const dataSubmit = {
-      avatar: file,
+      avatar: data.avatar,
       displayName: data.displayName,
       bio: data.bio,
       extensions: JSON.stringify(preData),
       offerCategories: [data.category],
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
-      .then(res => {
-        if (res) {
-          window.location.reload();
+      .then(res =>{
+        if (res > 300) {
+          notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Tạo thành công');
       })
       .catch(err => cacthError(err));
   };
