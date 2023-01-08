@@ -479,7 +479,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   </SimpleGrid>
                 </FormControl>
                 <FormControl>
-                  <CustomFormLabel>{t(messages.cccd())}</CustomFormLabel>
+                  <CustomFormLabel display="flex">{t(messages.cccd())}<Box color={RED_COLOR}>(Vui lòng chỉ tải ảnh dưới 2MB)</Box></CustomFormLabel>
                   <SimpleGrid columns={2} spacing={2}>
                     <Box>
                       <Image

@@ -230,6 +230,7 @@ const Profile = ({
                   </Box>
                 </Box>
               </Box>
+              <Box color={RED_COLOR}>Vui lòng chỉ tải ảnh dưới 2MB</Box>
               <FormControl>
                 <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
                 <InputCustomV2
