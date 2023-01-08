@@ -95,8 +95,9 @@ const Profile = ({
 
   useEffect(() => {
     if (organizerInfo && organizerInfo.avatar) {
-      const fileImage = getFileFromAWS(organizerInfo.avatar);
-      setUrl(fileImage);
+      getFileFromAWS(organizerInfo.avatar).then(res => {
+        setUrl(res);
+      });
     }
   }, [organizerInfo]);
 

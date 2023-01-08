@@ -102,16 +102,19 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
 
   useEffect(() => {
     if (organizerInfo && organizerInfo.avatar) {
-      const fileImage = getFileFromAWS(organizerInfo.avatar);
-      setUrlAvatar(fileImage);
+      getFileFromAWS(organizerInfo.avatar).then(res => {
+        setUrlAvatar(res);
+      });
     }
     if (organizerInfo && organizerInfo.cccd1) {
-      const fileImage = getFileFromAWS(organizerInfo.cccd1);
-      setUrlCCCD1(fileImage);
+      getFileFromAWS(organizerInfo.cccd1).then(res => {
+        setUrlCCCD1(res);
+      });
     }
     if (organizerInfo && organizerInfo.cccd2) {
-      const fileImage = getFileFromAWS(organizerInfo.cccd2);
-      setUrlCCCD2(fileImage);
+      getFileFromAWS(organizerInfo.cccd2).then(res => {
+        setUrlCCCD2(res);
+      });
     }
   }, [organizerInfo]);
 

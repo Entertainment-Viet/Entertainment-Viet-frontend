@@ -106,16 +106,19 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
 
   useEffect(() => {
     if (talentInfo && talentInfo.avatar) {
-      const fileImage = getFileFromAWS(talentInfo.avatar);
-      setUrlAvatar(fileImage);
+      getFileFromAWS(talentInfo.avatar).then(res => {
+        setUrlAvatar(res);
+      });
     }
     if (talentInfo && talentInfo.cccd1) {
-      const fileImage = getFileFromAWS(talentInfo.cccd1);
-      setUrlCCCD1(fileImage);
+      getFileFromAWS(talentInfo.cccd1).then(res => {
+        setUrlCCCD1(res);
+      });
     }
     if (talentInfo && talentInfo.cccd2) {
-      const fileImage = getFileFromAWS(talentInfo.cccd2);
-      setUrlCCCD2(fileImage);
+      getFileFromAWS(talentInfo.cccd2).then(res => {
+        setUrlCCCD2(res);
+      });
     }
   }, [talentInfo]);
 
