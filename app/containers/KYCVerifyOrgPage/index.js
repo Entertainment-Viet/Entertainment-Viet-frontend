@@ -142,7 +142,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const dataType = [
     {
       label: 'Cá nhân',
-      value: 'account.type.individual',
+      value: 'account.type.organizer',
     },
     {
       label: 'Công ty',
@@ -189,8 +189,9 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       setFullData(true);
 
       const dataSubmit = {
-        avatar: data.avatar || '',
-        accountType: data.type,
+        // avatar: data.avatar || '',
+        // accountType: data.accountType,
+        userType: 'user.type.individual',
         phoneNumber: data.phoneNumber,
         address: data.address,
         taxId: '1123123123123',
@@ -200,8 +201,9 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         bankBranchName: 'HCM',
         // introduction: data.introduction,
         companyName: data.companyName,
-        cccd1: data.cccd1,
-        cccd2: data.cccd2,
+        // api not support upload cmnd
+        // cccd1: data.cccd1,
+        // cccd2: data.cccd2,
         representative: data.representative,
         position: data.position,
         businessPaper: ['string'],
@@ -280,7 +282,8 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
-                      organizerInfo.accountType
+                      organizerInfo.accountType && dataType.filter(
+                        item => item.value === organizerInfo.accountType)[0]
                         ? dataType.filter(
                           item => item.value === organizerInfo.accountType)[0].value
                         : null}

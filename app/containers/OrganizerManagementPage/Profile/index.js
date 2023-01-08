@@ -260,7 +260,9 @@ const Profile = ({
                   id="bio"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[1]
                       ? JSON.parse(organizerInfo.extensions)[1].value
                       : null
                   }
@@ -276,7 +278,9 @@ const Profile = ({
                   id="activity"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[0]
                       ? JSON.parse(organizerInfo.extensions)[0].value
                       : null
                   }
