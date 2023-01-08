@@ -106,13 +106,13 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         setUrlAvatar(res);
       });
     }
-    if (organizerInfo && organizerInfo.cccd1) {
-      getFileFromAWS(organizerInfo.cccd1).then(res => {
+    if (organizerInfo && organizerInfo.businessPaper && organizerInfo.businessPaper[0]) {
+      getFileFromAWS(organizerInfo.businessPaper[0]).then(res => {
         setUrlCCCD1(res);
       });
     }
-    if (organizerInfo && organizerInfo.cccd2) {
-      getFileFromAWS(organizerInfo.cccd2).then(res => {
+    if (organizerInfo && organizerInfo.businessPaper && organizerInfo.businessPaper[1]) {
+      getFileFromAWS(organizerInfo.businessPaper[1]).then(res => {
         setUrlCCCD2(res);
       });
     }
@@ -142,11 +142,11 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const dataType = [
     {
       label: 'Cá nhân',
-      value: 'account.type.individual',
+      value: 'user.type.individual',
     },
     {
       label: 'Công ty',
-      value: 'account.type.company',
+      value: 'user.type.company',
     },
   ];
 
@@ -165,7 +165,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
     }
     const data = {
       avatar: fileCodeAvatar,
-      accountType: values.type,
+      userType: values.type,
       phoneNumber: values.phoneNumber,
       companyName: values.companyName,
       displayName: values.displayName,
@@ -183,14 +183,15 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       position: values.position,
       checkBoxRemember: values.checkBoxRemember,
     };
-    if (fileCCCD1 === null || fileCCCD2 === null) {
+    if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
     } else {
       setFullData(true);
 
       const dataSubmit = {
-        avatar: data.avatar || '',
-        accountType: data.type,
+        // avatar: data.avatar || '',
+        // accountType: data.accountType,
+        userType: data.userType,
         phoneNumber: data.phoneNumber,
         address: data.address,
         taxId: '1123123123123',
@@ -200,11 +201,9 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         bankBranchName: 'HCM',
         // introduction: data.introduction,
         companyName: data.companyName,
-        cccd1: data.cccd1,
-        cccd2: data.cccd2,
         representative: data.representative,
         position: data.position,
-        businessPaper: ['string'],
+        businessPaper: [data.cccd1, data.cccd2] || [],
       };
       put(API_ORGANIZER_KYC, dataSubmit, organizerId)
         .then(res => {
@@ -280,7 +279,8 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
-                      organizerInfo.accountType
+                      organizerInfo.accountType && dataType.filter(
+                        item => item.value === organizerInfo.accountType)[0]
                         ? dataType.filter(
                           item => item.value === organizerInfo.accountType)[0].value
                         : null}
@@ -578,7 +578,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                   </SimpleGrid>
                 </FormControl>
                 <FormControl>
-                  <CustomFormLabel>{t(messages.cccd())}</CustomFormLabel>
+                  <CustomFormLabel display="flex">{t(messages.cccd())}<Box color={RED_COLOR}>(Vui lòng chỉ tải ảnh dưới 2MB)</Box></CustomFormLabel>
                   <SimpleGrid columns={2} spacing={2}>
                     <Box>
                       <Image
