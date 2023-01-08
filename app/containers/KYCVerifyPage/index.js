@@ -569,7 +569,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   bg={TEXT_GREEN}
                   color={SUB_BLU_COLOR}
                   type="submit"
-                  // disabled={talentInfo.userState === USER_STATE.PENDING}
+                  disabled={talentInfo.userState === USER_STATE.PENDING}
                 >
                   {t(messages.submit())}
                 </Button>
