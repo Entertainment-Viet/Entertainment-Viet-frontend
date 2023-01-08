@@ -230,6 +230,7 @@ const Profile = ({
                   </Box>
                 </Box>
               </Box>
+              <Box color={RED_COLOR}>Vui lòng chỉ tải ảnh dưới 2MB</Box>
               <FormControl>
                 <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
                 <InputCustomV2
@@ -260,7 +261,9 @@ const Profile = ({
                   id="bio"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[1]
                       ? JSON.parse(organizerInfo.extensions)[1].value
                       : null
                   }
@@ -276,7 +279,9 @@ const Profile = ({
                   id="activity"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[0]
                       ? JSON.parse(organizerInfo.extensions)[0].value
                       : null
                   }
