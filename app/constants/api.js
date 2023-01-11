@@ -72,3 +72,6 @@ export const API_GET_LOCATION = 'api/locations';
 /* AWS */
 export const API_UPLOAD_FILE = 'api/aws/files';
 export const API_GET_FILE = 'api/aws/files/:key';
+
+/* GENERAL */
+export const API_GET_SCORE_TYPE = 'api/admin/:id1/scoreTypes';
