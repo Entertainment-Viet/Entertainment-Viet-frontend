@@ -33,13 +33,16 @@ const useThumbnailImgs = number => {
     const results = await Promise.all(
       Object.values(thumbnailImgs).map(async img => {
         if (!img) return '';
-        if (img.file) return getFileFromAWS(await sendFileToAWS(img.file));
-        return img.src;
+        if (img.file) return sendFileToAWS(img.file);
+        return img.key;
       }),
     );
+    const imagesSrc = await Promise.all(
+      results.map(async result => result && getFileFromAWS(result)),
+    );
     setThumbnailImgs(() =>
-      results.map(result => {
-        if (result) return { src: result };
+      results.map((result, index) => {
+        if (result) return { src: imagesSrc[index], key: result };
         return null;
       }),
     );
@@ -48,6 +51,20 @@ const useThumbnailImgs = number => {
 
   const handleRemoveImg = index => {
     setThumbnailImgs(pre => ({ ...pre, [index]: null }));
+  };
+
+  const initImagesFromResponse = async responseImges => {
+    const results = await Promise.all(
+      responseImges.map(async img => {
+        if (img) return { src: await getFileFromAWS(img), key: img };
+        return null;
+      }),
+    );
+    const imgs = {};
+    results.forEach((img, index) => {
+      imgs[index] = img;
+    });
+    setThumbnailImgs(imgs);
   };
 
   return {
@@ -59,6 +76,7 @@ const useThumbnailImgs = number => {
     handleDisplayImg,
     handleUploadImgs,
     handleRemoveImg,
+    initImagesFromResponse,
   };
 };
 

@@ -113,12 +113,7 @@ const Profile = ({
       });
     }
     if (talentInfo && talentInfo.descriptionImg) {
-      thumbnailComposable.setThumbnailImgs(
-        talentInfo.descriptionImg.map(img => {
-          if (img) return { src: img };
-          return null;
-        }),
-      );
+      thumbnailComposable.initImagesFromResponse(talentInfo.descriptionImg);
     }
   }, [talentInfo]);
 
