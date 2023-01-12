@@ -13,7 +13,8 @@ import {
   Avatar,
   AvatarBadge,
   IconButton,
-  Link, useToast,
+  Link,
+  useToast,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -40,7 +41,12 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import { cacthError, getFileFromAWS, getSubCategory, sendFileToAWS } from '../../../utils/helpers';
+import {
+  cacthError,
+  getFileFromAWS,
+  getSubCategory,
+  sendFileToAWS,
+} from '../../../utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
@@ -48,6 +54,8 @@ import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import SelectCustom from '../../../components/Controls/SelectCustom';
 import NotificationProvider from '../../../components/NotificationProvider';
+import ImageUploadInput from '../../../components/ImageUploadInput';
+import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailImgs';
 
 const key = 'Profile';
 
@@ -78,6 +86,7 @@ const Profile = ({
   const [subCategory, setSubCategory] = useState(null);
   const toast = useToast();
 
+  const thumbnailComposable = useThumbnailImgs(5);
   const notify = title => {
     toast({
       position: 'top-right',
@@ -103,12 +112,22 @@ const Profile = ({
         setUrl(res);
       });
     }
+    if (talentInfo && talentInfo.descriptionImg) {
+      thumbnailComposable.setThumbnailImgs(
+        talentInfo.descriptionImg.map(img => {
+          if (img) return { src: img };
+          return null;
+        }),
+      );
+    }
   }, [talentInfo]);
 
   useEffect(() => {
     if (talentInfo && categoriesInfo) {
-      const category = talentInfo.offerCategories && talentInfo.offerCategories.length > 0 ?
-        talentInfo.offerCategories[0] : categoriesInfo[0];
+      const category =
+        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
+          ? talentInfo.offerCategories[0]
+          : categoriesInfo[0];
       const sub = getSubCategory(category, categoriesInfo);
       setSubCategory(sub.chilren);
     }
@@ -121,7 +140,7 @@ const Profile = ({
     }
   };
 
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     const value = e.target.value;
     const cat = categoriesInfo.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categoriesInfo);
@@ -137,6 +156,7 @@ const Profile = ({
     if (file) {
       fileCode = await sendFileToAWS(file, true);
     }
+    const descriptionImg = await thumbnailComposable.handleUploadImgs();
     const data = {
       avatar: fileCode,
       displayName: values.displayName,
@@ -161,6 +181,7 @@ const Profile = ({
       bio: data.bio,
       extensions: JSON.stringify(preData),
       offerCategories: [data.category],
+      descriptionImg,
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
       .then(res =>{
@@ -314,6 +335,12 @@ const Profile = ({
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
+              </FormControl>
+              <FormControl>
+                <CustomFormLabel>
+                  {t(messages.imageThumbnails())}
+                </CustomFormLabel>
+                <ImageUploadInput thumbnailComposable={thumbnailComposable} />
               </FormControl>
               <FormControl>
                 <CustomFormLabel htmlFor="description">
