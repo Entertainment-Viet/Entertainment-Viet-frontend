@@ -42,11 +42,10 @@ import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
 import {
-  cacthError,
   getFileFromAWS,
   getSubCategory,
   sendFileToAWS,
-} from '../../../utils/helpers';
+} from 'utils/request';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
@@ -186,7 +185,6 @@ const Profile = ({
         }
         notify('Tạo thành công');
       })
-      .catch(err => cacthError(err));
   };
 
   return (

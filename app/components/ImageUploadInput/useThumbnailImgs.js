@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFileFromAWS, sendFileToAWS } from '../../utils/helpers';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
 
 const initImages = num => {
   const objImages = {};

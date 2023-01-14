@@ -47,7 +47,7 @@ import {
 } from '../../constants/styles';
 import { messages } from './messages';
 import { API_TALENT_KYC } from '../../constants/api';
-import { cacthError, getFileFromAWS, sendFileToAWS } from '../../utils/helpers';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
 import Metadata from '../../components/Metadata';
 import DynamicFormYourSong from '../../components/DynamicYourSongForm';
 import DynamicFormYourReward from '../../components/DynamicYourReward';
@@ -218,7 +218,6 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
           }
           notify('Tạo thành công');
         })
-        .catch(err => cacthError(err));
     }
   };
 
