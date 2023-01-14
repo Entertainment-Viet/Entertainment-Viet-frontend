@@ -12,7 +12,7 @@ import InputCustomV2 from '../Controls/InputCustomV2';
 import SelectCustom from '../Controls/SelectCustom';
 import { AttachIcon } from '../Controls/UploadFileCustom';
 import trashCan from '../DynamicYourSongForm/assets/ic_delete.svg';
-import { get } from '../../utils/request';
+import { get, sendFileToAWS } from '../../utils/request';
 import { API_GET_SCORE_TYPE } from '../../constants/api';
 
 const year = [
@@ -131,10 +131,11 @@ function DynamicFormYourReward(props) {
     })
   }, []);
 
-  const handleUpload = (item, name, index) => {
+  const handleUpload = async (item, name, index) => {
     if (item) {
       const data = [...formFields];
-      data[index][name] = item.name;
+      const file = await sendFileToAWS(item, true);
+      data[index][name] = file;
       setFormFields(data);
     }
   };
