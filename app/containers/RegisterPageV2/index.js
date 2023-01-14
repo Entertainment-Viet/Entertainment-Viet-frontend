@@ -22,7 +22,10 @@ import {
   InputGroup,
   InputLeftElement,
   Checkbox,
+  useToast,
 } from '@chakra-ui/react';
+import NotificationProvider from 'components/NotificationProvider';
+
 import {
   PRI_TEXT_COLOR,
   RED_COLOR,
@@ -33,15 +36,19 @@ import {
   THIRD_TEXT_COLOR,
 } from 'constants/styles';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { sha512 } from 'js-sha512';
 import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
 import { messages } from './messages';
 import { EmailIcon } from '../LoginPageV2/ProviderIcons';
 
 import { ROUTE_LOGIN } from '../../constants/routes';
+import { API_ORG_REGISTER, API_TAL_REGISTER } from '../../constants/api';
 import { AccountIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
 import SelectCustom from '../../components/Controls/SelectCustom';
+import { ENUM_ROLES } from '../../constants/enums';
 
 function RegisterPageV2() {
   const { t } = useTranslation();
@@ -50,15 +57,51 @@ function RegisterPageV2() {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const toast = useToast();
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
   const onSubmit = values => {
-    // eslint-disable-next-line no-alert
-    alert(values);
+    const password = sha512(values.password);
+    const data = {
+      username: values.username,
+      email: values.email,
+      password,
+    };
+    if (values.role === ENUM_ROLES.ORG) {
+      axios
+        .post(`${process.env.REACT_APP_API}${API_ORG_REGISTER}`, data)
+        .then(res => {
+          if (res > 300) {
+            notify(
+              'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+            );
+          }
+          notify('Thành công');
+        });
+    } else if (values.role === ENUM_ROLES.TAL) {
+      axios
+        .post(`${process.env.REACT_APP_API}${API_TAL_REGISTER}`, data)
+        .then(res => {
+          if (res > 300) {
+            notify(
+              'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+            );
+          }
+          notify('Thành công');
+        });
+    } else {
+      notify('Role không tồn tại');
+    }
   };
 
   const optionsRole = [
-    { label: 'Organizer', value: 'Organizer' },
-    { label: 'Talent', value: 'Talent' },
+    { label: 'Organizer', value: 'organizer' },
+    { label: 'Talent', value: 'talent' },
   ];
 
   return (
@@ -116,8 +159,8 @@ function RegisterPageV2() {
                   bg="transparent"
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
-                  placeholder="Enter your name"
-                  {...register('name', {
+                  placeholder="Enter your username"
+                  {...register('username', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
@@ -141,7 +184,7 @@ function RegisterPageV2() {
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
                   placeholder="Enter your email"
-                  {...register('username', {
+                  {...register('email', {
                     required: 'This is required',
                     minLength: {
                       value: 4,

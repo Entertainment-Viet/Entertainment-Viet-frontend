@@ -35,13 +35,13 @@ import {
   THIRD_TEXT_COLOR,
 } from 'constants/styles';
 import { talentRole, orgRole, adminRole } from 'constants/roles';
+import { sha512 } from 'js-sha512';
 import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
 import NotificationProvider from '../../components/NotificationProvider';
-
 function LoginPageV2() {
   const { t } = useTranslation();
   const toast = useToast();
@@ -67,7 +67,7 @@ function LoginPageV2() {
     const data = {
       client_id: 'backend',
       username: values.username,
-      password: values.password,
+      password: sha512(values.password),
       checkBoxRemember: values.checkBoxRemember,
       grant_type: 'password',
       scope: 'openid',
