@@ -3,7 +3,7 @@ import cRequest from 'utils/server';
 // eslint-disable-next-line import/no-cycle
 import { removeEmptyObj } from 'utils/helpers';
 import axios from 'axios';
-import { API_GET_FILE } from '../constants/api';
+import { API_GET_FILE, API_UPLOAD_FILE } from '../constants/api';
 function parseJSON(response) {
   if (response.status === 204 || response.status === 205) {
     return null;
@@ -99,4 +99,17 @@ export function getUrl(url, params) {
     .get(url, params)
     .then(checkStatus)
     .then(parseJSON);
+}
+
+export function sendFileToAWS(file, isPublic = true) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('public', isPublic);
+  return post(`${process.env.REACT_APP_API}/${API_UPLOAD_FILE}`, formData);
+}
+
+export async function getFileFromAWS(keyFile) {
+  const response = await getFile(keyFile);
+  const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+  return `data:image/*;base64,${base64Image}`;
 }

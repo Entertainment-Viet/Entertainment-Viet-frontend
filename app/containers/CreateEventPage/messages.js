@@ -25,5 +25,5 @@ export const messages = {
   postPaid: () => t(translations.createEventPage.postPaid),
   street: () => t(translations.KYCProfile.street),
   district: () => t(translations.KYCProfile.district),
-  province: () => t(translations.KYCProfile.province),
+  imageThumbnails: () => t(translations.TalentManagementPage.imageThumbnails),
 };

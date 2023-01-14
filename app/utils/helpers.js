@@ -3,8 +3,6 @@
 import * as Paths from 'constants/routes';
 import * as Storages from 'constants/storage';
 // eslint-disable-next-line import/no-cycle
-import { getFile, post } from './request';
-import { API_UPLOAD_FILE } from '../constants/api';
 // import { useHistory } from 'react-router-dom';
 // import { getCookie } from 'utils/cookie';
 
@@ -254,17 +252,4 @@ export function classifyCategories(categories) {
     });
 
   return parentCategories;
-}
-
-export function sendFileToAWS(file, isPublic = true) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('public', isPublic);
-  return post(`${process.env.REACT_APP_API}/${API_UPLOAD_FILE}`, formData);
-}
-
-export async function getFileFromAWS(keyFile) {
-  const response = await getFile(keyFile);
-  const base64Image = Buffer.from(response.data, 'binary').toString('base64');
-  return `data:image/*;base64,${base64Image}`;
 }
