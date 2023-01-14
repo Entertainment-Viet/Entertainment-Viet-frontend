@@ -60,6 +60,7 @@ cRequest.interceptors.request.use(async config => {
       grant_type: 'refresh_token',
       refresh_token: getLocalRefreshToken(),
       scope: 'openid',
+      client_secret: process.env.REACT_APP_CLIENT_SECRET,
     };
     const options = {
       method: 'POST',
