@@ -177,7 +177,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         address: values.street,
         parentId: getValues('district') || talentInfo.address.parent.uid
       },
-      introduction: introductionNFTRef.current.getContent(),
+      // introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
@@ -386,21 +386,21 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                     defaultDistrict={talentInfo.address && talentInfo.address.parent ? talentInfo.address.parent.uid : null}
                     defaultCity={talentInfo.address && talentInfo.address.parent && talentInfo.address.parent.parent ? talentInfo.address.parent.parent.uid : null}
                   />
-                <FormControl>
-                  <CustomFormLabel htmlFor="introduce">
-                    {t(messages.introduce())}
-                  </CustomFormLabel>
-                  <QWERTYEditor
-                    ref={introductionNFTRef}
-                    name="introduce"
-                    id="introduce"
-                    required
-                    val="Pass the variant prop to change the visual appearance of the input component. Chakra UI input variant types are: outline, filled, flushed and unstyled"
-                  />
-                </FormControl>
-                <Text color={RED_COLOR}>
-                  {errors.introduce && errors.introduce.message}
-                </Text>
+                {/*<FormControl>*/}
+                {/*  <CustomFormLabel htmlFor="introduce">*/}
+                {/*    {t(messages.introduce())}*/}
+                {/*  </CustomFormLabel>*/}
+                {/*  <QWERTYEditor*/}
+                {/*    ref={introductionNFTRef}*/}
+                {/*    name="introduce"*/}
+                {/*    id="introduce"*/}
+                {/*    required*/}
+                {/*    val="Pass the variant prop to change the visual appearance of the input component. Chakra UI input variant types are: outline, filled, flushed and unstyled"*/}
+                {/*  />*/}
+                {/*</FormControl>*/}
+                {/*<Text color={RED_COLOR}>*/}
+                {/*  {errors.introduce && errors.introduce.message}*/}
+                {/*</Text>*/}
                 <FormControl>
                   <CustomFormLabel>
                     {t(messages.accountNameOwner())}
