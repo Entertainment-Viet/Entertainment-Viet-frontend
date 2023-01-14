@@ -30,7 +30,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { put } from 'utils/request';
+import { put, getFileFromAWS, sendFileToAWS } from 'utils/request';
 import PropTypes from 'prop-types';
 import reducer from './slice/reducer';
 import saga from './slice/saga';
@@ -46,7 +46,6 @@ import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import { ROUTE_MANAGER_KYC_ORG } from '../../../constants/routes';
-import { getFileFromAWS, sendFileToAWS } from '../../../utils/helpers';
 
 const key = 'ProfileOrganizer';
 

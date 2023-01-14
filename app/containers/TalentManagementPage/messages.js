@@ -40,4 +40,5 @@ export const messages = {
   locationDistrict: () => t(translations.loginPage.locationDistrict),
   locationCity: () => t(translations.loginPage.locationCity),
   billing: () => t(translations.OrganizerManagementPage.billing),
+  imageThumbnails: () => t(translations.TalentManagementPage.imageThumbnails),
 };

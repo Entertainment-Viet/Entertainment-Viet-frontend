@@ -201,7 +201,8 @@
     "kycVerified": "KYC Verified",
     "category": "Category",
     "subCategory": "Sub Category",
-    "incomeRange": "Khoảng thu nhập (1 session)"
+    "incomeRange": "Khoảng thu nhập (1 session)",
+    "imageThumbnails": "Ảnh Thumbnails"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",

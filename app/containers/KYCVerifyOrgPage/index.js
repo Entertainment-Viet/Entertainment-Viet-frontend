@@ -46,7 +46,7 @@ import {
   TEXT_GREEN,
 } from '../../constants/styles';
 import { messages } from './messages';
-import { cacthError, getFileFromAWS, sendFileToAWS } from '../../utils/helpers';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
 import Metadata from '../../components/Metadata';
 import { makeSelectOrg } from './selectors';
 import { loadOrgInfo } from './actions';
@@ -213,7 +213,6 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
           }
           notify('Tạo thành công');
         })
-        .catch(err => cacthError(err));
     }
   };
 
