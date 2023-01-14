@@ -36,6 +36,7 @@ export const messages = {
   bio: () => t(translations.OrganizerManagementPage.bio),
   save: () => t(translations.OrganizerManagementPage.save),
   kycVerify: () => t(translations.OrganizerManagementPage.kycVerify),
+  kycVerifying: () => t(translations.TalentManagementPage.kycVerifying),
   kycVerified: () => t(translations.OrganizerManagementPage.kycVerified),
   category: () => t(translations.OrganizerManagementPage.category),
   incomeRange: () => t(translations.OrganizerManagementPage.incomeRange),

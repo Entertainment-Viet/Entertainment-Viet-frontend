@@ -385,17 +385,15 @@ const Profile = ({
               <Button
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
-                disabled={talentInfo.userState === USER_STATE.VERIFIED}
+                // disabled={talentInfo.userState === USER_STATE.VERIFIED}
               >
                 <Link
-                  href={
-                    talentInfo.userState === USER_STATE.VERIFIED
-                      ? null
-                      : ROUTE_MANAGER_KYC
-                  }
+                  href={ROUTE_MANAGER_KYC}
                 >
-                  {talentInfo.userState === USER_STATE.VERIFIED
+                  {talentInfo.userState == USER_STATE.VERIFIED
                     ? t(messages.kycVerified())
+                    : talentInfo.userState == USER_STATE.PENDING
+                    ? t(messages.kycVerifying())
                     : t(messages.kycVerify())}
                 </Link>
               </Button>

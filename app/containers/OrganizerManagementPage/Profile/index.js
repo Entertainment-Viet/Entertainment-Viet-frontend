@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   Text,
@@ -294,17 +296,13 @@ const Profile = ({
               <Button
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
-                disabled={organizerInfo.userState === USER_STATE.VERIFIED}
+                // disabled={organizerInfo.userState === USER_STATE.PENDING}
               >
-                <Link
-                  href={
-                    organizerInfo.userState === USER_STATE.VERIFIED
-                      ? null
-                      : ROUTE_MANAGER_KYC_ORG
-                  }
-                >
+                <Link href={ROUTE_MANAGER_KYC_ORG}>
                   {organizerInfo.userState === USER_STATE.VERIFIED
                     ? t(messages.kycVerified())
+                    : organizerInfo.userState === USER_STATE.PENDING
+                    ? t(messages.kycVerifying())
                     : t(messages.kycVerify())}
                 </Link>
               </Button>
