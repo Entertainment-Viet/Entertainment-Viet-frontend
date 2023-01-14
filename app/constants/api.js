@@ -4,6 +4,8 @@ export const API_SERVER = process.env.REACT_APP_API
 /* COMMON */
 export const API_LOGIN = '/auth/realms/ve-sso/protocol/openid-connect/token';
 export const API_LOGOUT = '/auth/realms/ve-sso/protocol/openid-connect/logout';
+export const API_ORG_REGISTER = '/api/users/organizers';
+export const API_TAL_REGISTER = '/api/users/talents';
 /* NEWS */
 export const API_NEWS_LIST = '/news/list';
 export const API_NEWS_DETAIL = '/news/detail/'; // :id
