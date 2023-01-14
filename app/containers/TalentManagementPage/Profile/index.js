@@ -41,11 +41,8 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import {
-  getFileFromAWS,
-  getSubCategory,
-  sendFileToAWS,
-} from 'utils/request';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
+import { getSubCategory } from 'utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
