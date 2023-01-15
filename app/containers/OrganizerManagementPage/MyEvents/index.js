@@ -34,10 +34,11 @@ import {
   changeLimit,
   loadEventInfo,
   loadCategories,
-  changeCategory,
+  // changeCategory,
   changeStart,
   changeEnd,
   loadLocation,
+  loadData,
   changeCity,
   changeDistrict,
 } from './slice/actions';
@@ -186,6 +187,7 @@ const MyEvents = ({
   handleStartChange,
   handleEndChange,
   onLoadLocation,
+  handleBudgetChange,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -194,7 +196,7 @@ const MyEvents = ({
   const cityData =
     locationData &&
     locationData.filter(item => item.locationType.type === 'city');
-  // const cityNameList = cityData && Array.from(new Set(cityData));
+
   const districtData =
     locationData &&
     city &&
@@ -290,7 +292,8 @@ const MyEvents = ({
               onLoadDetailData(position.eventId, position.uid);
             }}
           >
-            {position.jobOffer.jobDetail.category && position.jobOffer.jobDetail.category.name}
+            {position.jobOffer.jobDetail.category &&
+              position.jobOffer.jobDetail.category.name}
           </Text>
         ),
         totalSlot: position.quantity,
@@ -376,20 +379,18 @@ const MyEvents = ({
             <SearchLocation
               placeholder={t(messages.locationCity())}
               optionList={cityData}
-              typeHandle="city"
               handleChangeLocation={handleCityChange}
             />
             {city && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
-                typeHandle="district"
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />
             )}
             <SliderRange
-              typePage="manager"
               titleRange={t(messages.incomeRange())}
+              loadDataAction={handleBudgetChange}
             />
             <Text>Start time</Text>
             <Box>
@@ -477,6 +478,7 @@ MyEvents.propTypes = {
   handleDistrictChange: PropTypes.func,
   handleStartChange: PropTypes.func,
   handleEndChange: PropTypes.func,
+  handleBudgetChange: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -502,6 +504,9 @@ export function mapDispatchToProps(dispatch) {
       dispatch(changePage(page));
       dispatch(loadEvents());
     },
+    handleBudgetChange: () => {
+      dispatch(loadData());
+    },
     handleModeChange: mode => {
       dispatch(changeMode(mode));
     },
@@ -514,21 +519,26 @@ export function mapDispatchToProps(dispatch) {
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
+      dispatch(loadData());
     },
     handleEndChange: end => {
       dispatch(changeEnd(toIsoString(end)));
+      dispatch(loadData());
     },
-    handleCategoryChange: category => {
-      dispatch(changeCategory(category));
+    handleCategoryChange: () => {
+      // dispatch(changeCategory(category));
+      dispatch(loadData());
     },
     onLoadCategory: () => {
       dispatch(loadCategories());
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadData());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadData());
     },
     onLoadLocation: () => {
       dispatch(loadLocation());

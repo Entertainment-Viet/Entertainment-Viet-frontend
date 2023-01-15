@@ -21,3 +21,4 @@ export const CHANGE_DISTRICT = 'App/MyPackage/CHANGE_DISTRICT';
 export const LOAD_LOCATION = 'App/MyPackage/LOAD_LOCATION';
 export const LOAD_LOCATION_SUCCESS = 'App/MyPackage/LOAD_LOCATION_SUCCESS';
 export const CHANGE_PRICE_RANGE = 'App/MyPackage/CHANGE_PRICE_RANGE';
+export const LOAD_DATA = 'App/MyPackage/LOAD_DATA';

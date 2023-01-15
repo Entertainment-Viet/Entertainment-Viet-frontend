@@ -17,9 +17,16 @@ import {
   CHANGE_DISTRICT,
   CHANGE_CITY,
   LOAD_LOCATION_SUCCESS,
+  LOAD_DATA,
   LOAD_LOCATION,
 } from './constants';
 
+export function loadData(search) {
+  return {
+    type: LOAD_DATA,
+    search,
+  };
+}
 export function loadPackages(id) {
   return {
     type: LOAD_PACKAGES,

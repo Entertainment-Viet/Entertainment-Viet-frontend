@@ -12,6 +12,7 @@ import {
   LOAD_DATA_ERROR,
   LOAD_CATEGORIES_SUCCESS,
   CHANGE_CATEGORY_EVENT,
+  LOAD_DATA,
   CHANGE_START,
   CHANGE_END,
   LOAD_LOCATION,
@@ -19,7 +20,12 @@ import {
   CHANGE_CITY,
   CHANGE_DISTRICT,
 } from './constants';
-
+export function loadData(search) {
+  return {
+    type: LOAD_DATA,
+    search,
+  };
+}
 export function loadEvents(eventId, positionId) {
   return {
     type: LOAD_EVENTS,

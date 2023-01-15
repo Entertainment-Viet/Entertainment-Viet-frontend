@@ -16,6 +16,7 @@ import {
   CHANGE_END,
   LOAD_LOCATION_SUCCESS,
   CHANGE_START,
+  LOAD_DATA,
   CHANGE_CITY,
 } from './constants';
 
@@ -50,7 +51,12 @@ const pageReducer = (state = initialState, action) =>
         draft.data = false;
         draft.packageId = action.id;
         break;
-
+      case LOAD_DATA:
+        draft.loading = true;
+        draft.error = false;
+        draft.data = false;
+        draft.paging = ENUM_PAGGING;
+        break;
       case LOAD_BOOKING_PACKAGES:
         draft.loading = true;
         draft.error = false;

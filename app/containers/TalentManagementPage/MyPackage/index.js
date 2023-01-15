@@ -32,9 +32,10 @@ import {
   changeLimit,
   changeEnd,
   changeStart,
-  changeCategory,
+  // changeCategory,
   loadCategories,
   loadPackageInfo,
+  loadData,
   changeCity,
   loadLocation,
   changeDistrict,
@@ -159,6 +160,7 @@ const MyPackage = ({
   city,
   onLoadLocation,
   handleCityChange,
+  handleBudgetChange,
   handleDistrictChange,
 }) => {
   useInjectReducer({ key, reducer });
@@ -298,8 +300,8 @@ const MyPackage = ({
               />
             )}
             <SliderRange
-              typePage="package-manager"
               titleRange={t(messages.incomeRange())}
+              loadDataAction={handleBudgetChange}
             />
             <Text>Start time</Text>
             <Box>
@@ -366,6 +368,7 @@ MyPackage.propTypes = {
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  handleBudgetChange: PropTypes.func,
   city: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
@@ -388,6 +391,9 @@ export function mapDispatchToProps(dispatch) {
     onLoadData: id => {
       dispatch(loadPackages(id));
     },
+    handleBudgetChange: () => {
+      dispatch(loadData());
+    },
     handlePageChange: page => {
       dispatch(changePage(page));
       dispatch(loadPackages());
@@ -404,18 +410,23 @@ export function mapDispatchToProps(dispatch) {
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
+      dispatch(loadData());
     },
     handleEndChange: end => {
       dispatch(changeEnd(toIsoString(end)));
+      dispatch(loadData());
     },
-    handleCategoryChange: category => {
-      dispatch(changeCategory(category));
+    handleCategoryChange: () => {
+      // dispatch(changeCategory(category));
+      dispatch(loadData());
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadData());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadData());
     },
     onLoadCategory: () => {
       dispatch(loadCategories());

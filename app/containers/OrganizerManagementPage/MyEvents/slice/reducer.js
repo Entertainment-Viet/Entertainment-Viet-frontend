@@ -18,6 +18,7 @@ import {
   CHANGE_DISTRICT,
   LOAD_LOCATION_SUCCESS,
   LOAD_EVENT_SUCCESS,
+  LOAD_DATA,
 } from './constants';
 
 export const initialState = {
@@ -25,12 +26,12 @@ export const initialState = {
   error: false,
   data: false,
   eventId: false,
+  paging: ENUM_PAGGING,
   positionId: false,
   mode: 0,
   page: 0,
   limit: 10,
   total: 0,
-  paging: ENUM_PAGGING,
   eventInfo: false,
   city: '',
   district: '',
@@ -46,6 +47,12 @@ export const initialState = {
 const pageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case LOAD_DATA:
+        draft.loading = true;
+        draft.error = false;
+        draft.data = false;
+        draft.paging = ENUM_PAGGING;
+        break;
       case LOAD_EVENTS:
         draft.loading = true;
         draft.error = false;
