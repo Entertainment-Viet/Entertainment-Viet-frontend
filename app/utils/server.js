@@ -60,6 +60,7 @@ cRequest.interceptors.request.use(async config => {
       grant_type: 'refresh_token',
       refresh_token: getLocalRefreshToken(),
       scope: 'openid',
+      client_secret: process.env.REACT_APP_CLIENT_SECRET,
     };
     const options = {
       method: 'POST',
@@ -69,7 +70,12 @@ cRequest.interceptors.request.use(async config => {
         process.env.REACT_KEYCLOAK_API
       }/auth/realms/ve-sso/protocol/openid-connect/token`,
     };
-    const result = await axios(options);
+    let result;
+    try {
+      result = await axios(options);
+    } catch (err) {
+      logout();
+    }
     if (result.status === 200) {
       setSecureCookie(
         'token',

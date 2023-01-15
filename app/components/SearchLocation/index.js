@@ -20,7 +20,13 @@ const FieldWrapper = chakra(Box, {
     color: 'white',
   },
 });
-function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
+function SearchLocation({
+  placeholder,
+  typeHandle,
+  optionList,
+  handleChangeLocation,
+}) {
+  console.log(typeHandle, optionList);
   return (
     <FieldWrapper>
       <CustomSelect
@@ -30,11 +36,25 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
         <CustomOption selected hidden disabled value="">
           {placeholder}
         </CustomOption>
+        {/* {optionList &&
+          optionList.map((item, index) =>
+            typeHandle === 'city' ? (
+              item && (
+                // eslint-disable-next-line react/no-array-index-key
+                <CustomOption key={`option_${index}`} value={item.uid}>
+                  {item}
+                </CustomOption>
+              )
+            ) : (
+              <CustomOption key={item.uid} value={item.uid}>
+                {item.name}
+              </CustomOption>
+            ),
+          )} */}
         {optionList &&
-          optionList.map((item, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <CustomOption key={index} value={item.name}>
-              {item.name ? item.name : item}
+          optionList.map(item => (
+            <CustomOption key={item.uid} value={item.uid}>
+              {item.name}
             </CustomOption>
           ))}
       </CustomSelect>
@@ -44,6 +64,7 @@ function SearchLocation({ placeholder, optionList, handleChangeLocation }) {
 SearchLocation.propTypes = {
   placeholder: PropTypes.string,
   optionList: PropTypes.any,
+  typeHandle: PropTypes.string,
   handleChangeLocation: PropTypes.func,
 };
 

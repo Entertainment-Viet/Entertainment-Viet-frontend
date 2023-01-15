@@ -14,6 +14,7 @@ import {
   AvatarBadge,
   IconButton,
   Link,
+  useToast,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -40,13 +41,17 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import { cacthError, getSubCategory } from '../../../utils/helpers';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
+import { getSubCategory } from 'utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
 import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import SelectCustom from '../../../components/Controls/SelectCustom';
+import NotificationProvider from '../../../components/NotificationProvider';
+import ImageUploadInput from '../../../components/ImageUploadInput';
+import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailImgs';
 
 const key = 'Profile';
 
@@ -75,6 +80,16 @@ const Profile = ({
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
   const [subCategory, setSubCategory] = useState(null);
+  const toast = useToast();
+
+  const thumbnailComposable = useThumbnailImgs(5);
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
 
   const {
     handleSubmit,
@@ -88,9 +103,22 @@ const Profile = ({
   }, [talentId]);
 
   useEffect(() => {
+    if (talentInfo && talentInfo.avatar) {
+      getFileFromAWS(talentInfo.avatar).then(res => {
+        setUrl(res);
+      });
+    }
+    if (talentInfo && talentInfo.descriptionImg) {
+      thumbnailComposable.initImagesFromResponse(talentInfo.descriptionImg);
+    }
+  }, [talentInfo]);
+
+  useEffect(() => {
     if (talentInfo && categoriesInfo) {
-      const category = talentInfo.offerCategories && talentInfo.offerCategories.length > 0 ?
-        talentInfo.offerCategories[0] : categoriesInfo[0];
+      const category =
+        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
+          ? talentInfo.offerCategories[0]
+          : categoriesInfo[0];
       const sub = getSubCategory(category, categoriesInfo);
       setSubCategory(sub.chilren);
     }
@@ -103,7 +131,7 @@ const Profile = ({
     }
   };
 
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     const value = e.target.value;
     const cat = categoriesInfo.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categoriesInfo);
@@ -115,8 +143,13 @@ const Profile = ({
   };
 
   const onSubmit = async values => {
+    let fileCode = '';
+    if (file) {
+      fileCode = await sendFileToAWS(file, true);
+    }
+    const descriptionImg = await thumbnailComposable.handleUploadImgs();
     const data = {
-      avatar: file,
+      avatar: fileCode,
       displayName: values.displayName,
       history: historyNFTRef.current.getContent(),
       activity: activityNFTRef.current.getContent(),
@@ -134,19 +167,21 @@ const Profile = ({
       },
     ];
     const dataSubmit = {
-      avatar: file,
+      avatar: data.avatar,
       displayName: data.displayName,
       bio: data.bio,
       extensions: JSON.stringify(preData),
       offerCategories: [data.category],
+      descriptionImg,
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
-      .then(res => {
-        if (res) {
-          window.location.reload();
+      .then(res =>{
+        if (res > 300) {
+          notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Tạo thành công');
       })
-      .catch(err => cacthError(err));
   };
 
   return (
@@ -232,6 +267,7 @@ const Profile = ({
                   </Box>
                 </Box>
               </Box>
+              <Box color={RED_COLOR}>Vui lòng chỉ tải ảnh dưới 2MB</Box>
               <FormControl>
                 <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
                 <InputCustomV2
@@ -292,6 +328,12 @@ const Profile = ({
                 </SimpleGrid>
               </FormControl>
               <FormControl>
+                <CustomFormLabel>
+                  {t(messages.imageThumbnails())}
+                </CustomFormLabel>
+                <ImageUploadInput thumbnailComposable={thumbnailComposable} />
+              </FormControl>
+              <FormControl>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.history())}
                 </CustomFormLabel>
@@ -301,7 +343,7 @@ const Profile = ({
                   id="history"
                   required
                   val={
-                    talentInfo.extensions
+                    talentInfo.extensions && JSON.parse(talentInfo.extensions)[1]
                       ? JSON.parse(talentInfo.extensions)[1].value
                       : null
                   }
@@ -317,7 +359,7 @@ const Profile = ({
                   id="activity"
                   required
                   val={
-                    talentInfo.extensions
+                    talentInfo.extensions && JSON.parse(talentInfo.extensions)[0]
                       ? JSON.parse(talentInfo.extensions)[0].value
                       : null
                   }
@@ -343,17 +385,15 @@ const Profile = ({
               <Button
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
-                disabled={talentInfo.userState === USER_STATE.VERIFIED}
+                // disabled={talentInfo.userState === USER_STATE.VERIFIED}
               >
                 <Link
-                  href={
-                    talentInfo.userState === USER_STATE.VERIFIED
-                      ? null
-                      : ROUTE_MANAGER_KYC
-                  }
+                  href={ROUTE_MANAGER_KYC}
                 >
-                  {talentInfo.userState === USER_STATE.VERIFIED
+                  {talentInfo.userState == USER_STATE.VERIFIED
                     ? t(messages.kycVerified())
+                    : talentInfo.userState == USER_STATE.PENDING
+                    ? t(messages.kycVerifying())
                     : t(messages.kycVerify())}
                 </Link>
               </Button>

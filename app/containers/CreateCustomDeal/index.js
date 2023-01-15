@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString , getSubCategory } from 'utils/helpers';
+import { toIsoString, getSubCategory } from 'utils/helpers';
 import { API_CREATE_BOOKING } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -38,7 +38,7 @@ import reducer from './reducer';
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import NotificationProvider from '../../components/NotificationProvider';
-import { dataDistrictHCM } from '../../utils/data-address';
+// import { dataDistrictHCM } from '../../utils/data-address';
 
 import {
   PRI_BACKGROUND,
@@ -50,6 +50,7 @@ import { ENUM_PAYMENT_TYPE } from '../../constants/enums';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
+import CitySelector from '../CitySelector/Loadable';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -92,7 +93,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
     }
   }, [categories]);
 
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     const { value } = e.target;
     const cat = categories.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categories);
@@ -107,12 +108,13 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
       talentId: match.params.id,
       jobDetail: {
         location: {
-          street: getValues('street'),
-          district: getValues('district'),
-          city: getValues('city')
+          address: getValues('street'),
+          parentId: getValues('district'),
         },
         note: describeNFTRef.current.getContent(),
-        categoryId: getValues('subCategory') ? getValues('subCategory') : getValues('category'),
+        categoryId: getValues('subCategory')
+          ? getValues('subCategory')
+          : getValues('category'),
         workType: getValues('workType'),
         price: {
           min: getValues('min'),
@@ -125,13 +127,11 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
         extensions: 'string',
       },
       paymentType: getValues('paymentType'),
-      extensions: "string"
+      extensions: 'string',
     };
     post(API_CREATE_BOOKING, val, orgId).then(res1 => {
       if (res1 > 300) {
-        notify(
-          'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
-        );
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
         return;
       }
       notify('Thành công');
@@ -267,7 +267,7 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   // defaultValue={talentInfo.address.street}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
                     <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
@@ -299,7 +299,8 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     </Text>
                   </Box>
                 </SimpleGrid>
-              </FormControl>
+              </FormControl> */}
+              <CitySelector register={register} errors={errors} />
               <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
@@ -324,20 +325,19 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                     <CustomFormLabel htmlFor="subcategory">
                       {t(messages.subCategory())}
                     </CustomFormLabel>
-                    <SelectCustom
-                      {...register('subcategory')}
-                    >
-                      {subCategory && subCategory.length > 0 && subCategory.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
+                    <SelectCustom {...register('subcategory')}>
+                      {subCategory &&
+                        subCategory.length > 0 &&
+                        subCategory.map((option, index) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <option key={index} value={option.uid}>
+                            {option.name}
+                          </option>
+                        ))}
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
               </FormControl>
-
             </Stack>
           </Box>
         </Box>
@@ -402,8 +402,12 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   placeholder="Select option"
                   {...register('paymentType')}
                 >
-                  <option value={ENUM_PAYMENT_TYPE.OFFLINE}>{t(messages.laterPay())}</option>
-                  <option value={ENUM_PAYMENT_TYPE.ONLINE}>{t(messages.instantPay())}</option>
+                  <option value={ENUM_PAYMENT_TYPE.OFFLINE}>
+                    {t(messages.laterPay())}
+                  </option>
+                  <option value={ENUM_PAYMENT_TYPE.ONLINE}>
+                    {t(messages.instantPay())}
+                  </option>
                 </SelectCustom>
               </Box>
             </Stack>

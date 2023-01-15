@@ -74,7 +74,7 @@ function CardEvent(props) {
         src={property.imageUrl}
         alt={property.imageAlt}
         maxW={imgWidth}
-        style={{ aspectRatio: '2/1.5' }}
+        styles={{ aspectRatio: '2/1.5' }}
         zIndex={50}
         mt="0.3rem"
         ml="1px"
@@ -128,7 +128,7 @@ function CardEvent(props) {
               lineHeight="tight"
               noOfLines={1}
             >
-              10 job offers
+              {props.data.openPositionsCount} job offers
             </Box>
             <HStack>
               <Text color={TEXT_GREEN}>Apply</Text>

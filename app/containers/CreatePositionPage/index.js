@@ -98,8 +98,8 @@ export function CreatePositionPage({ getCategories, categories, match }) {
       jobOffer: {
         name: getValues('name'),
         jobDetail: {
-          categoryId: getValues('subCategory')
-            ? getValues('subCategory')
+          categoryId: getValues('subcategory')
+            ? getValues('subcategory')
             : getValues('category'),
           workType: getValues('workType'),
           price: {
@@ -116,6 +116,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
         },
       },
       quantity: getValues('quantity'),
+      paymentType: 'payment.offline',
     };
     post(API_EVENT_POSITIONS, val, myId, eventId).then(res1 => {
       if (res1 > 300) {
@@ -249,7 +250,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                 >
                   <option value="work.type.single-time">Single time</option>
                   <option value="work.type.single-show">Single show</option>
-                  <option value=" work.type.period-contract">
+                  <option value="work.type.period-contract">
                     Single contract
                   </option>
                 </SelectCustom>
@@ -297,7 +298,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                     <CustomFormLabel htmlFor="subcategory">
                       {t(messages.subCategory())}
                     </CustomFormLabel>
-                    <SelectCustom {...register('subcategory')}>
+                    <SelectCustom id="subcategory" {...register('subcategory')}>
                       {subCategory &&
                         subCategory.length > 0 &&
                         subCategory.map(option => (

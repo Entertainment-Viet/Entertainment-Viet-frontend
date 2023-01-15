@@ -18,7 +18,7 @@ import {
   SimpleGrid,
   FormLabel,
   Checkbox,
-  Image,
+  Image, useToast,
 } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
@@ -35,9 +35,7 @@ import { AddAvatarIcon } from '../TalentManagementPage/ProviderIcons';
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import {
-  bankName,
-  dataDistrictHCM,
-  dataProvince,
+  bankName
 } from '../../utils/data-address';
 import { QWERTYEditor } from '../../components/Controls';
 import example from './image/example.png';
@@ -49,7 +47,7 @@ import {
 } from '../../constants/styles';
 import { messages } from './messages';
 import { API_TALENT_KYC } from '../../constants/api';
-import { cacthError } from '../../utils/helpers';
+import { getFileFromAWS, sendFileToAWS } from 'utils/request';
 import Metadata from '../../components/Metadata';
 import DynamicFormYourSong from '../../components/DynamicYourSongForm';
 import DynamicFormYourReward from '../../components/DynamicYourReward';
@@ -58,6 +56,7 @@ import { loadTalentInfo } from './actions';
 import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
 import CitySelector from '../CitySelector';
+import NotificationProvider from '../../components/NotificationProvider';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -74,16 +73,25 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [urlAvtar, setUrlAvatar] = useState('https://bit.ly/sage-adebayo');
-  const [fileAvatar, setFileAvatar] = useState({});
+  const [fileAvatar, setFileAvatar] = useState(null);
   const [urlCCCD1, setUrlCCCD1] = useState(example);
-  const [fileCCCD1, setFileCCCD1] = useState({});
+  const [fileCCCD1, setFileCCCD1] = useState(null);
   const [urlCCCD2, setUrlCCCD2] = useState(example);
-  const [fileCCCD2, setFileCCCD2] = useState({});
+  const [fileCCCD2, setFileCCCD2] = useState(null);
   const introductionNFTRef = useRef(null);
   const [dynamicDataYourSong, setDynamicDataYourSong] = useState();
   const [dynamicDataYourReward, setDynamicDataYourReward] = useState();
   const [isFullData, setFullData] = useState(true);
   const talentId = window.localStorage.getItem('uid');
+  const toast = useToast();
+
+  const notify = title => {
+    toast({
+      position: 'top-right',
+      duration: 3000,
+      render: () => <NotificationProvider title={title} />,
+    });
+  };
 
   const {
     handleSubmit,
@@ -96,7 +104,23 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
     loadTalent(talentId);
   }, [talentId]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (talentInfo && talentInfo.avatar) {
+      getFileFromAWS(talentInfo.avatar).then(res => {
+        setUrlAvatar(res);
+      });
+    }
+    if (talentInfo && talentInfo.citizenPaper && talentInfo.citizenPaper[0]) {
+      getFileFromAWS(talentInfo.citizenPaper[0]).then(res => {
+        setUrlCCCD1(res);
+      });
+    }
+    if (talentInfo && talentInfo.citizenPaper && talentInfo.citizenPaper[1]) {
+      getFileFromAWS(talentInfo.citizenPaper[1]).then(res => {
+        setUrlCCCD2(res);
+      });
+    }
+  }, [talentInfo]);
 
   const handleUploadAvatar = item => {
     if (item) {
@@ -122,44 +146,54 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const dataType = [
     {
       label: 'Cá nhân',
-      value: 'account.type.individual',
+      value: 'user.type.individual',
     },
     {
       label: 'Công ty',
-      value: 'account.type.company',
+      value: 'user.type.company',
     },
   ];
 
   const onSubmit = async values => {
+    let fileCodeAvatar = '';
+    if (fileAvatar) {
+      fileCodeAvatar = await sendFileToAWS(fileAvatar, true);
+    }
+    let fileCodeCCCD1= '';
+    if (fileCCCD1) {
+      fileCodeCCCD1 = await sendFileToAWS(fileCCCD1, true);
+    }
+    let fileCodeCCCD2 = '';
+    if (fileCCCD2) {
+      fileCodeCCCD2 = await sendFileToAWS(fileCCCD2, true);
+    }
     const data = {
-      avatar: fileAvatar,
+      avatar: fileCodeAvatar,
+      userType: values.type,
       fullName: values.fullName,
       displayName: values.displayName,
       phoneNumber: values.phoneNumber,
-      // street: values.street,
-      // district: values.district,
-      // province: values.province,
       address: {
         address: values.street,
         parentId: getValues('district') || talentInfo.address.parent.uid
       },
-      introduction: introductionNFTRef.current.getContent(),
+      // introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
-      cccd1: fileCCCD1,
-      cccd2: fileCCCD2,
-      type: values.type,
+      cccd1: fileCodeCCCD1,
+      cccd2: fileCodeCCCD2,
       checkBoxRemember: values.checkBoxRemember,
       dynamicDataYourSong,
       dynamicDataYourReward,
     };
-    if (fileAvatar === null || fileCCCD1 === null || fileCCCD2 === null) {
+
+    if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
     } else {
       setFullData(true);
       const dataSubmit = {
-        accountType: data.type,
+        userType: data.userType,
         phoneNumber: data.phoneNumber,
         address: data.address,
         taxId: '1123123123123',
@@ -169,25 +203,19 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         bankBranchName: 'HCM',
         // introduction: data.introduction,
         fullName: data.fullName,
-        // avatar: data.avatar,
-        // cccd1: data.cccd1,
-        // cccd2: data.cccd2,
-        address: {
-          address: values.street,
-          parentId: getValues('district')
-        },
-        songs: data.dynamicDataYourSong,
-        rewards: data.dynamicDataYourReward,
         citizenId: '0AB3425SD5FD',
-        citizenPaper: ['string'],
+        citizenPaper: [data.cccd1, data.cccd2] || [],
+        songs: data.dynamicDataYourSong || [],
+        rewards: data.dynamicDataYourReward || [],
       };
       put(API_TALENT_KYC, dataSubmit, talentId)
         .then(res => {
-          if (res) {
-            window.location.reload();
+          if (res > 300) {
+            notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+            return;
           }
+          notify('Tạo thành công');
         })
-        .catch(err => cacthError(err));
     }
   };
 
@@ -253,9 +281,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                     size="md"
                     {...register('type')}
                     defaultValue={
-                      talentInfo.accountType ? (
+                      talentInfo.userType && dataType.filter(
+                        item => item.value === talentInfo.userType,
+                      )[0] ? (
                       dataType.filter(
-                        item => item.value === talentInfo.accountType,
+                        item => item.value === talentInfo.userType,
                       )[0].value) : null
                     }
                   >
@@ -350,27 +380,27 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 <Text color={RED_COLOR}>
                   {errors.street && errors.street.message}
                 </Text>
-                <CitySelector 
-                    register={register} 
-                    errors={errors} 
-                    defaultDistrict={talentInfo.address ? talentInfo.address.parent.uid : null} 
-                    defaultCity={talentInfo.address ? talentInfo.address.parent.parent.uid : null} 
+                <CitySelector
+                    register={register}
+                    errors={errors}
+                    defaultDistrict={talentInfo.address && talentInfo.address.parent ? talentInfo.address.parent.uid : null}
+                    defaultCity={talentInfo.address && talentInfo.address.parent && talentInfo.address.parent.parent ? talentInfo.address.parent.parent.uid : null}
                   />
-                <FormControl>
-                  <CustomFormLabel htmlFor="introduce">
-                    {t(messages.introduce())}
-                  </CustomFormLabel>
-                  <QWERTYEditor
-                    ref={introductionNFTRef}
-                    name="introduce"
-                    id="introduce"
-                    required
-                    val="Pass the variant prop to change the visual appearance of the input component. Chakra UI input variant types are: outline, filled, flushed and unstyled"
-                  />
-                </FormControl>
-                <Text color={RED_COLOR}>
-                  {errors.introduce && errors.introduce.message}
-                </Text>
+                {/*<FormControl>*/}
+                {/*  <CustomFormLabel htmlFor="introduce">*/}
+                {/*    {t(messages.introduce())}*/}
+                {/*  </CustomFormLabel>*/}
+                {/*  <QWERTYEditor*/}
+                {/*    ref={introductionNFTRef}*/}
+                {/*    name="introduce"*/}
+                {/*    id="introduce"*/}
+                {/*    required*/}
+                {/*    val="Pass the variant prop to change the visual appearance of the input component. Chakra UI input variant types are: outline, filled, flushed and unstyled"*/}
+                {/*  />*/}
+                {/*</FormControl>*/}
+                {/*<Text color={RED_COLOR}>*/}
+                {/*  {errors.introduce && errors.introduce.message}*/}
+                {/*</Text>*/}
                 <FormControl>
                   <CustomFormLabel>
                     {t(messages.accountNameOwner())}
@@ -426,7 +456,9 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         size="md"
                         {...register('bankName')}
                         defaultValue={
-                          talentInfo.bankName ? (
+                          talentInfo.bankName && bankName.filter(
+                            item => item.name === talentInfo.bankName,
+                          )[0] ? (
                           bankName.filter(
                             item => item.name === talentInfo.bankName,
                           )[0].name) : null
@@ -446,7 +478,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   </SimpleGrid>
                 </FormControl>
                 <FormControl>
-                  <CustomFormLabel>{t(messages.cccd())}</CustomFormLabel>
+                  <CustomFormLabel display="flex">{t(messages.cccd())}<Box color={RED_COLOR}>(Vui lòng chỉ tải ảnh dưới 2MB)</Box></CustomFormLabel>
                   <SimpleGrid columns={2} spacing={2}>
                     <Box>
                       <Image

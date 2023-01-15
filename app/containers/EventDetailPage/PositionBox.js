@@ -72,7 +72,7 @@ const PositionBox = ({ data, toggleModal }) => (
                         {item.jobOffer.name}
                       </Text>
                       <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                        {item.jobOffer.jobDetail.category.name}
+                        {item.jobOffer.jobDetail.category && item.jobOffer.jobDetail.category.name}
                       </Text>
                       <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                         {new Date(

@@ -6,12 +6,14 @@ import {
   Avatar,
   MenuOptionGroup,
   MenuDivider,
-  Link,
   MenuItemOption,
+  Link,
 } from '@chakra-ui/react';
+// import { Link } from 'react-router-dom';
 import { logout, getLocalRefreshToken } from 'utils/auth';
 import qs from 'qs';
 import axios from 'axios';
+import * as Paths from 'constants/routes';
 import { API_LOGOUT } from '../../constants/api';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
@@ -35,13 +37,13 @@ const ProfileAvatar = () => {
     }
   };
   return (
-    <Menu closeOnSelect={false}>
+    <Menu closeOnSelect>
       <MenuButton colorScheme="blue">
         <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
       </MenuButton>
-      <MenuList minWidth="240px">
+      <MenuList minWidth="240px" zIndex={9999}>
         <MenuOptionGroup title="Manager" type="button">
-          <Link href="/manager">
+          <Link href={Paths.ROUTE_MANAGER}>
             <MenuItemOption>My manager</MenuItemOption>
           </Link>
         </MenuOptionGroup>

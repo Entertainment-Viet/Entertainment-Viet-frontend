@@ -198,10 +198,12 @@
     "bio": "Dịch vụ cung cấp",
     "save": "Save",
     "kycVerify": "KYC Verification",
+    "kycVerifying": "Admin is verifying your profile",
     "kycVerified": "KYC Verified",
     "category": "Category",
     "subCategory": "Sub Category",
-    "incomeRange": "Khoảng thu nhập (1 session)"
+    "incomeRange": "Khoảng thu nhập (1 session)",
+    "imageThumbnails": "Ảnh Thumbnails"
   },
   "OrganizerManagementPage": {
     "createEvent": "+ Create event",
@@ -233,7 +235,8 @@
     "kycVerify": "KYC Verification",
     "kycVerified": "KYC Verified",
     "incomeRange": "Khoảng thu nhập (1 session)",
-    "category": "Category"
+    "category": "Category",
+    "billing": "Billing"
   },
   "bookingDetailPage": {
     "bookingInfo": "Thông tin booking: ",

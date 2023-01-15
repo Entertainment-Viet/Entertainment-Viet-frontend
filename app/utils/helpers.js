@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import * as Paths from 'constants/routes';
 import * as Storages from 'constants/storage';
+// eslint-disable-next-line import/no-cycle
 // import { useHistory } from 'react-router-dom';
 // import { getCookie } from 'utils/cookie';
 

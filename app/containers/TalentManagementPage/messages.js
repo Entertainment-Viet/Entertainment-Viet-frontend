@@ -33,10 +33,13 @@ export const messages = {
   bio: () => t(translations.TalentManagementPage.bio),
   save: () => t(translations.TalentManagementPage.save),
   kycVerify: () => t(translations.TalentManagementPage.kycVerify),
+  kycVerifying: () => t(translations.TalentManagementPage.kycVerifying),
   kycVerified: () => t(translations.TalentManagementPage.kycVerified),
   category: () => t(translations.TalentManagementPage.category),
   subCategory: () => t(translations.TalentManagementPage.subCategory),
   incomeRange: () => t(translations.TalentManagementPage.incomeRange),
   locationDistrict: () => t(translations.loginPage.locationDistrict),
   locationCity: () => t(translations.loginPage.locationCity),
+  billing: () => t(translations.OrganizerManagementPage.billing),
+  imageThumbnails: () => t(translations.TalentManagementPage.imageThumbnails),
 };

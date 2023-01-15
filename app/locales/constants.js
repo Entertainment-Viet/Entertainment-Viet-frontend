@@ -1,5 +1,3 @@
-// import { wKaiAbi, S500ClaimAbi, NftAbi, Multicall } from './../../src/app/abis';
-
 export const ENUM_LANGS = {
   en: 'en',
   vi: 'vi',

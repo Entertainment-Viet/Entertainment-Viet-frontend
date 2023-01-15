@@ -4,6 +4,8 @@ export const API_SERVER = process.env.REACT_APP_API
 /* COMMON */
 export const API_LOGIN = '/auth/realms/ve-sso/protocol/openid-connect/token';
 export const API_LOGOUT = '/auth/realms/ve-sso/protocol/openid-connect/logout';
+export const API_ORG_REGISTER = '/api/users/organizers';
+export const API_TAL_REGISTER = '/api/users/talents';
 /* NEWS */
 export const API_NEWS_LIST = '/news/list';
 export const API_NEWS_DETAIL = '/news/detail/'; // :id
@@ -59,6 +61,8 @@ export const API_EVENT_POSITIONS_BOOKINGS =
 export const API_EVENT_DETAIL = 'api/organizers/:id1/events/:id2';
 export const API_EVENT_POSITION_DETAIL =
   'api/organizers/:id1/events/:id2/positions/:id3';
+export const API_EVENT_BOOKINGS_LIST =
+  'api/organizers/:id1/events/:id2/bookings';
 
 /* CATEGORY */
 export const API_GET_CATEGORIES = 'api/categories';
@@ -66,3 +70,10 @@ export const API_EVENT_SEARCH = 'api/events';
 
 /* LOCATION */
 export const API_GET_LOCATION = 'api/locations';
+
+/* AWS */
+export const API_UPLOAD_FILE = 'api/aws/files';
+export const API_GET_FILE = 'api/aws/files/:key';
+
+/* GENERAL */
+export const API_GET_SCORE_TYPE = 'api/admin/:id1/scoreTypes';

@@ -62,6 +62,7 @@ const DateTimeCustom = props => {
   return (
     <MyWrapper className={template}>
       <DatePicker
+        autoComplete="off"
         selected={date}
         onChange={d => {
           handleDateChange(d);

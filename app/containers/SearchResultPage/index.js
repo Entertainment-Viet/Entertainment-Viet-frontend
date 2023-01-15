@@ -5,24 +5,11 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import CategoriesFilter from 'components/CategoriesFilter';
 import SearchLocation from 'components/SearchLocation';
-import {
-  Container,
-  Box,
-  SimpleGrid,
-  NumberInput,
-  NumberInputField,
-  HStack,
-  Text,
-} from '@chakra-ui/react';
+import { Container, Box, SimpleGrid, HStack, Text } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import {
-  TEXT_PURPLE,
-  SEC_TEXT_COLOR,
-  PRI_TEXT_COLOR,
-  TEXT_GREEN,
-} from 'constants/styles';
+import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
 import { Card } from 'components/Cards';
 import { H1 } from 'components/Elements';
@@ -38,7 +25,7 @@ import {
   changeDistrict,
   changeStart,
   changeEnd,
-  changeCategory,
+  // changeCategory,
   changeSearch,
   loadCategories,
   loadLocation,
@@ -109,19 +96,19 @@ export function SearchResultPage({
     last: paging.last,
   };
 
-  const cityData = locationData && locationData.map(item => item.parentName);
-  const cityNameList = cityData && Array.from(new Set(cityData));
+  // const cityData = locationData && locationData.map(item => item.parentName);
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
+  // const cityNameList = cityData && Array.from(new Set(cityData));
   const districtData =
     locationData &&
     city &&
     locationData.filter(
-      item =>
-        item.locationType.type === 'district' &&
-        item.locationType.level === 2 &&
-        item.parentName === city,
+      item => item.locationType.type === 'district' && item.parentUid === city,
     );
   return (
-    <div style={{ width: '100%' }}>
+    <div styles={{ width: '100%' }}>
       <Metadata />
       <H1 color={TEXT_GREEN}>{`Result for "${search}"`}</H1>
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
@@ -132,23 +119,29 @@ export function SearchResultPage({
           <CategoriesFilter
             placeholder="Categories"
             listOptions={categoriesFiltered}
+            loadDataAction={handleCategoryChange}
           />
           <SearchLocation
             placeholder={t(messages.locationCity())}
-            optionList={cityNameList}
+            optionList={cityData}
             handleChangeLocation={handleCityChange}
+            typeHandle="city"
           />
           {city && (
             <SearchLocation
               placeholder={t(messages.locationDistrict())}
               handleChangeLocation={handleDistrictChange}
               optionList={districtData}
+              typeHandle="district"
             />
           )}
-          <SliderRange titleRange={t(messages.incomeRange())} />
+          <SliderRange
+            titleRange={t(messages.incomeRange())}
+            loadDataAction={handleBudgetChange}
+          />
         </HStack>
         <HStack w="50%">
-          <Text>Your budget</Text>
+          {/* <Text>Your budget</Text>
           <Box>
             <NumberInput
               color={PRI_TEXT_COLOR}
@@ -158,7 +151,7 @@ export function SearchResultPage({
             >
               <NumberInputField placeholder="Budget" />
             </NumberInput>
-          </Box>
+          </Box> */}
           <Text>Start time</Text>
           <Box>
             <DateTimeCustom
@@ -267,9 +260,14 @@ export function mapDispatchToProps(dispatch) {
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadData());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadData());
+    },
+    handleBudgetChange: () => {
+      dispatch(loadData());
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
@@ -279,8 +277,8 @@ export function mapDispatchToProps(dispatch) {
       dispatch(changeEnd(toIsoString(end)));
       dispatch(loadData());
     },
-    handleCategoryChange: category => {
-      dispatch(changeCategory(category));
+    handleCategoryChange: () => {
+      // dispatch(changeCategory(category));
       dispatch(loadData());
     },
     onLoadData: category => {

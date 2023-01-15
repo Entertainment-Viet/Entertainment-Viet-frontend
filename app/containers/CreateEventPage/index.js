@@ -33,6 +33,8 @@ import { RED_COLOR } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import CitySelector from '../CitySelector/Loadable';
 import NotificationProvider from '../../components/NotificationProvider';
+import ImageUploadInput from '../../components/ImageUploadInput';
+import useThumbnailImgs from '../../components/ImageUploadInput/useThumbnailImgs';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -60,6 +62,7 @@ export function CreateEventPage() {
     getValues,
     formState: { errors, isSubmitting },
   } = useForm();
+  const thumbnailComposable = useThumbnailImgs(5);
   const describeNFTRef = useRef(null);
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
@@ -68,17 +71,18 @@ export function CreateEventPage() {
 
   const onSubmit = async () => {
     const orgId = window.localStorage.getItem('uid');
+    const descriptionImg = await thumbnailComposable.handleUploadImgs();
     const val = {
       name: getValues('name'),
       isActive: true,
       occurrenceAddress: {
-        street: getValues('street'),
-        district: getValues('district'),
-        city: getValues('city'),
+        address: getValues('street'),
+        parentId: getValues('district'),
       },
       occurrenceStartTime: start,
       occurrenceEndTime: end,
       description: describeNFTRef.current.getContent(),
+      descriptionImg,
     };
     post(API_LIST_EVENTS, val, orgId).then(res1 => {
       if (res1 > 300) {
@@ -134,7 +138,12 @@ export function CreateEventPage() {
                 type="hm"
                 handleDateChange={setEnd}
               />
-
+              <FormControl>
+                <CustomFormLabel>
+                  {t(messages.imageThumbnails())}
+                </CustomFormLabel>
+                <ImageUploadInput thumbnailComposable={thumbnailComposable} />
+              </FormControl>
               <FormControl isInvalid={errors.name}>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.desc())}

@@ -10,7 +10,7 @@ import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
 import SliderRange from 'components/SliderRange';
-import SearchLocation from 'components/SearchLocation';
+// import SearchLocation from 'components/SearchLocation';
 import { connect } from 'react-redux';
 import { DateTimeCustom } from 'components/Controls';
 import { compose } from 'redux';
@@ -177,12 +177,12 @@ const MyEvents = ({
   handleLimitChange,
   onLoadDetailData,
   eventInfo,
-  handleCityChange,
-  handleDistrictChange,
+  // handleCityChange,
+  // handleDistrictChange,
   categories,
   onLoadCategory,
-  locationData,
-  city,
+  // locationData,
+  // city,
   handleStartChange,
   handleEndChange,
   onLoadLocation,
@@ -204,17 +204,17 @@ const MyEvents = ({
     setCategoriesFiltered(categoriesClassified);
   }, [categories]);
   const userId = localStorage.getItem('uid');
-  const cityData = locationData && locationData.map(item => item.parentName);
-  const cityNameList = cityData && Array.from(new Set(cityData));
-  const districtData =
-    locationData &&
-    city &&
-    locationData.filter(
-      item =>
-        item.locationType.type === 'district' &&
-        item.locationType.level === 2 &&
-        item.parentName === city,
-    );
+  // const cityData = locationData && locationData.map(item => item.parentName);
+  // const cityNameList = cityData && Array.from(new Set(cityData));
+  // const districtData =
+  //   locationData &&
+  //   city &&
+  //   locationData.filter(
+  //     item =>
+  //       item.locationType.type === 'district' &&
+  //       item.locationType.level === 2 &&
+  //       item.parentName === city,
+  //   );
   // function handleDelete(id) {
   //   del(`${API_EVENT_DETAIL}/${id}`, {}, userId).then(res1 => {
   //     console.log(res1);
@@ -281,7 +281,7 @@ const MyEvents = ({
               onLoadDetailData(position.eventId, position.uid);
             }}
           >
-            {position.jobOffer.jobDetail.category.name}
+            {position.jobOffer.jobDetail.category && position.jobOffer.jobDetail.category.name}
           </Text>
         ),
         totalSlot: position.quantity,
@@ -364,7 +364,7 @@ const MyEvents = ({
               typePage="manager"
               listOptions={categoriesFiltered}
             />
-            <SearchLocation
+            {/* <SearchLocation
               placeholder={t(messages.locationCity())}
               optionList={cityNameList}
               handleChangeLocation={handleCityChange}
@@ -375,7 +375,7 @@ const MyEvents = ({
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />
-            )}
+            )} */}
             <SliderRange
               typePage="manager"
               titleRange={t(messages.incomeRange())}

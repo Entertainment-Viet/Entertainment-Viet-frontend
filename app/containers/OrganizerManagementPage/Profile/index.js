@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-nested-ternary */
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   Text,
@@ -30,7 +32,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { put } from 'utils/request';
+import { put, getFileFromAWS, sendFileToAWS } from 'utils/request';
 import PropTypes from 'prop-types';
 import reducer from './slice/reducer';
 import saga from './slice/saga';
@@ -92,6 +94,14 @@ const Profile = ({
     loadCategories();
   }, [organizerId]);
 
+  useEffect(() => {
+    if (organizerInfo && organizerInfo.avatar) {
+      getFileFromAWS(organizerInfo.avatar).then(res => {
+        setUrl(res);
+      });
+    }
+  }, [organizerInfo]);
+
   const handleUpload = item => {
     if (item) {
       setFile(item);
@@ -100,8 +110,12 @@ const Profile = ({
   };
 
   const onSubmit = async values => {
+    let fileCode = '';
+    if (file) {
+      fileCode = await sendFileToAWS(file, true);
+    }
     const data = {
-      avatar: file,
+      avatar: fileCode,
       displayName: values.displayName,
       activity: activityNFTRef.current.getContent(),
       bio: bioNFTRef.current.getContent(),
@@ -118,7 +132,7 @@ const Profile = ({
       },
     ];
     const dataSubmit = {
-      // avatar: file,
+      avatar: data.avatar,
       displayName: data.displayName,
       bio: data.bio,
       extensions: JSON.stringify(preData),
@@ -217,6 +231,7 @@ const Profile = ({
                   </Box>
                 </Box>
               </Box>
+              <Box color={RED_COLOR}>Vui lòng chỉ tải ảnh dưới 2MB</Box>
               <FormControl>
                 <CustomFormLabel>{t(messages.displayName())}</CustomFormLabel>
                 <InputCustomV2
@@ -247,7 +262,9 @@ const Profile = ({
                   id="bio"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[1]
                       ? JSON.parse(organizerInfo.extensions)[1].value
                       : null
                   }
@@ -263,7 +280,9 @@ const Profile = ({
                   id="activity"
                   required
                   val={
-                    organizerInfo.extensions
+                    organizerInfo.extensions &&
+                    JSON.parse(organizerInfo.extensions) &&
+                    JSON.parse(organizerInfo.extensions)[0]
                       ? JSON.parse(organizerInfo.extensions)[0].value
                       : null
                   }
@@ -277,17 +296,13 @@ const Profile = ({
               <Button
                 bg={TEXT_PURPLE}
                 color={SUB_BLU_COLOR}
-                disabled={organizerInfo.userState === USER_STATE.VERIFIED}
+                // disabled={organizerInfo.userState === USER_STATE.PENDING}
               >
-                <Link
-                  href={
-                    organizerInfo.userState === USER_STATE.VERIFIED
-                      ? null
-                      : ROUTE_MANAGER_KYC_ORG
-                  }
-                >
+                <Link href={ROUTE_MANAGER_KYC_ORG}>
                   {organizerInfo.userState === USER_STATE.VERIFIED
                     ? t(messages.kycVerified())
+                    : organizerInfo.userState === USER_STATE.PENDING
+                    ? t(messages.kycVerifying())
                     : t(messages.kycVerify())}
                 </Link>
               </Button>
