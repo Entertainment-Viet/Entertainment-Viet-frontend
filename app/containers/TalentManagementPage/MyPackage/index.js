@@ -176,16 +176,15 @@ const MyPackage = ({
     setCategoriesFiltered(categoriesClassified);
   }, [categories]);
   const userId = window.localStorage.getItem('uid');
-  const cityData = locationData && locationData.map(item => item.parentName);
-  const cityNameList = cityData && Array.from(new Set(cityData));
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
+  // const cityNameList = cityData && Array.from(new Set(cityData));
   const districtData =
     locationData &&
     city &&
     locationData.filter(
-      item =>
-        item.locationType.type === 'district' &&
-        item.locationType.level === 2 &&
-        item.parentName === city,
+      item => item.locationType.type === 'district' && item.parentUid === city,
     );
   function handleDelete(id) {
     del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
@@ -286,12 +285,14 @@ const MyPackage = ({
             />
             <SearchLocation
               placeholder={t(messages.locationCity())}
-              optionList={cityNameList}
+              optionList={cityData}
+              typeHandle="city"
               handleChangeLocation={handleCityChange}
             />
             {city && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
+                typeHandle="district"
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />

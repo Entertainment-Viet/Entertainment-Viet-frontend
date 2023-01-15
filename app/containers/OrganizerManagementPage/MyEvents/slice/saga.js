@@ -178,7 +178,7 @@ export function* getLocationChange() {
       get,
       API_LIST_EVENTS,
       {
-        locationParentName: cityName,
+        locationId: cityName,
         name: districtName,
       },
       USER_ID,

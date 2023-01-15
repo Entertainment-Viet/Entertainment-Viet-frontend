@@ -10,7 +10,7 @@ import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
 import SliderRange from 'components/SliderRange';
-// import SearchLocation from 'components/SearchLocation';
+import SearchLocation from 'components/SearchLocation';
 import { connect } from 'react-redux';
 import { DateTimeCustom } from 'components/Controls';
 import { compose } from 'redux';
@@ -177,12 +177,12 @@ const MyEvents = ({
   handleLimitChange,
   onLoadDetailData,
   eventInfo,
-  // handleCityChange,
-  // handleDistrictChange,
+  handleCityChange,
+  handleDistrictChange,
   categories,
   onLoadCategory,
-  // locationData,
-  // city,
+  locationData,
+  city,
   handleStartChange,
   handleEndChange,
   onLoadLocation,
@@ -191,7 +191,16 @@ const MyEvents = ({
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [categoriesFiltered, setCategoriesFiltered] = useState([]);
-
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
+  // const cityNameList = cityData && Array.from(new Set(cityData));
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item => item.locationType.type === 'district' && item.parentUid === city,
+    );
   useEffect(() => {
     if (mode === 0) {
       onLoadTableData();
@@ -364,18 +373,20 @@ const MyEvents = ({
               typePage="manager"
               listOptions={categoriesFiltered}
             />
-            {/* <SearchLocation
+            <SearchLocation
               placeholder={t(messages.locationCity())}
-              optionList={cityNameList}
+              optionList={cityData}
+              typeHandle="city"
               handleChangeLocation={handleCityChange}
             />
             {city && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
+                typeHandle="district"
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />
-            )} */}
+            )}
             <SliderRange
               typePage="manager"
               titleRange={t(messages.incomeRange())}
