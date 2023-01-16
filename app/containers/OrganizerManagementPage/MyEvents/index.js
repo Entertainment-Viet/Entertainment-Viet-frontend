@@ -10,7 +10,7 @@ import { PRI_TEXT_COLOR, TEXT_GREEN, RED_COLOR } from 'constants/styles';
 import styled from 'styled-components';
 import AdvancedTable from 'components/AdvancedTable';
 import SliderRange from 'components/SliderRange';
-// import SearchLocation from 'components/SearchLocation';
+import SearchLocation from 'components/SearchLocation';
 import { connect } from 'react-redux';
 import { DateTimeCustom } from 'components/Controls';
 import { compose } from 'redux';
@@ -34,10 +34,11 @@ import {
   changeLimit,
   loadEventInfo,
   loadCategories,
-  changeCategory,
+  // changeCategory,
   changeStart,
   changeEnd,
   loadLocation,
+  loadData,
   changeCity,
   changeDistrict,
 } from './slice/actions';
@@ -177,21 +178,31 @@ const MyEvents = ({
   handleLimitChange,
   onLoadDetailData,
   eventInfo,
-  // handleCityChange,
-  // handleDistrictChange,
+  handleCityChange,
+  handleDistrictChange,
   categories,
   onLoadCategory,
-  // locationData,
-  // city,
+  locationData,
+  city,
   handleStartChange,
   handleEndChange,
   onLoadLocation,
+  handleBudgetChange,
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [categoriesFiltered, setCategoriesFiltered] = useState([]);
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
 
+  const districtData =
+    locationData &&
+    city &&
+    locationData.filter(
+      item => item.locationType.type === 'district' && item.parentUid === city,
+    );
   useEffect(() => {
     if (mode === 0) {
       onLoadTableData();
@@ -281,7 +292,8 @@ const MyEvents = ({
               onLoadDetailData(position.eventId, position.uid);
             }}
           >
-            {position.jobOffer.jobDetail.category && position.jobOffer.jobDetail.category.name}
+            {position.jobOffer.jobDetail.category &&
+              position.jobOffer.jobDetail.category.name}
           </Text>
         ),
         totalSlot: position.quantity,
@@ -361,24 +373,24 @@ const MyEvents = ({
           <HStack maxW="100%" mb="6">
             <CategoriesFilter
               placeholder="Categories"
-              typePage="manager"
               listOptions={categoriesFiltered}
             />
-            {/* <SearchLocation
+            <SearchLocation
               placeholder={t(messages.locationCity())}
-              optionList={cityNameList}
+              optionList={cityData}
               handleChangeLocation={handleCityChange}
             />
-            {city && (
+            {city && districtData.length > 0 && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />
-            )} */}
+            )}
             <SliderRange
-              typePage="manager"
               titleRange={t(messages.incomeRange())}
+              typePage="event-manager"
+              loadDataAction={handleBudgetChange}
             />
             <Text>Start time</Text>
             <Box>
@@ -466,6 +478,7 @@ MyEvents.propTypes = {
   handleDistrictChange: PropTypes.func,
   handleStartChange: PropTypes.func,
   handleEndChange: PropTypes.func,
+  handleBudgetChange: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -491,6 +504,9 @@ export function mapDispatchToProps(dispatch) {
       dispatch(changePage(page));
       dispatch(loadEvents());
     },
+    handleBudgetChange: () => {
+      dispatch(loadData());
+    },
     handleModeChange: mode => {
       dispatch(changeMode(mode));
     },
@@ -503,21 +519,26 @@ export function mapDispatchToProps(dispatch) {
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
+      dispatch(loadData());
     },
     handleEndChange: end => {
       dispatch(changeEnd(toIsoString(end)));
+      dispatch(loadData());
     },
-    handleCategoryChange: category => {
-      dispatch(changeCategory(category));
+    handleCategoryChange: () => {
+      // dispatch(changeCategory(category));
+      dispatch(loadData());
     },
     onLoadCategory: () => {
       dispatch(loadCategories());
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadData());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadData());
     },
     onLoadLocation: () => {
       dispatch(loadLocation());

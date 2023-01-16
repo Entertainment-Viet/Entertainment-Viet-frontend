@@ -125,14 +125,12 @@ export function SearchResultPage({
             placeholder={t(messages.locationCity())}
             optionList={cityData}
             handleChangeLocation={handleCityChange}
-            typeHandle="city"
           />
-          {city && (
+          {city && districtData.length > 0 && (
             <SearchLocation
               placeholder={t(messages.locationDistrict())}
               handleChangeLocation={handleDistrictChange}
               optionList={districtData}
-              typeHandle="district"
             />
           )}
           <SliderRange

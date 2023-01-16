@@ -34,6 +34,7 @@ function SliderRange({
     if (typePage) {
       setValue(val);
       handlePriceChangeManager(val);
+      loadDataAction();
     } else {
       setValue(val);
       handlePriceChange(val);

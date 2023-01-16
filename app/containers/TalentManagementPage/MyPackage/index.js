@@ -32,9 +32,10 @@ import {
   changeLimit,
   changeEnd,
   changeStart,
-  changeCategory,
+  // changeCategory,
   loadCategories,
   loadPackageInfo,
+  loadData,
   changeCity,
   loadLocation,
   changeDistrict,
@@ -159,6 +160,7 @@ const MyPackage = ({
   city,
   onLoadLocation,
   handleCityChange,
+  handleBudgetChange,
   handleDistrictChange,
 }) => {
   useInjectReducer({ key, reducer });
@@ -176,16 +178,15 @@ const MyPackage = ({
     setCategoriesFiltered(categoriesClassified);
   }, [categories]);
   const userId = window.localStorage.getItem('uid');
-  const cityData = locationData && locationData.map(item => item.parentName);
-  const cityNameList = cityData && Array.from(new Set(cityData));
+  const cityData =
+    locationData &&
+    locationData.filter(item => item.locationType.type === 'city');
+  // const cityNameList = cityData && Array.from(new Set(cityData));
   const districtData =
     locationData &&
     city &&
     locationData.filter(
-      item =>
-        item.locationType.type === 'district' &&
-        item.locationType.level === 2 &&
-        item.parentName === city,
+      item => item.locationType.type === 'district' && item.parentUid === city,
     );
   function handleDelete(id) {
     del(`${API_GET_PACKAGE_INFO}/${id}`, {}, userId).then(res1 => {
@@ -281,15 +282,14 @@ const MyPackage = ({
           <HStack maxW="100%" mb="6">
             <CategoriesFilter
               placeholder="Categories"
-              typePage="manager"
               listOptions={categoriesFiltered}
             />
             <SearchLocation
               placeholder={t(messages.locationCity())}
-              optionList={cityNameList}
+              optionList={cityData}
               handleChangeLocation={handleCityChange}
             />
-            {city && (
+            {city && districtData.length > 0 && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
                 handleChangeLocation={handleDistrictChange}
@@ -299,6 +299,7 @@ const MyPackage = ({
             <SliderRange
               typePage="package-manager"
               titleRange={t(messages.incomeRange())}
+              loadDataAction={handleBudgetChange}
             />
             <Text>Start time</Text>
             <Box>
@@ -365,6 +366,7 @@ MyPackage.propTypes = {
   categories: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   packageInfo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   locationData: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  handleBudgetChange: PropTypes.func,
   city: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
@@ -387,6 +389,9 @@ export function mapDispatchToProps(dispatch) {
     onLoadData: id => {
       dispatch(loadPackages(id));
     },
+    handleBudgetChange: () => {
+      dispatch(loadData());
+    },
     handlePageChange: page => {
       dispatch(changePage(page));
       dispatch(loadPackages());
@@ -403,18 +408,23 @@ export function mapDispatchToProps(dispatch) {
     },
     handleStartChange: start => {
       dispatch(changeStart(toIsoString(start)));
+      dispatch(loadData());
     },
     handleEndChange: end => {
       dispatch(changeEnd(toIsoString(end)));
+      dispatch(loadData());
     },
-    handleCategoryChange: category => {
-      dispatch(changeCategory(category));
+    handleCategoryChange: () => {
+      // dispatch(changeCategory(category));
+      dispatch(loadData());
     },
     handleCityChange: city => {
       dispatch(changeCity(city));
+      dispatch(loadData());
     },
     handleDistrictChange: district => {
       dispatch(changeDistrict(district));
+      dispatch(loadData());
     },
     onLoadCategory: () => {
       dispatch(loadCategories());

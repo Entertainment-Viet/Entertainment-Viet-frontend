@@ -16,7 +16,9 @@ import {
   CHANGE_END,
   LOAD_LOCATION_SUCCESS,
   CHANGE_START,
+  LOAD_DATA,
   CHANGE_CITY,
+  CHANGE_DISTRICT,
 } from './constants';
 
 export const initialState = {
@@ -50,7 +52,12 @@ const pageReducer = (state = initialState, action) =>
         draft.data = false;
         draft.packageId = action.id;
         break;
-
+      case LOAD_DATA:
+        draft.loading = true;
+        draft.error = false;
+        draft.data = false;
+        draft.paging = ENUM_PAGGING;
+        break;
       case LOAD_BOOKING_PACKAGES:
         draft.loading = true;
         draft.error = false;
@@ -99,6 +106,9 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_OWN_PACKAGE_PRICE_RANGE:
         draft.priceRange = action.priceRange;
+        break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
         break;
       case LOAD_PACKAGE:
         draft.error = false;

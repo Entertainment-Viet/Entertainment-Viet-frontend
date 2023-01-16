@@ -19,3 +19,4 @@ export const CHANGE_CITY = 'App/MyEvents/CHANGE_CITY';
 export const CHANGE_DISTRICT = 'App/MyEvents/CHANGE_DISTRICT';
 export const LOAD_LOCATION = 'App/MyEvents/LOAD_LOCATION';
 export const LOAD_LOCATION_SUCCESS = 'App/MyEvents/LOAD_LOCATION_SUCCESS';
+export const LOAD_DATA = 'App/MyEvents/LOAD_DATA';

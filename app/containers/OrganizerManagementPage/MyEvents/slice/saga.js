@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import {
   API_LIST_EVENTS,
@@ -15,12 +15,7 @@ import {
   LOAD_EVENTS,
   LOAD_EVENT,
   LOAD_CATEGORIES,
-  CHANGE_CATEGORY_EVENT,
-  CHANGE_OWN_EVENT_PRICE_RANGE,
-  CHANGE_START,
-  CHANGE_END,
-  CHANGE_CITY,
-  CHANGE_DISTRICT,
+  LOAD_DATA,
   LOAD_LOCATION,
 } from './constants';
 import {
@@ -38,13 +33,39 @@ import {
   makeSelectStart,
   makeSelectPriceMax,
   makeSelectPriceMin,
-  makeSelectCategory,
   makeSelectPage,
   makeSelectCity,
   makeSelectDistrict,
 } from './selectors';
 const USER_ID = localStorage.getItem('uid');
-
+export function* getData() {
+  yield delay(1000);
+  const start = yield select(makeSelectStart());
+  const end = yield select(makeSelectEnd());
+  const cityName = yield select(makeSelectCity());
+  const districtName = yield select(makeSelectDistrict());
+  const currency = ENUM_CURRENCY.VND;
+  const maxPrice = yield select(makeSelectPriceMax());
+  const minPrice = yield select(makeSelectPriceMin());
+  try {
+    const payload = yield call(
+      get,
+      API_LIST_EVENTS,
+      {
+        startTime: start,
+        endTime: end,
+        locationId: districtName || cityName,
+        currency: minPrice && maxPrice ? currency : null,
+        maxPrice,
+        minPrice,
+      },
+      USER_ID,
+    );
+    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
 export function* getEventData(id) {
   try {
     // const page = yield select(makeSelectPage());
@@ -114,54 +135,6 @@ export function* getCategories() {
     yield put(loadDataError(err));
   }
 }
-export function* getEventByTime() {
-  const start = yield select(makeSelectStart());
-  const end = yield select(makeSelectEnd());
-  try {
-    const payload = yield call(
-      get,
-      API_LIST_EVENTS,
-      {
-        startTime: start,
-        endTime: end,
-      },
-      USER_ID,
-    );
-
-    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
-  } catch (err) {
-    yield put(loadDataError(err));
-  }
-}
-export function* getCategoriesByChanging() {
-  try {
-    const category = yield select(makeSelectCategory());
-    const payload = yield call(get, API_LIST_EVENTS, { category }, USER_ID);
-    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
-  } catch (err) {
-    yield put(loadDataError(err));
-  }
-}
-export function* getPriceRange() {
-  try {
-    const currency = ENUM_CURRENCY.VND;
-    const maxPrice = yield select(makeSelectPriceMax());
-    const minPrice = yield select(makeSelectPriceMin());
-    const payload = yield call(
-      get,
-      API_LIST_EVENTS,
-      {
-        currency,
-        maxPrice,
-        minPrice,
-      },
-      USER_ID,
-    );
-    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
-  } catch (err) {
-    yield put(loadDataError(err));
-  }
-}
 export function* getLocation() {
   try {
     const payload = yield call(get, API_GET_LOCATION, {});
@@ -170,33 +143,10 @@ export function* getLocation() {
     yield put(loadDataError(err));
   }
 }
-export function* getLocationChange() {
-  try {
-    const cityName = yield select(makeSelectCity());
-    const districtName = yield select(makeSelectDistrict());
-    const payload = yield call(
-      get,
-      API_LIST_EVENTS,
-      {
-        locationParentName: cityName,
-        name: districtName,
-      },
-      USER_ID,
-    );
-    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
-  } catch (err) {
-    yield put(loadDataError(err));
-  }
-}
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_EVENTS, getEventData);
   yield takeEvery(LOAD_EVENT, getEventDetail);
-  yield takeEvery(CHANGE_CATEGORY_EVENT, getCategoriesByChanging);
   yield takeEvery(LOAD_CATEGORIES, getCategories);
-  yield takeEvery(CHANGE_OWN_EVENT_PRICE_RANGE, getPriceRange);
-  yield takeEvery(CHANGE_START, getEventByTime);
-  yield takeEvery(CHANGE_END, getEventByTime);
   yield takeEvery(LOAD_LOCATION, getLocation);
-  yield takeEvery(CHANGE_CITY, getLocationChange);
-  yield takeEvery(CHANGE_DISTRICT, getLocationChange);
+  yield takeEvery(LOAD_DATA, getData);
 }
