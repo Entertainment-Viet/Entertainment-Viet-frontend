@@ -18,6 +18,7 @@ import {
   CHANGE_START,
   LOAD_DATA,
   CHANGE_CITY,
+  CHANGE_DISTRICT,
 } from './constants';
 
 export const initialState = {
@@ -105,6 +106,9 @@ const pageReducer = (state = initialState, action) =>
         break;
       case CHANGE_OWN_PACKAGE_PRICE_RANGE:
         draft.priceRange = action.priceRange;
+        break;
+      case CHANGE_DISTRICT:
+        draft.district = action.district;
         break;
       case LOAD_PACKAGE:
         draft.error = false;
