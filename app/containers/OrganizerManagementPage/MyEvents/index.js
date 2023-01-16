@@ -373,7 +373,6 @@ const MyEvents = ({
           <HStack maxW="100%" mb="6">
             <CategoriesFilter
               placeholder="Categories"
-              typePage="manager"
               listOptions={categoriesFiltered}
             />
             <SearchLocation
@@ -381,7 +380,7 @@ const MyEvents = ({
               optionList={cityData}
               handleChangeLocation={handleCityChange}
             />
-            {city && (
+            {city && districtData.length > 0 && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
                 handleChangeLocation={handleDistrictChange}
@@ -390,6 +389,7 @@ const MyEvents = ({
             )}
             <SliderRange
               titleRange={t(messages.incomeRange())}
+              typePage="event-manager"
               loadDataAction={handleBudgetChange}
             />
             <Text>Start time</Text>

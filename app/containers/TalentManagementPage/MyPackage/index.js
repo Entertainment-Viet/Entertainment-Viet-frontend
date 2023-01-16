@@ -282,24 +282,22 @@ const MyPackage = ({
           <HStack maxW="100%" mb="6">
             <CategoriesFilter
               placeholder="Categories"
-              typePage="manager"
               listOptions={categoriesFiltered}
             />
             <SearchLocation
               placeholder={t(messages.locationCity())}
               optionList={cityData}
-              typeHandle="city"
               handleChangeLocation={handleCityChange}
             />
-            {city && (
+            {city && districtData.length > 0 && (
               <SearchLocation
                 placeholder={t(messages.locationDistrict())}
-                typeHandle="district"
                 handleChangeLocation={handleDistrictChange}
                 optionList={districtData}
               />
             )}
             <SliderRange
+              typePage="package-manager"
               titleRange={t(messages.incomeRange())}
               loadDataAction={handleBudgetChange}
             />
