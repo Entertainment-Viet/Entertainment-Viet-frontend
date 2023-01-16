@@ -63,7 +63,6 @@ export function* getData() {
       USER_ID,
     );
     yield put(loadInfoSuccess(payload.content, payload.paging));
-    console.log('payload1', payload);
   } catch (err) {
     yield put(loadDataError(err));
   }

@@ -15,8 +15,6 @@ import {
   LOAD_EVENTS,
   LOAD_EVENT,
   LOAD_CATEGORIES,
-  CHANGE_START,
-  CHANGE_END,
   LOAD_DATA,
   LOAD_LOCATION,
 } from './constants';
@@ -137,25 +135,6 @@ export function* getCategories() {
     yield put(loadDataError(err));
   }
 }
-export function* getEventByTime() {
-  const start = yield select(makeSelectStart());
-  const end = yield select(makeSelectEnd());
-  try {
-    const payload = yield call(
-      get,
-      API_LIST_EVENTS,
-      {
-        startTime: start,
-        endTime: end,
-      },
-      USER_ID,
-    );
-
-    yield put(loadEventsInfoSuccess(payload.content, payload.paging));
-  } catch (err) {
-    yield put(loadDataError(err));
-  }
-}
 export function* getLocation() {
   try {
     const payload = yield call(get, API_GET_LOCATION, {});
@@ -168,8 +147,6 @@ export default function* watchLatestAction() {
   yield takeEvery(LOAD_EVENTS, getEventData);
   yield takeEvery(LOAD_EVENT, getEventDetail);
   yield takeEvery(LOAD_CATEGORIES, getCategories);
-  yield takeEvery(CHANGE_START, getEventByTime);
-  yield takeEvery(CHANGE_END, getEventByTime);
   yield takeEvery(LOAD_LOCATION, getLocation);
   yield takeEvery(LOAD_DATA, getData);
 }
