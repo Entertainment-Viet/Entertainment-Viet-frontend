@@ -11,7 +11,6 @@ import {
   chakra,
   Text,
   Stack,
-  useToast,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -32,10 +31,9 @@ import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import { RED_COLOR } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import CitySelector from '../CitySelector/Loadable';
-import NotificationProvider from '../../components/NotificationProvider';
 import ImageUploadInput from '../../components/ImageUploadInput';
 import useThumbnailImgs from '../../components/ImageUploadInput/useThumbnailImgs';
-
+import { useNotification } from '../../hooks/useNotification';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -48,14 +46,8 @@ export function CreateEventPage() {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
+
   const {
     handleSubmit,
     register,

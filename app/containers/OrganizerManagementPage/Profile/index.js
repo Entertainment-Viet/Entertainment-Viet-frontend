@@ -15,7 +15,6 @@ import {
   AvatarBadge,
   IconButton,
   Link,
-  useToast,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -37,8 +36,7 @@ import PropTypes from 'prop-types';
 import reducer from './slice/reducer';
 import saga from './slice/saga';
 import InputCustomV2 from '../../../components/Controls/InputCustomV2';
-import NotificationProvider from '../../../components/NotificationProvider';
-
+import { useNotification } from '../../../hooks/useNotification';
 import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { API_ORGANIZER_DETAIL } from '../../../constants/api';
@@ -69,18 +67,12 @@ const Profile = ({
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
   const [url, setUrl] = useState('https://bit.ly/sage-adebayo');
   const [file, setFile] = useState(null);
   const activityNFTRef = useRef(null);
   const bioNFTRef = useRef(null);
+  const { notify } = useNotification();
+
   const organizerId = window.localStorage.getItem('uid');
 
   const {

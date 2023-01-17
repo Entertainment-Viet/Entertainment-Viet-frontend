@@ -13,7 +13,6 @@ import {
   FormLabel,
   Input,
   chakra,
-  useToast,
 } from '@chakra-ui/react';
 
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
@@ -23,10 +22,9 @@ import { numberWithCommas } from 'utils/helpers';
 import parserHtml from 'utils/html';
 import { post } from 'utils/request';
 import { useForm } from 'react-hook-form';
-import NotificationProvider from '../NotificationProvider';
 // import { GoogleMap, Phone } from '../Icon';
 import { messages } from './messages';
-
+import { useNotification } from '../../hooks/useNotification';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -35,20 +33,14 @@ const CustomFormLabel = chakra(FormLabel, {
 });
 
 const PackageModal = props => {
+  const { notify } = useNotification();
+
   const { t } = useTranslation();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
   let jobDetail;
   if (props.data.jobDetail) {
     // eslint-disable-next-line prefer-destructuring
@@ -174,7 +166,7 @@ const PackageModal = props => {
               {jobDetail && parserHtml(jobDetail.note)}
             </Box>
             {/* <Link href="/" alignSelf="flex-end"> */}
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+            <form onSubmit={handleSubmit(onSubmit)} styles={{ width: '100%' }}>
               <FormControl isInvalid={errors.suggestedPrice}>
                 <CustomFormLabel htmlFor="suggestedPrice">
                   Your offer

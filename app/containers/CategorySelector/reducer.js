@@ -4,7 +4,7 @@ import { CATEGORY_LOAD, CATEGORY_LOAD_SUCCESS } from './constants';
 export const initialState = {
   loading: false,
   error: false,
-  categories: false,
+  categories: [],
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -14,11 +14,12 @@ const pageReducer = (state = initialState, action) =>
       case CATEGORY_LOAD:
         draft.loading = true;
         draft.error = false;
-        draft.categories = false;
         break;
       case CATEGORY_LOAD_SUCCESS:
-        draft.categories = action.data;
+        console.log(action.category);
         draft.loading = false;
+        draft.categories = action.category;
+        break;
     }
   });
 

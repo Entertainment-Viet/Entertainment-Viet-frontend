@@ -52,6 +52,7 @@ import SelectCustom from '../../../components/Controls/SelectCustom';
 import NotificationProvider from '../../../components/NotificationProvider';
 import ImageUploadInput from '../../../components/ImageUploadInput';
 import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailImgs';
+import CategorySelector from '../../CategorySelector';
 
 const key = 'Profile';
 
@@ -288,45 +289,7 @@ const Profile = ({
               <Text color={RED_COLOR}>
                 {errors.displayName && errors.displayName.message}
               </Text>
-              <FormControl>
-                <SimpleGrid columns={2} spacing={2}>
-                  <Box>
-                    <CustomFormLabel>{t(messages.category())}</CustomFormLabel>
-                    <SelectCustom
-                      id="category"
-                      size="md"
-                      {...register('category')}
-                      onChange={handleChangeCategory}
-                      defaultValue={
-                        talentInfo.offerCategories && talentInfo.offerCategories.length > 0
-                          ? categoriesInfo.filter(
-                            item => item.uid === talentInfo.offerCategories[0].uid,)[0].uid : null}
-                    >
-                      {categoriesInfo && categoriesInfo.length > 0 && categoriesInfo.map(option => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={option.uid} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </SelectCustom>
-                  </Box>
-                  <Box>
-                    <CustomFormLabel>{t(messages.subCategory())}</CustomFormLabel>
-                    <SelectCustom
-                      id="subCategory"
-                      size="md"
-                      {...register('subCategory')}
-                    >
-                      {subCategory && subCategory.length > 0 && subCategory.map(option => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={option.uid} value={option.uid}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </SelectCustom>
-                  </Box>
-                </SimpleGrid>
-              </FormControl>
+              <CategorySelector register={register} errors={errors} defaultCategory={talentInfo.offerCategories[0]} />
               <FormControl>
                 <CustomFormLabel>
                   {t(messages.imageThumbnails())}
