@@ -9,7 +9,6 @@ import {
   FormErrorMessage,
   FormLabel,
   chakra,
-  useToast,
 } from '@chakra-ui/react';
 import { TEXT_GREEN, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +21,8 @@ import {
 } from 'constants/api';
 import TextAreaCustom from 'components/Controls/TextAreaCustom';
 import BasicRating from '../Rating/BasicRating';
-import NotificationProvider from '../NotificationProvider';
 import { messages } from './messages';
-
+import { useNotification } from '../../hooks/useNotification';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -32,20 +30,14 @@ const CustomFormLabel = chakra(FormLabel, {
 });
 
 const ConfirmFinishModal = props => {
+  const { notify } = useNotification();
+
   const {
     handleSubmit,
     register,
     getValues,
     formState: { errors, isSubmitting },
   } = useForm();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
   const [rating, setRating] = useState(0);
   const { t } = useTranslation();
   const role = window.localStorage.getItem('role');
@@ -142,7 +134,7 @@ const ConfirmFinishModal = props => {
               setRating={setRating}
               rating={rating}
             />
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+            <form onSubmit={handleSubmit(onSubmit)} styles={{ width: '100%' }}>
               <FormControl isInvalid={errors.suggestedPrice}>
                 <CustomFormLabel htmlFor="suggestedPrice">
                   {t(messages.yourReview())}

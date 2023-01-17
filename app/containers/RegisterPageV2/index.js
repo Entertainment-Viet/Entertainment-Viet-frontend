@@ -22,9 +22,7 @@ import {
   InputGroup,
   InputLeftElement,
   Checkbox,
-  useToast,
 } from '@chakra-ui/react';
-import NotificationProvider from 'components/NotificationProvider';
 
 import {
   PRI_TEXT_COLOR,
@@ -38,6 +36,7 @@ import {
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { sha512 } from 'js-sha512';
+import { useNotification } from '../../hooks/useNotification';
 import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
 import { messages } from './messages';
@@ -57,14 +56,8 @@ function RegisterPageV2() {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
+
   const onSubmit = values => {
     const password = sha512(values.password);
     const data = {

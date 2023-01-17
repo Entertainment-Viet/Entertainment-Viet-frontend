@@ -16,7 +16,6 @@ import {
   Button,
   Image,
   Divider,
-  useToast,
 } from '@chakra-ui/react';
 
 import Buttons from 'components/Buttons';
@@ -29,19 +28,12 @@ import {
 import cRequest from 'utils/server';
 import { numberWithCommas, handleAddress } from 'utils/helpers';
 import PropTypes from 'prop-types';
-import NotificationProvider from '../../components/NotificationProvider';
 import Cart from './assets/Cart-white.svg';
+import { useNotification } from '../../hooks/useNotification';
 
-// If you want to use your own Selectors look up the Advancaed Story book examples
 const PackagesBox = ({ data, id, toggleModal }) => {
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
+
   function handleSelect(pId, price) {
     cRequest
       .post(`/api/talents/${id}/packages/${pId}/bookings/shoppingcart`, {
@@ -67,13 +59,13 @@ const PackagesBox = ({ data, id, toggleModal }) => {
             <Table
               variant="unstyled"
               overflowX="hidden"
-              style={{
+              styles={{
                 width: '25rem',
                 wordWrap: 'break-word',
               }}
             >
               <TableCaption>
-                <Link href={`/create-booking/${id}`} style={{ width: '100%' }}>
+                <Link href={`/create-booking/${id}`} styles={{ width: '100%' }}>
                   <Buttons width="100%" bg={TEXT_PURPLE} color="#1D1C4C">
                     Gửi báo giá riêng
                   </Buttons>

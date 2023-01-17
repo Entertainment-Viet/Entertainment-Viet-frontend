@@ -23,7 +23,6 @@ import {
   Link,
   InputLeftElement,
   InputGroup,
-  useToast,
 } from '@chakra-ui/react';
 import {
   PRI_TEXT_COLOR,
@@ -41,17 +40,10 @@ import PasswordField from './PasswordField';
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
-import NotificationProvider from '../../components/NotificationProvider';
+import { useNotification } from '../../hooks/useNotification';
 function LoginPageV2() {
   const { t } = useTranslation();
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
   const {
     handleSubmit,
     register,

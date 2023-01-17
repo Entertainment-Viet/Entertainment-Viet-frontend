@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React, { useEffect, useState } from 'react';
-import { Box, Text, chakra, VStack, useToast } from '@chakra-ui/react';
+import { Box, Text, chakra, VStack } from '@chakra-ui/react';
 import {
   SUB_BLU_COLOR,
   TEXT_GREEN,
@@ -20,12 +20,12 @@ import {
 
 import FeedbackOfferModal from 'components/Modal/FeedbackOfferModal';
 import { useTranslation } from 'react-i18next';
-import NotificationProvider from '../../components/NotificationProvider';
 import AcceptOfferModal from '../../components/Modal/AcceptOfferModal';
 import ConfirmFinishModal from '../../components/Modal/ConfirmFinishModal';
 import { globalMessages } from '../App/globalMessage';
 import { ENUM_BOOKING_STATUS } from '../../constants/enums';
 import { messages } from './messages';
+import { useNotification } from '../../hooks/useNotification';
 
 const GradientBox = chakra(Box, {
   baseStyle: {
@@ -62,14 +62,7 @@ const GradientBox = chakra(Box, {
 // If you want to use your own Selectors look up the Advancaed Story book examples
 
 const BookingGeneralCard = ({ data }) => {
-  const toast = useToast();
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
   const { t } = useTranslation();
   const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
