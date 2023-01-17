@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useRef, useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { toIsoString, getSubCategory } from 'utils/helpers';
+import { toIsoString } from 'utils/helpers';
 import { API_GET_PACKAGE_INFO } from 'constants/api';
 import { post } from 'utils/request';
 import { messages } from './messages';
@@ -37,9 +37,9 @@ import {
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
-// import { dataDistrictHCM } from '../../utils/data-address';
 import CitySelector from '../CitySelector';
 import { useNotification } from '../../hooks/useNotification';
+import CategorySelector from '../CategorySelector';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -49,7 +49,7 @@ const CustomFormLabel = chakra(FormLabel, {
 
 const key = 'CreatePackagePage';
 
-export function CreatePackagePage({ getCategories, categories }) {
+export function CreatePackagePage() {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const { t } = useTranslation();
@@ -64,33 +64,15 @@ export function CreatePackagePage({ getCategories, categories }) {
   const describeNFTRef = useRef(null);
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-  const [subCategory, setSubCategory] = useState(null);
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
-  useEffect(() => {
-    if (categories) {
-      const category = categories[0];
-      const sub = getSubCategory(category, categories);
-      setSubCategory(sub.chilren);
-    }
-  }, [categories]);
-
-  const handleChangeCategory = e => {
-    const { value } = e.target;
-    const cat = categories.find(item => item.uid === value);
-    const subTemp = getSubCategory(cat, categories);
-    setSubCategory(subTemp.chilren);
-  };
 
   const onSubmit = async () => {
     const talentId = window.localStorage.getItem('uid');
     const val = {
       name: getValues('name'),
       jobDetail: {
-        categoryId: getValues('category'),
+        categoryId: getValues('subCategory')
+          ? getValues('subCategory')
+          : getValues('category'),
         workType: getValues('workType'),
         price: {
           min: getValues('min'),
@@ -231,40 +213,8 @@ export function CreatePackagePage({ getCategories, categories }) {
                   // defaultValue={talentInfo.address.street}
                 />
               </FormControl>
-              {/* <FormControl>
-                <SimpleGrid columns={2} spacing={2}>
-                  <Box>
-                    <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
-                    <SelectCustom
-                      id="district"
-                      size="md"
-                      {...register('district')}
-                    >
-                      {dataDistrictHCM.map((option, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <option key={index} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </SelectCustom>
-                    <Text color={RED_COLOR}>
-                      {errors.district && errors.district.message}
-                    </Text>
-                  </Box>
-                  <Box>
-                    <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
-                    <SelectCustom id="city" size="md" {...register('city')}>
-                      <option value="Thành phố Hồ Chí Minh">
-                        Thành phố Hồ Chí Minh
-                      </option>
-                    </SelectCustom>
-                    <Text color={RED_COLOR}>
-                      {errors.province && errors.province.message}
-                    </Text>
-                  </Box>
-                </SimpleGrid>
-              </FormControl> */}
               <CitySelector register={register} errors={errors} />
+              <CategorySelector register={register} errors={errors} />
               <Box>
                 <CustomFormLabel htmlFor="subcategory">
                   {t(messages.workType())}
@@ -280,7 +230,7 @@ export function CreatePackagePage({ getCategories, categories }) {
                   </option>
                 </SelectCustom>
               </Box>
-              <FormControl>
+              {/* <FormControl>
                 <SimpleGrid columns={2} spacing={2}>
                   <Box>
                     <CustomFormLabel htmlFor="category">
@@ -315,7 +265,7 @@ export function CreatePackagePage({ getCategories, categories }) {
                     </SelectCustom>
                   </Box>
                 </SimpleGrid>
-              </FormControl>
+              </FormControl> */}
               {/* <FormControl>
                 <CustomFormLabel htmlFor="skills">
                   {t(messages.skills())}
