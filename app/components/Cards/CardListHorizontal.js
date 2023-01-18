@@ -40,7 +40,7 @@ CardListHorizontal.defaultProps = {
     },
   ],
   columns: [1, 2, 3, 4, 5],
-  spacing: '40px',
+  spacing: '2.5rem',
 };
 
 export default CardListHorizontal;

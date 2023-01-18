@@ -370,52 +370,89 @@ const MyEvents = ({
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
         ) : null}
         {mode === 0 ? (
-          <HStack maxW="100%" mb="6">
-            <CategoriesFilter
-              placeholder="Categories"
-              listOptions={categoriesFiltered}
-            />
-            <SearchLocation
-              placeholder={t(messages.locationCity())}
-              optionList={cityData}
-              handleChangeLocation={handleCityChange}
-            />
-            {city && districtData.length > 0 && (
+          <Flex
+            direction={{ sm: 'column', xl: 'row' }}
+            alignItems={{ sm: 'center', lg: 'flex-start', xl: 'center' }}
+            mb="6"
+            w="100%"
+          >
+            <Flex
+              direction={{ sm: 'column', md: 'row' }}
+              w={{ sm: '100%', xl: 'auto' }}
+            >
+              <CategoriesFilter
+                placeholder="Categories"
+                listOptions={categoriesFiltered}
+              />
               <SearchLocation
-                placeholder={t(messages.locationDistrict())}
-                handleChangeLocation={handleDistrictChange}
-                optionList={districtData}
+                placeholder={t(messages.locationCity())}
+                optionList={cityData}
+                handleChangeLocation={handleCityChange}
               />
-            )}
-            <SliderRange
-              titleRange={t(messages.incomeRange())}
-              typePage="event-manager"
-              loadDataAction={handleBudgetChange}
-            />
-            <Text>Start time</Text>
-            <Box>
-              <DateTimeCustom
-                template="datetime-picker right"
-                name="end_vip_date"
-                type="hm"
-                message="Start date"
-                handleDateChange={handleStartChange}
+              {city && districtData.length > 0 && (
+                <SearchLocation
+                  placeholder={t(messages.locationDistrict())}
+                  handleChangeLocation={handleDistrictChange}
+                  optionList={districtData}
+                />
+              )}
+              <SliderRange
+                titleRange={t(messages.incomeRange())}
+                typePage="event-manager"
+                loadDataAction={handleBudgetChange}
               />
-            </Box>
-            <Text>End time</Text>
-            <Box>
-              <DateTimeCustom
-                template="datetime-picker right"
-                name="end_vip_date"
-                type="hm"
-                message="End date"
-                handleDateChange={handleEndChange}
-              />
-            </Box>
-            <Link href="/event/create">
-              <CustomButton>{t(messages.createEvent())}</CustomButton>
-            </Link>
-          </HStack>
+            </Flex>
+            <Flex
+              mt={{ sm: 8, xl: 0 }}
+              ml={{ xl: 8 }}
+              direction={{ sm: 'column', md: 'row' }}
+              alignItems={{ md: 'center' }}
+              w={{ sm: '100%', xl: 'auto' }}
+            >
+              <Flex
+                alignItems="center"
+                my={2}
+                justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+              >
+                <Text mr={{ md: 2 }} whiteSpace="nowrap">
+                  Start time
+                </Text>
+                <Box>
+                  <DateTimeCustom
+                    template="datetime-picker right"
+                    name="end_vip_date"
+                    type="hm"
+                    message="Start date"
+                    handleDateChange={handleStartChange}
+                  />
+                </Box>
+              </Flex>
+              <Flex
+                alignItems="center"
+                my={2}
+                mx={{ md: 5, lg: 8 }}
+                justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+              >
+                <Text mr={{ md: 2 }} whiteSpace="nowrap">
+                  End time
+                </Text>
+                <Box>
+                  <DateTimeCustom
+                    template="datetime-picker right"
+                    name="end_vip_date"
+                    type="hm"
+                    message="End date"
+                    handleDateChange={handleEndChange}
+                  />
+                </Box>
+              </Flex>
+              <Box w={{ sm: '100%', md: 'auto' }}>
+                <Link href="/event/create">
+                  <CustomButton>{t(messages.createEvent())}</CustomButton>
+                </Link>
+              </Box>
+            </Flex>
+          </Flex>
         ) : (
           <Link href={`/create-position/${eventInfo.uid}`}>
             <CustomButton>{t(messages.createPosition())}</CustomButton>

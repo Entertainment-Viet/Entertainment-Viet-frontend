@@ -68,17 +68,16 @@ function Card(props) {
         style={{ aspectRatio: '1/1.2' }}
         zIndex={50}
         mt="0.3rem"
-        ml="1px"
       />
       <Link href={`/artist/${props.data.uid}`} zIndex={1}>
         <GradientBox>
           <Box p="4">
             <Box
-              fontSize="30px"
+              fontSize={{ sm: '1.25rem', md: '1.875rem' }}
               fontWeight="600"
               as="h1"
               lineHeight="100%"
-              noOfLines={1}
+              whiteSpace="nowrap"
               w={width}
               color={TEXT_PURPLE}
               mt={1}

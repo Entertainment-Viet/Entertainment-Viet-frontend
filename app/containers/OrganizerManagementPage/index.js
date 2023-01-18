@@ -46,7 +46,8 @@ export function OrganizerManagementPage() {
   const CustomTab = chakra(Tab, {
     baseStyle: {
       fontWeight: '500',
-      fontSize: '18px',
+      fontSize: { sm: '0.6rem', md: '1.125rem' },
+      whiteSpace: 'nowrap',
       _hover: { color: TEXT_GREEN },
       _focus: { color: TEXT_PURPLE },
     },
@@ -56,7 +57,7 @@ export function OrganizerManagementPage() {
 
   return (
     <>
-      <H1 color={TEXT_GREEN} fontSize="30px">
+      <H1 color={TEXT_GREEN} fontSize="1.875rem">
         {t(messages.myAccount())}
       </H1>
       <Tabs mb="12" isLazy>

@@ -1,15 +1,9 @@
 import React, { memo, useEffect } from 'react';
-import {
-  Container,
-  VStack,
-  Grid,
-  GridItem,
-  Text,
-  Divider,
-} from '@chakra-ui/react';
+import { Container, VStack, Flex, Box, Text, Divider } from '@chakra-ui/react';
 import { ImageSliderWithPreview } from 'components/Carousel';
 import { useTranslation } from 'react-i18next';
 import { PRI_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
+import PageSpinner from 'components/PageSpinner';
 import parserHtml from 'utils/html';
 import PropTypes from 'prop-types';
 import { messages } from '../../messages';
@@ -44,26 +38,22 @@ const Overview = ({ data, match, positions, toggleModal }) => {
         'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80',
     },
   ];
-  return (
-    <Grid
-      templateRows="repeat(2, 1fr)"
-      templateColumns="repeat(6, 1fr)"
-      gap={2}
-    >
-      <GridItem colSpan={6}>
-        <VStack align="flex-start">
+  return data ? (
+    <Flex direction="column" w="100%">
+      <Flex direction={{ sm: 'column-reverse', md: 'row' }}>
+        <Box w={{ md: '45%', lg: '50%' }}>
           <Header profile={data} />
-          <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-            <GridItem colSpan={4}>
-              <ImageSliderWithPreview slides={SlideData} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <PositionBox data={positions.content} toggleModal={toggleModal} />
-            </GridItem>
-          </Grid>
-        </VStack>
-      </GridItem>
-      <GridItem colSpan={4}>
+          <ImageSliderWithPreview slides={SlideData} />
+        </Box>
+        <Box
+          w={{ md: '60%', lg: '50%' }}
+          mt={{ sm: '1rem', md: '10rem' }}
+          mb={{ sm: 8, lg: 0 }}
+        >
+          <PositionBox data={positions.content} toggleModal={toggleModal} />
+        </Box>
+      </Flex>
+      <Box>
         <VStack align="flex-start">
           <Divider />
           <Text as="h1" fontWeight={700} color={TEXT_GREEN}>
@@ -78,8 +68,10 @@ const Overview = ({ data, match, positions, toggleModal }) => {
           </Text>
           <NormalProfile profile={data} />
         </VStack>
-      </GridItem>
-    </Grid>
+      </Box>
+    </Flex>
+  ) : (
+    <PageSpinner />
   );
 };
 

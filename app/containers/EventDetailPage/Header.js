@@ -16,7 +16,16 @@ import { handleAddress } from '../../utils/helpers';
 const Header = ({ profile }) => (
   <Container marginInlineStart="inherit" paddingInlineStart="inherit" mb={6}>
     <VStack align="flex-start" spacing={4} w="max-content">
-      <Text as="h1" fontWeight={700} fontSize="30px" color={TEXT_PURPLE}>
+      <Text
+        as="h1"
+        fontWeight={700}
+        fontSize={{
+          sm: '0.9rem',
+          md: '1.5625rem',
+          lg: '1.875rem',
+        }}
+        color={TEXT_PURPLE}
+      >
         {profile.name}
       </Text>
       <HStack>

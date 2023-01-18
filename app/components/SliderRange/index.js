@@ -49,7 +49,11 @@ function SliderRange({
         color="white"
         bg={TEXT_PURPLE}
         p={2}
-        w="fit-content"
+        mt={{ sm: 2, md: 0 }}
+        ml={{ md: 2 }}
+        whiteSpace="nowrap"
+        h="fit-content"
+        w={{ sm: '100%', md: '20%', lg: 'fit-content' }}
       >
         Price
         <ChevronDownIcon />

@@ -5,18 +5,13 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import { Box, Divider } from '@chakra-ui/react';
-
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { CardListHorizontal } from 'components/Cards';
 import Metadata from 'components/Metadata';
 import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
-//
-// import {} from 'constants/routes';
-// import {} from './styles';
 import { messages } from './messages';
-
 import { loadInfo } from './actions';
 import saga from './saga';
 import reducer from './reducer';
@@ -74,10 +69,52 @@ export function HomePage({ loading, error, data, onLoadData }) {
     {
       id: '3',
     },
+    {
+      id: '4',
+    },
+    {
+      id: '5',
+    },
   ];
 
-  const columns = [1, 2, 3];
-
+  const columns = {
+    sm: 1,
+    md: 2,
+    xl: 3,
+    '2xl': 4,
+    '3xl': 5,
+  };
+  const columnsPopular = {
+    sm: 1,
+    md: 2,
+    lg: 3,
+    xl: 4,
+    '2xl': 5,
+    '3xl': 6,
+  };
+  const spacing = {
+    sm: '1rem',
+    md: '0.5rem',
+    lg: '1.5rem',
+    xl: '1.5rem',
+    '2xl': '2rem',
+    '3xl': '1rem',
+  };
+  const flexDir = {
+    sm: 'column',
+    lg: 'row',
+  };
+  const widthWelcomeBox = {
+    md: '60%',
+    lg: '35%',
+    xl: '25%',
+    '2xl': '20%',
+    '3xl': '15%',
+  };
+  const textAlign = {
+    sm: 'center',
+    md: 'left',
+  };
   return loading ? (
     <PageSpinner />
   ) : (
@@ -91,35 +128,44 @@ export function HomePage({ loading, error, data, onLoadData }) {
           color={TEXT_GREEN}
           mt="12"
           mb="6"
-          ml="10"
+          ml={{ md: '16', lg: '10', '2xl': '10' }}
+          textAlign={textAlign}
           fontWeight="600"
-          fontSize="20px"
+          fontSize={{ sm: '1.5rem', md: '1.25rem' }}
           lineHeight="24px"
-          noOfLines={1}
+          noOfLines={{ sm: 2, md: 1 }}
         >
           {t(messages.popularTalent())}
         </Box>
         <Box>
-          <CardListHorizontal />
+          <CardListHorizontal
+            dataList={dataList}
+            columns={columnsPopular}
+            spacing={spacing}
+          />
         </Box>
-        <Box display="flex" pl={10}>
+        <Box display="flex" flexDir={flexDir} pl={{ sm: 0, lg: 10 }}>
           <Box
-            width="37%"
+            width={widthWelcomeBox}
             mt="12"
+            mr={{ md: 'auto', xl: 0 }}
+            ml={{ md: 'auto', xl: 0 }}
             backgroundImage={background}
             backgroundSize="100% 100%"
-            borderRadius="10px"
+            borderRadius="0.625rem"
             height="10%"
           >
             <WelcomeBox />
           </Box>
-          <Box pl={8}>
+          <Box pl={{ lg: 8 }}>
             <Box
               color={TEXT_GREEN}
               mb="6"
-              ml="4"
+              ml={{ md: '16', lg: '4' }}
+              mt={{ sm: '16', lg: '0' }}
+              textAlign={textAlign}
               fontWeight="600"
-              fontSize="20px"
+              fontSize="1.25rem"
               lineHeight="24px"
               noOfLines={1}
             >
@@ -128,7 +174,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
             <CardListHorizontal
               dataList={dataList}
               columns={columns}
-              spacing="45px"
+              spacing={spacing}
             />
           </Box>
         </Box>
@@ -139,15 +185,20 @@ export function HomePage({ loading, error, data, onLoadData }) {
           color={TEXT_GREEN}
           mt="12"
           mb="6"
-          ml="10"
+          textAlign={textAlign}
+          ml={{ md: '16', lg: '10', '2xl': '10' }}
           fontWeight="600"
-          fontSize="20px"
+          fontSize={{ sm: '1.5rem', md: '1.25rem' }}
           lineHeight="24px"
           noOfLines={1}
         >
           {t(messages.editorChoice())}
         </Box>
-        <CardListHorizontal />
+        <CardListHorizontal
+          dataList={dataList}
+          columns={columnsPopular}
+          spacing={spacing}
+        />
         <Divider />
       </>
     </div>

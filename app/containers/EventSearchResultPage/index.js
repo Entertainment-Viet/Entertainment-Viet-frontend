@@ -7,7 +7,7 @@ import {
   Container,
   Box,
   SimpleGrid,
-  HStack,
+  Flex,
   Text,
   Input,
   InputGroup,
@@ -116,7 +116,7 @@ export function EventSearchResultPage({
     locationData.filter(
       item => item.locationType.type === 'district' && item.parentUid === city,
     );
-
+  const columns = { sm: 1, md: 2, xl: 3, '2xl': 4, '3xl': 5 };
   return (
     <div styles={{ width: '100%' }}>
       <Metadata />
@@ -124,73 +124,103 @@ export function EventSearchResultPage({
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
-      <HStack maxW="100%" mb="6">
-        {/* <CategoriesFilter
-          placeholder="Categories"
-          listOptions={categoriesFiltered}
-          loadDataAction={handleReloadEventData}
-        /> */}
-        <SearchLocation
-          placeholder={t(messages.locationCity())}
-          optionList={cityData}
-          handleChangeLocation={handleCityChange}
-        />
-        {city && districtData.length > 0 && (
-          <SearchLocation
-            placeholder={t(messages.locationDistrict())}
-            handleChangeLocation={handleDistrictChange}
-            optionList={districtData}
-          />
-        )}
-        <SliderRange
-          titleRange={t(messages.incomeRange())}
-          loadDataAction={handleReloadEventData}
-        />
-        <Text>Start time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="Start date"
-            handleDateChange={handleStartChange}
-          />
-        </Box>
-        <Text>End time</Text>
-        <Box>
-          <DateTimeCustom
-            template="datetime-picker right"
-            name="end_vip_date"
-            type="hm"
-            message="End date"
-            handleDateChange={handleEndChange}
-          />
-        </Box>
-        <Text>Organizer name</Text>
-        <Box>
-          <InputGroup>
-            <Input
-              // value={org}
-              onChange={e => handleOrganizerChange(e.target.value)}
-              bg="transparent"
-              placeholder="Search"
-              _placeholder={{ opacity: 1, color: `${TEXT_PURPLE}` }}
-              border={`1px solid ${TEXT_PURPLE}`}
-              borderRadius="2rem"
-            />
-            <InputLeftElement>
-              <SearchIcon color={TEXT_PURPLE} />
-            </InputLeftElement>
-          </InputGroup>
-        </Box>
-      </HStack>
-      <Container maxW="100%" ps={0}>
-        <SimpleGrid
-          maxW="100%"
-          columns={{ xl: 3, '2xl': 4 }}
-          spacing="30px"
-          alignItems="start"
+      <Flex
+        alignItems={{ lg: 'center' }}
+        direction={{ sm: 'column', lg: 'row' }}
+        w="100%"
+        mb="6"
+      >
+        <Flex
+          direction={{ sm: 'column', md: 'row' }}
+          w="auto"
+          mr={{ lg: 5 }}
+          h="fit-content"
         >
+          <SearchLocation
+            placeholder={t(messages.locationCity())}
+            optionList={cityData}
+            handleChangeLocation={handleCityChange}
+          />
+          {city && districtData.length > 0 && (
+            <SearchLocation
+              placeholder={t(messages.locationDistrict())}
+              handleChangeLocation={handleDistrictChange}
+              optionList={districtData}
+            />
+          )}
+          <SliderRange
+            titleRange={t(messages.incomeRange())}
+            loadDataAction={handleReloadEventData}
+          />
+        </Flex>
+        <Flex direction={{ sm: 'column', md: 'row' }} w="auto" my={{ sm: 5 }}>
+          <Flex
+            alignItems="center"
+            my={2}
+            mr={{ md: 2 }}
+            justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+          >
+            <Text my={2} mr={{ md: 2 }} whiteSpace="nowrap">
+              Start time
+            </Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={handleStartChange}
+              />
+            </Box>
+          </Flex>
+          <Flex
+            alignItems="center"
+            my={2}
+            mr={{ md: 2 }}
+            justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+          >
+            <Text my={2} mr={{ md: 2 }} whiteSpace="nowrap">
+              End time
+            </Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={handleEndChange}
+              />
+            </Box>
+          </Flex>
+          <Flex
+            alignItems="center"
+            my={2}
+            justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+          >
+            <Text my={2} mr={{ md: 2 }} whiteSpace="nowrap">
+              Organizer name
+            </Text>
+            <Box>
+              <InputGroup>
+                <Input
+                  // value={org}
+                  onChange={e => handleOrganizerChange(e.target.value)}
+                  bg="transparent"
+                  placeholder="Search"
+                  _placeholder={{ opacity: 1, color: `${TEXT_PURPLE}` }}
+                  border={`1px solid ${TEXT_PURPLE}`}
+                  borderRadius="2rem"
+                />
+                <InputLeftElement>
+                  <SearchIcon color={TEXT_PURPLE} />
+                </InputLeftElement>
+              </InputGroup>
+            </Box>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Container maxW="100%" p={0} centerContent>
+        <SimpleGrid maxW="100%" spacing="2rem" columns={columns}>
           {data &&
             data.map(tempt => {
               const { uid } = tempt;

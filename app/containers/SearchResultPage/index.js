@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import CategoriesFilter from 'components/CategoriesFilter';
 import SearchLocation from 'components/SearchLocation';
-import { Container, Box, SimpleGrid, HStack, Text } from '@chakra-ui/react';
+import { Container, Box, SimpleGrid, Text, Flex } from '@chakra-ui/react';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
@@ -107,6 +107,7 @@ export function SearchResultPage({
     locationData.filter(
       item => item.locationType.type === 'district' && item.parentUid === city,
     );
+  const columns = { sm: 1, md: 2, lg: 3, xl: 4 };
   return (
     <div styles={{ width: '100%' }}>
       <Metadata />
@@ -114,8 +115,18 @@ export function SearchResultPage({
       <Box color={SEC_TEXT_COLOR} mt="-4" mb="6">
         {data && data.length} results found
       </Box>
-      <HStack mb="6">
-        <HStack w="50%">
+      <Flex
+        alignItems={{ lg: 'center' }}
+        direction={{ sm: 'column', lg: 'row' }}
+        w="100%"
+        mb="6"
+      >
+        <Flex
+          direction={{ sm: 'column', md: 'row' }}
+          w={{ sm: '100%', lg: '50%', xl: 'auto' }}
+          h="fit-content"
+          mr={{ lg: 8 }}
+        >
           <CategoriesFilter
             placeholder="Categories"
             listOptions={categoriesFiltered}
@@ -137,8 +148,12 @@ export function SearchResultPage({
             titleRange={t(messages.incomeRange())}
             loadDataAction={handleBudgetChange}
           />
-        </HStack>
-        <HStack w="50%">
+        </Flex>
+        <Flex
+          direction={{ sm: 'column', md: 'row' }}
+          w={{ lg: '50%', xl: 'auto' }}
+          my={{ sm: 5 }}
+        >
           {/* <Text>Your budget</Text>
           <Box>
             <NumberInput
@@ -150,35 +165,48 @@ export function SearchResultPage({
               <NumberInputField placeholder="Budget" />
             </NumberInput>
           </Box> */}
-          <Text>Start time</Text>
-          <Box>
-            <DateTimeCustom
-              template="datetime-picker right"
-              name="end_vip_date"
-              type="hm"
-              message="Start date"
-              handleDateChange={handleStartChange}
-            />
-          </Box>
-          <Text>End time</Text>
-          <Box>
-            <DateTimeCustom
-              template="datetime-picker right"
-              name="end_vip_date"
-              type="hm"
-              message="End date"
-              handleDateChange={handleEndChange}
-            />
-          </Box>
-        </HStack>
-      </HStack>
-      <Container maxW="100%" ps={0}>
-        <SimpleGrid
-          maxW="100%"
-          columns={{ xl: 4, '2xl': 5 }}
-          spacing="30px"
-          alignItems="start"
-        >
+          <Flex
+            alignItems="center"
+            my={2}
+            justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+            mr={{ md: 5 }}
+          >
+            <Text my={2} mr={{ md: 2 }}>
+              Start time
+            </Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="Start date"
+                handleDateChange={handleStartChange}
+              />
+            </Box>
+          </Flex>
+          <Flex
+            alignItems="center"
+            my={2}
+            justifyContent={{ sm: 'space-between', md: 'flex-start' }}
+            mr={{ md: 5 }}
+          >
+            <Text my={2} mr={{ md: 2 }}>
+              End time
+            </Text>
+            <Box>
+              <DateTimeCustom
+                template="datetime-picker right"
+                name="end_vip_date"
+                type="hm"
+                message="End date"
+                handleDateChange={handleEndChange}
+              />
+            </Box>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Container maxW="100%" p={0} centerContent>
+        <SimpleGrid columns={columns} spacing="1.875rem">
           {data &&
             data.map(tempt => {
               const { uid } = tempt;

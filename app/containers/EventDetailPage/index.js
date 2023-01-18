@@ -47,7 +47,7 @@ import About from './components/About';
 const CustomTab = chakra(Tab, {
   baseStyle: {
     fontWeight: '500',
-    fontSize: '18px',
+    fontSize: { sm: '13px', lg: '18px' },
     _hover: { color: TEXT_GREEN },
     _focus: { color: TEXT_GREEN },
   },
@@ -74,7 +74,7 @@ export function EventDetailPage({
   useEffect(() => {
     onLoadData(match.params.id1, match.params.id2);
   }, [match.params.id]);
-  return (
+  return data ? (
     <div>
       <Metadata />
       {/* <H1 color={TEXT_GREEN} ml={4}>
@@ -118,6 +118,8 @@ export function EventDetailPage({
         data={positionInfo}
       />
     </div>
+  ) : (
+    <PageSpinner />
   );
 }
 

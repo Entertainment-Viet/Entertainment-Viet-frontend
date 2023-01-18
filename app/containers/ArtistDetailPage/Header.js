@@ -49,7 +49,16 @@ const Header = ({ profile, comments }) => {
   return (
     <Container marginInlineStart="inherit" paddingInlineStart="inherit" mb={6}>
       <VStack align="flex-start" spacing={4} w="max-content">
-        <Text as="h1" fontWeight={700} fontSize="30px" color={TEXT_PURPLE}>
+        <Text
+          as="h1"
+          fontWeight={700}
+          fontSize={{
+            sm: '0.9rem',
+            md: '1.5625rem',
+            lg: '1.875rem',
+          }}
+          color={TEXT_PURPLE}
+        >
           Singer performs for music festival, bar, club and pub
         </Text>
         <HStack>
@@ -65,7 +74,7 @@ const Header = ({ profile, comments }) => {
             as="span"
             mr="2"
             color={TEXT_GREEN}
-            fontSize="14px"
+            fontSize="1rem"
             fontWeight={500}
           >
             {`${averageComments} (${totalComments})`}

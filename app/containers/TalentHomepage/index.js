@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Box, SimpleGrid } from '@chakra-ui/react';
+import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
-import { CardEvent } from 'components/Cards';
+import { Card } from 'components/Cards';
 import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
 //
@@ -70,11 +70,14 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
     displayName: 'Halloween event',
   };
   const priceRange = [0, 0];
-
+  const columns = { sm: 1, md: 2, lg: 3, xl: 4, '2xl': 5 };
+  const spacing = {
+    base: '0.5rem',
+  };
   return loading ? (
     <PageSpinner />
   ) : (
-    <div style={{ width: '85%', margin: '0 auto' }}>
+    <div style={{ width: '100%' }}>
       <Metadata />
       <Box px={10}>
         <ImageSlider slides={SlideData} />
@@ -84,6 +87,7 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
         mt="12"
         mb="6"
         ml="10"
+        textAlign={{ base: 'center', md: 'left' }}
         fontWeight="600"
         fontSize="20px"
         lineHeight="24px"
@@ -91,20 +95,21 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
       >
         {t(messages.hotUpcomingEvent())}
       </Box>
-      <SimpleGrid
-        maxW="100%"
-        columns={{ xl: 3, '2xl': 3 }}
-        spacing="30px"
-        alignItems="center"
-        ml={10}
-      >
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
-      </SimpleGrid>
+      <Box>
+        <Container maxW="100%" centerContent>
+          <SimpleGrid columns={columns} spacing={spacing} ml={4}>
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+            <Card key={uid} data={tempt} priceRange={priceRange} />
+          </SimpleGrid>
+        </Container>
+      </Box>
       <Box display="flex" pl={10}>
         <Box
-          width="100%"
+          width={{ sm: '100%', lg: '50%' }}
           mt="12"
           backgroundImage={background}
           backgroundSize="100% 100%"

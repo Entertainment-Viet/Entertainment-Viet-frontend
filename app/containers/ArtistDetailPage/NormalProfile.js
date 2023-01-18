@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, HStack, Container } from '@chakra-ui/react';
+import { Box, Flex, Container } from '@chakra-ui/react';
 import { PRI_BACKGROUND } from 'constants/styles';
 
 import PropTypes from 'prop-types';
@@ -7,13 +7,19 @@ import { ProfileCard } from 'components/Cards';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const NormalProfile = ({ profile }) => (
-  <Container ps={0}>
-    <HStack w={{ '2xl': '73rem', xl: '57rem' }}>
+  <Container p={0}>
+    <Flex direction={{ sm: 'column', md: 'row' }} w="100%">
       <ProfileCard data={profile} />
-      <Box bg={PRI_BACKGROUND} h="26rem" w="1000%" p={4}>
+      <Box
+        bg={PRI_BACKGROUND}
+        h="26rem"
+        mt={{ sm: '1rem', lg: 0 }}
+        w="100%"
+        p={4}
+      >
         DAWD AWD AWD AWDd awd wa dwa dwad
       </Box>
-    </HStack>
+    </Flex>
   </Container>
 );
 

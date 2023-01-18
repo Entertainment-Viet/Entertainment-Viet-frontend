@@ -4,7 +4,7 @@ import { chakra, Button } from '@chakra-ui/react';
 
 export const CustomButton = chakra(Button, {
   baseStyle: {
-    w: 'fit-content',
+    w: { sm: '100%', md: 'fit-content' },
     color: 'black',
     bg: TEXT_PURPLE,
   },

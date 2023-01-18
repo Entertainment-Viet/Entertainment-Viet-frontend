@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Box,
   Link,
-  Container,
   VStack,
   Text,
   TableContainer,
@@ -51,97 +50,100 @@ const PackagesBox = ({ data, id, toggleModal }) => {
       });
   }
   return (
-    <Container>
-      <VStack>
-        {/* <Box h="6.3rem" /> */}
-        <Box bg={PRI_BACKGROUND} borderRadius="1%" color={PRI_TEXT_COLOR}>
-          <TableContainer>
-            <Table
-              variant="unstyled"
-              overflowX="hidden"
-              styles={{
-                width: '25rem',
-                wordWrap: 'break-word',
-              }}
-            >
-              <TableCaption>
-                <Link href={`/create-booking/${id}`} styles={{ width: '100%' }}>
-                  <Buttons width="100%" bg={TEXT_PURPLE} color="#1D1C4C">
-                    Gửi báo giá riêng
-                  </Buttons>
-                </Link>
-              </TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>Gói dịch vụ</Th>
-                  <Th>
-                    <Box textAlign="center" w="9rem">
-                      Giá khởi điểm
-                    </Box>
-                  </Th>
-                  <Th />
-                </Tr>
-              </Thead>
-              <Tbody position="relative">
-                {data.map((item, index) => (
-                  <>
-                    {index !== 0 && (
-                      <Divider
-                        w="90%"
+    <VStack w={{ sm: '100%', md: '100%' }}>
+      <Box bg={PRI_BACKGROUND} borderRadius="1%" p={4} color={PRI_TEXT_COLOR}>
+        <TableContainer>
+          <Table
+            variant="unstyled"
+            overflowX="hidden"
+            whiteSpace={{
+              sm: 'normal',
+              md: 'nowrap',
+              lg: 'normal',
+              xl: 'nowrap',
+            }}
+            style={{
+              wordWrap: 'break-word',
+              width: '25rem',
+            }}
+          >
+            <TableCaption>
+              <Link href={`/create-booking/${id}`} style={{ width: '100%' }}>
+                <Buttons width="100%" bg={TEXT_PURPLE} color="#1D1C4C">
+                  Gửi báo giá riêng
+                </Buttons>
+              </Link>
+            </TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Gói dịch vụ</Th>
+                <Th>
+                  <Box textAlign="center" w="9rem">
+                    Giá khởi điểm
+                  </Box>
+                </Th>
+                <Th />
+              </Tr>
+            </Thead>
+            <Tbody position="relative">
+              {data.map((item, index) => (
+                <>
+                  {index !== 0 && (
+                    <Divider
+                      w="90%"
+                      position="absolute"
+                      left={0}
+                      right={0}
+                      margin="0 auto"
+                      bg={PRI_TEXT_COLOR}
+                    />
+                  )}
+                  <Tr key={item.uid}>
+                    <Td>
+                      <Text
+                        textDecoration="underline"
+                        color={TEXT_PURPLE}
+                        onClick={() => toggleModal(item.uid)}
+                      >
+                        {item.name}
+                      </Text>
+                      <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
+                        {handleAddress(item.jobDetail.location)}
+                        {console.log('location: ', item.jobDetail.location)}
+                      </Text>
+                      <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
+                        {new Date(
+                          item.jobDetail.performanceStartTime,
+                        ).toLocaleString()}
+                      </Text>
+                    </Td>
+                    <Td>
+                      {' '}
+                      <Text color={TEXT_GREEN} textAlign="center">
+                        {numberWithCommas(item.jobDetail.price.min)} VND
+                      </Text>
+                    </Td>
+                    <Td position="relative">
+                      <Button
+                        onClick={() =>
+                          handleSelect(item.uid, item.jobDetail.price.min)
+                        }
+                        variant="ghost"
                         position="absolute"
-                        left={0}
-                        right={0}
-                        margin="0 auto"
-                        bg={PRI_TEXT_COLOR}
-                      />
-                    )}
-                    <Tr key={item.uid}>
-                      <Td>
-                        <Text
-                          textDecoration="underline"
-                          color={TEXT_PURPLE}
-                          onClick={() => toggleModal(item.uid)}
-                        >
-                          {item.name}
-                        </Text>
-                        <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                          {handleAddress(item.jobDetail.location)}
-                          {console.log('location: ', item.jobDetail.location)}
-                        </Text>
-                        <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                          {new Date(
-                            item.jobDetail.performanceStartTime,
-                          ).toLocaleString()}
-                        </Text>
-                      </Td>
-                      <Td>
-                        {' '}
-                        <Text color={TEXT_GREEN} textAlign="center">
-                          {numberWithCommas(item.jobDetail.price.min)} VND
-                        </Text>
-                      </Td>
-                      <Td position="relative">
-                        <Button
-                          onClick={() =>
-                            handleSelect(item.uid, item.jobDetail.price.min)
-                          }
-                          variant="ghost"
-                          position="absolute"
-                          top="20%"
-                          right="10%"
-                        >
-                          <Image src={Cart} alt="Cart" />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  </>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </Box>
-      </VStack>
-    </Container>
+                        top="20%"
+                        right="10%"
+                      >
+                        <Image src={Cart} alt="Cart" />
+                      </Button>
+                    </Td>
+                  </Tr>
+                </>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </VStack>
   );
 };
 

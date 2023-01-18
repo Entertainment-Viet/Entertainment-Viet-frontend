@@ -8,9 +8,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-
 import {
-  SimpleGrid,
   Box,
   Stack,
   HStack,
@@ -96,21 +94,22 @@ function RegisterPageV2() {
     { label: 'Organizer', value: 'organizer' },
     { label: 'Talent', value: 'talent' },
   ];
-
+  const widthRegisterBox = {
+    sm: '100%',
+    md: '80%',
+    lg: '40rem',
+    '2xl': '34rem',
+  };
   return (
-    <SimpleGrid
-      sx={{
-        justifyContent: 'center',
-      }}
-    >
+    <Box mt="auto" mb="auto">
       <Metadata />
       <Box
         color={TEXT_GREEN}
         fontWeight="700"
-        fontSize="36px"
+        fontSize={{ sm: '3.5rem', md: '2.1rem' }}
         sx={{
           textAlign: 'center',
-          marginBottom: '25px',
+          marginBottom: '1.5rem',
         }}
       >
         Entertainment Viet
@@ -119,7 +118,9 @@ function RegisterPageV2() {
         sx={{
           backgroundColor: PRI_BACKGROUND,
         }}
-        width="545px"
+        mr="auto"
+        ml="auto"
+        width={widthRegisterBox}
         borderRadius="10px"
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
@@ -129,7 +130,7 @@ function RegisterPageV2() {
             marginBottom: '10px',
           }}
           fontWeight="600"
-          fontSize="35px"
+          fontSize={{ sm: '3.5rem', md: '2.1rem', lg: '1.8rem' }}
           color={TEXT_PURPLE}
         >
           {t(messages.signup())}
@@ -139,7 +140,12 @@ function RegisterPageV2() {
             marginBottom: '35px',
           }}
         >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
+          <Text
+            fontSize={{ sm: '1.5rem', md: '1.2rem', lg: '1.5rem' }}
+            color={PRI_TEXT_COLOR}
+          >
+            {t(messages.welcome())}
+          </Text>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="2">
@@ -152,8 +158,8 @@ function RegisterPageV2() {
                   bg="transparent"
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
-                  placeholder="Enter your username"
-                  {...register('username', {
+                  placeholder="Enter your name"
+                  {...register('name', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
@@ -177,7 +183,7 @@ function RegisterPageV2() {
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
                   placeholder="Enter your email"
-                  {...register('email', {
+                  {...register('username', {
                     required: 'This is required',
                     minLength: {
                       value: 4,
@@ -210,9 +216,12 @@ function RegisterPageV2() {
             <Checkbox
               id="check-box-remember"
               color={PRI_TEXT_COLOR}
+              size={{ sm: 'lg', md: 'md' }}
               {...register('checkBoxRemember')}
             >
-              {t(messages.remember())}
+              <Text fontSize={{ sm: '1.3rem', lg: '1rem' }}>
+                {t(messages.remember())}
+              </Text>
             </Checkbox>
           </HStack>
           <FormControl>
@@ -238,21 +247,30 @@ function RegisterPageV2() {
               isLoading={isSubmitting}
               type="submit"
             >
-              {t(messages.signup())}
+              <Text fontSize="1.3rem">{t(messages.signup())}</Text>
             </Button>
             {/* eslint-disable-next-line no-console */}
             {errors.password && console.log(errors.password.message)}
             <OAuthButtonGroup />
             <HStack spacing="1" justify="center">
-              <Text color={PRI_TEXT_COLOR}>{t(messages.haveAccount())}</Text>
-              <Button variant="link" color={TEXT_GREEN}>
+              <Text
+                fontSize={{ sm: '1.5rem', md: '1.25rem' }}
+                color={PRI_TEXT_COLOR}
+              >
+                {t(messages.haveAccount())}
+              </Text>
+              <Button
+                variant="link"
+                fontSize={{ sm: '1.5rem', md: '1.25rem' }}
+                color={TEXT_GREEN}
+              >
                 <Link href={ROUTE_LOGIN}>{t(messages.signin())}</Link>
               </Button>
             </HStack>
           </Stack>
         </form>
       </Box>
-    </SimpleGrid>
+    </Box>
   );
 }
 

@@ -33,6 +33,12 @@ const PositionBox = ({ data, toggleModal }) => (
           <Table
             variant="unstyled"
             overflowX="hidden"
+            whiteSpace={{
+              sm: 'normal',
+              md: 'nowrap',
+              lg: 'normal',
+              xl: 'nowrap',
+            }}
             style={{
               width: '25rem',
               wordWrap: 'break-word',
@@ -72,7 +78,8 @@ const PositionBox = ({ data, toggleModal }) => (
                         {item.jobOffer.name}
                       </Text>
                       <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
-                        {item.jobOffer.jobDetail.category && item.jobOffer.jobDetail.category.name}
+                        {item.jobOffer.jobDetail.category &&
+                          item.jobOffer.jobDetail.category.name}
                       </Text>
                       <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                         {new Date(
