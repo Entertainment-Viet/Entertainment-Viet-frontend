@@ -30,6 +30,7 @@ import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
 import { loadDataHeader } from 'components/Header/actions';
+import { getFileFromAWS } from 'utils/request';
 import { loadCommentsInfo, loadData, loadPackageInfo } from './actions';
 
 // import {} from 'constants/routes';
@@ -75,6 +76,8 @@ export function ArtistDetailPage({
   const [id, setId] = useState();
   const [pageNumberComments, setPageNumberComments] = useState(0);
   const [commentsData, setCommentsData] = useState([]);
+  const [descriptionImg, setDesciptionImg] = useState([]);
+  const [avatar, setAvatar] = useState();
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);
@@ -115,6 +118,28 @@ export function ArtistDetailPage({
       }
     }
   }, [pageNumberComments]);
+  const [profile, setProfile] = useState();
+  useEffect(() => {
+    if (data) setProfile(data);
+    if (data.descriptionImg) {
+      const tempArr = [];
+      for (let i = 0; i < data.descriptionImg.length; i += 1) {
+        getFileFromAWS(data.descriptionImg[i]).then(res => {
+          if (res) {
+            tempArr.push(res);
+            // console.log(tempArr)
+            setDesciptionImg([...tempArr]);
+          }
+        });
+      }
+    }
+    if (data.avatar) {
+      getFileFromAWS(data.avatar).then(res => {
+        setAvatar(res);
+        profile.avatar = res;
+      });
+    }
+  }, [data]);
 
   const handleSeeMore = () => {
     setPageNumberComments(pageNumberComments + 1);
@@ -134,26 +159,29 @@ export function ArtistDetailPage({
           <CustomTab>{t(messages.schedule())}</CustomTab>
           <CustomTab>{t(messages.review())}</CustomTab>
         </TabList>
-        {!data ? (
+        {!profile ? (
           <PageSpinner />
         ) : (
           <TabPanels>
             <TabPanel>
               <Overview
-                data={data}
+                data={profile}
                 match={match}
                 packages={packages}
                 toggleModal={toggleModal}
                 comments={comments}
+                carousel={descriptionImg}
+                avatar={avatar}
               />
             </TabPanel>
             <TabPanel>
               <About
-                data={data}
+                data={profile}
                 comments={comments}
                 match={match}
                 packages={packages}
                 toggleModal={toggleModal}
+                avatar={avatar}
               />
             </TabPanel>
             <TabPanel>

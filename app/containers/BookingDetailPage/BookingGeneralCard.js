@@ -12,7 +12,7 @@ import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
 
 import { post, del } from 'utils/request';
-import { numberWithCommas, getResStatus, cacthResponse } from 'utils/helpers';
+import { numberWithCommas } from 'utils/helpers';
 import {
   API_GET_BOOKING_TALENT_INFO,
   API_GET_BOOKING_ORG_INFO,
@@ -114,25 +114,19 @@ const BookingGeneralCard = ({ data }) => {
   function handleCancel() {
     if (role === 'talent')
       del(API_GET_BOOKING_TALENT_INFO, {}, id, data.uid).then(res1 => {
-        const status1 = getResStatus(res1);
-        if (status1 === '201') {
-          console.log('sent');
-        } else if (status1 === '400') {
-          console.log('fail');
-        } else {
-          cacthResponse(res1);
+        if (res1 > 300) {
+          notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Thành công');
       });
     else if (role === 'organizer')
       del(API_GET_BOOKING_ORG_INFO, {}, id, data.uid).then(res1 => {
-        const status1 = getResStatus(res1);
-        if (status1 === '201') {
-          console.log('sent');
-        } else if (status1 === '400') {
-          console.log('fail');
-        } else {
-          cacthResponse(res1);
+        if (res1 > 300) {
+          notify('Thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+          return;
         }
+        notify('Thành công');
       });
   }
 
@@ -176,6 +170,12 @@ const BookingGeneralCard = ({ data }) => {
             </Text>
             <Text>
               <b>{t(messages.status())}</b> {t(globalMessages[data.status])}
+            </Text>
+            <Text>
+              <b>VAT/PIT: </b> {numberWithCommas(Math.ceil(data.tax))}
+            </Text>
+            <Text>
+              <b>{t(messages.cutoff())}: </b> {numberWithCommas(data.fee)}
             </Text>
           </VStack>
           <VStack>

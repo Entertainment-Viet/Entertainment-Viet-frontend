@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Image, Divider, Container, Link, chakra } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 import {
@@ -9,6 +9,7 @@ import {
 } from 'constants/styles';
 import PropTypes from 'prop-types';
 import { numberWithCommas } from 'utils/helpers';
+import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 
 const width = [230, 230, 250, 250, 290];
@@ -50,7 +51,14 @@ function Card(props) {
     rating: 4,
     price: '300k-1M / performance',
   };
-
+  const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    if (props.data.avatar) {
+      getFileFromAWS(props.data.avatar).then(res => {
+        setAvatar(res);
+      });
+    }
+  }, []);
   return (
     <Container ps={0} zIndex={1}>
       <Image
@@ -62,10 +70,12 @@ function Card(props) {
         zIndex={51}
       />
       <Image
-        src={property.imageUrl}
-        alt={property.imageAlt}
+        boxSize="350px"
+        objectFit="cover"
+        src={avatar}
+        alt="Avatar"
         maxW={imgWidth}
-        style={{ aspectRatio: '1/1.2' }}
+        styles={{ aspectRatio: '1/1.2' }}
         zIndex={50}
         mt="0.3rem"
         ml="1px"

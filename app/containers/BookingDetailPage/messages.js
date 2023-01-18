@@ -26,4 +26,5 @@ export const messages = {
   location: () => t(translations.bookingDetailPage.location),
   skillRequired: () => t(translations.bookingDetailPage.skillRequired),
   workType: () => t(translations.bookingDetailPage.workType),
+  cutoff: () => t(translations.bookingDetailPage.cutoff),
 };

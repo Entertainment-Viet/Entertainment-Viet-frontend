@@ -21,4 +21,15 @@ const makeSelectDetail = () =>
     State => State.data,
   );
 
-export { makeSelectDetailLoading, makeSelectDetailError, makeSelectDetail };
+const makeSelectEditorChoice = () =>
+  createSelector(
+    selectState,
+    State => State.editorChoice,
+  );
+
+export {
+  makeSelectDetailLoading,
+  makeSelectDetailError,
+  makeSelectDetail,
+  makeSelectEditorChoice,
+};

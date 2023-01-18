@@ -255,7 +255,8 @@
     "detail": "Thông tin chi tiết",
     "location": "Địa điểm",
     "skillRequired": "Kỹ năng yêu cầu",
-    "workType": "Hình thức làm việc: "
+    "workType": "Hình thức làm việc: ",
+    "cutoff": "Management fee: "
   },
   "globalMessages": {
     "ORG_PENDING": "Đang chờ phía tổ chức",

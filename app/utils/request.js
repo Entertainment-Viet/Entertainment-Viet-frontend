@@ -110,6 +110,7 @@ export function sendFileToAWS(file, isPublic = true) {
 
 export async function getFileFromAWS(keyFile) {
   const response = await getFile(keyFile);
+  if (response.status === 500) return null;
   const base64Image = Buffer.from(response.data, 'binary').toString('base64');
   return `data:image/*;base64,${base64Image}`;
 }

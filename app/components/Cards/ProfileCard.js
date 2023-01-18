@@ -55,10 +55,12 @@ function ProfileCard(props) {
         zIndex={51}
       />
       <Image
-        src={property.imageUrl}
+        boxSize="350px"
+        objectFit="cover"
+        src={props.avatar}
         alt={property.imageAlt}
         maxW={imgWidth}
-        style={{ aspectRatio: '1/1.2' }}
+        styles={{ aspectRatio: '1/1.2' }}
         zIndex={50}
         mt="0.3rem"
         ml="1px"
@@ -87,6 +89,7 @@ function ProfileCard(props) {
 
 ProfileCard.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  avatar: PropTypes.any,
 };
 
 export default ProfileCard;

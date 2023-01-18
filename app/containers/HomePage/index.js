@@ -24,13 +24,14 @@ import {
   makeSelectDetailLoading,
   makeSelectDetailError,
   makeSelectDetail,
+  makeSelectEditorChoice,
 } from './selectors';
 import WelcomeBox from './WelcomeBox';
 import { TEXT_GREEN } from '../../constants/styles';
 import ImageSlider from '../../components/Carousel/ImageSlider';
 
 const key = 'HomePage';
-export function HomePage({ loading, error, data, onLoadData }) {
+export function HomePage({ loading, data, onLoadData, editorChoice }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -39,7 +40,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
   }, []);
   const { t } = useTranslation();
   // eslint-disable-next-line no-console
-  console.log(data, loading, error);
+  console.log(data, editorChoice);
 
   const SlideData = [
     {
@@ -64,24 +65,12 @@ export function HomePage({ loading, error, data, onLoadData }) {
     },
   ];
 
-  const dataList = [
-    {
-      id: '1',
-    },
-    {
-      id: '2',
-    },
-    {
-      id: '3',
-    },
-  ];
-
   const columns = [1, 2, 3];
 
-  return loading ? (
+  return loading || !data || !editorChoice ? (
     <PageSpinner />
   ) : (
-    <div style={{ width: '100%' }}>
+    <div styles={{ width: '100%' }}>
       <Metadata />
       <>
         <Box px={10}>
@@ -100,7 +89,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
           {t(messages.popularTalent())}
         </Box>
         <Box>
-          <CardListHorizontal />
+          <CardListHorizontal dataList={data} quantity={5} />
         </Box>
         <Box display="flex" pl={10}>
           <Box
@@ -126,9 +115,10 @@ export function HomePage({ loading, error, data, onLoadData }) {
               {t(messages.recentTalent())}
             </Box>
             <CardListHorizontal
-              dataList={dataList}
+              dataList={data}
               columns={columns}
               spacing="45px"
+              quantity={3}
             />
           </Box>
         </Box>
@@ -147,7 +137,7 @@ export function HomePage({ loading, error, data, onLoadData }) {
         >
           {t(messages.editorChoice())}
         </Box>
-        <CardListHorizontal />
+        <CardListHorizontal dataList={editorChoice} quantity={10} />
         <Divider />
       </>
     </div>
@@ -157,14 +147,15 @@ export function HomePage({ loading, error, data, onLoadData }) {
 HomePage.propTypes = {
   onLoadData: PropTypes.func,
   loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  editorChoice: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectDetailLoading(),
   error: makeSelectDetailError(),
   data: makeSelectDetail(),
+  editorChoice: makeSelectEditorChoice(),
 });
 
 export function mapDispatchToProps(dispatch) {
