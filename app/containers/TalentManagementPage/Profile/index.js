@@ -53,6 +53,7 @@ import NotificationProvider from '../../../components/NotificationProvider';
 import ImageUploadInput from '../../../components/ImageUploadInput';
 import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailImgs';
 import CategorySelector from '../../CategorySelector';
+import { toBase64 } from '../../../utils/helpers';
 
 const key = 'Profile';
 
@@ -176,11 +177,12 @@ const Profile = ({
       descriptionImg,
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
-      .then(res =>{
+      .then(async res =>{
         if (res > 300) {
           notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
           return;
         }
+        localStorage.setItem('userInfo', await toBase64(file));
         notify('Tạo thành công');
       })
   };

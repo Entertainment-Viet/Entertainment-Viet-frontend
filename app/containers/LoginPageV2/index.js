@@ -6,7 +6,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { useForm } from 'react-hook-form';
 
-import { API_LOGIN } from 'constants/api';
+import { API_LOGIN, API_ORG_DETAIL, API_TALENT_DETAIL } from 'constants/api';
 import { ROUTE_REGISTER, ROUTE_FORGOTPASSWORD } from 'constants/routes';
 import { ENUM_ROLES } from 'constants/enums';
 import { setSecureCookie, getCookie } from 'utils/cookie';
@@ -35,6 +35,7 @@ import {
 } from 'constants/styles';
 import { talentRole, orgRole, adminRole } from 'constants/roles';
 import { sha512 } from 'js-sha512';
+import { get, getFileFromAWS } from 'utils/request';
 import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
 import { messages } from './messages';
@@ -88,14 +89,33 @@ function LoginPageV2() {
         } else {
           setSecureCookie('refreshToken', result.data.refresh_token, 0);
         }
-        const role = roles.every(element => {
+        roles.every(async element => {
           if (talentRole === element) {
             window.localStorage.setItem('role', ENUM_ROLES.TAL);
+            console.log('logging in');
+            const personalInfo = await get(
+              API_TALENT_DETAIL,
+              {},
+              jwt(result.data.access_token).sub,
+            );
+            if (personalInfo.avatar) {
+              const res = await getFileFromAWS(personalInfo.avatar);
+              localStorage.setItem('userInfo', res);
+            }
             window.location.href = '/';
             return false;
           }
           if (orgRole === element) {
             window.localStorage.setItem('role', ENUM_ROLES.ORG);
+            const personalInfo = await get(
+              API_ORG_DETAIL,
+              {},
+              jwt(result.data.access_token).sub,
+            );
+            if (personalInfo.avatar) {
+              const res = await getFileFromAWS(personalInfo.avatar);
+              localStorage.setItem('userInfo', res);
+            }
             window.location.href = '/';
             return false;
           }
@@ -107,7 +127,6 @@ function LoginPageV2() {
           return true;
         });
         // eslint-disable-next-line no-console
-        console.log(role);
       }
     } catch (err) {
       notify('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin');

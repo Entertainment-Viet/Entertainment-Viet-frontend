@@ -46,6 +46,7 @@ import PageSpinner from '../../../components/PageSpinner';
 import { messages } from '../messages';
 import { USER_STATE } from '../../../constants/enums';
 import { ROUTE_MANAGER_KYC_ORG } from '../../../constants/routes';
+import { toBase64 } from '../../../utils/helpers';
 
 const key = 'ProfileOrganizer';
 
@@ -130,11 +131,12 @@ const Profile = ({
       extensions: JSON.stringify(preData),
       // offerCategories: [data.category],
     };
-    put(API_ORGANIZER_DETAIL, dataSubmit, organizerId).then(res => {
+    put(API_ORGANIZER_DETAIL, dataSubmit, organizerId).then(async res => {
       if (res > 300) {
         notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
         return;
       }
+      localStorage.setItem('userInfo', await toBase64(file));
       notify('Tạo thành công');
     });
   };

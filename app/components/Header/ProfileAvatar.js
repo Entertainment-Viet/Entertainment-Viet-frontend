@@ -18,6 +18,7 @@ import { API_LOGOUT } from '../../constants/api';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const ProfileAvatar = () => {
+  const avatar = localStorage.getItem('userInfo');
   const logoutHandle = async () => {
     const data = {
       client_id: 'backend',
@@ -39,7 +40,7 @@ const ProfileAvatar = () => {
   return (
     <Menu closeOnSelect>
       <MenuButton colorScheme="blue">
-        <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+        <Avatar name="Dan Abrahmov" src={avatar} />
       </MenuButton>
       <MenuList minWidth="240px" zIndex={9999}>
         <MenuOptionGroup title="Manager" type="button">

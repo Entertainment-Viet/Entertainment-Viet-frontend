@@ -59,7 +59,7 @@ const Overview = ({
     >
       <GridItem colSpan={6}>
         <VStack align="flex-start">
-          <Header profile={data} comments={comments} />
+          <Header profile={data} comments={comments} avatar={avatar} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2}>
             <GridItem colSpan={4}>
               <ImageSliderWithPreview slides={carousel} />

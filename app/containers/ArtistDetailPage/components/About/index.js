@@ -85,7 +85,19 @@ const About = ({ data, match, packages, toggleModal, comments, avatar }) => {
           >
             Giải thưởng
           </Text>
-          <Text styles={{ marginLeft: '1rem' }}>test</Text>
+          {data.rewards.map(item => (
+            <Text styles={{ marginLeft: '1rem', marginBottom: '4px' }}>
+              {item.scoreTypeName}
+            </Text>
+          ))}
+          <Text as="h1" fontWeight={700} color={TEXT_GREEN} mt="1rem">
+            Bài hát
+          </Text>
+          {data.songs.map(item => (
+            <Text mb="4px">
+              {item.achievement}: {item.proof}
+            </Text>
+          ))}
         </Box>
       </GridItem>
       {/* <GridItem colSpan={1}>

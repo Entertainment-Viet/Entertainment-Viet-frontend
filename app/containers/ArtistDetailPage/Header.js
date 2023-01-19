@@ -13,7 +13,7 @@ import { LIGHT_GRAY, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 
 import PropTypes from 'prop-types';
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const Header = ({ profile, comments }) => {
+const Header = ({ profile, comments, avatar }) => {
   const [totalComments, setTotalComments] = useState(0);
   const [averageComments, setAverageComments] = useState(0);
 
@@ -53,11 +53,7 @@ const Header = ({ profile, comments }) => {
           Singer performs for music festival, bar, club and pub
         </Text>
         <HStack>
-          <Avatar
-            name="Dan Abrahmov"
-            src="https://bit.ly/dan-abramov"
-            size="sm"
-          />
+          <Avatar name={profile.displayName} src={avatar} size="sm" />
           <Text color={TEXT_PURPLE}>{profile.displayName}</Text>
           <Divider orientation="vertical" color={LIGHT_GRAY} w="1px" h="24px" />
           <StarIcon color={TEXT_GREEN} />
@@ -77,6 +73,7 @@ const Header = ({ profile, comments }) => {
 };
 Header.propTypes = {
   profile: PropTypes.any,
+  avatar: PropTypes.any,
   comments: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 export default Header;
