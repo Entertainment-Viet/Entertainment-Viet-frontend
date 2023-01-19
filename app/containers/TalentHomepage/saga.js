@@ -11,7 +11,7 @@ import {} from './selectors';
 
 export function* getData() {
   try {
-    const data = yield call(get, '/api/categories');
+    const data = yield call(get, '/api/events', { size: 12 });
     yield put(loadInfoSuccess(data));
   } catch (err) {
     yield put(loadInfoError(err));

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-const selectState = state => state.HomePage || initialState;
+const selectState = state => state.TalentHomePage || initialState;
 
 const makeSelectDetailLoading = () =>
   createSelector(

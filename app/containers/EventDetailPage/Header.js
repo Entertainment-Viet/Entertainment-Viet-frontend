@@ -21,8 +21,8 @@ const Header = ({ profile }) => (
       </Text>
       <HStack>
         <Avatar
-          name="Dan Abrahmov"
-          src="https://bit.ly/dan-abramov"
+          name={profile.organizer.displayName}
+          src={profile.organizer.avatar}
           size="sm"
         />
         <Text color={TEXT_PURPLE} as="h1">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Image,
@@ -17,6 +17,7 @@ import {
   TEXT_GREEN,
 } from 'constants/styles';
 import PropTypes from 'prop-types';
+import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 import ArrowRight from './assets/arrow_right.svg';
 
@@ -59,7 +60,14 @@ function CardEvent(props) {
     rating: 4,
     price: '300k-1M / performance',
   };
-
+  const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    if (props.data.descriptionImg) {
+      getFileFromAWS(props.data.descriptionImg[0]).then(res => {
+        setAvatar(res);
+      });
+    }
+  }, []);
   return (
     <Container ps={0} zIndex={1}>
       <Image
@@ -71,7 +79,9 @@ function CardEvent(props) {
         zIndex={51}
       />
       <Image
-        src={property.imageUrl}
+        boxSize="450px"
+        objectFit="cover"
+        src={avatar}
         alt={property.imageAlt}
         maxW={imgWidth}
         styles={{ aspectRatio: '2/1.5' }}

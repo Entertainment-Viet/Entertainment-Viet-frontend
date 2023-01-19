@@ -43,7 +43,6 @@ function ProfileCard(props) {
     rating: 4,
     price: '300k-1M / performance',
   };
-
   return (
     <Container ps={0} zIndex={1}>
       <Image

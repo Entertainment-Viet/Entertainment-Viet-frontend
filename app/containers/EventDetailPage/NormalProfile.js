@@ -10,7 +10,7 @@ import parserHtml from 'utils/html';
 const NormalProfile = ({ profile }) => (
   <Container ps={0}>
     <HStack w={{ '2xl': '73rem', xl: '57rem' }}>
-      <ProfileCard data={{ displayName: profile.organizerName }} />
+      <ProfileCard data={profile.organizer} avatar={profile.organizer.avatar} />
       <Box bg={PRI_BACKGROUND} h="26rem" w="1000%" p={4}>
         {parserHtml(profile.organizer.bio)}
       </Box>

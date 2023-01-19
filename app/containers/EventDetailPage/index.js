@@ -29,6 +29,7 @@ import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
 import { loadDataHeader } from 'components/Header/actions';
+import { getFileFromAWS } from 'utils/request';
 import { loadData, loadPositionInfo } from './actions';
 
 // import {} from 'constants/routes';
@@ -66,6 +67,7 @@ export function EventDetailPage({
   const { t } = useTranslation();
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
+  const [descriptionImg, setDesciptionImg] = useState([]);
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);
@@ -74,6 +76,31 @@ export function EventDetailPage({
   useEffect(() => {
     onLoadData(match.params.id1, match.params.id2);
   }, [match.params.id]);
+  const [profile, setProfile] = useState();
+
+  useEffect(() => {
+    if (data) setProfile(data);
+    if (data.descriptionImg) {
+      const tempArr = [];
+      for (let i = 0; i < data.descriptionImg.length; i += 1) {
+        getFileFromAWS(data.descriptionImg[i]).then(res => {
+          if (res) {
+            tempArr.push(res);
+            // console.log(tempArr)
+            setDesciptionImg([...tempArr]);
+          }
+        });
+      }
+    }
+    if (data.organizer) {
+      getFileFromAWS(data.organizer.avatar).then(res => {
+        setProfile({
+          ...data,
+          organizer: { ...data.organizer, avatar: res },
+        });
+      });
+    }
+  }, [data]);
   return (
     <div>
       <Metadata />
@@ -87,21 +114,22 @@ export function EventDetailPage({
           <CustomTab>{t(messages.overview())}</CustomTab>
           <CustomTab>{t(messages.about())}</CustomTab>
         </TabList>
-        {!data ? (
+        {!profile ? (
           <PageSpinner />
         ) : (
           <TabPanels>
             <TabPanel>
               <Overview
-                data={data}
+                data={profile}
                 match={match}
                 positions={positions}
                 toggleModal={toggleModal}
+                carousel={descriptionImg}
               />
             </TabPanel>
             <TabPanel>
               <About
-                data={data}
+                data={profile}
                 match={match}
                 positions={positions}
                 toggleModal={toggleModal}

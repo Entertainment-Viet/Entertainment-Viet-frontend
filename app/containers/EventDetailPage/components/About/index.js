@@ -20,43 +20,38 @@ import PositionBox from '../../PositionBox';
 const About = ({ data, positions, toggleModal }) => {
   const { t } = useTranslation();
   const org = data && data.organizer;
+  console.log('profile: ', org);
   const dataArtist = org && JSON.parse(org.extensions);
   const RenderProfile = () =>
     dataArtist &&
     dataArtist.map(item => (
       <>
-        <Divider />
-        <Box style={{ margin: '1rem 0px' }}>
+        <Divider my={4} />
+        <Box styles={{ margin: '1rem 0px' }}>
           <Text
             as="h1"
             fontWeight={700}
-            style={{ margin: '1rem 0px' }}
+            styles={{ margin: '1rem 0px' }}
             color={TEXT_GREEN}
+            mb={4}
           >
             {item.type === 'bio'
               ? t(messages.artistStory())
               : t(messages.artistActivity())}
           </Text>
-          <Text style={{ marginLeft: '1rem' }}>{parserHtml(item.value)}</Text>
+          <Text styles={{ marginLeft: '1rem' }}>{parserHtml(item.value)}</Text>
         </Box>
       </>
     ));
-  const ARTIST_IMAGE =
-    'https://vnn-imgs-a1.vgcloud.vn/znews-photo.zadn.vn/Uploaded/izhqv/2020_11_12/viechannelphotos_rap_viet_tap_15_thi_sinh_rpt_mck_1_16050204487251365930315_crop_1605020583124889154191.jpg';
   return data ? (
     <Grid templateColumns="repeat(6, 1fr)" gap={2}>
       <GridItem colSpan={6}>
         <VStack align="flex-start">
-          <Header
-            profile={{
-              name: 'About Organizer',
-              organizerName: org.displayName,
-            }}
-          />
+          <Header profile={data} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2} w="100%">
             <GridItem colSpan={4}>
               <Image
-                src={ARTIST_IMAGE}
+                src={org.avatar}
                 borderRadius="10px"
                 alt="Talent Image"
                 w="100%"

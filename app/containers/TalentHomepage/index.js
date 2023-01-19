@@ -64,17 +64,10 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
     },
   ];
 
-  const uid = 'jnduiah-dawndnwaj-dawdaw';
-  const tempt = {
-    uid,
-    displayName: 'Halloween event',
-  };
-  const priceRange = [0, 0];
-
   return loading ? (
     <PageSpinner />
   ) : (
-    <div style={{ width: '85%', margin: '0 auto' }}>
+    <div styles={{ width: '85%', margin: '0 auto' }}>
       <Metadata />
       <Box px={10}>
         <ImageSlider slides={SlideData} />
@@ -98,9 +91,11 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
         alignItems="center"
         ml={10}
       >
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
-        <CardEvent key={uid} data={tempt} priceRange={priceRange} />
+        {data &&
+          data.map(tempt => {
+            const { uid } = tempt;
+            return <CardEvent key={uid} data={tempt} />;
+          })}
       </SimpleGrid>
       <Box display="flex" pl={10}>
         <Box

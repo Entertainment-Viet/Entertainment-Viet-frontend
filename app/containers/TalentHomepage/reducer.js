@@ -21,7 +21,7 @@ const pageReducer = (state = initialState, action) =>
       case LOAD_INFO_SUCCESS:
         draft.loading = false;
         draft.error = false;
-        draft.data = action.data;
+        draft.data = action.data.content;
         break;
 
       case LOAD_INFO_ERROR:

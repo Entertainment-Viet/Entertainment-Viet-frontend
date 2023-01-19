@@ -75,7 +75,6 @@ function Header({ handleSubmit, handleRefresh, cartData }) {
         <Box>
           <HStack spacing={8}>
             <form
-              style={{}}
               onSubmit={e => {
                 e.preventDefault();
                 if (window.location.pathname === '/search') {
@@ -103,7 +102,7 @@ function Header({ handleSubmit, handleRefresh, cartData }) {
                 </InputLeftElement>
               </InputGroup>
             </form>
-            <HeaderButton text={t(messages.findTalent())} href="#" />
+            <HeaderButton text={t(messages.findTalent())} href="/search" />
             <HeaderButton text={t(messages.postJob())} href="#" />
             <HeaderButton
               text={t(messages.openJob())}
