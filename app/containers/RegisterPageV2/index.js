@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import {
-  SimpleGrid,
   Box,
   Stack,
   HStack,
@@ -98,7 +97,9 @@ function RegisterPageV2() {
   ];
 
   return (
-    <SimpleGrid
+    <Box
+      mt="auto"
+      mb="auto"
       sx={{
         justifyContent: 'center',
       }}
@@ -121,6 +122,9 @@ function RegisterPageV2() {
         }}
         width="545px"
         borderRadius="10px"
+        ml="auto"
+        mr="auto"
+        w={{ sm: '100%', md: '545px' }}
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
       >
@@ -252,7 +256,7 @@ function RegisterPageV2() {
           </Stack>
         </form>
       </Box>
-    </SimpleGrid>
+    </Box>
   );
 }
 

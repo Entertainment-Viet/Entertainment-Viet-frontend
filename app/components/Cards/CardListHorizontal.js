@@ -4,8 +4,14 @@ import { SimpleGrid, Container } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import Card from './Card';
 
-const CardListHorizontal = ({ dataList, columns, spacing, quantity }) => (
-  <Container maxW="100%" centerContent>
+const CardListHorizontal = ({
+  dataList,
+  columns,
+  spacing,
+  quantity,
+  width,
+}) => (
+  <Container maxW="100%" centerContent paddingInlineStart={0}>
     <SimpleGrid maxW="100%" columns={columns} spacing={spacing}>
       {/* eslint-disable-next-line func-names */}
       {dataList.map(function(data, index) {
@@ -24,6 +30,7 @@ const CardListHorizontal = ({ dataList, columns, spacing, quantity }) => (
             key={uid}
             data={data}
             priceRange={min && max ? [min, max] : [0, 0]}
+            width={width}
           />
         );
       })}
@@ -34,6 +41,7 @@ const CardListHorizontal = ({ dataList, columns, spacing, quantity }) => (
 CardListHorizontal.propTypes = {
   dataList: PropTypes.array,
   columns: PropTypes.array,
+  width: PropTypes.array,
   spacing: PropTypes.string,
   quantity: PropTypes.number,
 };

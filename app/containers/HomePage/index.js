@@ -29,6 +29,7 @@ import {
 import WelcomeBox from './WelcomeBox';
 import { TEXT_GREEN } from '../../constants/styles';
 import ImageSlider from '../../components/Carousel/ImageSlider';
+import { useIsMobileView, useIsTabletView } from '../../hooks/useIsMobileView';
 
 const key = 'HomePage';
 export function HomePage({ loading, data, onLoadData, editorChoice }) {
@@ -40,7 +41,8 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
   }, []);
   const { t } = useTranslation();
   // eslint-disable-next-line no-console
-  console.log(data, editorChoice);
+  const isMobile = useIsMobileView();
+  const isTablet = useIsTabletView();
 
   const SlideData = [
     {
@@ -65,8 +67,6 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
     },
   ];
 
-  const columns = [1, 2, 3];
-
   return loading || !data || !editorChoice ? (
     <PageSpinner />
   ) : (
@@ -75,25 +75,30 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
       <>
         <Box px={10}>
           <ImageSlider slides={SlideData} />
-        </Box>
-        <Box
-          color={TEXT_GREEN}
-          mt="12"
-          mb="6"
-          ml="10"
-          fontWeight="600"
-          fontSize="20px"
-          lineHeight="24px"
-          noOfLines={1}
-        >
-          {t(messages.popularTalent())}
-        </Box>
-        <Box>
-          <CardListHorizontal dataList={data} quantity={5} />
-        </Box>
-        <Box display="flex" pl={10}>
           <Box
-            width="37%"
+            color={TEXT_GREEN}
+            mt="12"
+            mb="6"
+            fontWeight="600"
+            fontSize="20px"
+            lineHeight="24px"
+            noOfLines={1}
+          >
+            {t(messages.popularTalent())}
+          </Box>
+          <Box>
+            <CardListHorizontal
+              dataList={data}
+              quantity={8}
+              spacing="45px"
+              columns={[1, 2, 4]}
+              width={[0, 140, 200, 200, 290]}
+            />
+          </Box>
+        </Box>
+        <Box display="flex" pl={10} flexWrap="wrap">
+          <Box
+            width={isTablet || isMobile ? '100%' : '37%'}
             mt="12"
             backgroundImage={background}
             backgroundSize="100% 100%"
@@ -102,11 +107,11 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
           >
             <WelcomeBox />
           </Box>
-          <Box pl={8}>
+          <Box pl={isMobile ? 0 : 8}>
             <Box
               color={TEXT_GREEN}
               mb="6"
-              ml="4"
+              mt={isTablet || isMobile ? 12 : 0}
               fontWeight="600"
               fontSize="20px"
               lineHeight="24px"
@@ -116,28 +121,32 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
             </Box>
             <CardListHorizontal
               dataList={data}
-              columns={columns}
+              columns={[1, 2, 3, 2]}
               spacing="45px"
-              quantity={3}
+              quantity={4}
+              width={[0, 140, 200, 290]}
             />
           </Box>
         </Box>
         <Box px={10}>
           <ImageSlider slides={SlideData} />
+          <Box
+            color={TEXT_GREEN}
+            mt="12"
+            mb="6"
+            fontWeight="600"
+            fontSize="20px"
+            lineHeight="24px"
+            noOfLines={1}
+          >
+            {t(messages.editorChoice())}
+          </Box>
+          <CardListHorizontal
+            dataList={editorChoice}
+            quantity={8}
+            width={[0, 135, 230, 160, 290]}
+          />
         </Box>
-        <Box
-          color={TEXT_GREEN}
-          mt="12"
-          mb="6"
-          ml="10"
-          fontWeight="600"
-          fontSize="20px"
-          lineHeight="24px"
-          noOfLines={1}
-        >
-          {t(messages.editorChoice())}
-        </Box>
-        <CardListHorizontal dataList={editorChoice} quantity={10} />
         <Divider />
       </>
     </div>
