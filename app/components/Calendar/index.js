@@ -5,7 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { JobDetailModal } from 'components/Modal';
 import PropTypes from 'prop-types';
-
+import { toLocalISOTime } from '../../utils/helpers';
 // import { INITIAL_EVENTS } from './event-utils';
 import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css'; // a dependency of timegrid
@@ -47,12 +47,8 @@ export default function Calendar({ onSelectDate, data }) {
         const tempt = {
           id: event.uid,
           title: event.packageName,
-          start: new Date(event.jobDetail.performanceStartTime)
-            .toISOString()
-            .replace('.000Z', ''),
-          end: new Date(event.jobDetail.performanceEndTime)
-            .toISOString()
-            .replace('.000Z', ''),
+          start: toLocalISOTime(new Date(event.jobDetail.performanceStartTime)),
+          end: toLocalISOTime(new Date(event.jobDetail.performanceEndTime)),
           backgroundColor: '#805AD5',
           className: 'dot',
         };

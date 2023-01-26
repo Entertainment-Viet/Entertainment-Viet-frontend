@@ -175,7 +175,7 @@ export function SearchResultPage({
       <Container maxW="100%" ps={0}>
         <SimpleGrid
           maxW="100%"
-          columns={{ xl: 4, '2xl': 5 }}
+          columns={[3, 3, 4, 5]}
           spacing="30px"
           alignItems="start"
         >
@@ -195,6 +195,7 @@ export function SearchResultPage({
                   key={uid}
                   data={tempt}
                   priceRange={min && max ? [min, max] : [0, 0]}
+                  width={[0, 140, 200, 200, 270]}
                 />
               );
             })}
