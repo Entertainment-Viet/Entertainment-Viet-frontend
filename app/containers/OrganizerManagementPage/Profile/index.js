@@ -136,7 +136,7 @@ const Profile = ({
         notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
         return;
       }
-      localStorage.setItem('userInfo', await toBase64(file));
+      if (file) localStorage.setItem('userInfo', await toBase64(file));
       notify('Tạo thành công');
     });
   };

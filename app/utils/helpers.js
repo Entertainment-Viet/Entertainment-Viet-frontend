@@ -261,3 +261,8 @@ export const toBase64 = file =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+
+export const toLocalISOTime = date => {
+  const tzoffset = new Date().getTimezoneOffset() * 60000; // offset in milliseconds
+  return new Date(date - tzoffset).toISOString().slice(0, -1);
+};
