@@ -25,6 +25,7 @@ import {
   toIsoString,
   classifyCategories,
 } from 'utils/helpers';
+import { useIsTabletView , useIsMobileView } from 'hooks/useIsMobileView';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -191,6 +192,8 @@ const MyEvents = ({
 }) => {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
+  const isTablet = useIsTabletView();
+  const isMobile = useIsMobileView();
   const { t } = useTranslation();
   const [categoriesFiltered, setCategoriesFiltered] = useState([]);
   const cityData =
@@ -364,7 +367,7 @@ const MyEvents = ({
     handlePageChange(0);
   }
   return (
-    <Box color={PRI_TEXT_COLOR}>
+    <Box color={PRI_TEXT_COLOR} w="90vw">
       <Flex justifyContent="space-between" mb={2}>
         {mode === 1 || mode === 2 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
@@ -425,7 +428,7 @@ const MyEvents = ({
       {!data ? (
         <PageSpinner />
       ) : (
-        <Flex zIndex={1} position="relative" gap={4}>
+        <Flex zIndex={1} position="relative" gap={4} flexDirection={isTablet || isMobile ? 'column' : 'row'}>
           {mode === 1 ? (
             <EventDetailCard data={eventInfo} />
           ) : mode === 2 ? (

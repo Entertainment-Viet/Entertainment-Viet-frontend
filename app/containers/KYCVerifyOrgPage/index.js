@@ -55,6 +55,7 @@ import { USER_STATE } from '../../constants/enums';
 import { API_ORGANIZER_KYC } from '../../constants/api';
 import CitySelector from '../CitySelector';
 import NotificationProvider from '../../components/NotificationProvider';
+import FormWrapper from '../../components/ContentWrapper/FormWrapper';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -229,17 +230,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
             justifyContent: 'center',
           }}
         >
-          <Box
-            color={PRI_TEXT_COLOR}
-            bg={SUB_BLU_COLOR}
-            width="700px"
-            sx={{
-              marginTop: '10px',
-              borderRadius: '5px',
-            }}
-            px="112px"
-            py="74px"
-          >
+          <FormWrapper>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing="1">
                 <Box textAlign="center">
@@ -487,7 +478,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                   defaultDistrict={organizerInfo.address ? organizerInfo.address.parent.uid: null}
                   defaultCity={organizerInfo.address ? organizerInfo.address.parent.parent.uid : null}
                 />
-                <FormControl>
+                {/* <FormControl>
                   <CustomFormLabel htmlFor="introduce">
                     {t(messages.introduce())}
                   </CustomFormLabel>
@@ -498,7 +489,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                     required
                     val="Pass the variant prop to change the visual appearance of the input component. Chakra UI input variant types are: outline, filled, flushed and unstyled"
                   />
-                </FormControl>
+                </FormControl> */}
                 <Text color={RED_COLOR}>
                   {errors.introduce && errors.introduce.message}
                 </Text>
@@ -660,7 +651,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                 <Box />
               </Stack>
             </form>
-          </Box>
+          </FormWrapper>
         </SimpleGrid>
       ) : (
         <PageSpinner />

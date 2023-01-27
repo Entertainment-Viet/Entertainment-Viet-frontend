@@ -88,12 +88,12 @@ export function BillingPage({
           </HStack>
           <Grid templateColumns="repeat(5, 1fr)" gap={6}>
             <Metadata />
-            <GridItem colSpan={2}>
+            <GridItem colSpan={[5, 5, 2]}>
               <CustomBox>
                 <GeneralInfo data={data} />
               </CustomBox>
             </GridItem>
-            <GridItem colSpan={3}>
+            <GridItem colSpan={[5, 5, 3]}>
               <CustomBox>
                 <BillDetail data={data.bookings.content} />
               </CustomBox>

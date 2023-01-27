@@ -80,7 +80,7 @@ const Table = ({
       flexDirection="column"
       flex={1}
       maxWidth="100%"
-      width="100%"
+      // width="100%"
       zIndex={1}
       position="relative"
     >
@@ -146,7 +146,7 @@ const Table = ({
             placeholder={pageSize}
             onChange={val => handlePageSize(Number(val.target.value))}
           >
-            {[1, 2, 4, 30, 40, 50].map(size => (
+            {[5, 10, 20, 50].map(size => (
               // <option key={size} value={size}>
               //   Show {size}
               // </option>

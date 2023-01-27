@@ -17,9 +17,9 @@ function Form(props) {
       <Box
         sx={{
           backgroundColor: PRI_BACKGROUND,
-          marginTop: '104px',
         }}
-        width="810px"
+        mt="104px"
+        width={['90vw', '80vw', '80vw', '60vw']}
         borderRadius="10px"
         py={{ base: '0', sm: '12' }}
         px={{ base: '4', sm: '12' }}
