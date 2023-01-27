@@ -36,7 +36,7 @@ export function EventBillingPage({ match, loadEventData, data, event }) {
       ) : (
         <Grid templateColumns="repeat(5, 1fr)" gap={6}>
           <Metadata />
-          <GridItem colSpan={2}>
+          <GridItem colSpan={[5, 5, 2]}>
             <CustomBox>
               <GeneralInfo event={event} info={data} />
             </CustomBox>
@@ -44,7 +44,7 @@ export function EventBillingPage({ match, loadEventData, data, event }) {
               <EventDetail />
             </CustomBox> */}
           </GridItem>
-          <GridItem colSpan={3}>
+          <GridItem colSpan={[5, 5, 3]}>
             <CustomBox>
               <BillDetail data={data.bookings.content} event={event} />
             </CustomBox>

@@ -32,16 +32,16 @@ const Overview = ({ data, match, positions, toggleModal, carousel }) => {
         <VStack align="flex-start">
           <Header profile={data} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-            <GridItem colSpan={4}>
+            <GridItem colSpan={[6, 6, 6, 6, 4]}>
               <ImageSliderWithPreview slides={carousel} />
             </GridItem>
-            <GridItem colSpan={2}>
+            <GridItem colSpan={[6, 6, 6, 6, 2]}>
               <PositionBox data={positions.content} toggleModal={toggleModal} />
             </GridItem>
           </Grid>
         </VStack>
       </GridItem>
-      <GridItem colSpan={4}>
+      <GridItem colSpan={[6, 6, 6, 6, 4]}>
         <VStack align="flex-start">
           <Divider />
           <Text as="h1" fontWeight={700} color={TEXT_GREEN}>

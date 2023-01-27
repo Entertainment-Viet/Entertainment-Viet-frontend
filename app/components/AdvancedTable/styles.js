@@ -8,7 +8,7 @@ export const StyledTable = styled.div`
   width: 100%;
   display: flex;
   max-width: 100%;
-  overflow-x: inherit;
+  overflow-x: auto;
   border-radius: 4px;
   flex-direction: column;
   box-sizing: border-box;

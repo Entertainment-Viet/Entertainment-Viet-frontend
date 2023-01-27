@@ -28,18 +28,14 @@ import reducer from './reducer';
 
 import InputCustomV2 from '../../components/Controls/InputCustomV2';
 import SelectCustom from '../../components/Controls/SelectCustom';
-import {
-  PRI_BACKGROUND,
-  RED_COLOR,
-  SUB_BLU_COLOR,
-  TEXT_GREEN,
-} from '../../constants/styles';
+import { RED_COLOR, SUB_BLU_COLOR, TEXT_GREEN } from '../../constants/styles';
 import { QWERTYEditor, DateTimeCustom } from '../../components/Controls';
 import { makeSelectCategories } from './selectors';
 import { loadCategories } from './actions';
 import CitySelector from '../CitySelector';
 import { useNotification } from '../../hooks/useNotification';
 import CategorySelector from '../CategorySelector';
+import FormWrapper from '../../components/ContentWrapper/FormWrapper';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -108,16 +104,7 @@ export function CreatePackagePage() {
     >
       <Metadata />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          sx={{
-            backgroundColor: PRI_BACKGROUND,
-            marginTop: '104px',
-          }}
-          width="810px"
-          borderRadius="10px"
-          py={{ base: '0', sm: '12' }}
-          px={{ base: '4', sm: '12' }}
-        >
+        <FormWrapper>
           <Box
             color={TEXT_GREEN}
             fontWeight="600"
@@ -274,17 +261,8 @@ export function CreatePackagePage() {
               </FormControl> */}
             </Stack>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: PRI_BACKGROUND,
-            marginTop: '5px',
-          }}
-          width="810px"
-          borderRadius="10px"
-          py={{ base: '0', sm: '12' }}
-          px={{ base: '4', sm: '12' }}
-        >
+        </FormWrapper>
+        <FormWrapper>
           <Box
             sx={{
               marginTop: '-30px',
@@ -330,7 +308,7 @@ export function CreatePackagePage() {
               </FormControl>
             </Stack>
           </Box>
-        </Box>
+        </FormWrapper>
         <Box display="flex" justifyContent="end">
           <Button
             sx={{

@@ -61,10 +61,10 @@ const Overview = ({
         <VStack align="flex-start">
           <Header profile={data} comments={comments} avatar={avatar} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-            <GridItem colSpan={4}>
+            <GridItem colSpan={[6, 6, 4]}>
               <ImageSliderWithPreview slides={carousel} />
             </GridItem>
-            <GridItem colSpan={2}>
+            <GridItem colSpan={[6, 6, 2]}>
               <PackagesBox
                 data={packages.content}
                 id={match.params.id}
@@ -74,7 +74,7 @@ const Overview = ({
           </Grid>
         </VStack>
       </GridItem>
-      <GridItem colSpan={4}>
+      <GridItem colSpan={[6, 6, 4]}>
         <VStack align="flex-start">
           <HStack
             justifyContent="space-between"

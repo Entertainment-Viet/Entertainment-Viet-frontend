@@ -216,7 +216,7 @@ const Orders = ({
   };
 
   return (
-    <Box color={PRI_TEXT_COLOR}>
+    <Box color={PRI_TEXT_COLOR} w="90vw">
       <Box
         display="d-flex"
         justifyContent="space-between"

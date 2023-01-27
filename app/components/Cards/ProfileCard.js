@@ -44,7 +44,7 @@ function ProfileCard(props) {
     price: '300k-1M / performance',
   };
   return (
-    <Container ps={0} zIndex={1}>
+    <Container ps={0} zIndex={1} w="auto">
       <Image
         src={CardTop}
         alt={property.imageAlt}
@@ -54,7 +54,7 @@ function ProfileCard(props) {
         zIndex={51}
       />
       <Image
-        boxSize="350px"
+        boxSize="23rem"
         objectFit="cover"
         src={props.avatar}
         alt={property.imageAlt}

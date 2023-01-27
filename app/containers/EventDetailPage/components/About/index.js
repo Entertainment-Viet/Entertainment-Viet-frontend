@@ -49,7 +49,7 @@ const About = ({ data, positions, toggleModal }) => {
         <VStack align="flex-start">
           <Header profile={data} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2} w="100%">
-            <GridItem colSpan={4}>
+            <GridItem colSpan={[6, 6, 6, 6, 4]}>
               <Image
                 src={org.avatar}
                 borderRadius="10px"
@@ -65,13 +65,13 @@ const About = ({ data, positions, toggleModal }) => {
                 {org.displayName}
               </Text>
             </GridItem>
-            <GridItem colSpan={2}>
+            <GridItem colSpan={[6, 6, 6, 6, 2]}>
               <PositionBox data={positions.content} toggleModal={toggleModal} />
             </GridItem>
           </Grid>
         </VStack>
       </GridItem>
-      <GridItem colSpan={4}>
+      <GridItem colSpan={[6, 6, 6, 6, 4]}>
         <RenderProfile />
       </GridItem>
       {/* <GridItem colSpan={1}>

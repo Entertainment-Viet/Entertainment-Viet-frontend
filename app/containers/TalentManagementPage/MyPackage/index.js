@@ -23,6 +23,7 @@ import {
   toIsoString,
   classifyCategories,
 } from 'utils/helpers';
+import { useIsTabletView, useIsMobileView } from 'hooks/useIsMobileView';
 import { messages } from '../messages';
 import { CustomButton } from '../styles';
 import {
@@ -57,6 +58,7 @@ import {
 } from './slice/selectors';
 import PackageDetailCard from './PackageDetailCard';
 import { globalMessages } from '../../App/globalMessage';
+
 const StatusCell = styled(Text)`
   text-align: center;
   padding: 5px;
@@ -167,6 +169,8 @@ const MyPackage = ({
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
   const [categoriesFiltered, setCategoriesFiltered] = useState([]);
+  const isTablet = useIsTabletView();
+  const isMobile = useIsMobileView();
 
   useEffect(() => {
     onLoadData();
@@ -272,9 +276,10 @@ const MyPackage = ({
   function handleBack() {
     handleModeChange(0);
     handlePageChange(0);
+    onLoadData();
   }
   return (
-    <Box color={PRI_TEXT_COLOR}>
+    <Box color={PRI_TEXT_COLOR} w="90vw">
       <Flex justifyContent="space-between" mb={2}>
         {mode === 1 ? (
           <CustomButton onClick={handleBack}>{t(messages.back())}</CustomButton>
@@ -330,7 +335,12 @@ const MyPackage = ({
       {!data ? (
         <PageSpinner />
       ) : (
-        <Flex zIndex={1} position="relative" gap={4}>
+        <Flex
+          zIndex={1}
+          position="relative"
+          gap={4}
+          flexDirection={isTablet || isMobile ? 'column' : 'row'}
+        >
           {mode === 1 ? <PackageDetailCard data={packageInfo} /> : null}
           <Box w={mode === 1 ? 'auto' : '100%'} flexGrow={1}>
             <AdvancedTable
@@ -394,7 +404,7 @@ export function mapDispatchToProps(dispatch) {
     },
     handlePageChange: page => {
       dispatch(changePage(page));
-      dispatch(loadPackages());
+      // dispatch(loadPackages());
     },
     handleModeChange: mode => {
       dispatch(changeMode(mode));

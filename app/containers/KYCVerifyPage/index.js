@@ -57,6 +57,7 @@ import PageSpinner from '../../components/PageSpinner';
 import { USER_STATE } from '../../constants/enums';
 import CitySelector from '../CitySelector';
 import NotificationProvider from '../../components/NotificationProvider';
+import FormWrapper from '../../components/ContentWrapper/FormWrapper';
 
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -232,17 +233,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
             justifyContent: 'center',
           }}
         >
-          <Box
-            color={PRI_TEXT_COLOR}
-            bg={SUB_BLU_COLOR}
-            width="700px"
-            sx={{
-              marginTop: '10px',
-              borderRadius: '5px',
-            }}
-            px="112px"
-            py="74px"
-          >
+          <FormWrapper>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing="1">
                 <Box textAlign="center">
@@ -575,7 +566,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                 <Box />
               </Stack>
             </form>
-          </Box>
+          </FormWrapper>
         </SimpleGrid>
       ) : (
         <PageSpinner />

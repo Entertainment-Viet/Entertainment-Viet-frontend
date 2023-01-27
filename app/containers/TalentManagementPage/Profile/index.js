@@ -54,6 +54,7 @@ import ImageUploadInput from '../../../components/ImageUploadInput';
 import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailImgs';
 import CategorySelector from '../../CategorySelector';
 import { toBase64 } from '../../../utils/helpers';
+import FormWrapper from '../../../components/ContentWrapper/FormWrapper';
 
 const key = 'Profile';
 
@@ -196,17 +197,7 @@ const Profile = ({
       }}
     >
       {talentInfo && categoriesInfo ? (
-        <Box
-          color={PRI_TEXT_COLOR}
-          bg={SUB_BLU_COLOR}
-          width="700px"
-          sx={{
-            marginTop: '10px',
-            borderRadius: '5px',
-          }}
-          px="112px"
-          py="74px"
-        >
+        <FormWrapper>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing="2">
               <Box display="flex" marginBottom="20px">
@@ -365,7 +356,7 @@ const Profile = ({
               </Button>
             </Stack>
           </form>
-        </Box>
+        </FormWrapper>
       ) : (
         <PageSpinner />
       )}

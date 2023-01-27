@@ -49,7 +49,7 @@ const About = ({ data, match, packages, toggleModal, comments, avatar }) => {
         <VStack align="flex-start">
           <Header profile={data} comments={comments} />
           <Grid templateColumns="repeat(6, 1fr)" gap={2} w="100%">
-            <GridItem colSpan={4}>
+            <GridItem colSpan={[6, 6, 4]}>
               {dataArtist.length > 0 && (
                 <Image
                   src={avatar}
@@ -59,7 +59,7 @@ const About = ({ data, match, packages, toggleModal, comments, avatar }) => {
                 />
               )}
             </GridItem>
-            <GridItem colSpan={2}>
+            <GridItem colSpan={[6, 6, 2]}>
               <PackagesBox
                 data={packages.content}
                 id={match.params.id}
@@ -69,7 +69,7 @@ const About = ({ data, match, packages, toggleModal, comments, avatar }) => {
           </Grid>
         </VStack>
       </GridItem>
-      <GridItem colSpan={4}>
+      <GridItem colSpan={[6, 6, 4]}>
         <Text as="h1" fontWeight={600} fontSize="50px" color={TEXT_PURPLE}>
           {data.displayName}
         </Text>
