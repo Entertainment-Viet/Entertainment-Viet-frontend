@@ -115,7 +115,7 @@ export function SearchResultPage({
         {data && data.length} results found
       </Box>
       <HStack mb="6">
-        <HStack w="50%">
+        <HStack w="100%">
           <CategoriesFilter
             placeholder="Categories"
             listOptions={categoriesFiltered}
@@ -137,19 +137,6 @@ export function SearchResultPage({
             titleRange={t(messages.incomeRange())}
             loadDataAction={handleBudgetChange}
           />
-        </HStack>
-        <HStack w="50%">
-          {/* <Text>Your budget</Text>
-          <Box>
-            <NumberInput
-              color={PRI_TEXT_COLOR}
-              bg="transparent"
-              borderColor={TEXT_PURPLE}
-              onChange={val => handleBudgetChange(val)}
-            >
-              <NumberInputField placeholder="Budget" />
-            </NumberInput>
-          </Box> */}
           <Text>Start time</Text>
           <Box>
             <DateTimeCustom
@@ -170,6 +157,17 @@ export function SearchResultPage({
               handleDateChange={handleEndChange}
             />
           </Box>
+          {/* <Text>Your budget</Text>
+          <Box>
+            <NumberInput
+              color={PRI_TEXT_COLOR}
+              bg="transparent"
+              borderColor={TEXT_PURPLE}
+              onChange={val => handleBudgetChange(val)}
+            >
+              <NumberInputField placeholder="Budget" />
+            </NumberInput>
+          </Box> */}
         </HStack>
       </HStack>
       <Container maxW="100%" ps={0}>
@@ -199,6 +197,7 @@ export function SearchResultPage({
                 />
               );
             })}
+          {data && data.length === 0 ? <Text>Talent not found</Text> : null}
         </SimpleGrid>
         <Pagination {...pageProps} onPageChange={handlePageChange} />
       </Container>

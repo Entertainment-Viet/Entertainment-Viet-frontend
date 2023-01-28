@@ -35,6 +35,7 @@ import Notification from './Notification';
 import Cart from './Cart';
 import ProfileAvatar from './ProfileAvatar';
 import { makeSelectCartData } from './selectors';
+import { ENUM_ROLES } from '../../constants/enums';
 function HeaderButton({ text, href, isExternal = false }) {
   return (
     <Link href={href} isExternal={isExternal}>
@@ -57,7 +58,7 @@ function Header({ handleSubmit, handleRefresh, cartData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [searchTerm, setSearchTerm] = useState('');
-
+  const role = localStorage.getItem('role');
   const { t } = useTranslation();
 
   const orgId = window.localStorage.getItem('uid');
@@ -102,13 +103,20 @@ function Header({ handleSubmit, handleRefresh, cartData }) {
                 </InputLeftElement>
               </InputGroup>
             </form>
-            <HeaderButton text={t(messages.findTalent())} href="/search" />
-            <HeaderButton text={t(messages.postJob())} href="#" />
             <HeaderButton
+              text={
+                role === ENUM_ROLES.ORG
+                  ? t(messages.findTalent())
+                  : t(messages.findEvent())
+              }
+              href="/search"
+            />
+            {/* <HeaderButton text={t(messages.postJob())} href="#" /> */}
+            {/* <HeaderButton
               text={t(messages.openJob())}
               href="https://google.com"
               isExternal
-            />
+            /> */}
             <Notification />
             {cartData && <Cart data={cartData} />}
             <ProfileAvatar />
