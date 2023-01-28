@@ -79,7 +79,7 @@ function CardEvent(props) {
         zIndex={51}
       />
       <Image
-        boxSize="450px"
+        boxSize="400px"
         objectFit="cover"
         src={avatar}
         alt={property.imageAlt}
