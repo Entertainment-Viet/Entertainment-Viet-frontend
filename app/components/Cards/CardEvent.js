@@ -21,8 +21,8 @@ import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 import ArrowRight from './assets/arrow_right.svg';
 
-const width = [320, 320, 350, 350, 400];
-const imgWidth = [317, 317, 347, 347, 397];
+const width = [300, 300, 320, 330, 400];
+const imgWidth = width.map(item => item - 3);
 const GradientBox = chakra(Box, {
   baseStyle: {
     borderRadius: 'md',
@@ -79,7 +79,7 @@ function CardEvent(props) {
         zIndex={51}
       />
       <Image
-        boxSize="400px"
+        boxSize={imgWidth}
         objectFit="cover"
         src={avatar}
         alt={property.imageAlt}

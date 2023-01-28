@@ -11,6 +11,7 @@ import {} from 'constants/routes';
 
 export const messages = {
   findTalent: () => t(translations.header.findTalent),
+  findEvent: () => t(translations.header.findEvent),
   postJob: () => t(translations.header.postJob),
   openJob: () => t(translations.header.openJob),
   soloSinger: () => t(translations.header.soloSinger),
