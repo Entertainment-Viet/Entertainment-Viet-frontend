@@ -51,15 +51,16 @@ const GradientBox = chakra(Box, {
   },
 });
 function CardEvent(props) {
-  // useEffect(() => {
-  //   if (props.data.avatar) {
-  //     getFileFromAWS(props.data.avatar).then(res => {
-  //       setAvatar(res);
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (props.data.organizerAvatar) {
+      getFileFromAWS(props.data.organizerAvatar).then(res => {
+        setOrgAvatar(res);
+      });
+    }
+  }, []);
 
   const [avatar, setAvatar] = useState(null);
+  const [orgAvatar, setOrgAvatar] = useState(null);
   useEffect(() => {
     if (props.data.descriptionImg) {
       getFileFromAWS(props.data.descriptionImg[0]).then(res => {
@@ -109,7 +110,7 @@ function CardEvent(props) {
             <Box display="flex" alignItems="center" my={2}>
               <Avatar
                 name={props.data.organizerName}
-                src="https://bit.ly/dan-abramov"
+                src={orgAvatar}
                 size="sm"
               />
               <Box as="span" ml="2" color={PRI_TEXT_COLOR} fontSize="sm">
