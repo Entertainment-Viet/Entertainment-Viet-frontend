@@ -51,15 +51,14 @@ const GradientBox = chakra(Box, {
   },
 });
 function CardEvent(props) {
-  const property = {
-    imageUrl: 'https://bit.ly/2Z4KKcF',
-    imageAlt: 'Rear view of modern home with pool',
-    name: 'Sun Dae',
-    title: 'Solo singer',
-    reviewCount: 34,
-    rating: 4,
-    price: '300k-1M / performance',
-  };
+  // useEffect(() => {
+  //   if (props.data.avatar) {
+  //     getFileFromAWS(props.data.avatar).then(res => {
+  //       setAvatar(res);
+  //     });
+  //   }
+  // }, []);
+
   const [avatar, setAvatar] = useState(null);
   useEffect(() => {
     if (props.data.descriptionImg) {
@@ -72,7 +71,7 @@ function CardEvent(props) {
     <Container ps={0} zIndex={1}>
       <Image
         src={CardTop}
-        alt={property.imageAlt}
+        alt="Decorator image"
         w={width}
         maxW="inherit"
         pos="absolute"
@@ -82,7 +81,7 @@ function CardEvent(props) {
         boxSize={imgWidth}
         objectFit="cover"
         src={avatar}
-        alt={property.imageAlt}
+        alt="Thumbnail image"
         maxW={imgWidth}
         styles={{ aspectRatio: '2/1.5' }}
         zIndex={50}
@@ -109,7 +108,7 @@ function CardEvent(props) {
             </Box>
             <Box display="flex" alignItems="center" my={2}>
               <Avatar
-                name="Dan Abrahmov"
+                name={props.data.organizerName}
                 src="https://bit.ly/dan-abramov"
                 size="sm"
               />
