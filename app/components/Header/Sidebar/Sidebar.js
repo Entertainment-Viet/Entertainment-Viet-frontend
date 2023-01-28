@@ -10,9 +10,16 @@ import VE from '../assets/Entertainment Viet.svg';
 import EV from '../assets/EV.svg';
 import DropdownItem from './DropdownItem';
 import { dataAbout, dataSupport } from './DataSidebar';
+import {
+  useIsMobileView,
+  useIsTabletView,
+} from '../../../hooks/useIsMobileView';
 export default function Sidebar() {
   const [navSize, changeNavSize] = useState('small');
   const [categories, setCategories] = useState([]);
+  const isMobile = useIsMobileView();
+  const isTablet = useIsTabletView();
+  const isMobileView = isMobile || isTablet;
   useEffect(() => {
     cRequest
       .get('/api/categories')
@@ -32,13 +39,19 @@ export default function Sidebar() {
   }, []);
   return (
     <Flex
-      pos="sticky"
-      left="5"
+      pos={isMobileView ? 'absolute' : 'sticky'}
+      bg={
+        isMobileView
+          ? 'linear-gradient(205.76deg, #090F36 0%, #07091A 100%)'
+          : 'transparent'
+      }
+      zIndex="999"
+      left={isMobileView ? '0' : '5'}
       h="100vh"
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize === 'small' ? '15px' : '30px'}
-      w={navSize === 'small' ? '3rem' : '30%'}
+      w={navSize === 'small' ? '3rem' : isMobileView ? '60%' : '30%'}
       overflow={navSize === 'large' && 'auto'}
       flexDir="column"
       justifyContent="space-between"

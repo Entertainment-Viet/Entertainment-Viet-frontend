@@ -187,15 +187,17 @@ export function EventSearchResultPage({
       <Container maxW="100%" ps={0}>
         <SimpleGrid
           maxW="100%"
-          columns={{ xl: 3, '2xl': 4 }}
+          columns={{ xl: 3 }}
           spacing="30px"
           alignItems="start"
+          justifyContent="center"
         >
           {data &&
             data.map(tempt => {
               const { uid } = tempt;
               return <CardEvent key={uid} data={tempt} />;
             })}
+          {data && data.length === 0 ? <Text>Event not found</Text> : null}
         </SimpleGrid>
         <Pagination {...pageProps} onPageChange={handlePageChange} />
       </Container>
