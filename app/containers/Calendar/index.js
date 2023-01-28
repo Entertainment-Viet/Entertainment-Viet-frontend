@@ -37,6 +37,7 @@ import {
   makeSelectDetailError,
   makeSelectDetail,
 } from './selectors';
+import { useIsMobileView, useIsTabletView } from '../../hooks/useIsMobileView';
 
 // import { propTypes } from 'qrcode.react';
 
@@ -45,12 +46,20 @@ export function BookManagementPage({ data, onLoadData, loading, roles, uid }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [selectedDate, selectDate] = useState();
+  const isMobile = useIsMobileView();
+  const isTablet = useIsTabletView();
   useEffect(() => {
     onLoadData(roles, uid);
   }, []);
   // const { t } = useTranslation();
   return data && !loading ? (
-    <Flex color={PRI_TEXT_COLOR} gap={8} minWidth="max-content">
+    <Flex
+      color={PRI_TEXT_COLOR}
+      gap={8}
+      minWidth="max-content"
+      flexWrap={isMobile || isTablet ? 'wrap' : 'none'}
+      justifyContent={isTablet ? 'space-around' : 'flex-start'}
+    >
       <WeeklyCalendar toDate={selectedDate} data={data} />
       <Calendar onSelectDate={selectDate} data={data} />
     </Flex>
