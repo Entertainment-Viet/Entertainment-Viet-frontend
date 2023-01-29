@@ -92,7 +92,7 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
               quantity={8}
               spacing="45px"
               columns={[1, 2, 4]}
-              width={[0, 140, 200, 200, 290]}
+              width={[0, 135, 190, 230, 340]}
             />
           </Box>
         </Box>
@@ -144,7 +144,7 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
           <CardListHorizontal
             dataList={editorChoice}
             quantity={8}
-            width={[0, 135, 230, 160, 290]}
+            width={[0, 135, 190, 230, 340]}
           />
         </Box>
         <Divider />
