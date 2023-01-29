@@ -39,7 +39,7 @@ export default function Sidebar() {
   }, []);
   return (
     <Flex
-      pos={isMobileView ? 'absolute' : 'sticky'}
+      pos={isMobileView ? 'inherit' : 'sticky'}
       bg={
         isMobileView
           ? 'linear-gradient(205.76deg, #090F36 0%, #07091A 100%)'

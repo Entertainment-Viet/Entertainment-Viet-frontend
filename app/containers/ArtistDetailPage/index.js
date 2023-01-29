@@ -136,7 +136,6 @@ export function ArtistDetailPage({
     if (data.avatar) {
       getFileFromAWS(data.avatar).then(res => {
         setAvatar(res);
-        profile.avatar = res;
       });
     }
   }, [data]);

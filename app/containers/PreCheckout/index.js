@@ -12,6 +12,7 @@ import { H1 } from 'components/Elements';
 import PageSpinner from 'components/PageSpinner';
 import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
 import { makeSelectCartData } from 'components/Header/selectors';
+import { useIsMobileView, useIsTabletView } from 'hooks/useIsMobileView';
 import { messages } from './messages';
 import { loadInfo } from './actions';
 import { HeaderCheckout } from './styles';
@@ -26,7 +27,6 @@ import {
 import PackageCheckout from './PackageCheckout';
 import PayMethod from './PayMethod';
 import TotalTray from './PackageCheckout/TotalTray';
-
 const key = 'PreCheckout';
 export function PreCheckout({ onLoadData, cartData }) {
   useInjectReducer({ key, reducer });
@@ -35,6 +35,9 @@ export function PreCheckout({ onLoadData, cartData }) {
     onLoadData();
   }, []);
   const { t } = useTranslation();
+  const isMobile = useIsMobileView();
+  const isTablet = useIsTabletView();
+
   const { content } = cartData;
   const sortedPackage =
     content && content.sort((a, b) => a.talentName.localeCompare(b.talentName));
@@ -42,10 +45,10 @@ export function PreCheckout({ onLoadData, cartData }) {
   // group all the same elements have same talentName into an array of array
   const groupPackage = sortedPackage
     ? sortedPackage.reduce((result, curr) => {
-        // eslint-disable-next-line no-param-reassign
-        result[curr.talentName] = [...(result[curr.talentName] || []), curr];
-        return result;
-      }, {})
+      // eslint-disable-next-line no-param-reassign
+      result[curr.talentName] = [...(result[curr.talentName] || []), curr];
+      return result;
+    }, {})
     : [];
 
   // get object values is subArray of a big array
@@ -55,7 +58,7 @@ export function PreCheckout({ onLoadData, cartData }) {
     <div style={{ width: '100%' }}>
       <Metadata />
       <Grid templateColumns="repeat(6,1fr)" my={6} gap={12}>
-        <GridItem colSpan={3}>
+        <GridItem colSpan={isMobile || isTablet ? 6 : 3}>
           <H1 color={TEXT_GREEN} fontSize="25">
             {t(messages.overview())}
           </H1>
@@ -102,7 +105,11 @@ export function PreCheckout({ onLoadData, cartData }) {
           </Box>
           {sortedPackage.length > 0 && <TotalTray content={sortedPackage} />}
         </GridItem>
-        <GridItem mt={20} colStart={5} colEnd={7}>
+        <GridItem
+          mt={20}
+          colStart={isMobile || isTablet ? 6 : 5}
+          colEnd={isMobile || isTablet ? 1 : 7}
+        >
           <PayMethod />
         </GridItem>
       </Grid>

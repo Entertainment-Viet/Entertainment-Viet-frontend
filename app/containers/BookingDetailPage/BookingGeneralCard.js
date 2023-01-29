@@ -135,7 +135,6 @@ const BookingGeneralCard = ({ data }) => {
   }, [data]);
   return (
     <GradientBox>
-      {console.log(data)}
       {!data ? (
         <PageSpinner />
       ) : (
@@ -156,8 +155,11 @@ const BookingGeneralCard = ({ data }) => {
               {new Date(data.jobDetail.performanceEndTime).toLocaleString()}
             </Text>
             <Text>
-              <b>{t(messages.price())}</b>{' '}
-              {numberWithCommas(data.jobDetail.price.min)} -{' '}
+              <b>Giá nghệ sĩ yêu cầu:</b>{' '}
+              {numberWithCommas(data.jobDetail.price.min)}
+            </Text>
+            <Text>
+              <b>Giá organizer yêu cầu:</b>{' '}
               {numberWithCommas(data.jobDetail.price.max)}
             </Text>
             <Text>
@@ -176,6 +178,9 @@ const BookingGeneralCard = ({ data }) => {
             </Text>
             <Text>
               <b>{t(messages.cutoff())}: </b> {numberWithCommas(data.fee)}
+            </Text>
+            <Text>
+              <b>Total: </b> {numberWithCommas(data.total)}
             </Text>
           </VStack>
           <VStack>

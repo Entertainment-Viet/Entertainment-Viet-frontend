@@ -77,7 +77,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const [fileCCCD1, setFileCCCD1] = useState(null);
   const [urlCCCD2, setUrlCCCD2] = useState(example);
   const [fileCCCD2, setFileCCCD2] = useState(null);
-  const introductionNFTRef = useRef(null);
+  // const introductionNFTRef = useRef(null);
   const [isFullData, setFullData] = useState(true);
   const organizerId = window.localStorage.getItem('uid');
   const toast = useToast();
@@ -174,7 +174,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         address: values.street,
         parentId: getValues('district') || organizerInfo.address.parent.uid
       },
-      introduction: introductionNFTRef.current.getContent(),
+      // introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,

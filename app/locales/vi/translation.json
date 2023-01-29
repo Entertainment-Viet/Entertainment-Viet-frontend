@@ -155,7 +155,7 @@
     "overviewDesc": "Đơn hàng của bạn",
     "method": "Hình thức thanh toán",
     "methodPay": "Cách thức thanh toán",
-    "methodDescPay": "Vui lòng thực hiện thanh toán bằng phương thức chuyển khoản đến STK bên dưới. Kiểm tra kỹ nội dung chuyển khoản theo hướng dẫn.",
+    "methodDescPay": "Vui lòng thực hiện thanh toán 3 ngày trước ngày diễn theo mức giá đã chốt với phía nghệ sĩ trong booking. Nếu booking chưa được chốt trước 3 ngày trước khi diễn, BD có thể hủy booking của bạn",
     "methodDesc": "Vui lòng lựa chọn hình thức thanh toán của bạn.",
     "instantPay": "Thanh toán ngay",
     "laterPay": "Thanh toán trả sau",
