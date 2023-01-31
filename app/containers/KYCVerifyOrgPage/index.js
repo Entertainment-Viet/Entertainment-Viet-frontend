@@ -178,11 +178,11 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
-      cccd1: fileCodeCCCD1,
-      cccd2: fileCodeCCCD2,
       representative: values.representative,
       position: values.position,
       checkBoxRemember: values.checkBoxRemember,
+      ...(fileCodeCCCD1 && {cccd1: fileCodeCCCD1}),
+      ...(fileCodeCCCD2 && {cccd2: fileCodeCCCD2}),
     };
     if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
@@ -204,7 +204,8 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         companyName: data.companyName,
         representative: data.representative,
         position: data.position,
-        businessPaper: [data.cccd1, data.cccd2] || [],
+        // businessPaper: [data.cccd1, data.cccd2] || [],
+        ...((data.cccd1 || data.cccd2) && {businessPaper: [data.cccd1, data.cccd2]}),
       };
       put(API_ORGANIZER_KYC, dataSubmit, organizerId)
         .then(res => {
