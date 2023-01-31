@@ -56,7 +56,7 @@ export function BookManagementPage({ data, onLoadData, loading, roles, uid }) {
     <Flex
       color={PRI_TEXT_COLOR}
       gap={8}
-      minWidth="max-content"
+      minWidth="90vw"
       flexWrap={isMobile || isTablet ? 'wrap' : 'none'}
       justifyContent={isTablet ? 'space-around' : 'flex-start'}
     >
