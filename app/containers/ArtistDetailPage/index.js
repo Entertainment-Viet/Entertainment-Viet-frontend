@@ -42,6 +42,7 @@ import Overview from './components/Overview';
 import Review from './components/Review';
 import Calendar from '../Calendar';
 import About from './components/About';
+import { DEFAULT_AVATAR } from '../../constants/storage';
 // import { BasicRating } from '../../components/Rating';
 const key = 'ArtistDetailPage';
 export function ArtistDetailPage({
@@ -62,7 +63,7 @@ export function ArtistDetailPage({
   const [pageNumberComments, setPageNumberComments] = useState(0);
   const [commentsData, setCommentsData] = useState([]);
   const [descriptionImg, setDesciptionImg] = useState([]);
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);

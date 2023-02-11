@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 import ArrowRight from './assets/arrow_right.svg';
-
+import { DEFAULT_AVATAR } from '../../constants/storage';
 const width = [300, 300, 320, 330, 400];
 const imgWidth = width.map(item => item - 3);
 const GradientBox = chakra(Box, {
@@ -59,7 +59,7 @@ function CardEvent(props) {
     }
   }, []);
 
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const [orgAvatar, setOrgAvatar] = useState(null);
   useEffect(() => {
     if (props.data.descriptionImg) {

@@ -30,11 +30,12 @@ import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
 import { PAY_METHOD_VIEW } from '../constants';
+import { DEFAULT_AVATAR } from '../../../constants/storage';
 const DetailPackage = ({ dataPackage, payMethod }) => {
   const { t } = useTranslation();
   const { jobDetail, suggestedPrice, name, talent } = dataPackage;
   const isMobile = useIsMobileView();
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
 
   useEffect(() => {
     if (talent.avatar) {
@@ -84,9 +85,9 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
             style={
               payMethod === PAY_METHOD_VIEW.LATER
                 ? {
-                    justifyContent: 'space-between',
-                    width: '40%',
-                  }
+                  justifyContent: 'space-between',
+                  width: '40%',
+                }
                 : { marginRight: '2%' }
             }
           >
