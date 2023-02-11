@@ -23,7 +23,12 @@ export function* getData() {
   const id = yield select(makeSelectId());
   try {
     const payload = yield call(get, API_TALENT_DETAIL, {}, id);
-    const packages = yield call(get, API_TALENT_PACKAGE, {}, id);
+    const packages = yield call(
+      get,
+      API_TALENT_PACKAGE,
+      { isActive: true },
+      id,
+    );
     yield put(loadDataSuccess(payload, packages));
   } catch (err) {
     yield put(loadDataError(err));

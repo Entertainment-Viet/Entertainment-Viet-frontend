@@ -77,7 +77,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const [fileCCCD1, setFileCCCD1] = useState(null);
   const [urlCCCD2, setUrlCCCD2] = useState(example);
   const [fileCCCD2, setFileCCCD2] = useState(null);
-  const introductionNFTRef = useRef(null);
+  // const introductionNFTRef = useRef(null);
   const [isFullData, setFullData] = useState(true);
   const organizerId = window.localStorage.getItem('uid');
   const toast = useToast();
@@ -174,15 +174,15 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         address: values.street,
         parentId: getValues('district') || organizerInfo.address.parent.uid
       },
-      introduction: introductionNFTRef.current.getContent(),
+      // introduction: introductionNFTRef.current.getContent(),
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
-      cccd1: fileCodeCCCD1,
-      cccd2: fileCodeCCCD2,
       representative: values.representative,
       position: values.position,
       checkBoxRemember: values.checkBoxRemember,
+      ...(fileCodeCCCD1 && {cccd1: fileCodeCCCD1}),
+      ...(fileCodeCCCD2 && {cccd2: fileCodeCCCD2}),
     };
     if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
@@ -204,7 +204,8 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
         companyName: data.companyName,
         representative: data.representative,
         position: data.position,
-        businessPaper: [data.cccd1, data.cccd2] || [],
+        // businessPaper: [data.cccd1, data.cccd2] || [],
+        ...((data.cccd1 || data.cccd2) && {businessPaper: [data.cccd1, data.cccd2]}),
       };
       put(API_ORGANIZER_KYC, dataSubmit, organizerId)
         .then(res => {

@@ -23,7 +23,7 @@ export function* getData(id) {
     const packages = yield call(
       get,
       API_EVENT_POSITIONS,
-      {},
+      { isActive: true },
       id.orgId,
       id.eventId,
     );

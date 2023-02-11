@@ -12,20 +12,13 @@ import { compose } from 'redux';
 import { useTranslation } from 'react-i18next';
 import { createStructuredSelector } from 'reselect';
 
-import {
-  Tab,
-  TabList,
-  Tabs,
-  chakra,
-  TabPanels,
-  TabPanel,
-} from '@chakra-ui/react';
+import { Tab, TabList, Tabs, TabPanels, TabPanel } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { PositionModal } from 'components/Modal';
-import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
+import { TEXT_PURPLE } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
 import { loadDataHeader } from 'components/Header/actions';
@@ -45,14 +38,6 @@ import {
 } from './selectors';
 import Overview from './components/Overview';
 import About from './components/About';
-const CustomTab = chakra(Tab, {
-  baseStyle: {
-    fontWeight: '500',
-    fontSize: '18px',
-    _hover: { color: TEXT_GREEN },
-    _focus: { color: TEXT_GREEN },
-  },
-});
 const key = 'EventDetailPage';
 export function EventDetailPage({
   match,
@@ -111,8 +96,8 @@ export function EventDetailPage({
       </H1> */}
       <Tabs mb="12" isLazy>
         <TabList color={TEXT_PURPLE}>
-          <CustomTab>{t(messages.overview())}</CustomTab>
-          <CustomTab>{t(messages.about())}</CustomTab>
+          <Tab>{t(messages.overview())}</Tab>
+          <Tab>{t(messages.about())}</Tab>
         </TabList>
         {!profile ? (
           <PageSpinner />

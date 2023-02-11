@@ -85,7 +85,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const [isFullData, setFullData] = useState(true);
   const talentId = window.localStorage.getItem('uid');
   const toast = useToast();
-
+  
   const notify = title => {
     toast({
       position: 'top-right',
@@ -169,7 +169,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       fileCodeCCCD2 = await sendFileToAWS(fileCCCD2, true);
     }
     const data = {
-      avatar: fileCodeAvatar,
+      // avatar: fileCodeAvatar,
       userType: values.type,
       fullName: values.fullName,
       displayName: values.displayName,
@@ -182,13 +182,13 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
       accountNameOwner: values.accountNameOwner,
       accountNumber: values.accountNumber,
       bankName: values.bankName,
-      cccd1: fileCodeCCCD1,
-      cccd2: fileCodeCCCD2,
       checkBoxRemember: values.checkBoxRemember,
-      dynamicDataYourSong,
-      dynamicDataYourReward,
+      songs: dynamicDataYourSong,
+      rewards: dynamicDataYourReward,
+      ...(fileCodeCCCD1 && {cccd1: fileCodeCCCD1}),
+      ...(fileCodeCCCD2 && {cccd2: fileCodeCCCD2}),
     };
-
+    console.log(data);
     if (urlCCCD1 === null || urlCCCD2 === null) {
       setFullData(false);
     } else {
@@ -205,9 +205,11 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
         // introduction: data.introduction,
         fullName: data.fullName,
         citizenId: '0AB3425SD5FD',
-        citizenPaper: [data.cccd1, data.cccd2] || [],
-        songs: data.dynamicDataYourSong || [],
-        rewards: data.dynamicDataYourReward || [],
+        // citizenPaper: [data.cccd1, data.cccd2] || [],
+        // songs: data.dynamicDataYourSong || [{}],
+        songs: data.songs || [],
+        rewards: data.rewards || [],
+        ...((data.cccd1 || data.cccd2) && {citizenPaper: [data.cccd1, data.cccd2]}),
       };
       put(API_TALENT_KYC, dataSubmit, talentId)
         .then(res => {

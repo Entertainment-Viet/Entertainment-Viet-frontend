@@ -12,14 +12,7 @@ import { compose } from 'redux';
 import { useTranslation } from 'react-i18next';
 import { createStructuredSelector } from 'reselect';
 
-import {
-  Tab,
-  TabList,
-  Tabs,
-  chakra,
-  TabPanels,
-  TabPanel,
-} from '@chakra-ui/react';
+import { Tab, TabList, Tabs, TabPanels, TabPanel } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -49,15 +42,8 @@ import Overview from './components/Overview';
 import Review from './components/Review';
 import Calendar from '../Calendar';
 import About from './components/About';
+import { DEFAULT_AVATAR } from '../../constants/storage';
 // import { BasicRating } from '../../components/Rating';
-const CustomTab = chakra(Tab, {
-  baseStyle: {
-    fontWeight: '500',
-    fontSize: '18px',
-    _hover: { color: TEXT_GREEN },
-    _focus: { color: TEXT_GREEN },
-  },
-});
 const key = 'ArtistDetailPage';
 export function ArtistDetailPage({
   match,
@@ -77,7 +63,7 @@ export function ArtistDetailPage({
   const [pageNumberComments, setPageNumberComments] = useState(0);
   const [commentsData, setCommentsData] = useState([]);
   const [descriptionImg, setDesciptionImg] = useState([]);
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const toggleModal = inputId => {
     setIsShowing(!isShowing);
     setId(inputId);
@@ -136,7 +122,6 @@ export function ArtistDetailPage({
     if (data.avatar) {
       getFileFromAWS(data.avatar).then(res => {
         setAvatar(res);
-        profile.avatar = res;
       });
     }
   }, [data]);
@@ -154,10 +139,10 @@ export function ArtistDetailPage({
       </H1>
       <Tabs mb="12" isLazy>
         <TabList color={TEXT_PURPLE}>
-          <CustomTab>{t(messages.overview())}</CustomTab>
-          <CustomTab>{t(messages.about())}</CustomTab>
-          <CustomTab>{t(messages.schedule())}</CustomTab>
-          <CustomTab>{t(messages.review())}</CustomTab>
+          <Tab size="md">{t(messages.overview())}</Tab>
+          <Tab>{t(messages.about())}</Tab>
+          <Tab>{t(messages.schedule())}</Tab>
+          <Tab>{t(messages.review())}</Tab>
         </TabList>
         {!profile ? (
           <PageSpinner />

@@ -8,11 +8,11 @@ import { device } from 'constants/styles';
 
 const Wrapper = styled.div`
   @media ${device.mob} {
-    padding: 0px 2rem;
+    padding: 0px 3rem;
     margin: 0 auto;
   }
   @media ${device.tab} {
-    padding: 0px 2rem;
+    padding: 0px 3rem;
     margin: 4rem auto;
   }
   @media ${device.lap} {

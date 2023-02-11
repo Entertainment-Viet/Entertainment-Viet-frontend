@@ -12,7 +12,7 @@ import { numberWithCommas } from 'utils/helpers';
 import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 import { useIsMobileView } from '../../hooks/useIsMobileView';
-
+import { DEFAULT_AVATAR } from '../../constants/storage';
 // const width = [0, 135, 230, 160, 290];
 // const imgWidth = [0, 132, 227, 157, 287];
 function Card(props) {
@@ -54,7 +54,7 @@ function Card(props) {
     },
   });
   const imgWidth = width.map(item => item - 5);
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
   const isMobile = useIsMobileView();
   useEffect(() => {
     if (props.data.avatar) {

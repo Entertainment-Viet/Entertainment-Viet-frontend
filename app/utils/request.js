@@ -80,7 +80,7 @@ export function post(url, params, id1, id2, id3) {
 }
 
 export function put(url, params, id1, id2, id3) {
-  removeEmptyObj(params);
+  // removeEmptyObj(params);
   let replaceUrl = url;
   if (id1 || id2 || id3) {
     // eslint-disable-next-line no-param-reassign

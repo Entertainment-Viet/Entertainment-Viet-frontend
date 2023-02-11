@@ -3,14 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import {
-  Tab,
-  TabList,
-  Tabs,
-  chakra,
-  TabPanels,
-  TabPanel,
-} from '@chakra-ui/react';
+import { Tab, TabList, Tabs, TabPanels, TabPanel } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -39,15 +32,6 @@ export function ManagementPage() {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
-  const CustomTab = chakra(Tab, {
-    baseStyle: {
-      fontWeight: '500',
-      fontSize: '18px',
-      _hover: { color: TEXT_GREEN },
-      _focus: { color: TEXT_PURPLE },
-    },
-  });
-
   const { t } = useTranslation();
 
   return (
@@ -57,11 +41,11 @@ export function ManagementPage() {
       </H1>
       <Tabs mb="12" isLazy>
         <TabList color={TEXT_PURPLE}>
-          <CustomTab>{t(messages.profile())}</CustomTab>
-          <CustomTab>{t(messages.myPackage())}</CustomTab>
-          <CustomTab>{t(messages.orders())}</CustomTab>
-          <CustomTab>{t(messages.schedule())}</CustomTab>
-          <CustomTab>{t(messages.billing())}</CustomTab>
+          <Tab>{t(messages.profile())}</Tab>
+          <Tab>{t(messages.myPackage())}</Tab>
+          <Tab>{t(messages.orders())}</Tab>
+          <Tab>{t(messages.schedule())}</Tab>
+          <Tab>{t(messages.billing())}</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -24,14 +24,26 @@ import {
   convertReadableTime,
   handleAddress,
 } from 'utils/helpers';
+import { useIsMobileView } from 'hooks/useIsMobileView';
+import { getFileFromAWS } from 'utils/request';
 import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
 import { PAY_METHOD_VIEW } from '../constants';
-
+import { DEFAULT_AVATAR } from '../../../constants/storage';
 const DetailPackage = ({ dataPackage, payMethod }) => {
   const { t } = useTranslation();
-  const { jobDetail, suggestedPrice, name } = dataPackage;
+  const { jobDetail, suggestedPrice, name, talent } = dataPackage;
+  const isMobile = useIsMobileView();
+  const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
+
+  useEffect(() => {
+    if (talent.avatar) {
+      getFileFromAWS(talent.avatar).then(res => {
+        setAvatar(res);
+      });
+    }
+  });
   return (
     <>
       <Divider my={5} w="100%" style={{ padding: '0' }} />
@@ -39,24 +51,28 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
         <HStack align="center" justifyContent="space-between">
           <HStack w="60%">
             <Image
-              src="https://bit.ly/2Z4KKcF"
-              alt="demo"
+              src={avatar}
+              alt="avatar"
               boxSize="4rem"
               borderRadius="10%"
             />
-            <VStack alignItems="flex-start">
+            <VStack alignItems="flex-start" w="60%">
               <Text color={TEXT_PURPLE} fontWeight={600} fontSize="20px">
                 {name}
               </Text>
-              <Text color={PRI_TEXT_COLOR} fontWeight={400} fontSize="15px">
+              <Text
+                color={PRI_TEXT_COLOR}
+                fontWeight={400}
+                fontSize={isMobile ? '12px' : '15px'}
+              >
                 {t(messages.packageBoxTime())}:&nbsp;
                 {convertReadableTime(jobDetail.performanceStartTime)}
               </Text>
               <Text
                 color={PRI_TEXT_COLOR}
                 fontWeight={400}
-                fontSize="15px"
-                whiteSpace="nowrap"
+                fontSize={isMobile ? '12px' : '15px'}
+                // whiteSpace="nowrap"
                 textOverflow="ellipsis"
                 overflow="hidden"
               >
@@ -69,16 +85,16 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
             style={
               payMethod === PAY_METHOD_VIEW.LATER
                 ? {
-                    justifyContent: 'space-between',
-                    width: '40%',
-                  }
+                  justifyContent: 'space-between',
+                  width: '40%',
+                }
                 : { marginRight: '2%' }
             }
           >
             <Text
               color={TEXT_GREEN}
               fontWeight={600}
-              fontSize="15px"
+              fontSize={isMobile ? '12px' : '15px'}
               lineHeight="18px"
               whiteSpace="nowrap"
             >
@@ -90,14 +106,14 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
                   bg="transparent"
                   color={PRI_TEXT_COLOR}
                   fontWeight={400}
-                  fontSize="14px"
+                  fontSize={isMobile ? '12px' : '15px'}
                 >
                   {t(messages.packageBoxEdit())}
                 </Button>
                 <Button
                   bg="transparent"
                   color={RED_COLOR}
-                  fontSize="14px"
+                  fontSize={isMobile ? '12px' : '15px'}
                   fontWeight={400}
                 >
                   {t(messages.packageBoxDelete())}

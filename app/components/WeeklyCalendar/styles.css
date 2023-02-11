@@ -81,6 +81,11 @@ option {
     display: inline-block;
     background: #1D1C4C;
 }
+@media screen and (max-width: 1024px) {
+    .weekly-calendar-wrapper {
+        width: 95%;
+    }
+}
 .fc-timegrid-slot.fc-timegrid-slot-label.fc-timegrid-slot-minor, .fc-timegrid-slot.fc-timegrid-slot-lane.fc-timegrid-slot-minor {
     border-top-style: hidden;
 
@@ -100,6 +105,11 @@ option {
 .fc .fc-col-header-cell-cushion {
     text-align: center;
     padding: 2px 1.3rem;
+}
+@media screen and (max-width: 1024px) {
+    .fc .fc-col-header-cell-cushion {
+        padding: 2px 0;
+    }
 }
 .fc-timegrid-event {
     background-color: #BDC1EA !important;

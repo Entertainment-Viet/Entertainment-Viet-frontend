@@ -9,49 +9,34 @@ import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { useTranslation } from 'react-i18next';
 import { createStructuredSelector } from 'reselect';
 
-import {
-  Container,
-  VStack,
-  HStack,
-  Grid,
-  GridItem,
-  Text,
-  Box,
-  Image,
-  Divider,
-  Flex,
-} from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import parserHtml from 'utils/html';
 import Metadata from 'components/Metadata';
-import { PRI_TEXT_COLOR, RED_COLOR } from 'constants/styles';
 
 import PageSpinner from 'components/PageSpinner';
-import styled from 'styled-components';
+import { useIsMobileView, useIsTabletView } from 'hooks/useIsMobileView';
 import BookingGeneralCard from './BookingGeneralCard';
-import Arrow from './assets/arrow.svg';
 import { loadData } from './actions';
-
-import {} from 'constants/routes';
-import {} from './styles';
-import { messages } from './messages';
 
 import saga from './saga';
 import reducer from './reducer';
 import { makeSelectData, makeSelectBookingSuccess } from './selectors';
 import BookingDetailCard from './BookingDetailCard';
-
+import TransferInfo from './TransferInfo';
+import { ENUM_ROLES } from '../../constants/enums';
 const key = 'BookingDetail';
 export function BookingDetailPage({ match, onLoadData, data, loading }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-  const { t } = useTranslation();
+  const role = localStorage.getItem('role');
+  const isTablet = useIsTabletView();
+  const isMobile = useIsMobileView();
 
+  const isMobileView = isTablet || isMobile;
   useEffect(() => {
     const talentId = window.localStorage.getItem('uid');
     onLoadData(match.params.id, talentId);
@@ -102,10 +87,19 @@ export function BookingDetailPage({ match, onLoadData, data, loading }) {
           </VStack>
         </GridItem>
       </Grid> */
-        <Flex zIndex={1} position="relative" gap={4}>
+        <Flex
+          zIndex={1}
+          position="relative"
+          gap={4}
+          flexDirection={isMobileView ? 'column' : 'row'}
+        >
           <BookingGeneralCard data={data} />
-          <Box w="65%" flexGrow={1}>
+          <Box w={!isMobileView ? '65%' : '100%'} flexGrow={1}>
             <BookingDetailCard data={data} />
+
+            {role === ENUM_ROLES.ORG && (
+              <TransferInfo bookingCode={data.bookingCode} total={data.total} />
+            )}
           </Box>
         </Flex>
       ) : (
