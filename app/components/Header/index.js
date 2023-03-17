@@ -34,7 +34,7 @@ import { Wrapper } from './styles';
 import Notification from './Notification';
 import Cart from './Cart';
 import ProfileAvatar from './ProfileAvatar';
-import { makeSelectCartData } from './selectors';
+import { makeSelectCartData, makeSelectNotiData } from './selectors';
 import { ENUM_ROLES } from '../../constants/enums';
 function HeaderButton({ text, href, isExternal = false }) {
   return (
@@ -54,7 +54,7 @@ function HeaderButton({ text, href, isExternal = false }) {
 }
 
 const key = 'Header';
-function Header({ handleSubmit, handleRefresh, cartData }) {
+function Header({ handleSubmit, handleRefresh, cartData, notiData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [searchTerm, setSearchTerm] = useState('');
@@ -117,7 +117,7 @@ function Header({ handleSubmit, handleRefresh, cartData }) {
               href="https://google.com"
               isExternal
             /> */}
-            <Notification />
+            <Notification data={notiData} />
             {cartData && <Cart data={cartData} />}
             <ProfileAvatar />
           </HStack>
@@ -131,6 +131,7 @@ Header.propTypes = {
   handleSubmit: PropTypes.func,
   handleRefresh: PropTypes.func,
   cartData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  notiData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 HeaderButton.propTypes = {
@@ -142,6 +143,7 @@ HeaderButton.propTypes = {
 const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   cartData: makeSelectCartData(),
+  notiData: makeSelectNotiData(),
 });
 
 export function mapDispatchToProps(dispatch) {

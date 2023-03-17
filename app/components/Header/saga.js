@@ -2,11 +2,23 @@
  * Gets the repositories of the user from Github
  */
 
-import { call, put, select, takeEvery, delay, all } from 'redux-saga/effects';
+import {
+  call,
+  put,
+  select,
+  takeEvery,
+  delay,
+  all,
+  takeLatest,
+} from 'redux-saga/effects';
 import { get } from 'utils/request';
-import { API_GET_SHOPPINGCART, API_TALENT_DETAIL } from 'constants/api';
+import {
+  API_GET_SHOPPINGCART,
+  API_TALENT_DETAIL,
+  API_GET_OLD_NOTI,
+} from 'constants/api';
 import { LOAD_DATA } from './constants';
-import { loadDataSuccess, loadDataError } from './actions';
+import { loadDataSuccess, loadDataError, loadNotiDataSuccess } from './actions';
 import { makeSelectId } from './selectors';
 
 export function* getData() {
@@ -31,6 +43,16 @@ export function* getData() {
   }
 }
 
+export function* getNoti(id) {
+  try {
+    const payload = yield call(get, API_GET_OLD_NOTI, {}, id.id);
+    yield put(loadNotiDataSuccess(payload));
+  } catch (err) {
+    yield put(loadDataError(err));
+  }
+}
+
 export default function* watchLatestAction() {
   yield takeEvery(LOAD_DATA, getData);
+  yield takeLatest(LOAD_DATA, getNoti);
 }

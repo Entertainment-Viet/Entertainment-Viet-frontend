@@ -128,7 +128,7 @@ module.exports = options => ({
       'react-dom$': 'react-dom/profiling',
       'react-dom/server': 'react-dom/profiling',
       'scheduler/tracing': 'scheduler/tracing-profiling',
-    }
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

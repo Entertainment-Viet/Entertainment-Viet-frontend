@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   Menu,
   MenuButton,
@@ -6,18 +6,40 @@ import {
   MenuGroup,
   MenuItem,
   Box,
-  Link,
 } from '@chakra-ui/react';
+import { post } from 'utils/request';
 import { SUB_BLU_COLOR, LIGHT_PINK } from 'constants/styles';
-import SockJsClient from 'react-stomp';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { getLocalToken } from 'utils/auth';
 import NotificationBox from './NotificationBox';
 import { NotificationIcon } from '../Icon';
+import { API_READ_NOTI } from '../../constants/api';
 
 // import { NumWrapper } from './Wrapper';
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const Notification = () => {
-  const url = `http://13.214.197.81:8888/api/ws`;
-  const clientRef = useRef();
+const Notification = ({ data }) => {
+  if (data) console.log('noti: ', data);
+  const customHeaders = {
+    token: `Bearer ${getLocalToken()}`,
+  };
+  const myId = localStorage.getItem('uid');
+  const readAllHandler = () => {
+    post(API_READ_NOTI, {}, localStorage.getItem('uid'));
+  };
+
+  const sock = new SockJS(`${process.env.REACT_APP_API}/api/ws`);
+  const stomptClient = Stomp.over(sock);
+  sock.onopen = () => {
+    console.log('opened');
+  };
+
+  stomptClient.connect(customHeaders, function(frame) {
+    console.log('Connected: ', frame);
+    stomptClient.subscribe(`/user/${myId}/topic/booking`, message => {
+      console.log(message);
+    });
+  });
   // useEffect(() => {
 
   // }, []);
@@ -26,16 +48,6 @@ const Notification = () => {
   // };
   return (
     <Menu onCloseSelect={false}>
-      <SockJsClient
-        url={url}
-        topics={['/user/baodk3/topic/booking']}
-        onMessage={msg => {
-          console.log(msg);
-        }}
-        ref={client => {
-          clientRef.current = client;
-        }}
-      />
       <MenuButton>
         <NotificationIcon />
         {/* <NumWrapper>{1}</NumWrapper> */}
@@ -60,18 +72,62 @@ const Notification = () => {
             <Box as="h1" color={SUB_BLU_COLOR} fontSize="24px" m="0.4rem">
               Notification
             </Box>
-            <Link
-              href="https://google.com"
+            <Box
               right="1rem"
               position="absolute"
               _hover={{ textDecoration: 'none' }}
               borderBottom={`1px solid ${SUB_BLU_COLOR}`}
               fontWeight={600}
             >
-              <Box as="span" color={SUB_BLU_COLOR} fontWeight={500}>
+              <Box
+                as="span"
+                color={SUB_BLU_COLOR}
+                fontWeight={500}
+                onClick={readAllHandler}
+              >
                 Mark all as read
               </Box>
-            </Link>
+            </Box>
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
+          </MenuItem>
+        </MenuGroup>
+        <MenuGroup>
+          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+            <NotificationBox />
           </MenuItem>
         </MenuGroup>
         <MenuGroup>
