@@ -11,7 +11,7 @@ const NormalProfile = ({ profile }) => (
   <Container p={0} w="100%" maxWidth="inherit">
     <Flex direction={{ sm: 'column', md: 'row' }} w="100%" height="25rem">
       <ProfileCard data={profile.organizer} avatar={profile.organizer.avatar} />
-      <Box bg={PRI_BACKGROUND} w="100%" p={4} mt={{ sm: '1rem', lg: 0 }}>
+      <Box bg={PRI_BACKGROUND} w="100%" p={8} mt={{ sm: '1rem', lg: 0 }}>
         {parserHtml(profile.organizer.bio)}
       </Box>
     </Flex>

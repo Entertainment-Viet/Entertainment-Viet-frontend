@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Menu,
   MenuButton,
@@ -8,7 +8,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { post } from 'utils/request';
-import { SUB_BLU_COLOR, LIGHT_PINK } from 'constants/styles';
+import { SUB_BLU_COLOR, LIGHT_PINK, TEXT_GREEN } from 'constants/styles';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { getLocalToken } from 'utils/auth';
@@ -19,7 +19,7 @@ import { API_READ_NOTI } from '../../constants/api';
 // import { NumWrapper } from './Wrapper';
 // If you want to use your own Selectors look up the Advancaed Story book examples
 const Notification = ({ data }) => {
-  if (data) console.log('noti: ', data);
+  const [noti, setNoti] = useState(false);
   const customHeaders = {
     token: `${getLocalToken()}`,
   };
@@ -37,12 +37,13 @@ const Notification = ({ data }) => {
   stomptClient.connect(customHeaders, function(frame) {
     console.log('Connected: ', frame);
     stomptClient.subscribe(`/user/${myId}/topic/booking`, message => {
-      console.log(message);
+      const body = JSON.parse(message.body);
+      setNoti([...noti, body]);
     });
   });
-  // useEffect(() => {
-
-  // }, []);
+  useEffect(() => {
+    setNoti(data.content);
+  }, [data]);
   // const sendMessage = msg => {
   //   clientRef.current.sendMessage('/user/baodk3/topic/booking', msg);
   // };
@@ -90,56 +91,14 @@ const Notification = ({ data }) => {
             </Box>
           </MenuItem>
         </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
-        <MenuGroup>
-          <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-            <NotificationBox />
-          </MenuItem>
-        </MenuGroup>
+        {noti &&
+          noti.map(item => (
+            <MenuGroup bg={item.isRead === false && TEXT_GREEN}>
+              <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
+                <NotificationBox item={item} />
+              </MenuItem>
+            </MenuGroup>
+          ))}
       </MenuList>
     </Menu>
   );

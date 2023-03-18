@@ -15,7 +15,7 @@ const NormalProfile = ({ profile, avatar }) => (
         bg={PRI_BACKGROUND}
         // h="26rem"
         w="100%"
-        p={4}
+        p={8}
         mt={{ sm: '1rem', lg: 0 }}
       >
         {parseHtml(JSON.parse(profile.extensions)[1].value)}

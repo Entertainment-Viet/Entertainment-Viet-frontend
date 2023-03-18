@@ -8,9 +8,10 @@ import {
   Text,
   Divider,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const NotificationBox = () => (
+const NotificationBox = ({ item }) => (
   <Container>
     <HStack align="center">
       <Box>
@@ -24,16 +25,18 @@ const NotificationBox = () => (
       </Box>
       <Flex>
         <Text fontWeight={600} fontSize={15}>
-          Conor
+          {item.content}
         </Text>
-        <Text fontWeight={400} fontSize={15}>
+        {/* <Text fontWeight={400} fontSize={15}>
           &nbsp;vừa chấp nhận yêu cầu của bạn
-        </Text>
+        </Text> */}
       </Flex>
     </HStack>
     <Divider w="100%" ml="auto" mr="auto" mt="1rem" />
   </Container>
 );
 
-NotificationBox.propTypes = {};
+NotificationBox.propTypes = {
+  item: PropTypes.any,
+};
 export default NotificationBox;
