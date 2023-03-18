@@ -21,7 +21,7 @@ import { API_READ_NOTI } from '../../constants/api';
 const Notification = ({ data }) => {
   if (data) console.log('noti: ', data);
   const customHeaders = {
-    token: `Bearer ${getLocalToken()}`,
+    token: `${getLocalToken()}`,
   };
   const myId = localStorage.getItem('uid');
   const readAllHandler = () => {
