@@ -46,7 +46,7 @@ export function* getData() {
   try {
     const payload = yield call(get, API_EVENT_SEARCH, {
       page: page - 1,
-      name: search,
+      searchPattern: search,
       category,
       startTime: start,
       endTime: end,
