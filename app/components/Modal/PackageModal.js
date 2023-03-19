@@ -1,4 +1,7 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState, memo } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import './Modal.css';
@@ -22,6 +25,7 @@ import { numberWithCommas } from 'utils/helpers';
 import parserHtml from 'utils/html';
 import { post } from 'utils/request';
 import { useForm } from 'react-hook-form';
+import { loadDataHeader } from '../Header/actions';
 // import { GoogleMap, Phone } from '../Icon';
 import { messages } from './messages';
 import { useNotification } from '../../hooks/useNotification';
@@ -49,10 +53,11 @@ const PackageModal = props => {
   const [offerData, setOfferData] = useState();
 
   function onSubmit(values) {
+    const myId = localStorage.getItem('uid');
     const val = {
       // attachment: file,
       ...values,
-      organizerId: window.localStorage.getItem('uid'),
+      organizerId: myId,
     };
     post(
       `/api/talents/${props.talentId}/packages/${
@@ -64,6 +69,7 @@ const PackageModal = props => {
         notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
         return;
       }
+      props.handleFetchCartData(myId);
       notify('Thành công');
     });
   }
@@ -213,4 +219,21 @@ const PackageModal = props => {
   );
 };
 
-export default PackageModal;
+const mapStateToProps = createStructuredSelector({});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    handleFetchCartData: id => {
+      dispatch(loadDataHeader(id));
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+export default compose(
+  withConnect,
+  memo,
+)(PackageModal);

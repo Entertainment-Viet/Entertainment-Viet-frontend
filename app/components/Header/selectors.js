@@ -39,6 +39,12 @@ const makeSelectNotiData = () =>
     State => State.notiData,
   );
 
+const makeSelectUnreadNoti = () =>
+  createSelector(
+    selectState,
+    State => State.countUnread,
+  );
+
 export {
   makeSelectCartData,
   makeSelectNFTError,
@@ -46,4 +52,5 @@ export {
   makeSelectId,
   makeSelectPackages,
   makeSelectNotiData,
+  makeSelectUnreadNoti,
 };

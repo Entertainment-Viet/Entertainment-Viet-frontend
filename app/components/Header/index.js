@@ -25,7 +25,7 @@ import {
 } from 'containers/EventSearchResultPage/actions';
 import { makeSelectSearch } from 'containers/SearchResultPage/selectors';
 import { TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
-import { loadDataHeader } from './actions';
+import { loadDataHeader, loadNoti } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -34,7 +34,11 @@ import { Wrapper } from './styles';
 import Notification from './Notification';
 import Cart from './Cart';
 import ProfileAvatar from './ProfileAvatar';
-import { makeSelectCartData, makeSelectNotiData } from './selectors';
+import {
+  makeSelectCartData,
+  makeSelectNotiData,
+  makeSelectUnreadNoti,
+} from './selectors';
 import { ENUM_ROLES } from '../../constants/enums';
 function HeaderButton({ text, href, isExternal = false }) {
   return (
@@ -54,7 +58,14 @@ function HeaderButton({ text, href, isExternal = false }) {
 }
 
 const key = 'Header';
-function Header({ handleSubmit, handleRefresh, cartData, notiData }) {
+function Header({
+  handleSubmit,
+  handleRefresh,
+  cartData,
+  notiData,
+  unreadCount,
+  handleGetNoti,
+}) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const [searchTerm, setSearchTerm] = useState('');
@@ -65,6 +76,7 @@ function Header({ handleSubmit, handleRefresh, cartData, notiData }) {
 
   useEffect(() => {
     handleRefresh(orgId);
+    handleGetNoti(orgId);
   }, []);
 
   return (
@@ -117,7 +129,7 @@ function Header({ handleSubmit, handleRefresh, cartData, notiData }) {
               href="https://google.com"
               isExternal
             /> */}
-            <Notification data={notiData} />
+            <Notification data={notiData} unreadCount={unreadCount} />
             {cartData && <Cart data={cartData} />}
             <ProfileAvatar />
           </HStack>
@@ -130,8 +142,10 @@ function Header({ handleSubmit, handleRefresh, cartData, notiData }) {
 Header.propTypes = {
   handleSubmit: PropTypes.func,
   handleRefresh: PropTypes.func,
+  handleGetNoti: PropTypes.func,
   cartData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   notiData: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  unreadCount: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
 };
 
 HeaderButton.propTypes = {
@@ -144,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
   search: makeSelectSearch(),
   cartData: makeSelectCartData(),
   notiData: makeSelectNotiData(),
+  unreadCount: makeSelectUnreadNoti(),
 });
 
 export function mapDispatchToProps(dispatch) {
@@ -160,6 +175,9 @@ export function mapDispatchToProps(dispatch) {
     },
     handleRefresh: id => {
       dispatch(loadDataHeader(id));
+    },
+    handleGetNoti: id => {
+      dispatch(loadNoti(id));
     },
   };
 }

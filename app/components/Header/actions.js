@@ -3,6 +3,7 @@ import {
   LOAD_DATA_SUCCESS,
   LOAD_DATA_ERROR,
   LOAD_NOTI_DATA_SUCCESS,
+  LOAD_NOTI,
 } from './constants';
 
 export function loadDataHeader(id) {
@@ -11,11 +12,18 @@ export function loadDataHeader(id) {
     id,
   };
 }
+export function loadNoti(id) {
+  return {
+    type: LOAD_NOTI,
+    id,
+  };
+}
 
-export function loadNotiDataSuccess(notiData) {
+export function loadNotiDataSuccess(notiData, countUnread) {
   return {
     type: LOAD_NOTI_DATA_SUCCESS,
     notiData,
+    countUnread,
   };
 }
 

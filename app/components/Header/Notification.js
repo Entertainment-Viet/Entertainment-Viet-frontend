@@ -16,16 +16,18 @@ import NotificationBox from './NotificationBox';
 import { NotificationIcon } from '../Icon';
 import { API_READ_NOTI } from '../../constants/api';
 
-// import { NumWrapper } from './Wrapper';
+import { NumWrapper } from './Wrapper';
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const Notification = ({ data }) => {
+const Notification = ({ data, unreadCount }) => {
   const [noti, setNoti] = useState(false);
+  const [count, setCount] = useState(0);
   const customHeaders = {
     token: `${getLocalToken()}`,
   };
   const myId = localStorage.getItem('uid');
   const readAllHandler = () => {
     post(API_READ_NOTI, {}, localStorage.getItem('uid'));
+    setCount(0);
   };
 
   const sock = new SockJS(`${process.env.REACT_APP_API}/api/ws`);
@@ -34,24 +36,25 @@ const Notification = ({ data }) => {
     console.log('opened');
   };
 
-  stomptClient.connect(customHeaders, function(frame) {
-    console.log('Connected: ', frame);
+  stomptClient.connect(customHeaders, function() {
     stomptClient.subscribe(`/user/${myId}/topic/booking`, message => {
+      console.log(message);
       const body = JSON.parse(message.body);
-      setNoti([...noti, body]);
+      setNoti([body, ...noti]);
     });
   });
   useEffect(() => {
     setNoti(data.content);
-  }, [data]);
+    setCount(unreadCount);
+  }, [data, unreadCount]);
   // const sendMessage = msg => {
   //   clientRef.current.sendMessage('/user/baodk3/topic/booking', msg);
   // };
   return (
     <Menu onCloseSelect={false}>
-      <MenuButton>
+      <MenuButton pos="relative">
         <NotificationIcon />
-        {/* <NumWrapper>{1}</NumWrapper> */}
+        {unreadCount > 0 && <NumWrapper>{count}</NumWrapper>}
       </MenuButton>
       <MenuList
         minWidth="240px"

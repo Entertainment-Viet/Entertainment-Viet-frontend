@@ -191,9 +191,6 @@ const Orders = ({
       )} - ${numberWithCommas(booking.jobDetail.price.max)}`,
       action: (
         <HStack>
-          <Button colorScheme="purple" size="xs">
-            {t(messages.done())}
-          </Button>
           <Link
             href={`${ROUTE_BOOKING_DETAIL_MANAGER.replace(':id', booking.uid)}`}
           >
@@ -202,7 +199,7 @@ const Orders = ({
             </Button>
           </Link>
           <Button colorScheme="red" size="xs">
-            {t(messages.cancel())}
+            {t(messages.delete())}
           </Button>
         </HStack>
       ),
@@ -270,6 +267,34 @@ const Orders = ({
             color={active === 2 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.pending())}
+          </Button>
+          <Button
+            borderBottom="1px solid"
+            bg="transparent"
+            sx={{
+              borderRadius: '0',
+              borderColor: active === 5 ? TEXT_GREEN : 'transparent',
+              fontWeight: '10px',
+            }}
+            onClick={() => handleChangeStatus(5, 'booking.status.confirmed')}
+            color={active === 5 ? TEXT_PURPLE : 'white'}
+          >
+            Pending done
+          </Button>
+          <Button
+            borderBottom="1px solid"
+            bg="transparent"
+            sx={{
+              borderRadius: '0',
+              borderColor: active === 6 ? TEXT_GREEN : 'transparent',
+              fontWeight: '10px',
+            }}
+            onClick={() =>
+              handleChangeStatus(6, 'booking.status.talent-finished')
+            }
+            color={active === 6 ? TEXT_PURPLE : 'white'}
+          >
+            Waiting for you to confirm
           </Button>
           <Button
             borderBottom="1px solid"

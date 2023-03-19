@@ -12,6 +12,7 @@ export const initialState = {
   cartData: false,
   id: '',
   notiData: false,
+  countUnread: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -34,6 +35,7 @@ const pageReducer = (state = initialState, action) =>
         break;
       case LOAD_NOTI_DATA_SUCCESS:
         draft.notiData = action.notiData;
+        draft.countUnread = action.countUnread;
         break;
     }
   });
