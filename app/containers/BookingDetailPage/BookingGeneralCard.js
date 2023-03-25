@@ -12,7 +12,7 @@ import { PropTypes } from 'prop-types';
 import PageSpinner from 'components/PageSpinner';
 
 import { post, del } from 'utils/request';
-import { numberWithCommas } from 'utils/helpers';
+import { numberWithCommas, convertReadableTime } from 'utils/helpers';
 import {
   API_GET_BOOKING_TALENT_INFO,
   API_GET_BOOKING_ORG_INFO,
@@ -83,7 +83,6 @@ const BookingGeneralCard = ({ data }) => {
     // loadPackage(inputId, match.params.id);
   };
   function isEnableButton() {
-    console.log('aaa');
     if (role === 'talent') {
       return data.status !== ENUM_BOOKING_STATUS.TALENT_PENDING;
     }
@@ -147,12 +146,18 @@ const BookingGeneralCard = ({ data }) => {
               <b>Organizer:</b> {data.organizerName}
             </Text>
             <Text>
+              <b>Phone number:</b> {data.org.phoneNumber}
+            </Text>
+            <Text>
               <b>Talent:</b> {data.talent.displayName}
             </Text>
             <Text>
+              <b>Phone number:</b> {data.talent.phoneNumber}
+            </Text>
+            <Text>
               <b>{t(messages.performTime())}</b>{' '}
-              {new Date(data.jobDetail.performanceStartTime).toLocaleString()} -{' '}
-              {new Date(data.jobDetail.performanceEndTime).toLocaleString()}
+              {convertReadableTime(data.jobDetail.performanceStartTime)} -{' '}
+              {convertReadableTime(data.jobDetail.performanceEndTime)}
             </Text>
             <Text>
               <b>Giá nghệ sĩ yêu cầu:</b>{' '}

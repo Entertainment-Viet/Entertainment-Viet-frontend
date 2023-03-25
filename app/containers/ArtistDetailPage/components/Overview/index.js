@@ -30,7 +30,6 @@ const Overview = ({
   avatar,
 }) => {
   const { t } = useTranslation();
-  const mockHashtag = ['#đẹp trai vãi lồn', 'học trò xạo lồn của Bảo'];
   return (
     <Grid
       templateRows="repeat(2, 1fr)"
@@ -53,9 +52,9 @@ const Overview = ({
             </GridItem>
           </Grid>
           <HStack>
-            {mockHashtag.map(item => (
-              <Hashtag text={item} />
-            ))}
+            {data.hashTag &&
+              data.hashTag.length > 0 &&
+              data.hashTag.map(item => <Hashtag text={item} />)}
           </HStack>
         </VStack>
       </GridItem>

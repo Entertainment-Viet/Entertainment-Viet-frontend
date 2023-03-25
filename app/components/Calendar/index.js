@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { JobDetailModal } from 'components/Modal';
+// import { JobDetailModal } from 'components/Modal';
 import PropTypes from 'prop-types';
 import { toLocalISOTime } from '../../utils/helpers';
 // import { INITIAL_EVENTS } from './event-utils';
@@ -13,13 +13,14 @@ import '@fullcalendar/timegrid/main.css';
 import './styles.css';
 
 export default function Calendar({ onSelectDate, data }) {
+  const myRole = localStorage.getItem('role');
   const [currentEvents, setCurrentEvents] = useState([]);
-  const [isShowing, setIsShowing] = useState(false);
-  const [id, setId] = useState();
-  const toggleModal = inputId => {
-    setIsShowing(!isShowing);
-    setId(inputId);
-  };
+  // const [isShowing, setIsShowing] = useState(false);
+  // const [id, setId] = useState();
+  // const toggleModal = inputId => {
+  //   setIsShowing(!isShowing);
+  //   setId(inputId);
+  // };
   // const events = [];
   // useEffect(() => {
   //   if (data) {
@@ -46,7 +47,7 @@ export default function Calendar({ onSelectDate, data }) {
       data.content.map(event => {
         const tempt = {
           id: event.uid,
-          title: event.packageName,
+          title: myRole === 'talent' ? event.organizerName : event.talentName,
           start: toLocalISOTime(new Date(event.jobDetail.performanceStartTime)),
           end: toLocalISOTime(new Date(event.jobDetail.performanceEndTime)),
           backgroundColor: '#805AD5',
@@ -101,7 +102,7 @@ export default function Calendar({ onSelectDate, data }) {
     // }
   };
 
-  const handleEventClick = clickInfo => {
+  const handleEventClick = () => {
     // const calendarApi = clickInfo.view.calendar;
     // console.log(clickInfo.view.getCurrentData());
     // console.log(clickInfo.event);
@@ -112,7 +113,7 @@ export default function Calendar({ onSelectDate, data }) {
     // ) {
     //   clickInfo.event.remove();
     // }
-    toggleModal(clickInfo.event.title);
+    // toggleModal(clickInfo.event.title);
   };
 
   const handleEvents = events => {
@@ -153,12 +154,12 @@ export default function Calendar({ onSelectDate, data }) {
             */
       />
       {/* </div> */}
-      <JobDetailModal
+      {/* <JobDetailModal
         title="My Modal"
         onClose={() => toggleModal()}
         show={isShowing}
         id={id}
-      />
+      /> */}
     </div>
   );
 }
