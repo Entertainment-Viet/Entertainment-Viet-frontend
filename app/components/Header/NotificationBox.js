@@ -27,9 +27,6 @@ const NotificationBox = ({ item }) => (
         <Text fontWeight={600} fontSize={15}>
           {item.content}
         </Text>
-        {/* <Text fontWeight={400} fontSize={15}>
-          &nbsp;vừa chấp nhận yêu cầu của bạn
-        </Text> */}
       </Flex>
     </HStack>
     <Divider w="100%" ml="auto" mr="auto" mt="1rem" />

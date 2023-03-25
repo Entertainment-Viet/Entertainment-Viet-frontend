@@ -34,7 +34,8 @@ import CitySelector from '../CitySelector/Loadable';
 import ImageUploadInput from '../../components/ImageUploadInput';
 import useThumbnailImgs from '../../components/ImageUploadInput/useThumbnailImgs';
 import { useNotification } from '../../hooks/useNotification';
-import DynamicArrayForm from '../../components/DynamicInputForm';
+import DynamicForm from '../../components/DynamicInputForm';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -140,11 +141,8 @@ export function CreateEventPage() {
                 <ImageUploadInput thumbnailComposable={thumbnailComposable} />
               </FormControl>
               <FormControl>
-                <CustomFormLabel>Create hashtag for your event</CustomFormLabel>
-                <DynamicArrayForm
-                  setDynamicData={setDynamicHashtag}
-                  data={[]}
-                />
+                <CustomFormLabel>Create your own hashtag</CustomFormLabel>
+                <DynamicForm setDynamicData={setDynamicHashtag} />
               </FormControl>
               <FormControl isInvalid={errors.name}>
                 <CustomFormLabel htmlFor="description">

@@ -12,6 +12,7 @@ import { SUB_BLU_COLOR, LIGHT_PINK, TEXT_GREEN } from 'constants/styles';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { getLocalToken } from 'utils/auth';
+import { Link } from 'react-router-dom';
 import NotificationBox from './NotificationBox';
 import { NotificationIcon } from '../Icon';
 import { API_READ_NOTI } from '../../constants/api';
@@ -41,6 +42,7 @@ const Notification = ({ data, unreadCount }) => {
       console.log(message);
       const body = JSON.parse(message.body);
       setNoti([body, ...noti]);
+      setCount(count + 1);
     });
   });
   useEffect(() => {
@@ -98,7 +100,9 @@ const Notification = ({ data, unreadCount }) => {
           noti.map(item => (
             <MenuGroup bg={item.isRead === false && TEXT_GREEN}>
               <MenuItem _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}>
-                <NotificationBox item={item} />
+                <Link to={`/booking/${item.bookingUid}`}>
+                  <NotificationBox item={item} />
+                </Link>
               </MenuItem>
             </MenuGroup>
           ))}

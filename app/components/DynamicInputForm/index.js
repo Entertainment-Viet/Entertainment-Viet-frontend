@@ -8,7 +8,7 @@ function DynamicArrayForm(props) {
   const [formFields, setFormFields] = useState();
 
   useEffect(() => {
-    if (props.data.length > 0) {
+    if (props.data && props.data.length > 0) {
       console.log('dynamic: ', props.data);
       setFormFields(props.data);
       props.setDynamicData(props.data);

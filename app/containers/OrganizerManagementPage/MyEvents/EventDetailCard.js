@@ -6,6 +6,7 @@ import {
   UnorderedList,
   ListItem,
   Link,
+  HStack,
 } from '@chakra-ui/react';
 import { SUB_BLU_COLOR, TEXT_GREEN, TEXT_PURPLE } from 'constants/styles';
 import { H1 } from 'components/Elements';
@@ -16,6 +17,7 @@ import PageSpinner from 'components/PageSpinner';
 import parserHtml from 'utils/html';
 // import { numberWithCommas } from '../../../utils/helpers';
 import { handleAddress } from '../../../utils/helpers';
+import Hashtag from '../../../components/Hashtag';
 const GradientBox = chakra(Box, {
   baseStyle: {
     flex: 1,
@@ -68,7 +70,7 @@ const PackageDetailCard = ({ data }) => (
           {data.name}
         </H1>
         <Text color={TEXT_PURPLE} mt={6}>
-          Details
+          Details:
         </Text>
         <UnorderedList>
           <ListItem>
@@ -84,6 +86,11 @@ const PackageDetailCard = ({ data }) => (
             <Text>Note: {parserHtml(data.description)} </Text>
           </ListItem>
         </UnorderedList>
+        <HStack>
+          {data.hashTag &&
+            data.hashTag.length > 0 &&
+            data.hashTag.map(item => <Hashtag text={item} />)}
+        </HStack>
         <Link href={`event-billing/${data.uid}`}>
           <Text textAlign="right" color={TEXT_GREEN} mt="30px" mb="-30px">
             Tổng chi Event
