@@ -55,6 +55,7 @@ import useThumbnailImgs from '../../../components/ImageUploadInput/useThumbnailI
 import CategorySelector from '../../CategorySelector';
 import { toBase64 } from '../../../utils/helpers';
 import FormWrapper from '../../../components/ContentWrapper/FormWrapper';
+import DynamicForm from '../../../components/DynamicInputForm';
 
 const key = 'Profile';
 
@@ -83,8 +84,8 @@ const Profile = ({
   const bioNFTRef = useRef(null);
   const talentId = window.localStorage.getItem('uid');
   const [subCategory, setSubCategory] = useState(null);
+  const [dynamicHashtag, setDynamicHashtag] = useState([]);
   const toast = useToast();
-
   const thumbnailComposable = useThumbnailImgs(5);
   const notify = title => {
     toast({
@@ -176,6 +177,7 @@ const Profile = ({
       extensions: JSON.stringify(preData),
       offerCategories: [data.category],
       descriptionImg,
+      hashTag: dynamicHashtag,
     };
     put(API_TALENT_DETAIL, dataSubmit, talentId)
       .then(async res =>{
@@ -279,6 +281,10 @@ const Profile = ({
                   })}
                   defaultValue={talentInfo.displayName}
                 />
+              </FormControl>
+              <FormControl>
+                <CustomFormLabel>Create your own hashtag</CustomFormLabel>
+                <DynamicForm setDynamicData={setDynamicHashtag} data={talentInfo.hashTag} />
               </FormControl>
               <Text color={RED_COLOR}>
                 {errors.displayName && errors.displayName.message}

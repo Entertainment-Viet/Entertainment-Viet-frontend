@@ -6,6 +6,7 @@ import {
   GridItem,
   Text,
   Divider,
+  HStack,
 } from '@chakra-ui/react';
 import { ImageSliderWithPreview } from 'components/Carousel';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +17,7 @@ import { messages } from '../../messages';
 import Header from '../../Header';
 import NormalProfile from '../../NormalProfile';
 import PositionBox from '../../PositionBox';
+import Hashtag from '../../../../components/Hashtag';
 
 const Overview = ({ data, match, positions, toggleModal, carousel }) => {
   const { t } = useTranslation();
@@ -34,6 +36,11 @@ const Overview = ({ data, match, positions, toggleModal, carousel }) => {
           <Grid templateColumns="repeat(6, 1fr)" gap={2}>
             <GridItem colSpan={[6, 6, 6, 6, 4]}>
               <ImageSliderWithPreview slides={carousel} />
+              <HStack>
+                {data.hashTag &&
+                  data.hashTag.length > 0 &&
+                  data.hashTag.map(item => <Hashtag text={item} />)}
+              </HStack>
             </GridItem>
             <GridItem colSpan={[6, 6, 6, 6, 2]}>
               <PositionBox data={positions.content} toggleModal={toggleModal} />

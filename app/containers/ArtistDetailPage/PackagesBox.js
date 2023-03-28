@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import {
   Box,
   Link,
@@ -28,12 +31,13 @@ import {
 import cRequest from 'utils/server';
 import { numberWithCommas, handleAddress } from 'utils/helpers';
 import PropTypes from 'prop-types';
+import { loadDataHeader } from 'components/Header/actions';
 import Cart from './assets/Cart-white.svg';
 import { useNotification } from '../../hooks/useNotification';
 
-const PackagesBox = ({ data, id, toggleModal }) => {
+const PackagesBox = ({ data, id, toggleModal, handleFetchCartData }) => {
   const { notify } = useNotification();
-
+  const myId = localStorage.getItem('uid');
   function handleSelect(pId, price) {
     cRequest
       .post(`/api/talents/${id}/packages/${pId}/bookings/shoppingcart`, {
@@ -47,6 +51,7 @@ const PackagesBox = ({ data, id, toggleModal }) => {
           );
           return;
         }
+        handleFetchCartData(myId);
         notify('Thêm thành công');
       });
   }
@@ -150,4 +155,21 @@ PackagesBox.propTypes = {
   id: PropTypes.string,
   toggleModal: PropTypes.func,
 };
-export default PackagesBox;
+const mapStateToProps = createStructuredSelector({});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    handleFetchCartData: id => {
+      dispatch(loadDataHeader(id));
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+export default compose(
+  withConnect,
+  memo,
+)(PackagesBox);

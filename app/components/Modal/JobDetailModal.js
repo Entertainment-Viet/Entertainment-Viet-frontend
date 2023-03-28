@@ -5,11 +5,18 @@ import './Modal.css';
 import { HStack, Text, Box, VStack, Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { PRI_TEXT_COLOR, TEXT_PURPLE, TEXT_GREEN } from 'constants/styles';
-import { numberWithCommas, handleAddress } from 'utils/helpers';
+import {
+  numberWithCommas,
+  handleAddress,
+  convertReadableTime,
+} from 'utils/helpers';
 import parserHtml from 'utils/html';
+import { Link } from 'react-router-dom';
 import { GoogleMap, Phone } from '../Icon';
 import { messages } from './messages';
+
 const JobDetailModal = props => {
+  const myRole = localStorage.getItem('role');
   const { t } = useTranslation();
   const closeOnEscapeKeyDown = e => {
     if ((e.charCode || e.keyCode) === 27) {
@@ -44,18 +51,24 @@ const JobDetailModal = props => {
           onClick={e => e.stopPropagation()}
           onKeyPress={closeOnEscapeKeyDown}
         >
-          {props.data && (
+          {props.data && props.data.organizerName && props.data.talentName ? (
             <VStack align="flex-start" p={4} spacing={4}>
               <HStack align="flex-start">
                 <Box bg={TEXT_GREEN} w={20} h={14} borderRadius={4} />
                 <Container>
-                  <Box color={TEXT_PURPLE} as="h1" fontSize="18px">
-                    {props.data.packageName}
-                  </Box>
+                  <Link to={`/booking/${props.data.uid}`}>
+                    <Box color={TEXT_PURPLE} as="h1" fontSize="18px">
+                      {myRole === 'talent'
+                        ? `Organizer: ${props.data.organizerName}`
+                        : `Talent: ${props.data.talentName}`}
+                    </Box>
+                  </Link>
                   <Box as="span" color={PRI_TEXT_COLOR}>
-                    {new Date(
+                    {`${convertReadableTime(
                       props.data.jobDetail.performanceStartTime,
-                    ).toLocaleString()}
+                    )} - ${convertReadableTime(
+                      props.data.jobDetail.performanceEndTime,
+                    )}`}
                   </Box>
                 </Container>
               </HStack>
@@ -90,6 +103,8 @@ const JobDetailModal = props => {
               </Box>
               {/* <Link href="/" alignSelf="flex-end"> */}
             </VStack>
+          ) : (
+            <Text>Thông tin được bảo mật</Text>
           )}
           <div className="modal-footer" />
         </div>

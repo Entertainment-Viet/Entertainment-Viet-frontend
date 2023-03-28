@@ -40,7 +40,7 @@ export function* getData() {
   try {
     const payload = yield call(get, API_TALENT_LIST, {
       page: page - 1,
-      displayName: search,
+      searchPattern: search,
       category,
       startTime: start,
       endTime: end,

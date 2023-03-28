@@ -33,10 +33,24 @@ const makeSelectId = () =>
     State => State.id,
   );
 
+const makeSelectNotiData = () =>
+  createSelector(
+    selectState,
+    State => State.notiData,
+  );
+
+const makeSelectUnreadNoti = () =>
+  createSelector(
+    selectState,
+    State => State.countUnread,
+  );
+
 export {
   makeSelectCartData,
   makeSelectNFTError,
   makeSelectNFTLoading,
   makeSelectId,
   makeSelectPackages,
+  makeSelectNotiData,
+  makeSelectUnreadNoti,
 };

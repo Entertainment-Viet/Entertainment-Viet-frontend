@@ -19,6 +19,8 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { ROUTE_BOOKING_DETAIL_MANAGER } from 'constants/routes';
+import { del } from 'utils/request';
+import { API_GET_BOOKING_TALENT_INFO } from 'constants/api';
 import { messages } from '../messages';
 import { changePage, changeLimit, loadBookings } from './slice/actions';
 import saga from './slice/saga';
@@ -116,6 +118,12 @@ const Orders = ({
   const [hasFilterStatus, setHasFilterStatus] = useState(false);
   const [isFilterAll, setIsFilterAll] = useState(true);
   const [isFilterUpcoming, setIsFilterUpcoming] = useState(false);
+  const myId = localStorage.getItem('uid');
+  const handleArchiveBooking = bookingId => {
+    del(API_GET_BOOKING_TALENT_INFO, {}, myId, bookingId).then(() => {
+      loadBookings(status, hasFilterStatus, isFilterAll, isFilterUpcoming);
+    });
+  };
 
   useEffect(() => {
     loadBookings(status, hasFilterStatus, isFilterAll, isFilterUpcoming);
@@ -191,9 +199,6 @@ const Orders = ({
       )} - ${numberWithCommas(booking.jobDetail.price.max)}`,
       action: (
         <HStack>
-          <Button colorScheme="purple" size="xs">
-            {t(messages.done())}
-          </Button>
           <Link
             href={`${ROUTE_BOOKING_DETAIL_MANAGER.replace(':id', booking.uid)}`}
           >
@@ -201,8 +206,12 @@ const Orders = ({
               {t(messages.detail())}
             </Button>
           </Link>
-          <Button colorScheme="red" size="xs">
-            {t(messages.cancel())}
+          <Button
+            colorScheme="red"
+            size="xs"
+            onClick={() => handleArchiveBooking(booking.uid)}
+          >
+            {t(messages.delete())}
           </Button>
         </HStack>
       ),
@@ -270,6 +279,34 @@ const Orders = ({
             color={active === 2 ? TEXT_PURPLE : 'white'}
           >
             {t(messages.pending())}
+          </Button>
+          <Button
+            borderBottom="1px solid"
+            bg="transparent"
+            sx={{
+              borderRadius: '0',
+              borderColor: active === 5 ? TEXT_GREEN : 'transparent',
+              fontWeight: '10px',
+            }}
+            onClick={() => handleChangeStatus(5, 'booking.status.confirmed')}
+            color={active === 5 ? TEXT_PURPLE : 'white'}
+          >
+            Confirmed booked
+          </Button>
+          <Button
+            borderBottom="1px solid"
+            bg="transparent"
+            sx={{
+              borderRadius: '0',
+              borderColor: active === 5 ? TEXT_GREEN : 'transparent',
+              fontWeight: '10px',
+            }}
+            onClick={() =>
+              handleChangeStatus(6, 'booking.status.organizer-finished')
+            }
+            color={active === 6 ? TEXT_PURPLE : 'white'}
+          >
+            Waiting for you to confirm
           </Button>
           <Button
             borderBottom="1px solid"

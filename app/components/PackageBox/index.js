@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import {
   Box,
   Container,
@@ -21,24 +24,17 @@ import { del } from 'utils/request';
 import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
 import { useTranslation } from 'react-i18next';
 import { messages } from '../Header/messages';
+import { loadDataHeader } from '../Header/actions';
 
 // If you want to use your own Selectors look up the Advancaed Story book examples
-const PackagesBox = ({ data }) => {
+const PackagesBox = ({ data, handleFetchCartData }) => {
   const { t } = useTranslation();
   const orgId = window.localStorage.getItem('uid');
   const { name, talentName, suggestedPrice, jobDetail } = data;
   function handleDeletePackage() {
-    del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId);
-    // .then(res1 => {
-    //   const status1 = getResStatus(res1);
-    //   if (status1 === '201') {
-    //     console.log('sent');
-    //   } else if (status1 === '400') {
-    //     console.log('fail');
-    //   } else {
-    //     cacthResponse(res1);
-    //   }
-    // });
+    del(`${API_ORG_ACTION_SHOPPINGCART}/${data.uid}`, {}, orgId).then(() =>
+      handleFetchCartData(orgId),
+    );
   }
 
   return (
@@ -117,4 +113,22 @@ const PackagesBox = ({ data }) => {
 PackagesBox.propTypes = {
   data: PropTypes.any,
 };
-export default PackagesBox;
+
+const mapStateToProps = createStructuredSelector({});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    handleFetchCartData: id => {
+      dispatch(loadDataHeader(id));
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+export default compose(
+  withConnect,
+  memo,
+)(PackagesBox);

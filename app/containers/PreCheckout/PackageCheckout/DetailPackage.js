@@ -25,17 +25,26 @@ import {
   handleAddress,
 } from 'utils/helpers';
 import { useIsMobileView } from 'hooks/useIsMobileView';
-import { getFileFromAWS } from 'utils/request';
+import { getFileFromAWS, del } from 'utils/request';
+import { API_ORG_ACTION_SHOPPINGCART } from 'constants/api';
+import { loadDataHeader } from 'components/Header/actions';
 import { choosePaymentType } from '../actions';
 import { messages } from '../messages';
 import { makeSelectPayType } from '../selectors';
 import { PAY_METHOD_VIEW } from '../constants';
 import { DEFAULT_AVATAR } from '../../../constants/storage';
-const DetailPackage = ({ dataPackage, payMethod }) => {
+
+const DetailPackage = ({ dataPackage, payMethod, handleFetchCartData }) => {
   const { t } = useTranslation();
   const { jobDetail, suggestedPrice, name, talent } = dataPackage;
   const isMobile = useIsMobileView();
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
+  const orgId = localStorage.getItem('uid');
+  function handleDeletePackage() {
+    del(`${API_ORG_ACTION_SHOPPINGCART}/${dataPackage.uid}`, {}, orgId).then(
+      () => handleFetchCartData(orgId),
+    );
+  }
 
   useEffect(() => {
     if (talent.avatar) {
@@ -115,6 +124,7 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
                   color={RED_COLOR}
                   fontSize={isMobile ? '12px' : '15px'}
                   fontWeight={400}
+                  onClick={handleDeletePackage}
                 >
                   {t(messages.packageBoxDelete())}
                 </Button>
@@ -130,6 +140,9 @@ const DetailPackage = ({ dataPackage, payMethod }) => {
 export function mapDispatchToProps(dispatch) {
   return {
     choosePayMethod: paymentType => dispatch(choosePaymentType(paymentType)),
+    handleFetchCartData: id => {
+      dispatch(loadDataHeader(id));
+    },
   };
 }
 const mapStateToProps = createStructuredSelector({

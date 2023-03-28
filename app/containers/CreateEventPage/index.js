@@ -34,6 +34,8 @@ import CitySelector from '../CitySelector/Loadable';
 import ImageUploadInput from '../../components/ImageUploadInput';
 import useThumbnailImgs from '../../components/ImageUploadInput/useThumbnailImgs';
 import { useNotification } from '../../hooks/useNotification';
+import DynamicForm from '../../components/DynamicInputForm';
+
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -47,6 +49,7 @@ export function CreateEventPage() {
   const [end, setEnd] = useState();
   const { t } = useTranslation();
   const { notify } = useNotification();
+  const [dynamicHashtag, setDynamicHashtag] = useState([]);
 
   const {
     handleSubmit,
@@ -75,6 +78,7 @@ export function CreateEventPage() {
       occurrenceEndTime: end,
       description: describeNFTRef.current.getContent(),
       descriptionImg,
+      hashTag: dynamicHashtag,
     };
     post(API_LIST_EVENTS, val, orgId).then(res1 => {
       if (res1 > 300) {
@@ -135,6 +139,10 @@ export function CreateEventPage() {
                   {t(messages.imageThumbnails())}
                 </CustomFormLabel>
                 <ImageUploadInput thumbnailComposable={thumbnailComposable} />
+              </FormControl>
+              <FormControl>
+                <CustomFormLabel>Create your own hashtag</CustomFormLabel>
+                <DynamicForm setDynamicData={setDynamicHashtag} />
               </FormControl>
               <FormControl isInvalid={errors.name}>
                 <CustomFormLabel htmlFor="description">

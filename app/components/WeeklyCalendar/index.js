@@ -13,6 +13,7 @@ import '@fullcalendar/timegrid/main.css';
 import './styles.css';
 
 export default function WeeklyCalendar({ toDate, data }) {
+  const myRole = localStorage.getItem('role');
   const [currentEvents, setCurrentEvents] = useState([]);
   const [isShowing, setIsShowing] = useState(false);
   const [id, setId] = useState();
@@ -29,7 +30,7 @@ export default function WeeklyCalendar({ toDate, data }) {
       data.content.map(event => {
         const tempt = {
           id: event.uid,
-          title: event.packageName,
+          title: myRole === 'talent' ? event.organizerName : event.talentName,
           start: toLocalISOTime(new Date(event.jobDetail.performanceStartTime)),
           end: toLocalISOTime(new Date(event.jobDetail.performanceEndTime)),
           backgroundColor: '#805AD5',
@@ -82,7 +83,6 @@ export default function WeeklyCalendar({ toDate, data }) {
     // ) {
     //   clickInfo.event.remove();
     // }
-    console.log(clickInfo.event);
     toggleModal(clickInfo.event.id);
   };
 

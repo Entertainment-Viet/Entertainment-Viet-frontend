@@ -43,6 +43,7 @@ export function* getBookings(id) {
           page,
           size,
           startTime: new Date().toISOString(),
+          withArchived: false,
         },
         myId,
       );

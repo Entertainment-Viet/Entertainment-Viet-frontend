@@ -5,10 +5,10 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { get } from 'utils/request';
 import { API_CREATE_BOOKING } from 'constants/api';
+import { ENUM_BOOKING_STATUS } from 'constants/enums';
 import { DATA_LOAD } from './constants';
 import { loadDataSuccess, loadDataError } from './actions';
 import { makeSelectEnd, makeSelectStart } from './selectors';
-
 export function* getData() {
   const myId = localStorage.getItem('uid');
   try {
@@ -21,6 +21,7 @@ export function* getData() {
         size: 1000,
         startTime,
         endTime,
+        status: ENUM_BOOKING_STATUS.FINISHED,
       },
       myId,
     );

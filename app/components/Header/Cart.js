@@ -6,6 +6,7 @@ import {
   MenuList,
   MenuGroup,
   MenuItem,
+  Box,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -14,7 +15,7 @@ import { PRI_TEXT_COLOR, TEXT_PURPLE, SUB_BLU_COLOR } from 'constants/styles';
 import * as Paths from 'constants/routes';
 import { calculateTotalPrice } from 'utils/helpers';
 import { useTranslation } from 'react-i18next';
-import { NumberedCart, CartIcon } from '../Icon';
+import { CartIcon } from '../Icon';
 import { NumWrapper } from './Wrapper';
 import { messages } from './messages';
 
@@ -26,10 +27,11 @@ const Cart = ({ data }) => {
     <Menu onCloseSelect={false}>
       <MenuButton>
         {content.length > 0 ? (
-          <>
-            <NumberedCart />
+          <Box pos="relative">
+            {/* <NumberedCart /> */}
             <NumWrapper>{content.length}</NumWrapper>
-          </>
+            <CartIcon />
+          </Box>
         ) : (
           <CartIcon />
         )}

@@ -77,3 +77,8 @@ export const API_GET_FILE = 'api/aws/files/:key';
 
 /* GENERAL */
 export const API_GET_SCORE_TYPE = 'api/admin/:id1/scoreTypes';
+
+/* NOTIFICATION */
+export const API_GET_OLD_NOTI = 'api/notify/:id1/booking/list';
+export const API_READ_NOTI = 'api/notify/:id1/booking/read';
+export const API_COUNT_UNREAD = 'api/notify/:id1/booking/count';
