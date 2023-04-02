@@ -12,3 +12,4 @@
 export const LOAD_DATA = 'App/Global/LOAD_DATA';
 export const LOAD_ERROR = 'App/Global/LOAD_ERROR';
 export const LOAD_SUCCESS = 'App/Global/LOAD_SUCCESS';
+export const OPEN_SIDE_BAR = 'App/Global/OPEN_SIDE_BAR ';

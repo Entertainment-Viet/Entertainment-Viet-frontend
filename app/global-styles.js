@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { device, PRI_FONTCOLOR, INACTIVE_COLOR } from 'constants/styles';
+import { device, PRI_FONTCOLOR, INACTIVE_COLOR } from './constants/styles';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     width: 100%;
 
-    font-family: SVN-Gilroy, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: SF Pro Display, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   
     @media ${device.mob} {
       font-size: 12px;
@@ -23,11 +23,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   strong, b, h1, h2, h3, h4, h5, h6{
-    font-family: SVN-Gilroy Bold, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: SF Pro Display, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
 
   body.fontLoaded {
-    font-family: SVN-Gilroy, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: SF Pro Display, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   .nomargin{margin:0;}
   #app {

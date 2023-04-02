@@ -58,7 +58,7 @@ export default function DropdownItem({ title, active, navSize, data }) {
             style={{ borderTopWidth: '0', borderBottomWidth: '0' }}
           >
             <h2>
-              <AccordionButton>
+              <AccordionButton p={0}>
                 <MenuButton
                   w="100%"
                   border={
@@ -73,8 +73,8 @@ export default function DropdownItem({ title, active, navSize, data }) {
                       isActive={active ? TEXT_GREEN : PRI_TEXT_COLOR}
                     />
                     <Text
-                      ml={5}
-                      mt={2}
+                      ml={1}
+                      mt={0}
                       display={navSize === 'small' ? 'none' : 'flex'}
                       color={active ? TEXT_GREEN : PRI_TEXT_COLOR}
                       fontSize="30px"
@@ -87,23 +87,23 @@ export default function DropdownItem({ title, active, navSize, data }) {
               </AccordionButton>
             </h2>
             {navSize === 'large' && (
-              <AccordionPanel pb={4} color={PRI_TEXT_COLOR} ml={12}>
+              <AccordionPanel pb={4} color={PRI_TEXT_COLOR} ml={2}>
                 <VStack alignItems="flex-start">
                   {title === 'Categories' && data ? (
                     <CategoriesTab dataCate={categoriesFiltered} />
                   ) : (
                     data &&
                     data.map(value => (
-                      <Link href={`/${value.url}`} key={value.url}>
+                      <Link href={`/${value.url}`} key={value.url} py="8px">
                         <Flex>
                           <i style={{ marginTop: '2px', marginRight: '5px' }}>
                             <BodyIconAbout name={value.name} iconSize={20} />
                           </i>
                           <Box
                             color={PRI_TEXT_COLOR}
-                            fontWeight="700"
+                            fontWeight="600"
                             as="h1"
-                            fontSize="xl"
+                            fontSize="16px"
                             whiteSpace="nowrap"
                             noOfLines={1}
                             key={`header_${value.url}`}

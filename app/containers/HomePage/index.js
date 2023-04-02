@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { Box, Divider } from '@chakra-ui/react';
+import { Box, Divider, SimpleGrid } from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { CardListHorizontal } from 'components/Cards';
+import { CardListHorizontal, CardV2 } from 'components/Cards';
 import Metadata from 'components/Metadata';
 import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
@@ -26,13 +26,20 @@ import {
   makeSelectDetail,
   makeSelectEditorChoice,
 } from './selectors';
+import { makeSelectSidebar } from '../App/selectors';
 import WelcomeBox from './WelcomeBox';
 import { TEXT_GREEN } from '../../constants/styles';
 import ImageSlider from '../../components/Carousel/ImageSlider';
 import { useIsMobileView, useIsTabletView } from '../../hooks/useIsMobileView';
 
 const key = 'HomePage';
-export function HomePage({ loading, data, onLoadData, editorChoice }) {
+export function HomePage({
+  loading,
+  data,
+  onLoadData,
+  editorChoice,
+  isSidebarOpen,
+}) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -87,27 +94,43 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
             {t(messages.popularTalent())}
           </Box>
           <Box>
-            <CardListHorizontal
-              dataList={data}
-              quantity={8}
-              spacing="45px"
-              columns={[1, 2, 4]}
-              width={[0, 135, 190, 230, 340]}
-            />
+            {/* Most popular talents */}
+            <SimpleGrid spacing={8} columns={{ xl: isSidebarOpen ? 4 : 5 }}>
+              {data.map((talent, index) => {
+                const { uid } = talent;
+                const packagesPrice = [];
+                talent.packages.map(item => {
+                  packagesPrice.push(item.jobDetail.price.min);
+                  packagesPrice.push(item.jobDetail.price.max);
+                  return true;
+                });
+                const min = packagesPrice.sort((a, b) => a - b)[0];
+                const max = packagesPrice.sort((a, b) => b - a)[0];
+
+                return index >= 10 ? null : (
+                  <CardV2
+                    key={uid}
+                    data={talent}
+                    priceRange={min && max ? [min, max] : [0, 0]}
+                    // width={isSidebarOpen ? 252 : 220}
+                  />
+                );
+              })}
+            </SimpleGrid>
           </Box>
         </Box>
         <Box display="flex" pl={10} flexWrap="wrap">
           <Box
-            width={isTablet || isMobile ? '100%' : '37%'}
+            width={isTablet || isMobile ? '100%' : '417px'}
             mt="12"
             backgroundImage={background}
             backgroundSize="100% 100%"
             borderRadius="10px"
-            height="10%"
+            height="320px"
           >
             <WelcomeBox />
           </Box>
-          <Box pl={isMobile ? 0 : 8}>
+          <Box pl={isMobile ? 0 : 8} w={isSidebarOpen ? '650px' : '800px'}>
             <Box
               color={TEXT_GREEN}
               mb="6"
@@ -119,13 +142,19 @@ export function HomePage({ loading, data, onLoadData, editorChoice }) {
             >
               {t(messages.recentTalent())}
             </Box>
-            <CardListHorizontal
-              dataList={data}
-              columns={[1, 2, 3, 2]}
-              spacing="45px"
-              quantity={4}
-              width={[0, 140, 200, 290]}
-            />
+            <Box>
+              <CardListHorizontal
+                dataList={data}
+                columns={{ xl: 3 }}
+                spacing="16"
+                quantity={3}
+                width={
+                  isSidebarOpen
+                    ? [190, 190, 190, 190, 190]
+                    : [252, 252, 252, 252, 252]
+                }
+              />
+            </Box>
           </Box>
         </Box>
         <Box px={10}>
@@ -158,6 +187,7 @@ HomePage.propTypes = {
   loading: PropTypes.bool,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   editorChoice: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  isSidebarOpen: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -165,6 +195,7 @@ const mapStateToProps = createStructuredSelector({
   error: makeSelectDetailError(),
   data: makeSelectDetail(),
   editorChoice: makeSelectEditorChoice(),
+  isSidebarOpen: makeSelectSidebar(),
 });
 
 export function mapDispatchToProps(dispatch) {

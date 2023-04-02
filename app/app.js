@@ -17,7 +17,6 @@ import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import './locales/i18n';
 import { ChakraProvider } from '@chakra-ui/react';
-import FontFaceObserver from 'fontfaceobserver';
 
 // Import root app
 import App from 'containers/App';

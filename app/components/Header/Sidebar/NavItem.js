@@ -24,7 +24,6 @@ export default function NavItem({ icon, title, description, active, navSize }) {
         <Link
           href="/#"
           color={active && TEXT_GREEN}
-          p={3}
           borderRadius={8}
           _hover={{ textDecor: 'none', color: TEXT_GREEN }}
           w={navSize === 'large' && '100%'}
@@ -37,7 +36,7 @@ export default function NavItem({ icon, title, description, active, navSize }) {
                 color={active ? TEXT_GREEN : PRI_TEXT_COLOR}
               />
               <Text
-                ml={5}
+                ml={1}
                 display={navSize === 'small' ? 'none' : 'flex'}
                 color={active ? TEXT_GREEN : PRI_TEXT_COLOR}
                 fontSize="30px"
