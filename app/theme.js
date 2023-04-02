@@ -12,6 +12,9 @@ const breakpoints = {
 };
 const theme = extendTheme(
   {
+    fonts: {
+      body: `'SF Pro Display', sans-serif`,
+    },
     breakpoints,
     colors: {
       primary: {

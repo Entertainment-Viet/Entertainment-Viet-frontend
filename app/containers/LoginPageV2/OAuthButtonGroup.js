@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, ButtonGroup, Text } from '@chakra-ui/react';
 import { GoogleIcon } from './ProviderIcons';
+import { SUB_BLU_COLOR } from '../../constants/styles';
 
 const providers = [
   {
@@ -18,7 +19,7 @@ const OAuthButtonGroup = () => (
     {providers.map(({ name, icon, bg }) => (
       <Button key={name} width="full" bg={bg}>
         {icon}
-        <Text color="black" fontWeight="500">
+        <Text fontSize="15px" color={SUB_BLU_COLOR} fontWeight="500">
           &nbsp;&nbsp;Sign in with {name}
         </Text>
       </Button>

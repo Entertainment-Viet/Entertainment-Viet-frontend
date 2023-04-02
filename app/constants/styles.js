@@ -10,7 +10,7 @@
 // export const GAP = '1rem';
 
 export const PINK_COLOR = '#E3609F';
-
+export const WHITE_COLOR = '#FFFFFF';
 export const RED_COLOR = '#E53E3E';
 export const LIGHT_GRAY = '#2D3748';
 export const PRI_TEXT_COLOR = '#BDC1EA';
