@@ -12,9 +12,7 @@ import { CardListHorizontal, CardV2 } from 'components/Cards';
 import Metadata from 'components/Metadata';
 import PageSpinner from 'components/PageSpinner';
 import background from './image/image.png';
-//
-// import {} from 'constants/routes';
-// import {} from './styles';
+
 import { messages } from './messages';
 
 import { loadInfo } from './actions';
@@ -46,6 +44,7 @@ export function HomePage({
   useEffect(() => {
     onLoadData();
   }, []);
+
   const { t } = useTranslation();
   // eslint-disable-next-line no-console
   const isMobile = useIsMobileView();
@@ -170,11 +169,31 @@ export function HomePage({
           >
             {t(messages.editorChoice())}
           </Box>
-          <CardListHorizontal
-            dataList={editorChoice}
-            quantity={8}
-            width={[0, 135, 190, 230, 340]}
-          />
+
+          <Box>
+            {/* Editor CHOICE */}
+            <SimpleGrid spacing={8} columns={{ xl: isSidebarOpen ? 4 : 5 }}>
+              {editorChoice.map((choice, index) => {
+                const { uid } = choice;
+                const packagesPrice = [];
+                choice.packages.map(item => {
+                  packagesPrice.push(item.jobDetail.price.min);
+                  packagesPrice.push(item.jobDetail.price.max);
+                  return true;
+                });
+                const min = packagesPrice.sort((a, b) => a - b)[0];
+                const max = packagesPrice.sort((a, b) => b - a)[0];
+
+                return index >= 10 ? null : (
+                  <CardV2
+                    key={uid}
+                    data={choice}
+                    priceRange={min && max ? [min, max] : [0, 0]}
+                  />
+                );
+              })}
+            </SimpleGrid>
+          </Box>
         </Box>
         <Divider />
       </>
