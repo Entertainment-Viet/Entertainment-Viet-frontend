@@ -30,7 +30,13 @@ import { TEXT_GREEN } from '../../constants/styles';
 import ImageSlider from '../../components/Carousel/ImageSlider';
 
 const key = 'TalentHomePage';
-export function TalentHomePage({ loading, error, data, onLoadData }) {
+export function TalentHomePage({
+  loading,
+  error,
+  data,
+  onLoadData,
+  isSidebarOpen,
+}) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -67,46 +73,47 @@ export function TalentHomePage({ loading, error, data, onLoadData }) {
   return loading ? (
     <PageSpinner />
   ) : (
-    <div styles={{ width: '85%', margin: '0 auto' }}>
+    <div styles={{ width: '100%' }}>
       <Metadata />
       <Box px={10}>
         <ImageSlider slides={SlideData} />
-      </Box>
-      <Box
-        color={TEXT_GREEN}
-        mt="12"
-        mb="6"
-        ml="10"
-        fontWeight="600"
-        fontSize="20px"
-        lineHeight="24px"
-        noOfLines={1}
-      >
-        {t(messages.hotUpcomingEvent())}
-      </Box>
-      <SimpleGrid
-        maxW="100%"
-        columns={{ xl: 3, '2xl': 3 }}
-        spacing="30px"
-        alignItems="center"
-        ml={10}
-      >
-        {data &&
-          data.map(tempt => {
-            const { uid } = tempt;
-            return <CardEvent key={uid} data={tempt} />;
-          })}
-      </SimpleGrid>
-      <Box display="flex" pl={10}>
         <Box
-          width="100%"
+          color={TEXT_GREEN}
           mt="12"
-          backgroundImage={background}
-          backgroundSize="100% 100%"
-          borderRadius="10px"
-          height="10%"
+          mb="6"
+          ml="10"
+          fontWeight="600"
+          fontSize="20px"
+          lineHeight="24px"
+          noOfLines={1}
         >
-          <WelcomeBox />
+          {t(messages.hotUpcomingEvent())}
+        </Box>
+        <SimpleGrid
+          // maxW="100%"
+          // columns={{ xl: 3, '2xl': 3 }}
+          columns={{ xl: isSidebarOpen ? 2 : 3 }}
+          spacing={8}
+          // alignItems="center"
+          // ml={10}
+        >
+          {data &&
+            data.map(tempt => {
+              const { uid } = tempt;
+              return <CardEvent key={uid} data={tempt} />;
+            })}
+        </SimpleGrid>
+        <Box display="flex" pl={10}>
+          <Box
+            width="100%"
+            mt="12"
+            backgroundImage={background}
+            backgroundSize="100% 100%"
+            borderRadius="10px"
+            height="10%"
+          >
+            <WelcomeBox />
+          </Box>
         </Box>
       </Box>
     </div>
