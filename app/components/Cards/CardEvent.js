@@ -21,8 +21,10 @@ import { getFileFromAWS } from 'utils/request';
 import CardTop from './assets/CardTop.svg';
 import ArrowRight from './assets/arrow_right.svg';
 import { DEFAULT_AVATAR } from '../../constants/storage';
-const width = [300, 300, 320, 330, 400];
-const imgWidth = width.map(item => item - 3);
+import { useIsMobileView } from '../../hooks/useIsMobileView';
+
+// const width = [300, 300, 320, 330, 400];
+// const imgWidth = width.map(item => item - 3);
 const GradientBox = chakra(Box, {
   baseStyle: {
     borderRadius: 'md',
@@ -30,7 +32,6 @@ const GradientBox = chakra(Box, {
     color: PRI_TEXT_COLOR,
     pos: 'relative',
     bottom: '10%',
-    w: width,
     backgroundClip: 'padding-box',
     // border: 'solid 2px transparent',
     position: 'relative',
@@ -51,6 +52,7 @@ const GradientBox = chakra(Box, {
   },
 });
 function CardEvent(props) {
+  const isMobile = useIsMobileView();
   useEffect(() => {
     if (props.data.organizerAvatar) {
       getFileFromAWS(props.data.organizerAvatar).then(res => {
@@ -69,25 +71,25 @@ function CardEvent(props) {
     }
   }, []);
   return (
-    <Container ps={0} zIndex={1}>
+    <Container p="0" zIndex={1} w="100%" position="relative">
       <Image
         src={CardTop}
         alt="Decorator image"
-        w={width}
-        maxW="inherit"
+        w="100%"
         pos="absolute"
         zIndex={51}
       />
       <Image
-        boxSize={imgWidth}
+        boxSize="100%"
         objectFit="cover"
         src={avatar}
         alt="Thumbnail image"
-        maxW={imgWidth}
-        styles={{ aspectRatio: '2/1.5' }}
+        width="99%"
         zIndex={50}
+        height={350}
+        aspect
         mt="0.3rem"
-        ml="1px"
+        ml="2px"
       />
       <Link
         href={`/event/${props.data.organizerId}/${props.data.uid}`}
@@ -96,12 +98,11 @@ function CardEvent(props) {
         <GradientBox>
           <Box p="4">
             <Box
-              fontSize="30px"
+              fontSize={isMobile ? '15px' : '20px'}
               fontWeight="600"
-              as="h1"
+              // as="h1"
               lineHeight="100%"
               noOfLines={1}
-              w={width}
               color={TEXT_PURPLE}
               mt={1}
             >

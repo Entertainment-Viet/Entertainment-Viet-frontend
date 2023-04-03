@@ -33,7 +33,7 @@ const Pagination = props => {
 
   const lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <Container>
+    <Container style={{ marginTop: '20px' }}>
       <Item
         key="pagination-item-arrow-left"
         className={page === 1 ? 'disabled' : ''}

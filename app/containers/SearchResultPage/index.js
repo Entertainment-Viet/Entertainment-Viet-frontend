@@ -11,7 +11,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import Metadata from 'components/Metadata';
 import { SEC_TEXT_COLOR, TEXT_GREEN } from 'constants/styles';
 import { useTranslation } from 'react-i18next';
-import { Card } from 'components/Cards';
+import { CardV2 } from 'components/Cards';
 import { H1 } from 'components/Elements';
 import Pagination from 'components/Pagination';
 import { DateTimeCustom } from 'components/Controls';
@@ -189,11 +189,11 @@ export function SearchResultPage({
               const min = packagesPrice.sort((a, b) => a - b)[0];
               const max = packagesPrice.sort((a, b) => b - a)[0];
               return (
-                <Card
+                <CardV2
                   key={uid}
                   data={tempt}
                   priceRange={min && max ? [min, max] : [0, 0]}
-                  width={[0, 140, 200, 200, 270]}
+                  // width={[0, 140, 200, 200, 270]}
                 />
               );
             })}

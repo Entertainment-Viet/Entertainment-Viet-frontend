@@ -60,11 +60,12 @@ function CardV2(props) {
         objectFit="cover"
         src={avatar}
         alt="Avatar"
-        width="100%"
+        width="99%"
         height={350}
         aspect
         zIndex={50}
         mt="0.3rem"
+        ml="1px"
       />
       <Link href={`/artist/${props.data.uid}`} zIndex={1}>
         <GradientBox>

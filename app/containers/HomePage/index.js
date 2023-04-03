@@ -147,11 +147,7 @@ export function HomePage({
                 columns={{ xl: 3 }}
                 spacing="16"
                 quantity={3}
-                width={
-                  isSidebarOpen
-                    ? [190, 190, 190, 190, 190]
-                    : [252, 252, 252, 252, 252]
-                }
+                width="100%"
               />
             </Box>
           </Box>
