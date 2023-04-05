@@ -12,7 +12,14 @@ import { compose } from 'redux';
 import { useTranslation } from 'react-i18next';
 import { createStructuredSelector } from 'reselect';
 
-import { Tab, TabList, Tabs, TabPanels, TabPanel } from '@chakra-ui/react';
+import {
+  Tab,
+  TabList,
+  Tabs,
+  TabPanels,
+  TabPanel,
+  TabIndicator,
+} from '@chakra-ui/react';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -137,13 +144,14 @@ export function ArtistDetailPage({
           ? data.offerCategories[0].name
           : null}
       </H1>
-      <Tabs mb="12" isLazy>
+      <Tabs mb="12" isLazy position="relative" borderBottom="1px solid #282768">
         <TabList color={TEXT_PURPLE}>
           <Tab size="md">{t(messages.overview())}</Tab>
           <Tab>{t(messages.about())}</Tab>
           <Tab>{t(messages.schedule())}</Tab>
           <Tab>{t(messages.review())}</Tab>
         </TabList>
+        <TabIndicator mt="-6px" height="6px" bg="#B6FF6D" />
         {!profile ? (
           <PageSpinner />
         ) : (

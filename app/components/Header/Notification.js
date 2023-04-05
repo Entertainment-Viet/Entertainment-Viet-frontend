@@ -65,7 +65,8 @@ const Notification = ({ data, unreadCount }) => {
         overflow="auto"
         zIndex={999}
         pt={0}
-        border="none"
+        border="1px solid #404B8D"
+        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.45)"
       >
         <MenuGroup>
           <MenuItem

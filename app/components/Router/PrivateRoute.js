@@ -7,13 +7,15 @@ import Header from 'components/Header';
 import { getLocalRole } from 'utils/auth';
 
 import PageWrapper from 'components/PageWrapper';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Box } from '@chakra-ui/react';
 import Sidebar from '../Header/Sidebar/Sidebar';
 function PrivateRoute({ children, isAuthenticated, roles, ...rest }) {
   const getRole = getLocalRole();
   return (
-    <Flex>
-      <Sidebar />
+    <Flex overflow="auto" height="100vh">
+      <Box position="sticky" alignSelf="flex-start" top="0" height="auto">
+        <Sidebar />
+      </Box>
       <PageWrapper className="header-column">
         <Header />
         <Route
