@@ -10,14 +10,13 @@ import '@babel/polyfill';
 
 // Import all the third party stuff
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import './locales/i18n';
 import { ChakraProvider } from '@chakra-ui/react';
-import FontFaceObserver from 'fontfaceobserver';
 
 // Import root app
 import App from 'containers/App';
@@ -51,20 +50,7 @@ const MOUNT_NODE = document.getElementById('app');
 //   },
 // );
 
-const render = () => {
-  ReactDOM.render(
-    <ChakraProvider theme={theme} cssVarsRoot="body">
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          {/* <WalletListener /> */}
-          <App />
-        </ConnectedRouter>
-      </Provider>
-    </ChakraProvider>,
-    MOUNT_NODE,
-  );
-};
-
+const root = ReactDOM.createRoot(MOUNT_NODE);
 if (module.hot) {
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
@@ -74,7 +60,16 @@ if (module.hot) {
   });
 }
 
-render();
+root.render(
+  <ChakraProvider theme={theme} cssVarsRoot="body">
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        {/* <WalletListener /> */}
+        <App />
+      </ConnectedRouter>
+    </Provider>
+  </ChakraProvider>,
+);
 
 // Chunked polyfill for browsers without Intl support
 

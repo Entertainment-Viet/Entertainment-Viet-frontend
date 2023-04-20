@@ -8,7 +8,12 @@
  */
 
 import produce from 'immer';
-import { LOAD_DATA, LOAD_ERROR, LOAD_SUCCESS } from './constants';
+import {
+  LOAD_DATA,
+  LOAD_ERROR,
+  LOAD_SUCCESS,
+  OPEN_SIDE_BAR,
+} from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -16,6 +21,7 @@ export const initialState = {
   loading: false,
   error: false,
   success: false,
+  sidebarOpen: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -41,6 +47,9 @@ const appReducer = (state = initialState, action) =>
         draft.error = false;
         draft.data = false;
         draft.success = action.success;
+        break;
+      case OPEN_SIDE_BAR:
+        draft.sidebarOpen = action.open;
         break;
     }
   });

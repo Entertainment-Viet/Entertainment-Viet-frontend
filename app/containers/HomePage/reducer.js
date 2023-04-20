@@ -33,7 +33,6 @@ const pageReducer = (state = initialState, action) =>
       case LOAD_EDITORCHOICE_INFO_SUCCESS:
         draft.loading = false;
         draft.error = false;
-        console.log(action.data);
         draft.editorChoice = action.data;
         break;
 

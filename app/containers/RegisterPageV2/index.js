@@ -27,10 +27,10 @@ import {
   PRI_TEXT_COLOR,
   RED_COLOR,
   PRI_BACKGROUND,
-  SEC_TEXT_COLOR,
   TEXT_GREEN,
   TEXT_PURPLE,
   THIRD_TEXT_COLOR,
+  WHITE_COLOR,
 } from 'constants/styles';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -47,6 +47,8 @@ import { AccountIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import { ENUM_ROLES } from '../../constants/enums';
+
+import EntertainmentViet from '../../images/entertainment_viet.png';
 
 function RegisterPageV2() {
   const { t } = useTranslation();
@@ -114,7 +116,13 @@ function RegisterPageV2() {
           marginBottom: '25px',
         }}
       >
-        Entertainment Viet
+        <img
+          src={EntertainmentViet}
+          style={{ display: 'inline' }}
+          width="230px"
+          height="58px"
+          alt="entertainment viet"
+        />
       </Box>
       <Box
         sx={{
@@ -143,7 +151,9 @@ function RegisterPageV2() {
             marginBottom: '35px',
           }}
         >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
+          <Text fontSize="18px" fontWeight="500" color={PRI_TEXT_COLOR}>
+            {t(messages.welcome())}
+          </Text>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="2">
@@ -156,6 +166,8 @@ function RegisterPageV2() {
                   bg="transparent"
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
+                  fontSize="15px"
+                  fontWeight="400"
                   placeholder="Enter your username"
                   {...register('username', {
                     required: 'This is required',
@@ -180,6 +192,8 @@ function RegisterPageV2() {
                   bg="transparent"
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
+                  fontSize="15px"
+                  fontWeight="400"
                   placeholder="Enter your email"
                   {...register('email', {
                     required: 'This is required',
@@ -213,6 +227,8 @@ function RegisterPageV2() {
           <HStack justify="space-between" my={4}>
             <Checkbox
               id="check-box-remember"
+              fontSize="15px"
+              fontWeight="400"
               color={PRI_TEXT_COLOR}
               {...register('checkBoxRemember')}
             >
@@ -221,6 +237,8 @@ function RegisterPageV2() {
           </HStack>
           <FormControl>
             <SelectCustom
+              fontSize="15px"
+              fontWeight="400"
               {...register('role')}
               sx={{
                 marginBottom: '20px',
@@ -238,7 +256,7 @@ function RegisterPageV2() {
             <Button
               variant="primary"
               bg={TEXT_PURPLE}
-              color={SEC_TEXT_COLOR}
+              color={WHITE_COLOR}
               isLoading={isSubmitting}
               type="submit"
             >
@@ -248,9 +266,13 @@ function RegisterPageV2() {
             {errors.password && console.log(errors.password.message)}
             <OAuthButtonGroup />
             <HStack spacing="1" justify="center">
-              <Text color={PRI_TEXT_COLOR}>{t(messages.haveAccount())}</Text>
+              <Text color={PRI_TEXT_COLOR} fontSize="15px" fontWeight="400">
+                {t(messages.haveAccount())}
+              </Text>
               <Button variant="link" color={TEXT_GREEN}>
-                <Link href={ROUTE_LOGIN}>{t(messages.signin())}</Link>
+                <Link href={ROUTE_LOGIN} fontSize="15px" fontWeight="400">
+                  {t(messages.signin())}
+                </Link>
               </Button>
             </HStack>
           </Stack>

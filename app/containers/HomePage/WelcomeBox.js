@@ -15,6 +15,7 @@ export default function WelcomeBox() {
   return (
     <Box
       w="100%"
+      h="100%"
       paddingInlineStart="0"
       maxW="100%"
       mb={{ base: '1rem', lg: '0px' }}
@@ -22,7 +23,7 @@ export default function WelcomeBox() {
     >
       <Box
         width="100%"
-        height="26.7rem"
+        height="100%"
         borderWidth="1px"
         borderRadius="lg"
         bg="transparent"

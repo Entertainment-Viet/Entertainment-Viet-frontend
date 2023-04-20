@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, memo, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { Flex, Text, Image, Link } from '@chakra-ui/react';
 import { FiHome } from 'react-icons/fi';
 import cRequest from 'utils/server';
@@ -14,7 +18,10 @@ import {
   useIsMobileView,
   useIsTabletView,
 } from '../../../hooks/useIsMobileView';
-export default function Sidebar() {
+
+import { makeSelectSidebar } from '../../../containers/App/selectors';
+import { openSidebar } from '../../../containers/App/actions';
+export function Sidebar({ onOpenSidebar }) {
   const [navSize, changeNavSize] = useState('small');
   const [categories, setCategories] = useState([]);
   const isMobile = useIsMobileView();
@@ -51,7 +58,7 @@ export default function Sidebar() {
       marginTop="2.5vh"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       borderRadius={navSize === 'small' ? '15px' : '30px'}
-      w={navSize === 'small' ? '3rem' : isMobileView ? '60%' : '30%'}
+      w={navSize === 'small' ? '3rem' : isMobileView ? '60%' : '260px'}
       overflow={navSize === 'large' && 'auto'}
       flexDir="column"
       justifyContent="space-between"
@@ -59,13 +66,16 @@ export default function Sidebar() {
       cursor={navSize === 'small' ? 'pointer' : 'default'}
       onMouseEnter={() => {
         changeNavSize('large');
+        onOpenSidebar(true);
       }}
       onMouseLeave={() => {
+        onOpenSidebar(false);
         changeNavSize('small');
       }}
     >
       <Flex
         p="5%"
+        pr="0"
         flexDir="column"
         w="100%"
         alignItems={navSize === 'small' ? 'center' : 'flex-start'}
@@ -137,3 +147,29 @@ export default function Sidebar() {
     </Flex>
   );
 }
+
+Sidebar.propTypes = {
+  onOpenSidebar: PropTypes.func,
+};
+
+const mapStateToProps = createStructuredSelector({
+  sidebarOpen: makeSelectSidebar(),
+});
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    onOpenSidebar: isOpen => {
+      dispatch(openSidebar(isOpen));
+    },
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  withConnect,
+  memo,
+)(Sidebar);

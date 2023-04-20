@@ -28,9 +28,9 @@ import {
   RED_COLOR,
   TEXT_GREEN,
   PRI_BACKGROUND,
-  SEC_TEXT_COLOR,
   TEXT_PURPLE,
   THIRD_TEXT_COLOR,
+  WHITE_COLOR,
 } from 'constants/styles';
 import { talentRole, orgRole, adminRole } from 'constants/roles';
 import { sha512 } from 'js-sha512';
@@ -41,6 +41,8 @@ import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
 import { useNotification } from '../../hooks/useNotification';
+
+import EntertainmentViet from '../../images/entertainment_viet.png';
 function LoginPageV2() {
   const { t } = useTranslation();
   const { notify } = useNotification();
@@ -150,7 +152,13 @@ function LoginPageV2() {
           marginBottom: '25px',
         }}
       >
-        Entertainment Viet
+        <img
+          src={EntertainmentViet}
+          style={{ display: 'inline' }}
+          width="230px"
+          height="58px"
+          alt="entertainment viet"
+        />
       </Box>
       <Box
         sx={{
@@ -161,103 +169,128 @@ function LoginPageV2() {
         mr="auto"
         ml="auto"
         w={{ sm: '100%', md: '545px' }}
-        py={{ base: '0', sm: '12' }}
-        px={{ base: '4', sm: '12' }}
+        padding={{ base: '0.5' }}
+        background="linear-gradient(180deg, rgba(0, 35, 242, 0) 0%, #404B8D 100%);"
       >
         <Box
           sx={{
-            marginBottom: '10px',
+            backgroundColor: PRI_BACKGROUND,
           }}
-          fontWeight="600"
-          fontSize="35px"
-          color={TEXT_PURPLE}
+          py={{ base: '0', sm: '12' }}
+          px={{ base: '4', sm: '12' }}
+          borderRadius="10px"
         >
-          {t(messages.signin())}
-        </Box>
-        <Box
-          sx={{
-            marginBottom: '35px',
-          }}
-        >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
-        </Box>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing="2">
-            <FormControl>
-              <InputGroup>
-                <Input
-                  id="email"
-                  type="text"
-                  size="lg"
-                  bg="transparent"
-                  color={TEXT_GREEN}
-                  border={`1px solid ${THIRD_TEXT_COLOR}`}
-                  placeholder="Enter your email"
-                  {...register('username', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
-                />
-                <InputLeftElement sx={{ marginTop: '5px' }}>
-                  <EmailIcon />
-                </InputLeftElement>
-              </InputGroup>
-            </FormControl>
-            <Text color={RED_COLOR}>
-              {errors.username && errors.username.message}
+          <Box
+            sx={{
+              marginBottom: '10px',
+            }}
+            fontWeight="600"
+            fontSize="35px"
+            color={TEXT_PURPLE}
+          >
+            {t(messages.signin())}
+          </Box>
+          <Box
+            sx={{
+              marginBottom: '35px',
+            }}
+          >
+            <Text fontSize="18px" color={PRI_TEXT_COLOR} fontWeight="500">
+              {t(messages.welcome())}
             </Text>
-            <PasswordField
-              {...register('password', {
-                required: 'This is required',
-                minLength: {
-                  value: 4,
-                  message: 'Minimum length should be 4',
-                },
-              })}
-            />
-            <Text color={RED_COLOR}>
-              {errors.password && errors.password.message}
-            </Text>
-          </Stack>
-          <HStack justify="space-between" my={4}>
-            <Checkbox
-              id="check-box-remember"
-              defaultChecked
-              color={PRI_TEXT_COLOR}
-              {...register('checkBoxRemember')}
-            >
-              {t(messages.remember())}
-            </Checkbox>
-            <Button variant="link" color={TEXT_PURPLE} size="sm">
-              <Link href={ROUTE_FORGOTPASSWORD}>
-                {t(messages.forgotPassword())}
-              </Link>
-            </Button>
-          </HStack>
-          <Stack spacing="6">
-            <Button
-              variant="primary"
-              bg={TEXT_PURPLE}
-              color={SEC_TEXT_COLOR}
-              isLoading={isSubmitting}
-              type="submit"
-            >
-              {t(messages.signin())}
-            </Button>
-            {/* eslint-disable-next-line no-console */}
-            {errors.password && console.log(errors.password.message)}
-            <OAuthButtonGroup />
-            <HStack spacing="1" justify="center">
-              <Text color={PRI_TEXT_COLOR}>{t(messages.haveAccount())}</Text>
-              <Button variant="link" color={TEXT_GREEN}>
-                <Link href={ROUTE_REGISTER}>{t(messages.signup())}</Link>
+          </Box>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing="2">
+              <FormControl>
+                <InputGroup>
+                  <Input
+                    id="email"
+                    type="text"
+                    size="lg"
+                    bg="transparent"
+                    fontSize="15px"
+                    fontWeight="400"
+                    color={TEXT_GREEN}
+                    border={`1px solid ${THIRD_TEXT_COLOR}`}
+                    placeholder="Enter your email"
+                    {...register('username', {
+                      required: 'This is required',
+                      minLength: {
+                        value: 4,
+                        message: 'Minimum length should be 4',
+                      },
+                    })}
+                  />
+                  <InputLeftElement sx={{ marginTop: '5px' }}>
+                    <EmailIcon />
+                  </InputLeftElement>
+                </InputGroup>
+              </FormControl>
+              <Text color={RED_COLOR}>
+                {errors.username && errors.username.message}
+              </Text>
+              <PasswordField
+                {...register('password', {
+                  required: 'This is required',
+                  minLength: {
+                    value: 4,
+                    message: 'Minimum length should be 4',
+                  },
+                })}
+              />
+              <Text color={RED_COLOR}>
+                {errors.password && errors.password.message}
+              </Text>
+            </Stack>
+            <HStack justify="space-between" my={4}>
+              <Checkbox
+                fontSize="15px"
+                fontWeight="400"
+                id="check-box-remember"
+                defaultChecked
+                color={PRI_TEXT_COLOR}
+                {...register('checkBoxRemember')}
+              >
+                {t(messages.remember())}
+              </Checkbox>
+              <Button variant="link" color={TEXT_PURPLE} size="sm">
+                <Link
+                  fontSize="15px"
+                  fontWeight="400"
+                  href={ROUTE_FORGOTPASSWORD}
+                >
+                  {t(messages.forgotPassword())}
+                </Link>
               </Button>
             </HStack>
-          </Stack>
-        </form>
+            <Stack spacing="6">
+              <Button
+                fontSize="15px"
+                fontWeight="500"
+                variant="primary"
+                bg={TEXT_PURPLE}
+                color={WHITE_COLOR}
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                {t(messages.signin())}
+              </Button>
+              {/* eslint-disable-next-line no-console */}
+              {errors.password && console.log(errors.password.message)}
+              <OAuthButtonGroup />
+              <HStack spacing="1" justify="center">
+                <Text fontSize="15px" fontWeight="400" color={PRI_TEXT_COLOR}>
+                  {t(messages.haveAccount())}
+                </Text>
+                <Button variant="link" color={TEXT_GREEN}>
+                  <Link fontSize="15px" fontWeight="400" href={ROUTE_REGISTER}>
+                    {t(messages.signup())}
+                  </Link>
+                </Button>
+              </HStack>
+            </Stack>
+          </form>
+        </Box>
       </Box>
     </Box>
   );

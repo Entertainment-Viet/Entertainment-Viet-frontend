@@ -10,7 +10,11 @@ const ImageSliderWithPreview = ({ slides }) => (
   <Carousel>
     {slides.map(slide => (
       <div className="h-128">
-        <img alt="Description" src={slide} />
+        <img
+          alt="Description"
+          src={slide}
+          styles={{ width: '149px', height: '106px !important' }}
+        />
       </div>
     ))}
   </Carousel>

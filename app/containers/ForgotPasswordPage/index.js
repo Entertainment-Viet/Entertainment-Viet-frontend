@@ -21,7 +21,7 @@ import {
   RED_COLOR,
   TEXT_GREEN,
   PRI_BACKGROUND,
-  SEC_TEXT_COLOR,
+  WHITE_COLOR,
   TEXT_PURPLE,
   THIRD_TEXT_COLOR,
 } from 'constants/styles';
@@ -29,6 +29,8 @@ import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import background from './image/image.png';
 import Metadata from '../../components/Metadata';
+
+import EntertainmentViet from '../../images/entertainment_viet.png';
 
 function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -64,7 +66,13 @@ function ForgotPasswordPage() {
           marginBottom: '25px',
         }}
       >
-        Entertainment Viet
+        <img
+          src={EntertainmentViet}
+          style={{ display: 'inline' }}
+          width="230px"
+          height="58px"
+          alt="entertainment viet"
+        />
       </Box>
       <Box
         sx={{
@@ -98,7 +106,9 @@ function ForgotPasswordPage() {
             marginBottom: '35px',
           }}
         >
-          <Text color={PRI_TEXT_COLOR}>{t(messages.welcome())}</Text>
+          <Text fontSize="18px" fontWeight="500" color={PRI_TEXT_COLOR}>
+            {t(messages.welcome())}
+          </Text>
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing="6">
@@ -108,6 +118,8 @@ function ForgotPasswordPage() {
                   id="email"
                   type="text"
                   size="lg"
+                  fontSize="15px"
+                  fontWeight="400"
                   bg="transparent"
                   color={TEXT_GREEN}
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
@@ -133,7 +145,9 @@ function ForgotPasswordPage() {
             <Button
               variant="primary"
               bg={TEXT_PURPLE}
-              color={SEC_TEXT_COLOR}
+              color={WHITE_COLOR}
+              fontSize="15px"
+              fontWeight="500"
               isLoading={isSubmitting}
               type="submit"
             >

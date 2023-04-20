@@ -71,6 +71,7 @@ export default function App() {
   return (
     <AppWrapper>
       <GlobalFonts />
+      <GlobalStyle />
       <Helmet
         titleTemplate="%s - Viet entertainment"
         defaultTitle="Viet entertainment"
@@ -227,7 +228,6 @@ export default function App() {
         </PrivateRoute>
         <Route path="*" component={NotFoundPage} />
       </Switch>
-      <GlobalStyle />
       <ToastContainer limit={5} autoClose={1500} />
       {(process.env.REACT_APP_ENV === 'dev' ||
         process.env.REACT_APP_ENV === 'stg') && (
