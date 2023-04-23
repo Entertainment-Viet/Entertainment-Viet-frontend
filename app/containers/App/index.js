@@ -54,6 +54,7 @@ import ScrollToTop from 'components/ScrollToTop';
 import CreatePositionPage from '../CreatePositionPage/Loadable';
 
 import { requestFirebaseNotificationPermission } from '../../firebaseInit';
+import ResetPasswordPage from '../ResetPasswordPage';
 const AppWrapper = styled.div`
   margin: 0 auto;
 `;
@@ -90,6 +91,9 @@ export default function App() {
         </PublicRoute>
         <PublicRoute exact path={Paths.ROUTE_FORGOTPASSWORD}>
           <ForgotPasswordPage />
+        </PublicRoute>
+        <PublicRoute exact path={Paths.ROUTE_RESETPASSWORD}>
+          <ResetPasswordPage />
         </PublicRoute>
         <PublicRoute
           exact
