@@ -12,6 +12,7 @@ import {
   Text,
   Stack,
   Button,
+  Switch,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,7 @@ const key = 'CreatePackagePage';
 export function CreatePackagePage() {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
+  const [isCircular, setIsCircular] = useState(false);
   const { t } = useTranslation();
   const { notify } = useNotification();
 
@@ -63,28 +65,39 @@ export function CreatePackagePage() {
 
   const onSubmit = async () => {
     const talentId = window.localStorage.getItem('uid');
+    let jobDetail = {
+      categoryId: getValues('subCategory')
+        ? getValues('subCategory')
+        : getValues('category'),
+      workType: getValues('workType'),
+      price: {
+        min: getValues('min'),
+        max: getValues('max'),
+        currency: 'currency.vnd',
+      },
+      note: describeNFTRef.current.getContent(),
+      location: {
+        // address: getValues('street'),
+        parentId: getValues('city'),
+      },
+      performanceStartTime: toIsoString(start),
+      performanceEndTime: toIsoString(end),
+      performanceCount: 0,
+      extensions: 'string',
+    };
+    if (isCircular) {
+      jobDetail = {
+        ...jobDetail,
+        repeatPattern: {
+          cronExpression: `0 0 */${getValues('repeatDay')} * *`,
+          startPeriod: toIsoString(start),
+          endPeriod: toIsoString(end),
+        },
+      };
+    }
     const val = {
       name: getValues('name'),
-      jobDetail: {
-        categoryId: getValues('subCategory')
-          ? getValues('subCategory')
-          : getValues('category'),
-        workType: getValues('workType'),
-        price: {
-          min: getValues('min'),
-          max: getValues('max'),
-          currency: 'currency.vnd',
-        },
-        note: describeNFTRef.current.getContent(),
-        location: {
-          // address: getValues('street'),
-          parentId: getValues('city'),
-        },
-        performanceStartTime: toIsoString(start),
-        performanceEndTime: toIsoString(end),
-        performanceCount: 0,
-        extensions: '{}',
-      },
+      jobDetail,
     };
     post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
       if (res1 > 300) {
@@ -147,6 +160,29 @@ export function CreatePackagePage() {
                 message="End date"
                 handleDateChange={setEnd}
               />
+
+              <CustomFormLabel>Circular</CustomFormLabel>
+              <Switch
+                w="30%"
+                size="lg"
+                colorScheme="teal"
+                isCheck={isCircular}
+                onChange={() => setIsCircular(!isCircular)}
+              />
+              {isCircular && (
+                <>
+                  <CustomFormLabel>Repeat day</CustomFormLabel>
+                  <InputCustomV2
+                    id="repeatDay"
+                    type="number"
+                    placeholder="Repeat days"
+                    {...register('repeatDay', {
+                      required: 'This is required',
+                    })}
+                  />
+                </>
+              )}
+
               {/* <FormControl>
                 <CustomFormLabel htmlFor="description">
                   {t(messages.desc())}
