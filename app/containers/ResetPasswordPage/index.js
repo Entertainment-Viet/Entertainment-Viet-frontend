@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { sha512 } from 'js-sha512';
 import { messages } from './messages';
 import {
   PRI_BACKGROUND,
@@ -9,15 +11,20 @@ import {
   WHITE_COLOR,
 } from '../../constants/styles';
 import PasswordField from './PasswordField';
+import { API_RESET_EMAIL, API_SERVER } from '../../constants/api';
+import { useNotification } from '../../hooks/useNotification';
 
 const PASSWORD_REQUIRED_LENGTH = 8;
 const ResetPasswordPage = () => {
   const { t } = useTranslation();
+  const { notify } = useNotification();
+  const queryParams = new URLSearchParams(window.location.search);
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validate = (
     passwordValue = password,
@@ -79,10 +86,18 @@ const ResetPasswordPage = () => {
       password === confirmPassword
     );
 
-  const handleSubmit = () => {
-    setIsSubmitting(true);
-    console.log([password, confirmPassword]);
-    setTimeout(() => setIsSubmitting(false), 1000);
+  const handleSubmit = async () => {
+    const key = queryParams.get('key');
+    try {
+      await axios.post(`${API_SERVER}${API_RESET_EMAIL}?key=${key}`, {
+        temporary: false,
+        value: sha512(password),
+      });
+    } catch (e) {
+      notify('Reset password failed, please recheck again');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -25,15 +25,20 @@ import {
   TEXT_PURPLE,
   THIRD_TEXT_COLOR,
 } from 'constants/styles';
+import axios from 'axios';
 import { messages } from './messages';
 import { EmailIcon } from './ProviderIcons';
 import background from './image/image.png';
 import Metadata from '../../components/Metadata';
 
 import EntertainmentViet from '../../images/entertainment_viet.png';
+import { API_SERVER, API_TRIGGER_RESET_EMAIL } from '../../constants/api';
+import { useNotification } from '../../hooks/useNotification';
+import { deploymentUrl } from '../../constants/deployment';
 
 function ForgotPasswordPage() {
   const { t } = useTranslation();
+  const { notify } = useNotification();
   const {
     handleSubmit,
     register,
@@ -47,7 +52,14 @@ function ForgotPasswordPage() {
 
   const onSubmit = async values => {
     // eslint-disable-next-line no-console
-    console.log(values);
+    try {
+      await axios.post(
+        `${API_SERVER}${API_TRIGGER_RESET_EMAIL}?redirectUrl=${deploymentUrl}`,
+        { email: values.username },
+      );
+    } catch (e) {
+      notify('Error requesting reset password, please recheck');
+    }
   };
 
   return (
