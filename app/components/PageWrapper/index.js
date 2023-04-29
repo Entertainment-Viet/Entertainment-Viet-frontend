@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   @media ${device.mob} {
     padding: 0px 3rem;
     margin: 0 auto;
+    width: 100%;
   }
   @media ${device.tab} {
     padding: 0px 3rem;

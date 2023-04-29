@@ -65,7 +65,7 @@ export function Sidebar({ onOpenSidebar }) {
         marginTop="2.5vh"
         boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
         borderRadius={navSize === 'small' ? '15px' : '30px'}
-        w={navSize === 'small' ? '3rem' : isMobileView ? '60%' : '260px'}
+        w={navSize === 'small' ? '3rem' : isMobileView ? '60vw' : '260px'}
         overflow={navSize === 'large' && 'auto'}
         flexDir="column"
         justifyContent="space-between"

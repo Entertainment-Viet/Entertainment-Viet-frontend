@@ -144,7 +144,13 @@ export function ArtistDetailPage({
           ? data.offerCategories[0].name
           : null}
       </H1>
-      <Tabs mb="12" isLazy position="relative" borderBottom="1px solid #282768">
+      <Tabs
+        mb="12"
+        isLazy
+        position="relative"
+        borderBottom="1px solid #282768"
+        size={['sm', 'md', 'lg']}
+      >
         <TabList color={TEXT_PURPLE}>
           <Tab size="md">{t(messages.overview())}</Tab>
           <Tab>{t(messages.about())}</Tab>

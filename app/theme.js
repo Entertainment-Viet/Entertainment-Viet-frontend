@@ -40,17 +40,28 @@ const theme = extendTheme(
       Tabs: {
         baseStyle: {
           tab: {
+            fontSize: '20px',
             fontWeight: '500',
             _hover: { color: TEXT_GREEN },
             _focus: { color: TEXT_GREEN },
           },
         },
         sizes: {
-          md: {
-            tab: {
-              fontSize: '18px',
-            },
-          },
+          // md: {
+          //   tab: {
+          //     fontSize: '18px',
+          //   },
+          // },
+          // lg: {
+          //   tab: {
+          //     fontSize: '20px',
+          //   },
+          // },
+          // sm: {
+          //   tab: {
+          //     fontSize: '14px',
+          //   },
+          // },
         },
       },
       Input: {
