@@ -4,9 +4,8 @@ import {
   Container,
   HStack,
   Flex,
-  Image,
+  // Image,
   Text,
-  Divider,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
@@ -15,13 +14,13 @@ const NotificationBox = ({ item }) => (
   <Container>
     <HStack align="center">
       <Box>
-        <Image
+        {/* <Image
           src="https://bit.ly/2Z4KKcF"
           alt="demo"
           boxSize="2rem"
           borderRadius="10%"
           zIndex={99}
-        />
+        /> */}
       </Box>
       <Flex>
         <Text fontWeight={600} fontSize={15}>
@@ -29,7 +28,6 @@ const NotificationBox = ({ item }) => (
         </Text>
       </Flex>
     </HStack>
-    <Divider w="100%" ml="auto" mr="auto" mt="1rem" />
   </Container>
 );
 

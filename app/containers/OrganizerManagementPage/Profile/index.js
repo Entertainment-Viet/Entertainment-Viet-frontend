@@ -223,12 +223,12 @@ const Profile = ({
                   id="displayName"
                   type="text"
                   size="md"
-                  placeholder="Enter your name"
+                  placeholder="Enter your display name"
                   {...register('displayName', {
                     required: 'This is required',
                     minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                      value: 2,
+                      message: 'Minimum length should be 2',
                     },
                   })}
                   defaultValue={organizerInfo.displayName}

@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import PageSpinner from 'components/PageSpinner';
 import { messages } from './messages';
 import saga from './saga';
 import reducer from './reducer';
@@ -28,6 +27,7 @@ import {
   makeSelectCityData,
   makeSelectDistrictData,
   makeSelectCityLoading,
+  makeSelectCity,
 } from './selectors';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
@@ -43,10 +43,10 @@ export function CitySelector({
   citiData,
   districtData,
   getCities,
-  loading,
   getDistricts,
   defaultCity,
   defaultDistrict,
+  isSelectCityOnly,
 }) {
   const { t } = useTranslation();
 
@@ -70,12 +70,10 @@ export function CitySelector({
     }
   }, []);
 
-  return loading ? (
-    <PageSpinner />
-  ) : (
+  return (
     <>
       <FormControl>
-        <SimpleGrid columns={2} spacing={2}>
+        <SimpleGrid columns={isSelectCityOnly ? 1 : 2} spacing={2}>
           <Box>
             <CustomFormLabel>{t(messages.province())}</CustomFormLabel>
             {citiData ? (
@@ -100,22 +98,25 @@ export function CitySelector({
             </Text>
           </Box>
           <Box>
-            <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
-            {districtData ? (
-              <SelectCustom
-                id="district"
-                size="md"
-                placeholder="Select district"
-                {...register('district')}
-                onChange={e => handleChangeDistrict(e.target.value)}
-                value={district}
-              >
-                {districtData.map(option => (
-                  <option value={option.uid} key={option.uid}>
-                    {option.name}
-                  </option>
-                ))}
-              </SelectCustom>
+            {districtData && !isSelectCityOnly ? (
+              <>
+                <CustomFormLabel>{t(messages.district())}</CustomFormLabel>
+                <SelectCustom
+                  id="district"
+                  size="md"
+                  placeholder="Select district"
+                  {...register('district')}
+                  onChange={e => handleChangeDistrict(e.target.value)}
+                  value={district}
+                  _disabled={districtData.length === 0}
+                >
+                  {districtData.map(option => (
+                    <option value={option.uid} key={option.uid}>
+                      {option.name}
+                    </option>
+                  ))}
+                </SelectCustom>
+              </>
             ) : null}
 
             <Text color={RED_COLOR}>
@@ -145,6 +146,7 @@ const mapStateToProps = createStructuredSelector({
   citiData: makeSelectCityData(),
   loading: makeSelectCityLoading(),
   districtData: makeSelectDistrictData(),
+  chosenCity: makeSelectCity(),
 });
 export function mapDispatchToProps(dispatch) {
   return {
@@ -152,7 +154,6 @@ export function mapDispatchToProps(dispatch) {
       dispatch(loadCity());
     },
     getDistricts: city => {
-      console.log('city: ', city);
       dispatch(loadDistrict(city));
     },
   };

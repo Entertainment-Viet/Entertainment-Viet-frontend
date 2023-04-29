@@ -77,13 +77,13 @@ export function CreatePackagePage() {
         },
         note: describeNFTRef.current.getContent(),
         location: {
-          address: getValues('street'),
-          parentId: getValues('district'),
+          // address: getValues('street'),
+          parentId: getValues('city'),
         },
         performanceStartTime: toIsoString(start),
         performanceEndTime: toIsoString(end),
         performanceCount: 0,
-        extensions: 'string',
+        extensions: '{}',
       },
     };
     post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
@@ -122,13 +122,9 @@ export function CreatePackagePage() {
                 <InputCustomV2
                   id="name"
                   type="text"
-                  placeholder="Need a singer..."
+                  placeholder="Tên package"
                   {...register('name', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                 />
                 <Text color={RED_COLOR}>
@@ -183,7 +179,7 @@ export function CreatePackagePage() {
                   // {...register('description')}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <CustomFormLabel>{t(messages.street())}</CustomFormLabel>
                 <InputCustomV2
                   id="street"
@@ -199,8 +195,12 @@ export function CreatePackagePage() {
                   })}
                   // defaultValue={talentInfo.address.street}
                 />
-              </FormControl>
-              <CitySelector register={register} errors={errors} />
+              </FormControl> */}
+              <CitySelector
+                register={register}
+                errors={errors}
+                isSelectCityOnly
+              />
               <CategorySelector register={register} errors={errors} />
               <Box>
                 <CustomFormLabel htmlFor="subcategory">

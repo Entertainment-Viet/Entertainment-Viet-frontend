@@ -105,13 +105,9 @@ export function CreateEventPage() {
                 <InputCustomV2
                   id="name"
                   type="text"
-                  placeholder="Need a singer..."
+                  placeholder="Title"
                   {...register('name', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                 />
                 <Text color={RED_COLOR}>

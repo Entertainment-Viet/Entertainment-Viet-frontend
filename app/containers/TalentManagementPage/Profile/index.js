@@ -275,8 +275,8 @@ const Profile = ({
                   {...register('displayName', {
                     required: 'This is required',
                     minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                      value: 2,
+                      message: 'Minimum length should be 2',
                     },
                   })}
                   defaultValue={talentInfo.displayName}

@@ -6,6 +6,7 @@ import {
   MenuGroup,
   MenuItem,
   Box,
+  Divider,
 } from '@chakra-ui/react';
 import { post } from 'utils/request';
 import { SUB_BLU_COLOR, LIGHT_PINK, TEXT_GREEN } from 'constants/styles';
@@ -74,14 +75,15 @@ const Notification = ({ data, unreadCount }) => {
             w="100%"
             h="100%"
             mb="0.5rem"
-            _hover={{ bg: 'rgba(189, 193, 234, 0.5)' }}
+            display="flex"
+            justifyContent="space-between"
           >
             <Box as="h1" color={SUB_BLU_COLOR} fontSize="24px" m="0.4rem">
               Notification
             </Box>
             <Box
               right="1rem"
-              position="absolute"
+              // position="absolute"
               _hover={{ textDecoration: 'none' }}
               borderBottom={`1px solid ${SUB_BLU_COLOR}`}
               fontWeight={600}
@@ -105,6 +107,7 @@ const Notification = ({ data, unreadCount }) => {
                   <NotificationBox item={item} />
                 </Link>
               </MenuItem>
+              <Divider w="100%" ml="auto" mr="auto" mt="1rem" />
             </MenuGroup>
           ))}
       </MenuList>

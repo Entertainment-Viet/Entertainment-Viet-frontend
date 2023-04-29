@@ -166,13 +166,9 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                 <InputCustomV2
                   id="name"
                   type="text"
-                  placeholder="Need a singer..."
+                  placeholder="Title"
                   {...register('name', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                 />
                 <Text color={RED_COLOR}>
@@ -251,10 +247,6 @@ export function CreateCustomDealPage({ match, getCategories, categories }) {
                   placeholder="Enter your street"
                   {...register('street', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                   // defaultValue={talentInfo.address.street}
                 />
