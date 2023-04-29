@@ -17,7 +17,6 @@ import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import './locales/i18n';
 import { ChakraProvider } from '@chakra-ui/react';
-import { createRoot } from 'react-dom/client';
 
 // Import root app
 import App from 'containers/App';
@@ -39,7 +38,6 @@ import configureStore from './configureStore';
 const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
-const root = createRoot(MOUNT_NODE);
 // const myFontObserver = new FontFaceObserver('MyFont');
 // const myFontBoldObserver = new FontFaceObserver('MyFont-Bold');
 

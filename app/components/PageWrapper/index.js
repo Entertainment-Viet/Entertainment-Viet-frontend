@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   @media ${device.lap} {
     margin: 0px 1rem 1.5rem 1rem;
     width: 100%;
-    margin-left: 3rem;
+    margin-left: 6rem;
     // margin-right: auto;
   }
 `;
