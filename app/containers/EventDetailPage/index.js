@@ -94,7 +94,7 @@ export function EventDetailPage({
           ? data.offerCategories[0].name
           : null}
       </H1> */}
-      <Tabs mb="12" isLazy>
+      <Tabs mb="12" isLazy size={['sm', 'md', 'lg']}>
         <TabList color={TEXT_PURPLE}>
           <Tab>{t(messages.overview())}</Tab>
           <Tab>{t(messages.about())}</Tab>

@@ -61,7 +61,7 @@ function CardV2(props) {
         src={avatar}
         alt="Avatar"
         width="99%"
-        height={350}
+        height={300}
         aspect
         zIndex={50}
         mt="0.3rem"

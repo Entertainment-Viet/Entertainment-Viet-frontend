@@ -13,7 +13,13 @@ function PrivateRoute({ children, isAuthenticated, roles, ...rest }) {
   const getRole = getLocalRole();
   return (
     <Flex overflow="auto" height="100vh">
-      <Box position="sticky" alignSelf="flex-start" top="0" height="auto">
+      <Box
+        position="fixed"
+        alignSelf="flex-start"
+        top="0"
+        height="auto"
+        zIndex={999}
+      >
         <Sidebar />
       </Box>
       <PageWrapper className="header-column">

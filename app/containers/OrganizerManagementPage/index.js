@@ -50,7 +50,13 @@ export function OrganizerManagementPage() {
       <H1 color={TEXT_GREEN} fontSize="30px">
         {t(messages.myAccount())}
       </H1>
-      <Tabs mb="12" isLazy position="relative" borderBottom="1px solid #282768">
+      <Tabs
+        mb="12"
+        isLazy
+        position="relative"
+        borderBottom="1px solid #282768"
+        size={['sm', 'md', 'lg']}
+      >
         <TabList color={TEXT_PURPLE}>
           <Tab>{t(messages.profile())}</Tab>
           <Tab>{t(messages.myEvents())}</Tab>

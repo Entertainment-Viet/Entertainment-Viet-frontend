@@ -142,13 +142,7 @@ const ConfirmFinishModal = props => {
                 <TextAreaCustom
                   id="comment"
                   placeholder="Your reviews"
-                  {...register('comment', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
-                  })}
+                  {...register('comment', {})}
                 />
                 <FormErrorMessage>
                   {errors.suggestedPrice && errors.suggestedPrice.message}

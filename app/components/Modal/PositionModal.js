@@ -206,8 +206,8 @@ const PositionModal = props => {
                   {...register('suggestedPrice', {
                     required: 'This is required',
                     minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                      value: 5,
+                      message: 'Mức giá phải cao hơn 100.000VND',
                     },
                   })}
                 />

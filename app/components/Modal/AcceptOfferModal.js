@@ -4,10 +4,10 @@ import { CSSTransition } from 'react-transition-group';
 import './Modal.css';
 import {
   HStack,
-  Text,
-  Box,
+  // Text,
+  // Box,
   VStack,
-  Container,
+  // Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -15,13 +15,13 @@ import {
   chakra,
 } from '@chakra-ui/react';
 import { PRI_TEXT_COLOR } from 'constants/styles';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import Button from 'components/Buttons';
 import {
   getResStatus,
   cacthError,
   cacthResponse,
-  numberWithCommas,
+  // numberWithCommas,
 } from 'utils/helpers';
 import { useForm } from 'react-hook-form';
 import { put } from 'utils/request';
@@ -29,7 +29,9 @@ import {
   API_GET_BOOKING_TALENT_INFO,
   API_GET_BOOKING_ORG_INFO,
 } from 'constants/api';
-import { messages } from './messages';
+import { useNotification } from '../../hooks/useNotification';
+
+// import { messages } from './messages';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -44,7 +46,8 @@ const AcceptOfferModal = props => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
+  const { notify } = useNotification();
   const id = window.localStorage.getItem('uid');
   const role = window.localStorage.getItem('role');
   function onSubmit() {
@@ -77,16 +80,13 @@ const AcceptOfferModal = props => {
     else if (role === 'organizer')
       put(API_GET_BOOKING_TALENT_INFO, val, id, props.data.uid)
         .then(res => {
-          const status = getResStatus(res);
-          if (status === 200) {
-            console.log(res.data);
-          } else if (status === 400) {
-            console.log('error while logging out 400');
-          } else if (status === 500) {
-            console.log('error while logging out 500');
-          } else {
-            cacthResponse(res);
+          if (res > 300) {
+            notify(
+              'Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau',
+            );
+            return;
           }
+          notify('Tạo thành công');
         })
         .catch(err => cacthError(err));
   }
@@ -140,10 +140,6 @@ const AcceptOfferModal = props => {
                   placeholder="Mức giá"
                   {...register('max', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                 />
                 <FormErrorMessage>

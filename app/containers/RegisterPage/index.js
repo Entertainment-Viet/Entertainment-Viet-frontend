@@ -5,28 +5,28 @@
  *
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import cRequest from 'utils/server';
-import {
-  redirectHome,
-  getResErrorCode,
-  getResStatus,
-  cacthError,
-  cacthResponse,
-} from 'utils/helpers';
-import { setUserData, setUserLoginStat } from 'utils/auth';
-import * as Noti from 'utils/notification';
-import { ERROR_PARAMETERS, ERROR_USER_NOT_ACTIVE } from 'constants/errors';
+// import cRequest from 'utils/server';
+// import {
+//   redirectHome,
+//   getResErrorCode,
+//   getResStatus,
+//   cacthError,
+//   cacthResponse,
+// } from 'utils/helpers';
+// import { setUserData, setUserLoginStat } from 'utils/auth';
+// import * as Noti from 'utils/notification';
+// import { ERROR_PARAMETERS, ERROR_USER_NOT_ACTIVE } from 'constants/errors';
 
-import { API_LOGIN } from 'constants/api';
+// import { API_LOGIN } from 'constants/api';
 import { ROUTE_LOGIN } from 'constants/routes';
-import { ENUM_USER_ROLE, ENUM_LOGINSTATE } from 'constants/enums';
+// import { ENUM_USER_ROLE, ENUM_LOGINSTATE } from 'constants/enums';
 
 import Metadata from 'components/Metadata';
-import { H1 } from 'components/Elements';
+// import { H1 } from 'components/Elements';
 import {
   SimpleGrid,
   Box,
@@ -44,7 +44,7 @@ import {
   Select,
   chakra,
 } from '@chakra-ui/react';
-import { PRI_TEXT_COLOR, LIGHT_GRAY, RED_COLOR } from 'constants/styles';
+import { RED_COLOR } from 'constants/styles';
 import { useForm } from 'react-hook-form';
 import OAuthButtonGroup from './OAuthButtonGroup';
 import PasswordField from './PasswordField';
@@ -56,12 +56,12 @@ const CustomFormLabel = chakra(FormLabel, {
     my: '4',
   },
 });
-function RegisterPage(props) {
+function RegisterPage() {
   const { t } = useTranslation();
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm();
   // const [isTokenFound, setTokenFound] = useState(false);
 
@@ -170,8 +170,8 @@ function RegisterPage(props) {
                   {...register('displayName', {
                     required: 'This is required',
                     minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                      value: 3,
+                      message: 'Minimum length should be 3',
                     },
                   })}
                 />
@@ -186,9 +186,9 @@ function RegisterPage(props) {
                   placeholder="Enter your email"
                   {...register('email', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'invalid email address',
                     },
                   })}
                 />

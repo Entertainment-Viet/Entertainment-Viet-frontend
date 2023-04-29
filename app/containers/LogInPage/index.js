@@ -208,9 +208,9 @@ function LoginPage() {
                   placeholder="Enter your email"
                   {...register('username', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'invalid email address',
                     },
                   })}
                 />

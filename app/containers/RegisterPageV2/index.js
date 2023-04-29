@@ -168,12 +168,12 @@ function RegisterPageV2() {
                   border={`1px solid ${THIRD_TEXT_COLOR}`}
                   fontSize="15px"
                   fontWeight="400"
-                  placeholder="Enter your username"
+                  placeholder="Enter your display name"
                   {...register('username', {
                     required: 'This is required',
                     minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                      value: 2,
+                      message: 'Minimum length should be 2',
                     },
                   })}
                 />
@@ -197,9 +197,9 @@ function RegisterPageV2() {
                   placeholder="Enter your email"
                   {...register('email', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'invalid email address',
                     },
                   })}
                 />

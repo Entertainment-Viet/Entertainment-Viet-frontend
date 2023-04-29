@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   @media ${device.mob} {
     padding: 0px 3rem;
     margin: 0 auto;
+    width: 100%;
   }
   @media ${device.tab} {
     padding: 0px 3rem;
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
   @media ${device.lap} {
     margin: 0px 1rem 1.5rem 1rem;
     width: 100%;
-    margin-left: 3rem;
+    margin-left: 6rem;
     // margin-right: auto;
   }
 `;

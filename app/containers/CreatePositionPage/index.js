@@ -157,10 +157,6 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                   placeholder="Need a singer..."
                   {...register('name', {
                     required: 'This is required',
-                    minLength: {
-                      value: 4,
-                      message: 'Minimum length should be 4',
-                    },
                   })}
                 />
                 <Text color={RED_COLOR}>
@@ -173,10 +169,6 @@ export function CreatePositionPage({ getCategories, categories, match }) {
                   placeholder="Need a singer..."
                   {...register('quantity', {
                     required: 'This is required',
-                    minLength: {
-                      value: 1,
-                      message: 'This field must not be empty',
-                    },
                   })}
                 />
                 <Text color={RED_COLOR}>
