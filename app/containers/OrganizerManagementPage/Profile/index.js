@@ -31,7 +31,12 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { put, getFileFromAWS, sendFileToAWS } from 'utils/request';
+import {
+  put,
+  getFileFromAWS,
+  sendFileToAWS,
+  handleUpload,
+} from 'utils/request';
 import PropTypes from 'prop-types';
 import reducer from './slice/reducer';
 import saga from './slice/saga';
@@ -80,7 +85,7 @@ const Profile = ({
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -96,17 +101,25 @@ const Profile = ({
     }
   }, [organizerInfo]);
 
-  const handleUpload = item => {
-    if (item) {
-      setFile(item);
-      setUrl(URL.createObjectURL(item));
-    }
-  };
+  // const handleUpload = item => {
+  //   if (item.size > 2000000) {
+  //     notify('Xin vui lòng chỉ upload ảnh dưới 2mb');
+  //     return;
+  //   }
+  //   if (item) {
+  //     setFile(item);
+  //     setUrl(URL.createObjectURL(item));
+  //   }
+  // };
 
   const onSubmit = async values => {
     let fileCode = '';
     if (file) {
-      fileCode = await sendFileToAWS(file, true);
+      try {
+        fileCode = await sendFileToAWS(file, true);
+      } catch (err) {
+        notify('Upload thất bại. Xin vui lòng chỉ upload file dưới 2mb');
+      }
     }
     const data = {
       avatar: fileCode,
@@ -178,7 +191,9 @@ const Profile = ({
                       onDragEnter={startAnimation}
                       onDragLeave={stopAnimation}
                       position="absolute"
-                      onChange={e => handleUpload(e.target.files[0])}
+                      onChange={e =>
+                        handleUpload(e.target.files[0], setFile, setUrl, notify)
+                      }
                     />
                   </Avatar>
                 </Box>
@@ -274,7 +289,12 @@ const Profile = ({
                 />
               </FormControl>
               <Box />
-              <Button bg={TEXT_GREEN} color={SUB_BLU_COLOR} type="submit">
+              <Button
+                bg={TEXT_GREEN}
+                color={SUB_BLU_COLOR}
+                type="submit"
+                isLoading={isSubmitting}
+              >
                 {t(messages.save())}
               </Button>
               <Box />

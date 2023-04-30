@@ -102,10 +102,14 @@ export function getUrl(url, params) {
 }
 
 export function sendFileToAWS(file, isPublic = true) {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('public', isPublic);
-  return post(`${process.env.REACT_APP_API}/${API_UPLOAD_FILE}`, formData);
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('public', isPublic);
+    return post(`${process.env.REACT_APP_API}/${API_UPLOAD_FILE}`, formData);
+  } catch (err) {
+    throw new Error('error while uploading: ', err);
+  }
 }
 
 export async function getFileFromAWS(keyFile) {
@@ -114,3 +118,14 @@ export async function getFileFromAWS(keyFile) {
   const base64Image = Buffer.from(response.data, 'binary').toString('base64');
   return `data:image/*;base64,${base64Image}`;
 }
+
+export const handleUpload = (item, setFile, setUrl, notify) => {
+  if (item.size > 2000000) {
+    notify('Xin vui lòng chỉ upload ảnh dưới 2mb');
+    return;
+  }
+  if (item) {
+    setFile(item);
+    setUrl(URL.createObjectURL(item));
+  }
+};
