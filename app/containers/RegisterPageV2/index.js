@@ -11,22 +11,22 @@ import PropTypes from 'prop-types';
 
 import {
   Box,
-  Stack,
-  HStack,
-  FormControl,
-  Input,
   Button,
-  Text,
-  Link,
+  Checkbox,
+  FormControl,
+  HStack,
+  Input,
   InputGroup,
   InputLeftElement,
-  Checkbox,
+  Link,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 
 import {
+  PRI_BACKGROUND,
   PRI_TEXT_COLOR,
   RED_COLOR,
-  PRI_BACKGROUND,
   TEXT_GREEN,
   TEXT_PURPLE,
   THIRD_TEXT_COLOR,
@@ -42,13 +42,18 @@ import { messages } from './messages';
 import { EmailIcon } from '../LoginPageV2/ProviderIcons';
 
 import { ROUTE_LOGIN } from '../../constants/routes';
-import { API_ORG_REGISTER, API_TAL_REGISTER } from '../../constants/api';
+import {
+  API_ORG_REGISTER,
+  API_TAL_REGISTER,
+  API_VERIFY_EMAIL,
+} from '../../constants/api';
 import { AccountIcon } from './ProviderIcons';
 import Metadata from '../../components/Metadata';
 import SelectCustom from '../../components/Controls/SelectCustom';
 import { ENUM_ROLES } from '../../constants/enums';
 
 import EntertainmentViet from '../../images/entertainment_viet.png';
+import { deploymentUrl } from '../../constants/deployment';
 
 function RegisterPageV2() {
   const { t } = useTranslation();
@@ -59,38 +64,49 @@ function RegisterPageV2() {
   } = useForm();
   const { notify } = useNotification();
 
-  const onSubmit = values => {
+  const onSubmit = async values => {
     const password = sha512(values.password);
     const data = {
       username: values.username,
       email: values.email,
       password,
     };
+    let res;
     if (values.role === ENUM_ROLES.ORG) {
-      axios
-        .post(`${process.env.REACT_APP_API}${API_ORG_REGISTER}`, data)
-        .then(res => {
-          if (res > 300) {
-            notify(
-              'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
-            );
-          }
-          notify('Thành công');
-        });
+      res = await axios.post(
+        `${process.env.REACT_APP_API}${API_ORG_REGISTER}`,
+        data,
+      );
+      if (res > 300) {
+        notify(
+          'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+        );
+      }
+      notify('Thành công');
     } else if (values.role === ENUM_ROLES.TAL) {
-      axios
-        .post(`${process.env.REACT_APP_API}${API_TAL_REGISTER}`, data)
-        .then(res => {
-          if (res > 300) {
-            notify(
-              'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
-            );
-          }
-          notify('Thành công');
-        });
+      res = await axios.post(
+        `${process.env.REACT_APP_API}${API_TAL_REGISTER}`,
+        data,
+      );
+      if (res > 300) {
+        notify(
+          'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+        );
+        return;
+      }
+      notify('Thành công');
     } else {
       notify('Role không tồn tại');
+      return;
     }
+    await axios.post(
+      `${
+        process.env.REACT_APP_API
+      }${API_VERIFY_EMAIL}?redirectUrl=${deploymentUrl}`,
+      {
+        uid: res.data,
+      },
+    );
   };
 
   const optionsRole = [

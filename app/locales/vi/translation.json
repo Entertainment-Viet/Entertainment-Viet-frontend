@@ -30,6 +30,16 @@
     "forgot": "Forgot Password?",
     "send": "Send"
   },
+  "resetPasswordPage": {
+    "resetPassword": "Reset Password",
+    "enterNewPassword": "Please enter new password.",
+    "placeHolderEnterPassword": "Enter your password",
+    "placeHolderConfirmPassword": "Confirm your password",
+    "passwordRequirement": "Must be at least 8 characters",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm your password",
+    "reset": "Reset"
+  },
   "homePage": {
     "welcome": "Welcome back!",
     "lookingTalent": "Looking for talent for your event?",

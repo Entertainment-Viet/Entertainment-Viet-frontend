@@ -6,6 +6,9 @@ export const API_LOGIN = '/auth/realms/ve-sso/protocol/openid-connect/token';
 export const API_LOGOUT = '/auth/realms/ve-sso/protocol/openid-connect/logout';
 export const API_ORG_REGISTER = '/api/users/organizers';
 export const API_TAL_REGISTER = '/api/users/talents';
+export const API_VERIFY_EMAIL = '/api/email/verification';
+export const API_TRIGGER_RESET_EMAIL = '/api/email/pass-reset';
+export const API_RESET_EMAIL = '/api/email-process/pass-reset';
 /* NEWS */
 export const API_NEWS_LIST = '/news/list';
 export const API_NEWS_DETAIL = '/news/detail/'; // :id
