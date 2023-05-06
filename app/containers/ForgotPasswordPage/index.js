@@ -58,7 +58,9 @@ function ForgotPasswordPage() {
         { email: values.username },
       );
     } catch (e) {
-      notify('Error requesting reset password, please recheck');
+      if (e.response.data.description) notify(e.response.data.description);
+      else if (e.response.data.error) notify(e.response.data.error);
+      else notify('Error requesting reset password, please recheck');
     }
   };
 

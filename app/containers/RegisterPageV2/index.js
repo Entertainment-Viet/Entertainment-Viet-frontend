@@ -65,48 +65,43 @@ function RegisterPageV2() {
   const { notify } = useNotification();
 
   const onSubmit = async values => {
-    const password = sha512(values.password);
-    const data = {
-      username: values.username,
-      email: values.email,
-      password,
-    };
-    let res;
-    if (values.role === ENUM_ROLES.ORG) {
-      res = await axios.post(
-        `${process.env.REACT_APP_API}${API_ORG_REGISTER}`,
-        data,
-      );
-      if (res > 300) {
-        notify(
-          'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+    try {
+      let res;
+      const password = sha512(values.password);
+      const data = {
+        username: values.username,
+        email: values.email,
+        password,
+      };
+      if (values.role === ENUM_ROLES.ORG) {
+        res = await axios.post(
+          `${process.env.REACT_APP_API}${API_ORG_REGISTER}`,
+          data,
         );
-      }
-      notify('Thành công');
-    } else if (values.role === ENUM_ROLES.TAL) {
-      res = await axios.post(
-        `${process.env.REACT_APP_API}${API_TAL_REGISTER}`,
-        data,
-      );
-      if (res > 300) {
-        notify(
-          'Tạo tài khoản thất bại, xin vui lòng liên hệ bộ phận kỹ thuật để được hỗ trợ',
+        notify('Thành công');
+      } else if (values.role === ENUM_ROLES.TAL) {
+        res = await axios.post(
+          `${process.env.REACT_APP_API}${API_TAL_REGISTER}`,
+          data,
         );
+        notify('Thành công');
+      } else {
+        notify('Role không tồn tại');
         return;
       }
-      notify('Thành công');
-    } else {
-      notify('Role không tồn tại');
-      return;
+      await axios.post(
+        `${
+          process.env.REACT_APP_API
+        }${API_VERIFY_EMAIL}?redirectUrl=${deploymentUrl}`,
+        {
+          uid: res.data,
+        },
+      );
+    } catch (e) {
+      if (e.response.data.description) notify(e.response.data.description);
+      else if (e.response.data.error) notify(e.response.data.error);
+      else notify('Error while register account, please contact administrator');
     }
-    await axios.post(
-      `${
-        process.env.REACT_APP_API
-      }${API_VERIFY_EMAIL}?redirectUrl=${deploymentUrl}`,
-      {
-        uid: res.data,
-      },
-    );
   };
 
   const optionsRole = [

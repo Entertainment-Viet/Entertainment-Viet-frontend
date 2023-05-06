@@ -94,7 +94,9 @@ const ResetPasswordPage = () => {
         value: sha512(password),
       });
     } catch (e) {
-      notify('Reset password failed, please recheck again');
+      if (e.response.data.description) notify(e.response.data.description);
+      else if (e.response.data.error) notify(e.response.data.error);
+      else notify('Reset password failed, please recheck again');
     } finally {
       setIsSubmitting(false);
     }
