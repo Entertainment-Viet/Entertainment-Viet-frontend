@@ -65,7 +65,7 @@ export function CreatePackagePage() {
 
   const onSubmit = async () => {
     const talentId = window.localStorage.getItem('uid');
-    let jobDetail = {
+    const jobDetail = {
       categoryId: getValues('subCategory')
         ? getValues('subCategory')
         : getValues('category'),
@@ -83,11 +83,15 @@ export function CreatePackagePage() {
       performanceStartTime: toIsoString(start),
       performanceEndTime: toIsoString(end),
       performanceCount: 0,
-      extensions: 'string',
+      extensions: '{}',
+    };
+    let val = {
+      name: getValues('name'),
+      jobDetail,
     };
     if (isCircular) {
-      jobDetail = {
-        ...jobDetail,
+      val = {
+        ...val,
         repeatPattern: {
           cronExpression: `0 0 */${getValues('repeatDay')} * *`,
           startPeriod: toIsoString(start),
@@ -95,17 +99,16 @@ export function CreatePackagePage() {
         },
       };
     }
-    const val = {
-      name: getValues('name'),
-      jobDetail,
-    };
-    post(API_GET_PACKAGE_INFO, val, talentId).then(res1 => {
-      if (res1 > 300) {
-        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
-        return;
-      }
+    try {
+      await post(API_GET_PACKAGE_INFO, val, talentId);
       notify('Tạo thành công');
-    });
+    } catch (e) {
+      if (e.response) {
+        if (e.response.data.description) notify(e.response.data.description);
+        else if (e.response.data.error) notify(e.response.data.error);
+      } else
+        notify('Tạo thất bại, vui lòng kiểm tra lại thông tin và thử lại sau');
+    }
   };
 
   return (

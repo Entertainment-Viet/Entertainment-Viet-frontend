@@ -57,10 +57,14 @@ function ForgotPasswordPage() {
         `${API_SERVER}${API_TRIGGER_RESET_EMAIL}?redirectUrl=${deploymentUrl}`,
         { email: values.username },
       );
+      await notify(
+        'Email to reset password has been sent, please check in your registered mail',
+      );
     } catch (e) {
-      if (e.response.data.description) notify(e.response.data.description);
-      else if (e.response.data.error) notify(e.response.data.error);
-      else notify('Error requesting reset password, please recheck');
+      if (e.response) {
+        if (e.response.data.description) notify(e.response.data.description);
+        else if (e.response.data.error) notify(e.response.data.error);
+      } else notify('Error requesting reset password, please recheck');
     }
   };
 
