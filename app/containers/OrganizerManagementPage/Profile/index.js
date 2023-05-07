@@ -74,7 +74,7 @@ const Profile = ({
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
-  const [url, setUrl] = useState('https://bit.ly/sage-adebayo');
+  const [url, setUrl] = useState('');
   const [file, setFile] = useState(null);
   const activityNFTRef = useRef(null);
   const bioNFTRef = useRef(null);
@@ -122,6 +122,7 @@ const Profile = ({
       }
     }
     const data = {
+      ...(fileCode && { avatar: fileCode }),
       avatar: fileCode,
       displayName: values.displayName,
       activity: activityNFTRef.current.getContent(),
