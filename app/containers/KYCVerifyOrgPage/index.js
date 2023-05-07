@@ -56,7 +56,8 @@ import { API_ORGANIZER_KYC } from '../../constants/api';
 import CitySelector from '../CitySelector';
 import NotificationProvider from '../../components/NotificationProvider';
 import FormWrapper from '../../components/ContentWrapper/FormWrapper';
-
+import { useNotification } from '../../hooks/useNotification';
+import { handleUpload } from '../../utils/request';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -82,19 +83,13 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
   const organizerId = window.localStorage.getItem('uid');
   const toast = useToast();
 
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
 
   const {
     handleSubmit,
     register,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -119,26 +114,26 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
     }
   }, [organizerInfo]);
 
-  const handleUploadAvatar = item => {
-    if (item) {
-      setFileAvatar(item);
-      setUrlAvatar(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadAvatar = item => {
+  //   if (item) {
+  //     setFileAvatar(item);
+  //     setUrlAvatar(URL.createObjectURL(item));
+  //   }
+  // };
 
-  const handleUploadCCCD1 = item => {
-    if (item) {
-      setFileCCCD1(item);
-      setUrlCCCD1(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadCCCD1 = item => {
+  //   if (item) {
+  //     setFileCCCD1(item);
+  //     setUrlCCCD1(URL.createObjectURL(item));
+  //   }
+  // };
 
-  const handleUploadCCCD2 = item => {
-    if (item) {
-      setFileCCCD2(item);
-      setUrlCCCD2(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadCCCD2 = item => {
+  //   if (item) {
+  //     setFileCCCD2(item);
+  //     setUrlCCCD2(URL.createObjectURL(item));
+  //   }
+  // };
 
   const dataType = [
     {
@@ -258,7 +253,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                       onDragEnter={startAnimation}
                       onDragLeave={stopAnimation}
                       position="absolute"
-                      onChange={e => handleUploadAvatar(e.target.files[0])}
+                      onChange={e => handleUpload(e.target.files[0], setFileAvatar, setUrlAvatar, notify )}
                     />
                   </Avatar>
                 </Box>
@@ -588,7 +583,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         position="absolute"
                         width="50%"
                         height="127px"
-                        onChange={e => handleUploadCCCD1(e.target.files[0])}
+                        onChange={e => handleUpload(e.target.files[0], setFileCCCD1, setUrlCCCD1, notify)}
                       />
                     </Box>
                     <Box>
@@ -608,7 +603,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                         position="absolute"
                         width="50%"
                         height="127px"
-                        onChange={e => handleUploadCCCD2(e.target.files[0])}
+                        onChange={e => handleUpload(e.target.files[0], setFileCCCD2, setUrlCCCD2, notify)}
                       />
                     </Box>
                   </SimpleGrid>
@@ -646,6 +641,7 @@ export function KYCVerifyOrgPage({ organizerInfo, loadOrganizer }) {
                   color={SUB_BLU_COLOR}
                   type="submit"
                   disabled={organizerInfo.userState === USER_STATE.PENDING}
+                  isLoading={isSubmitting}
                 >
                   {t(messages.submit())}
                 </Button>

@@ -206,9 +206,16 @@ export function numberWithCommas(x) {
 }
 
 export function handleAddress(addr) {
-  if (addr)
-    return `${addr.name}, ${addr.parent.name}, ${addr.parent.parent.name}`;
-  return null;
+  let returnAddress = '';
+  if (addr) {
+    if (addr.name) returnAddress = returnAddress.concat(addr.name);
+    if (addr.parent) {
+      returnAddress = returnAddress.concat(`, ${addr.parent.name}`);
+      if (addr.parent.parent)
+        returnAddress = returnAddress.concat(`, ${addr.parent.parent.name}`);
+    }
+  }
+  return returnAddress;
 }
 export function calculateTotalPrice(arr) {
   const totalPrice = arr.reduce(

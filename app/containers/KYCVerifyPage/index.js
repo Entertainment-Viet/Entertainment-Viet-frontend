@@ -27,7 +27,7 @@ import { H1 } from 'components/Elements';
 
 import { useForm } from 'react-hook-form';
 import { useAnimation } from 'framer-motion';
-import { put } from 'utils/request';
+import { put, handleUpload } from 'utils/request';
 import PropTypes from 'prop-types';
 import saga from './saga';
 import reducer from './reducer';
@@ -58,7 +58,7 @@ import { USER_STATE } from '../../constants/enums';
 import CitySelector from '../CitySelector';
 import NotificationProvider from '../../components/NotificationProvider';
 import FormWrapper from '../../components/ContentWrapper/FormWrapper';
-
+import { useNotification } from '../../hooks/useNotification';
 const CustomFormLabel = chakra(FormLabel, {
   baseStyle: {
     my: '4',
@@ -86,19 +86,13 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
   const talentId = window.localStorage.getItem('uid');
   const toast = useToast();
   
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
 
   const {
     handleSubmit,
     register,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -123,26 +117,26 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
     }
   }, [talentInfo]);
 
-  const handleUploadAvatar = item => {
-    if (item) {
-      setFileAvatar(item);
-      setUrlAvatar(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadAvatar = item => {
+  //   if (item) {
+  //     setFileAvatar(item);
+  //     setUrlAvatar(URL.createObjectURL(item));
+  //   }
+  // };
 
-  const handleUploadCCCD1 = item => {
-    if (item) {
-      setFileCCCD1(item);
-      setUrlCCCD1(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadCCCD1 = item => {
+  //   if (item) {
+  //     setFileCCCD1(item);
+  //     setUrlCCCD1(URL.createObjectURL(item));
+  //   }
+  // };
 
-  const handleUploadCCCD2 = item => {
-    if (item) {
-      setFileCCCD2(item);
-      setUrlCCCD2(URL.createObjectURL(item));
-    }
-  };
+  // const handleUploadCCCD2 = item => {
+  //   if (item) {
+  //     setFileCCCD2(item);
+  //     setUrlCCCD2(URL.createObjectURL(item));
+  //   }
+  // };
 
   const dataType = [
     {
@@ -262,7 +256,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                       onDragEnter={startAnimation}
                       onDragLeave={stopAnimation}
                       position="absolute"
-                      onChange={e => handleUploadAvatar(e.target.files[0])}
+                      onChange={e => handleUpload(e.target.files[0], setFileAvatar, setUrlAvatar, notify)}
                     />
                   </Avatar>
                 </Box>
@@ -490,7 +484,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         position="absolute"
                         width="50%"
                         height="127px"
-                        onChange={e => handleUploadCCCD1(e.target.files[0])}
+                        onChange={e => handleUpload(e.target.files[0], setFileCCCD1, setUrlCCCD1, notify)}
                       />
                     </Box>
                     <Box>
@@ -510,7 +504,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                         position="absolute"
                         width="50%"
                         height="127px"
-                        onChange={e => handleUploadCCCD2(e.target.files[0])}
+                        onChange={e => handleUpload(e.target.files[0], setFileCCCD2, setUrlCCCD2, notify)}
                       />
                     </Box>
                   </SimpleGrid>
@@ -562,6 +556,7 @@ export function KYCVerifyPage({ talentInfo, loadTalent }) {
                   color={SUB_BLU_COLOR}
                   type="submit"
                   disabled={talentInfo.userState === USER_STATE.PENDING}
+                  isLoading={isSubmitting}
                 >
                   {t(messages.submit())}
                 </Button>

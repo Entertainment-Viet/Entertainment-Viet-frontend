@@ -41,7 +41,7 @@ import { AddAvatarIcon, AddVerifyIcon } from '../ProviderIcons';
 import { QWERTYEditor } from '../../../components/Controls';
 import { ROUTE_MANAGER_KYC } from '../../../constants/routes';
 import { API_TALENT_DETAIL } from '../../../constants/api';
-import { getFileFromAWS, sendFileToAWS } from 'utils/request';
+import { getFileFromAWS, sendFileToAWS, handleUpload } from 'utils/request';
 import { getSubCategory } from 'utils/helpers';
 import { loadCategoriesInfo, loadTalentInfo } from './slice/actions';
 import { makeSelectCategories, makeSelectTalent } from './slice/selectors';
@@ -56,7 +56,7 @@ import CategorySelector from '../../CategorySelector';
 import { toBase64 } from '../../../utils/helpers';
 import FormWrapper from '../../../components/ContentWrapper/FormWrapper';
 import DynamicForm from '../../../components/DynamicInputForm';
-
+import { useNotification } from '../../../hooks/useNotification';
 const key = 'Profile';
 
 const CustomFormLabel = chakra(FormLabel, {
@@ -87,18 +87,12 @@ const Profile = ({
   const [dynamicHashtag, setDynamicHashtag] = useState([]);
   const toast = useToast();
   const thumbnailComposable = useThumbnailImgs(5);
-  const notify = title => {
-    toast({
-      position: 'top-right',
-      duration: 3000,
-      render: () => <NotificationProvider title={title} />,
-    });
-  };
+  const { notify } = useNotification();
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -128,12 +122,12 @@ const Profile = ({
     }
   }, [talentInfo, categoriesInfo]);
 
-  const handleUpload = item => {
-    if (item) {
-      setFile(item);
-      setUrl(URL.createObjectURL(item));
-    }
-  };
+  // const handleUpload = item => {
+  //   if (item) {
+  //     setFile(item);
+  //     setUrl(URL.createObjectURL(item));
+  //   }
+  // };
 
   const handleChangeCategory = e => {
     const value = e.target.value;
@@ -227,7 +221,7 @@ const Profile = ({
                       onDragEnter={startAnimation}
                       onDragLeave={stopAnimation}
                       position="absolute"
-                      onChange={e => handleUpload(e.target.files[0])}
+                      onChange={e => handleUpload(e.target.files[0], setFile, setUrl, notify)}
                     />
                   </Avatar>
                 </Box>
@@ -341,7 +335,7 @@ const Profile = ({
                 />
               </FormControl>
               <Box />
-              <Button bg={TEXT_GREEN} color={SUB_BLU_COLOR} type="submit">
+              <Button bg={TEXT_GREEN} color={SUB_BLU_COLOR} type="submit" isLoading={isSubmitting}>
                 {t(messages.save())}
               </Button>
               <Box />
