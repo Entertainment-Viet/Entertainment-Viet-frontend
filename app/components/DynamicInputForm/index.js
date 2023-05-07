@@ -22,12 +22,13 @@ function DynamicArrayForm(props) {
     const data = [...formFields];
     data[index] = event.target.value;
     setFormFields(data);
+    props.setDynamicData(data);
   };
 
-  const submit = e => {
-    e.preventDefault();
-    props.setDynamicData(formFields);
-  };
+  // const submit = e => {
+  //   e.preventDefault();
+  //   props.setDynamicData(formFields);
+  // };
 
   const addFields = () => {
     const object = '';
@@ -43,7 +44,7 @@ function DynamicArrayForm(props) {
   };
 
   return (
-    <form onChange={submit}>
+    <form>
       {formFields &&
         formFields.map((form, index) => (
           <Box display="flex" height="40px" marginBottom="20px">

@@ -41,6 +41,7 @@ export function CategorySelector({
   getCategories,
   categories,
   defaultCategory,
+  setValue,
 }) {
   const { t } = useTranslation();
 
@@ -54,18 +55,21 @@ export function CategorySelector({
     getCategories();
   }, []);
   function handleChangeSubCategory(value) {
-    console.log(value);
     setChosenSubCategory(value);
+    setValue('subCategory', value);
   }
   useEffect(() => {
     if (defaultCategory) {
       if (defaultCategory.parentUid) {
         setChosenCategory(defaultCategory.parentUid);
+        setValue('category', defaultCategory.parentUid);
         if (categories.length > 0)
           handleChangeCategory(defaultCategory.parentUid);
         setChosenSubCategory(defaultCategory.uid);
+        setValue('subCategory', defaultCategory.uid);
       } else {
         setChosenCategory(defaultCategory.uid);
+        setValue('category', defaultCategory.uid);
       }
     }
     if (categories) {
@@ -81,6 +85,8 @@ export function CategorySelector({
     const cat = categories.find(item => item.uid === value);
     const subTemp = getSubCategory(cat, categories);
     setSubCategory(subTemp.chilren);
+    setValue('category', value);
+    setValue('subCategory', null);
   };
 
   return loading ? (

@@ -77,7 +77,7 @@ const Profile = ({
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
   const { t } = useTranslation();
-  const [url, setUrl] = useState('https://bit.ly/sage-adebayo');
+  const [url, setUrl] = useState('');
   const [file, setFile] = useState(null);
   const historyNFTRef = useRef(null);
   const activityNFTRef = useRef(null);
@@ -92,6 +92,8 @@ const Profile = ({
   const {
     handleSubmit,
     register,
+    setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -152,7 +154,7 @@ const Profile = ({
       history: historyNFTRef.current.getContent(),
       activity: activityNFTRef.current.getContent(),
       bio: bioNFTRef.current.getContent(),
-      category: values.subCategory ? values.subCategory : values.category,
+      category: getValues('subCategory') ? getValues('subCategory') : getValues('category'),
     };
     const preData = [
       {
@@ -165,7 +167,8 @@ const Profile = ({
       },
     ];
     const dataSubmit = {
-      avatar: data.avatar,
+      ...(data.avatar && {avatar: data.avatar}),
+      // avatar: data.avatar,
       displayName: data.displayName,
       bio: data.bio,
       extensions: JSON.stringify(preData),
@@ -283,7 +286,7 @@ const Profile = ({
               <Text color={RED_COLOR}>
                 {errors.displayName && errors.displayName.message}
               </Text>
-              <CategorySelector register={register} errors={errors} defaultCategory={talentInfo.offerCategories[0]} />
+              <CategorySelector register={register} errors={errors} defaultCategory={talentInfo.offerCategories[0]} setValue={setValue} />
               <FormControl>
                 <CustomFormLabel>
                   {t(messages.imageThumbnails())}
