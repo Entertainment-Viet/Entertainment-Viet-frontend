@@ -212,13 +212,9 @@ function LoginPageV2() {
                     fontWeight="400"
                     color={TEXT_GREEN}
                     border={`1px solid ${THIRD_TEXT_COLOR}`}
-                    placeholder="Enter your email"
+                    placeholder="Enter your username"
                     {...register('username', {
                       required: 'This is required',
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: 'invalid email address',
-                      },
                     })}
                   />
                   <InputLeftElement sx={{ marginTop: '5px' }}>

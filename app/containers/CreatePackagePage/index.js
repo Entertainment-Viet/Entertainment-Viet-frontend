@@ -93,7 +93,7 @@ export function CreatePackagePage() {
       val = {
         ...val,
         repeatPattern: {
-          cronExpression: `0 0 */${getValues('repeatDay')} * *`,
+          cronExpression: `0 0 */${getValues('repeatDay')} * * ?`,
           startPeriod: toIsoString(start),
           endPeriod: toIsoString(end),
         },
