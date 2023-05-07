@@ -93,10 +93,12 @@ const ResetPasswordPage = () => {
         temporary: false,
         value: sha512(password),
       });
+      await notify('Your password has been successfully reset');
     } catch (e) {
-      if (e.response.data.description) notify(e.response.data.description);
-      else if (e.response.data.error) notify(e.response.data.error);
-      else notify('Reset password failed, please recheck again');
+      if (e.response) {
+        if (e.response.data.description) notify(e.response.data.description);
+        else if (e.response.data.error) notify(e.response.data.error);
+      } else notify('Reset password failed, please recheck again');
     } finally {
       setIsSubmitting(false);
     }

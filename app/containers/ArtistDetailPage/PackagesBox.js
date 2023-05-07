@@ -4,34 +4,36 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import {
   Box,
-  Link,
+  Button,
   Container,
-  VStack,
-  Text,
-  TableContainer,
+  Divider,
+  Icon,
+  Image,
+  Link,
   Table,
   TableCaption,
-  Thead,
-  Tr,
-  Th,
+  TableContainer,
   Tbody,
   Td,
-  Button,
-  Image,
-  Divider,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  VStack,
 } from '@chakra-ui/react';
 
 import Buttons from 'components/Buttons';
 import {
-  PRI_TEXT_COLOR,
-  TEXT_PURPLE,
   PRI_BACKGROUND,
+  PRI_TEXT_COLOR,
   TEXT_GREEN,
+  TEXT_PURPLE,
 } from 'constants/styles';
 import cRequest from 'utils/server';
-import { numberWithCommas, handleAddress } from 'utils/helpers';
+import { handleAddress, numberWithCommas } from 'utils/helpers';
 import PropTypes from 'prop-types';
 import { loadDataHeader } from 'components/Header/actions';
+import { FiRepeat } from 'react-icons/fi';
 import Cart from './assets/Cart-white.svg';
 import { useNotification } from '../../hooks/useNotification';
 
@@ -78,6 +80,7 @@ const PackagesBox = ({ data, id, toggleModal, handleFetchCartData }) => {
               </TableCaption>
               <Thead>
                 <Tr>
+                  <Th />
                   <Th>Gói dịch vụ</Th>
                   <Th>
                     <Box textAlign="center" w="9rem">
@@ -101,14 +104,26 @@ const PackagesBox = ({ data, id, toggleModal, handleFetchCartData }) => {
                       />
                     )}
                     <Tr key={item.uid}>
+                      <Td />
                       <Td>
-                        <Text
-                          textDecoration="underline"
-                          color={TEXT_PURPLE}
-                          onClick={() => toggleModal(item.uid)}
-                        >
-                          {item.name}
-                        </Text>
+                        <Box position="relative">
+                          {item.repeatPattern && (
+                            <Icon
+                              position="absolute"
+                              as={FiRepeat}
+                              boxSize={5}
+                              color={TEXT_GREEN}
+                              left="-50px"
+                            />
+                          )}
+                          <Text
+                            textDecoration="underline"
+                            color={TEXT_PURPLE}
+                            onClick={() => toggleModal(item.uid)}
+                          >
+                            {item.name}
+                          </Text>
+                        </Box>
                         <Text fontSize="12px" whiteSpace="normal" noOfLines={4}>
                           {handleAddress(item.jobDetail.location)}
                           {console.log('location: ', item.jobDetail.location)}
