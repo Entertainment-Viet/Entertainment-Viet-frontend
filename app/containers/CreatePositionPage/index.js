@@ -103,7 +103,7 @@ export function CreatePositionPage({ getCategories, categories, match }) {
           performanceStartTime: toIsoString(start),
           performanceEndTime: toIsoString(end),
           performanceCount: 0,
-          extensions: 'string',
+          extensions: '{}',
         },
       },
       quantity: getValues('quantity'),

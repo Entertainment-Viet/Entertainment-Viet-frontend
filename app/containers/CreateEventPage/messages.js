@@ -26,4 +26,5 @@ export const messages = {
   street: () => t(translations.KYCProfile.street),
   district: () => t(translations.KYCProfile.district),
   imageThumbnails: () => t(translations.TalentManagementPage.imageThumbnails),
+  hashtagForEvent: () => t(translations.createEventPage.hashtagForEvent),
 };

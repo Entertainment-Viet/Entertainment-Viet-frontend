@@ -133,7 +133,8 @@
     "paymentType": "Payment type",
     "createEvent": "Create event",
     "createPosition": "Create a new position in event",
-    "quantity": "Số lượng"
+    "quantity": "Số lượng",
+    "hashtagForEvent": "Hastag for your event"
   },
   "artistDetailPage": {
     "overview": "Overview",

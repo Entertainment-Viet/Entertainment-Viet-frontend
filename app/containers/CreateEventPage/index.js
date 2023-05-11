@@ -137,7 +137,9 @@ export function CreateEventPage() {
                 <ImageUploadInput thumbnailComposable={thumbnailComposable} />
               </FormControl>
               <FormControl>
-                <CustomFormLabel>Create your own hashtag</CustomFormLabel>
+                <CustomFormLabel>
+                  {t(messages.hashtagForEvent())}
+                </CustomFormLabel>
                 <DynamicForm setDynamicData={setDynamicHashtag} />
               </FormControl>
               <FormControl isInvalid={errors.name}>
