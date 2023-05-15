@@ -12,6 +12,7 @@ const ImageUploadInput = ({ thumbnailComposable }) => {
     handleChangeMainImg,
     handleDisplayImg,
     handleRemoveImg,
+    ids,
   } = thumbnailComposable;
 
   return (
@@ -34,6 +35,7 @@ const ImageUploadInput = ({ thumbnailComposable }) => {
           {thumbnailImgs[i] === null ? (
             <>
               <Input
+                id={ids[i]}
                 position="absolute"
                 type="file"
                 w="100%"

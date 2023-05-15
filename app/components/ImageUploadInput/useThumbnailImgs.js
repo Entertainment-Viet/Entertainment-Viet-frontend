@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getFileFromAWS, sendFileToAWS } from 'utils/request';
+import { useNotification } from '../../hooks/useNotification';
 
 const initImages = num => {
   const objImages = {};
@@ -9,9 +10,13 @@ const initImages = num => {
   return objImages;
 };
 
+const initIds = num => [...Array(num)].map((_, index) => `imgUpload${index}`);
+
 const useThumbnailImgs = number => {
   const [thumbnailImgs, setThumbnailImgs] = useState(initImages(number));
   const [mainImage, setMainImage] = useState(null);
+  const [ids] = useState(initIds(number));
+  const { notify } = useNotification();
 
   useEffect(() => {
     setMainImage(Object.values(thumbnailImgs).filter(img => img !== null)[0]);
@@ -23,6 +28,13 @@ const useThumbnailImgs = number => {
   };
 
   const handleDisplayImg = async (index, file) => {
+    const IMG_MAX_SIZE = 2 * 1000 * 1000;
+    if (file.size > IMG_MAX_SIZE) {
+      const element = document.getElementById(`imgUpload${index}`);
+      element.value = '';
+      notify('Image should be less than 2MB');
+      return;
+    }
     setThumbnailImgs(pre => ({
       ...pre,
       [index]: { file, src: URL.createObjectURL(file) },
@@ -72,6 +84,7 @@ const useThumbnailImgs = number => {
     thumbnailImgs,
     setThumbnailImgs,
     mainImage,
+    ids,
     handleChangeMainImg,
     handleDisplayImg,
     handleUploadImgs,
